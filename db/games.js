@@ -234,8 +234,8 @@ module.exports = {
         JOIN game_bans gb
         USING (game_id)
         ${whereClause}
-        ORDER BY created_at DESC
         GROUP BY game_id
+        ORDER BY created_at DESC
         LIMIT $1 OFFSET $2;
       `;
       if (hours) {
