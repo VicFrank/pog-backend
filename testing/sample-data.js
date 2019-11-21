@@ -235,7 +235,7 @@ function generatePlayerInfo(steamIDBucket, team) {
   let playerInfo = {};
   playerInfo.steamid = getRandomFromBucket(steamIDBucket);
   playerInfo.team = team;
-  playerInfo.username = usernames["steamid"];
+  playerInfo.username = usernames[playerInfo.steamid];
   if (randomInt(0, 10) < 5) {
     playerInfo.banChoice = randomElement(heroes);
   }
