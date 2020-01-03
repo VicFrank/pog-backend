@@ -99,6 +99,7 @@ module.exports = {
           totalExp,
           level,
           abilities,
+          itemPurchases,
           finalInventory,
           permanentBuffs,
           disconnectEvents,
@@ -112,9 +113,10 @@ module.exports = {
         const item3 = finalInventory["3"];
         const item4 = finalInventory["4"];
         const item5 = finalInventory["5"];
-        const backpack0 = finalInventory["0"];
-        const backpack1 = finalInventory["1"];
-        const backpack2 = finalInventory["2"];
+        const backpack0 = finalInventory["6"];
+        const backpack1 = finalInventory["7"];
+        const backpack2 = finalInventory["8"];
+        const backpack3 = finalInventory["9"];
 
         // bots can have a null steamid
         if (!steamid) continue;
@@ -137,16 +139,18 @@ module.exports = {
 
         await query(
           `
-        INSERT INTO game_players(game_id, steam_id, abandoned, is_radiant, hero,
-          ban, available_picks, rerolled_heroes, hero_damage, building_damage,
-          hero_healing, kills, deaths, assists, last_hits, denies, gold,
-          rampages, double_kills, tp_used, runes_used, health_drop_duration,
-          total_gold, total_exp, hero_level, abilities, permanent_buffs,
-          disconnects, item_0, item_1, item_2, item_3, item_4, item_5,
-          backpack_0, backpack_1, backpack_2)
+        INSERT INTO game_players(game_id, steam_id, abandoned, is_radiant,
+        hero, ban, available_picks, rerolled_heroes, hero_damage,
+        building_damage, hero_healing, kills, deaths, assists, last_hits,
+        denies, gold, rampages, double_kills, tp_used, runes_used,
+        health_drop_duration, total_gold, total_exp, hero_level, abilities,
+        permanent_buffs, disconnects, item_purchases,
+        item_0, item_1, item_2, item_3, item_4, item_5,
+        backpack_0, backpack_1, backpack_2, backpack_3)
+
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,
           $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29,
-          $30, $31, $32, $33, $34, $35, $36, $37)
+          $30, $31, $32, $33, $34, $35, $36, $37, $38, $39)
         `,
           [
             gameID,
@@ -171,12 +175,13 @@ module.exports = {
             tpScrollsUsed,
             runesUsed,
             healthDropDuration,
-            currentGold,
+            totalGold,
             totalExp,
             level,
             JSON.stringify(abilities),
             JSON.stringify(permanentBuffs),
             JSON.stringify(disconnectEvents),
+            JSON.stringify(itemPurchases),
             item0,
             item1,
             item2,
@@ -186,6 +191,7 @@ module.exports = {
             backpack0,
             backpack1,
             backpack2,
+            backpack3,
           ]
         );
       }
@@ -291,6 +297,31 @@ module.exports = {
         WHERE game_id = $1
       `;
       const { rows } = await query(sql_query, [gameID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /////////////////////////////////
+  // Game Stats
+  /////////////////////////////////
+
+  async getHeroStats() {
+    try {
+      const sql_query = `
+      SELECT gp.hero,
+      count(*) as games,
+      COUNT(case when g.radiant_win = gp.is_radiant then g.game_id end) as wins,
+      TRUNC(SUM(gp.kills)::decimal / count(*), 2) as avg_kills,
+      TRUNC(SUM(gp.deaths)::decimal / count(*), 2) as avg_deaths,
+      TRUNC(SUM(gp.assists)::decimal / count(*), 2) as avg_assists
+      FROM game_players gp
+        JOIN games g
+        USING (game_id)
+        GROUP BY gp.hero
+      `;
+      const { rows } = await query(sql_query);
       return rows;
     } catch (error) {
       throw error;

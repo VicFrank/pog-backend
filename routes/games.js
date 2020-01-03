@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const games = require("../db/games");
-const keys = require("../config/keys");
 const apicache = require("apicache");
+const { isFromDedicatedServer } = require("../middleware/auth");
 
 router.get("/", async (req, res) => {
   try {
@@ -22,19 +22,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", isFromDedicatedServer, async (req, res) => {
   try {
-    const { server_key, data } = req.body;
-
-    // const dedicatedServerKey = process.env.IS_PRODUCTION
-    //   ? keys.dedicatedServerKey
-    //   : keys.toolsKey;
-
-    // if (server_key != dedicatedServerKey) {
-    //   res.status(403).send({ message: `You are not authorized to add data` });
-    //   return;
-    // }
-    const parsedData = JSON.parse(data);
+    const parsedData = JSON.parse(JSON.stringify(req.body));
     const insertedGameID = await games.create(parsedData);
     res.status(201).send({ message: `Created game with ID ${insertedGameID}` });
   } catch (error) {
@@ -57,6 +47,17 @@ router.get("/:gameid", async (req, res) => {
       playerInfo,
     };
     res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+router.get("/stats/heroes", async (req, res) => {
+  try {
+    const heroStats = await games.getHeroStats();
+
+    res.status(200).json(heroStats);
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server Error" });

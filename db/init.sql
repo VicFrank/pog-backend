@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS teams CASCADE;
 DROP TABLE IF EXISTS players CASCADE;
 DROP TABLE IF EXISTS game_players CASCADE;
 DROP TABLE IF EXISTS player_cosmetics CASCADE;
+DROP TABLE IF EXISTS player_companions CASCADE;
 
 CREATE TABLE IF NOT EXISTS games (
   game_id SERIAL PRIMARY KEY,
@@ -39,9 +40,10 @@ CREATE TABLE IF NOT EXISTS players (
   steam_id TEXT PRIMARY KEY,
   username TEXT,
   mmr INTEGER DEFAULT 1000,
-  bp_level INTEGER DEFAULT 0,
-  currency INTEGER DEFAULT 0,
-  patreon_level INTEGER DEFAULT 0
+  poggers INTEGER DEFAULT 0,
+  patreon_level INTEGER DEFAULT 0,
+
+  last_stat_reset TIMESTAMP DEFAULT Now()
 );
 
 CREATE TABLE IF NOT EXISTS game_players (
@@ -77,6 +79,7 @@ CREATE TABLE IF NOT EXISTS game_players (
   abilities JSON,
   permanent_buffs JSON,
   disconnects JSON,
+  item_purchases JSON,
 
   item_0 TEXT,
   item_1 TEXT,
@@ -87,12 +90,36 @@ CREATE TABLE IF NOT EXISTS game_players (
   backpack_0 TEXT,
   backpack_1 TEXT,
   backpack_2 TEXT,
+  backpack_3 TEXT,
 
   CONSTRAINT game_players_pkey PRIMARY KEY (game_id, steam_id)
 );
 
+CREATE TABLE IF NOT EXISTS player_companions (
+  steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
+  companion_name TEXT,
+  companion_level INTEGER DEFAULT 0,
+  effect INTEGER DEFAULT -1,
+  amount INTEGER DEFAULT 0 CHECK (amount >= 0),
+
+  CONSTRAINT player_companions_pkey
+	  PRIMARY KEY (steam_id, companion_name, companion_level, effect)
+);
+
 CREATE TABLE IF NOT EXISTS player_cosmetics (
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
-  name TEXT,
-  owned INTEGER
+  cosmetic_name TEXT,
+  amount INTEGER DEFAULT 0 CHECK (amount >= 0),
+  equipped BOOLEAN DEFAULT FALSE,
+
+  CONSTRAINT player_cosmetics_pkey PRIMARY KEY (steam_id, cosmetic_name)
+);
+
+CREATE TABLE IF NOT EXISTS player_battle_pass (
+  steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
+  bp_name TEXT,
+  bp_level INTEGER DEFAULT 0,
+  points INTEGER DEFAULT 0,
+
+  CONSTRAINT player_battle_pass_pkey PRIMARY KEY (steam_id, bp_name)
 );

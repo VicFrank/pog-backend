@@ -84,6 +84,17 @@ const sampleData = {
           special_ability_spell_amp_12: "1",
           special_ability_mana_regen_3: "1",
         },
+        itemPurchases: {
+          // item purchases throughout the game, time: item name
+          "34": "item_blink",
+          "42": "item_cyclone",
+          "111": "item_sheepstick",
+          "234": "item_phase_boots",
+          "456": "item_nokrash_blade",
+          "799": "item_sphere",
+          "919": "item_mango",
+          "1028": "item_refresher",
+        },
         finalInventory: {
           // end-of-match inventory, 0-5 = active inventory, 6-8 = backpack
           "0": "item_blink",
@@ -146,6 +157,16 @@ const sampleData = {
           special_ability_spell_amp_12: "1",
           special_ability_mana_regen_3: "1",
         },
+        itemPurchases: {
+          "34": "item_blink",
+          "42": "item_cyclone",
+          "111": "item_sheepstick",
+          "234": "item_phase_boots",
+          "456": "item_nokrash_blade",
+          "799": "item_rapier",
+          "919": "item_mango",
+          "1028": "item_refresher",
+        },
         finalInventory: {
           "0": "item_blink",
           "1": "item_cyclone",
@@ -155,6 +176,8 @@ const sampleData = {
           "5": "item_sphere",
           "6": "item_mango",
           "7": "item_refresher",
+          "8": "item_heart",
+          "9": "item_tango",
         },
         permanentBuffs: [],
         disconnectEvents: {
@@ -285,12 +308,25 @@ function generatePlayerInfo(steamIDBucket, team) {
     "6": "item_mango",
     "7": "item_refresher",
   };
+
+  playerInfo.itemPurchases = {
+    "34": "item_blink",
+    "42": "item_cyclone",
+    "111": "item_sheepstick",
+    "234": "item_phase_boots",
+    "456": "item_nokrash_blade",
+    "799": "item_sphere",
+    "919": "item_mango",
+    "1028": "item_refresher",
+  };
+
   if (randomInt(0, 10) < 5) {
     playerInfo.permanentBuffs = [
       "modifier_moon_shard_consumed",
       "modifier_ultimate_scepter_consumed",
     ];
   }
+
   if (randomInt(0, 10) < 8) {
     playerInfo.disconnectEvents = {
       "37": "45",

@@ -15,7 +15,7 @@ router.get("/sample", async (req, res) => {
   } catch (error) {
     // console.log(req.body.data);
     console.log(error);
-    res.status(500).send({ message: "Server Error" });
+    res.status(500).json({ error: error.toString() });
   }
 });
 
@@ -26,7 +26,7 @@ router.get("/random_sample", async (req, res) => {
   } catch (error) {
     // console.log(req.body.data);
     console.log(error);
-    res.status(500).send({ message: "Server Error" });
+    res.status(500).json({ error: error.toString() });
   }
 });
 
