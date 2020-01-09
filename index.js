@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
@@ -18,9 +19,15 @@ app.use(
   })
 );
 
+app.use(express.static(path.join(__dirname, "client/dist")));
+
 app.use("/api/test", testRouter);
 app.use("/api/games", gamesRouter);
 app.use("/api/players", playersRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/dist/index.html"));
+});
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
