@@ -214,12 +214,12 @@ module.exports = {
   async getPlayerCosmetics(steamID) {
     try {
       const sql_query = `
-      SELECT cosmetic_name, effect, equipped
+      SELECT *
       FROM player_cosmetics
       WHERE steam_id = $1
       `;
       const { rows } = await query(sql_query, [steamID]);
-      return rows[0];
+      return rows;
     } catch (error) {
       throw error;
     }
@@ -228,12 +228,49 @@ module.exports = {
   async getCompanions(steamID) {
     try {
       const sql_query = `
-      SELECT companion_name, companion_level, effect, amount
+      SELECT *
       FROM player_companions
       WHERE steam_id = $1
       `;
       const { rows } = await query(sql_query, [steamID]);
-      return rows[0];
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getEquippedCompanion(steamID) {
+    try {
+      const sql_query = `
+      SELECT *
+      FROM player_companions
+      WHERE steam_id = $1 AND equipped = TRUE
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async setCompanion(steamID, companionID) {
+    try {
+      // unequip current companion, and equip this one
+      const query1 = `
+      UPDATE player_companions
+      SET equipped = FALSE
+      WHERE steam_id = $1;
+      `;
+      await query(query1, [steamID]);
+
+      const query2 = `
+      UPDATE player_companions
+      SET equipped = TRUE
+      WHERE companion_id = $1
+      RETURNING *;
+      `;
+      const { rows } = await query(query2, [companionID]);
+      return rows;
     } catch (error) {
       throw error;
     }
@@ -250,32 +287,42 @@ module.exports = {
           const { name, effect, level, amount } = companionData;
 
           if (amount > 0) {
-            // Upsert the companion
-            const queryText = `
+            for (let i = 0; i < amount; i++) {
+              const queryText = `
               INSERT INTO player_companions as pc
-                (steam_id, companion_name, companion_level, effect, amount)
+                (steam_id, companion_name, companion_level, effect)
               VALUES
-                ($1, $2, $3, $4, $5)
-              ON CONFLICT  (steam_id, companion_name, companion_level, effect)
-              DO UPDATE SET amount = pc.amount + $5
+                ($1, $2, $3, $4)
               `;
-            const { rows } = await query(queryText, [
-              steamID,
-              name,
-              level,
-              effect,
-              amount,
-            ]);
+              await query(queryText, [steamID, name, level, effect]);
+            }
           } else if (amount < 0) {
-            const queryText = `
-              UPDATE player_companions
-              SET amount = amount + $1
-              WHERE steam_id = $2 AND 
-                companion_name = $3 AND
-                companion_level = $4 AND
-                effect = $5
+            for (let i = 0; i < amount * -1; i++) {
+              const queryText = `
+              WITH deleted AS
+              (DELETE FROM player_companions
+                WHERE companion_id = 
+                any (array(
+                  SELECT companion_id
+                  FROM player_companions
+                  WHERE steam_id = $1 AND 
+                    companion_name = $2 AND
+                    companion_level = $3 AND
+                    effect = $4 LIMIT 1))
+              RETURNING *)
+              SELECT count(*) FROM deleted;
             `;
-            await query(queryText, [amount, steamID, name, level, effect]);
+              const { rows } = await query(queryText, [
+                steamID,
+                name,
+                level,
+                effect,
+              ]);
+              const rowsDeleted = rows[0].count;
+              if (rowsDeleted == 0) {
+                throw new Error("Tried to remove non-existent companion");
+              }
+            }
           }
         }
       }
@@ -298,23 +345,36 @@ module.exports = {
 
         for (const [itemName, amount] of entries) {
           if (amount > 0) {
-            // Upsert (can't upsert negative amounts)
-            const queryText = `
+            for (let i = 0; i < amount; i++) {
+              const queryText = `
               INSERT INTO player_cosmetics as pc
-                (steam_id, cosmetic_name, amount)
+                (steam_id, cosmetic_name)
               VALUES
-                ($1, $2, $3)
-              ON CONFLICT (steam_id, cosmetic_name)
-              DO UPDATE SET amount = pc.amount + $3
-            `;
-            await query(queryText, [steamID, itemName, amount]);
-          } else if (amount < 0) {
-            const queryText = `
-                UPDATE player_cosmetics
-                SET amount = amount + $1
-                WHERE steam_id = $2 AND cosmetic_name = $3
+                ($1, $2)
               `;
-            await query(queryText, [amount, steamID, itemName]);
+              await query(queryText, [steamID, itemName]);
+            }
+          } else if (amount < 0) {
+            for (let i = 0; i < amount * -1; i++) {
+              const queryText = `
+              WITH deleted AS
+              (DELETE FROM player_cosmetics
+                WHERE cosmetic_id = 
+                any (array(
+                  SELECT cosmetic_id
+                  FROM player_companions
+                  WHERE steam_id = $1 AND 
+                  cosmetic_name = $2
+                  LIMIT 1))
+              RETURNING *)
+              SELECT count(*) FROM deleted;
+              `;
+              const { rows } = await query(queryText, [steamID, itemName]);
+              const rowsDeleted = rows[0].count;
+              if (rowsDeleted == 0) {
+                throw new Error("Tried to remove non-existent cosmetic");
+              }
+            }
           }
         }
       }

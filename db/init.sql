@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS players CASCADE;
 DROP TABLE IF EXISTS game_players CASCADE;
 DROP TABLE IF EXISTS player_cosmetics CASCADE;
 DROP TABLE IF EXISTS player_companions CASCADE;
+DROP TABLE IF EXISTS player_battle_pass CASCADE;
 
 CREATE TABLE IF NOT EXISTS games (
   game_id SERIAL PRIMARY KEY,
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS players (
   steam_id TEXT PRIMARY KEY,
   username TEXT,
   mmr INTEGER DEFAULT 1000,
-  poggers INTEGER DEFAULT 0,
+  poggers INTEGER DEFAULT 0 CHECK (poggers >= 0),
   patreon_level INTEGER DEFAULT 0,
 
   last_stat_reset TIMESTAMP DEFAULT Now()
@@ -96,23 +97,19 @@ CREATE TABLE IF NOT EXISTS game_players (
 );
 
 CREATE TABLE IF NOT EXISTS player_companions (
+  companion_id SERIAL PRIMARY KEY,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   companion_name TEXT,
   companion_level INTEGER DEFAULT 0,
-  effect INTEGER DEFAULT -1,
-  amount INTEGER DEFAULT 0 CHECK (amount >= 0),
-
-  CONSTRAINT player_companions_pkey
-	  PRIMARY KEY (steam_id, companion_name, companion_level, effect)
+  equipped BOOLEAN DEFAULT FALSE,
+  effect INTEGER DEFAULT -1
 );
 
 CREATE TABLE IF NOT EXISTS player_cosmetics (
+  cosmetic_id SERIAL PRIMARY KEY,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   cosmetic_name TEXT,
-  amount INTEGER DEFAULT 0 CHECK (amount >= 0),
-  equipped BOOLEAN DEFAULT FALSE,
-
-  CONSTRAINT player_cosmetics_pkey PRIMARY KEY (steam_id, cosmetic_name)
+  equipped BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS player_battle_pass (
