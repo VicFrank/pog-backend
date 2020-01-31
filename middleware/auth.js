@@ -2,13 +2,12 @@ const keys = require("../config/keys");
 
 module.exports = {
   isFromDedicatedServer: function(req, res, next) {
-    const { server_key } = req.body;
-    console.log(req.get('X-Dota-Server-Key'))
+    const server_key = req.get("X-Dota-Server-Key");
     const dedicatedServerKey = process.env.IS_PRODUCTION
       ? keys.dedicatedServerKey
       : keys.toolsKey;
 
-    if (server_key == dedicatedServerKey) {
+    if (server_key === dedicatedServerKey) {
       return next();
     } else {
       res

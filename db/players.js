@@ -211,14 +211,31 @@ module.exports = {
     }
   },
 
-  async getPlayerCosmetics(steamID) {
+  async getPlayerCosmetics(steamID, onlyEquipped = false) {
     try {
+      const filter = onlyEquipped ? "AND equipped = TRUE" : "";
       const sql_query = `
       SELECT *
       FROM player_cosmetics
       WHERE steam_id = $1
+      ${filter}
       `;
       const { rows } = await query(sql_query, [steamID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async equipCosmetics(cosmeticID, equipped) {
+    try {
+      const sql_query = `
+      UPDATE player_cosmetics
+      SET equipped = ${equipped}
+      WHERE cosmetic_id = $1
+      RETURNING *
+      `;
+      const { rows } = await query(sql_query, [cosmeticID]);
       return rows;
     } catch (error) {
       throw error;

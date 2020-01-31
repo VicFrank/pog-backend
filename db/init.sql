@@ -109,14 +109,24 @@ CREATE TABLE IF NOT EXISTS player_cosmetics (
   cosmetic_id SERIAL PRIMARY KEY,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   cosmetic_name TEXT,
+  created TIMESTAMP DEFAULT Now(),
   equipped BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS player_consumables (
+  consumable_id SERIAL PRIMARY KEY,
+  steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
+  consumable_name TEXT,
+  created TIMESTAMP DEFAULT Now(),
+  activated TIMESTAMP,
+  duration INTERVAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS player_battle_pass (
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   bp_name TEXT,
   bp_level INTEGER DEFAULT 0,
-  points INTEGER DEFAULT 0,
+  total_experience INTEGER DEFAULT 0,
 
   CONSTRAINT player_battle_pass_pkey PRIMARY KEY (steam_id, bp_name)
 );
