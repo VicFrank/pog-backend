@@ -15,19 +15,19 @@
 
               <tbody>
                 <tr>
-                  <th class="tb-head" scope="col">Hero</th>
-                  <th class="tb-head" scope="col">Result</th>
-                  <th class="tb-head" scope="col">Duration</th>
-                  <th class="tb-head" scope="col">KDA</th>
-                  <th class="tb-head" scope="col">Items</th>
+                  <td class="tb-head" scope="col">Hero</td>
+                  <td class="tb-head" scope="col">Result</td>
+                  <td class="tb-head" scope="col">Duration</td>
+                  <td class="tb-head" scope="col">KDA</td>
+                  <td class="tb-head" scope="col">Items</td>
                 </tr>
                 <tr>
-                  <td scope="row">
+                  <th scope="row">
                     <img src="../../assets/images/necrophos.jpg" alt />
                     Necrophos
-                  </td>
+                  </th>
                   <td>
-                    <a href="./detail-history.html">Won</a>
+                    <router-link to="./DetailHistory">Won</router-link>
                   </td>
                   <td>41:21</td>
                   <td>8/9/16</td>
@@ -59,10 +59,7 @@
                     </div>
                     <div class="match-item">
                       <div class="image-container">
-                        <img
-                          src="../../assets/images/aghanims-scepter.jpg"
-                          alt
-                        />
+                        <img src="../../assets/images/aghanims-scepter.jpg" alt />
                       </div>
                     </div>
                   </td>
@@ -72,7 +69,7 @@
                     <img src="../../assets/images/morphling.jpg" alt />Morphling
                   </th>
                   <td>
-                    <a href="./detail-history.html">Lost</a>
+                    <router-link to="./DetailHistory">Lost</router-link>
                   </td>
                   <td>24:24</td>
                   <td>2/3/6</td>
@@ -104,23 +101,17 @@
                     </div>
                     <div class="match-item">
                       <div class="image-container">
-                        <img
-                          src="../../assets/images/aghanims-scepter.jpg"
-                          alt
-                        />
+                        <img src="../../assets/images/aghanims-scepter.jpg" alt />
                       </div>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <th scope="row">
-                    <img
-                      src="../../assets/images/juggernaut.jpg"
-                      alt
-                    />Juggernaut
+                    <img src="../../assets/images/juggernaut.jpg" alt />Juggernaut
                   </th>
                   <td>
-                    <a href="./detail-history.html">Lost</a>
+                    <router-link to="./DetailHistory">Lost</router-link>
                   </td>
                   <td>41:21</td>
                   <td>8/9/16</td>
@@ -150,23 +141,17 @@
                     </div>
                     <div class="match-item">
                       <div class="image-container">
-                        <img
-                          src="../../assets/images/aghanims-scepter.jpg"
-                          alt
-                        />
+                        <img src="../../assets/images/aghanims-scepter.jpg" alt />
                       </div>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <th scope="row">
-                    <img
-                      src="../../assets/images/faceless-void.jpg"
-                      alt
-                    />Faceless Void
+                    <img src="../../assets/images/faceless-void.jpg" alt />Faceless Void
                   </th>
                   <td>
-                    <a href="./detail-history.html">Won</a>
+                    <router-link to="./DetailHistory">Won</router-link>
                   </td>
                   <td>24:24</td>
                   <td>2/3/6</td>
@@ -198,10 +183,7 @@
                     </div>
                     <div class="match-item">
                       <div class="image-container">
-                        <img
-                          src="../../assets/images/aghanims-scepter.jpg"
-                          alt
-                        />
+                        <img src="../../assets/images/aghanims-scepter.jpg" alt />
                       </div>
                     </div>
                   </td>
@@ -211,7 +193,7 @@
                     <img src="../../assets/images/underlord.jpg" alt />Underlord
                   </th>
                   <td>
-                    <a href="./detail-history.html">Won</a>
+                    <router-link to="./DetailHistory">Won</router-link>
                   </td>
                   <td>24:24</td>
                   <td>2/3/6</td>

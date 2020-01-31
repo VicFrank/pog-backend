@@ -3,7 +3,9 @@
     <div class="sidebar-content">
       <div class="user-info">
         <h3>SUNSfan</h3>
-        <img src="../assets/images/sunsfan.svg" alt />
+        <router-link to="/Profile">
+          <img src="../assets/images/sunsfan.svg" alt />
+        </router-link>
         <div class="notification">
           <span class="custom-badge">4</span>
         </div>
