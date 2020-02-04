@@ -270,7 +270,7 @@ module.exports = {
     }
   },
 
-  async setCompanion(steamID, companionID) {
+  async setCompanion(steamID, companion) {
     try {
       // unequip current companion, and equip this one
       const query1 = `
@@ -283,10 +283,10 @@ module.exports = {
       const query2 = `
       UPDATE player_companions
       SET equipped = TRUE
-      WHERE companion_id = $1
+      WHERE companion_name = $1
       RETURNING *;
       `;
-      const { rows } = await query(query2, [companionID]);
+      const { rows } = await query(query2, [companion]);
       return rows;
     } catch (error) {
       throw error;
