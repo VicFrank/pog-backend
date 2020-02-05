@@ -6,6 +6,9 @@ DROP TABLE IF EXISTS game_players CASCADE;
 DROP TABLE IF EXISTS player_cosmetics CASCADE;
 DROP TABLE IF EXISTS player_companions CASCADE;
 DROP TABLE IF EXISTS player_battle_pass CASCADE;
+DROP TABLE IF EXISTS quests CASCADE;
+DROP TABLE IF EXISTS player_daily_quests CASCADE;
+DROP TABLE IF EXISTS player_achievements CASCADE;
 
 CREATE TABLE IF NOT EXISTS games (
   game_id SERIAL PRIMARY KEY,
@@ -43,6 +46,7 @@ CREATE TABLE IF NOT EXISTS players (
   mmr INTEGER DEFAULT 1000,
   poggers INTEGER DEFAULT 0 CHECK (poggers >= 0),
   patreon_level INTEGER DEFAULT 0,
+  is_admin BOOLEAN DEFAULT FALSE,
 
   last_stat_reset TIMESTAMP DEFAULT Now()
 );
@@ -105,6 +109,9 @@ CREATE TABLE IF NOT EXISTS player_companions (
   effect INTEGER DEFAULT -1
 );
 
+CREATE INDEX idx_player_companions
+ON player_companions (steam_id, companion_name, companion_level, effect);
+
 CREATE TABLE IF NOT EXISTS player_cosmetics (
   cosmetic_id SERIAL PRIMARY KEY,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
@@ -113,20 +120,51 @@ CREATE TABLE IF NOT EXISTS player_cosmetics (
   equipped BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE IF NOT EXISTS player_consumables (
-  consumable_id SERIAL PRIMARY KEY,
-  steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
-  consumable_name TEXT,
-  created TIMESTAMP DEFAULT Now(),
-  activated TIMESTAMP,
-  duration INTERVAL NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS player_battle_pass (
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
-  bp_name TEXT,
+  bp_version INTEGER DEFAULT 1,
   bp_level INTEGER DEFAULT 0,
   total_experience INTEGER DEFAULT 0,
+  tier INTEGER DEFAULT 0,
+  upgrade_expiration TIMESTAMP
+);
 
-  CONSTRAINT player_battle_pass_pkey PRIMARY KEY (steam_id, bp_name)
+CREATE OR REPLACE FUNCTION create_battle_pass()
+  RETURNS trigger AS
+$$
+BEGIN
+  INSERT INTO player_battle_pass(steam_id)
+  VALUES(NEW.steam_id);
+
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER create_player_trigger
+AFTER INSERT
+ON players
+FOR EACH ROW
+EXECUTE PROCEDURE create_battle_pass();
+
+CREATE TABLE IF NOT EXISTS quests (
+  quest_id SERIAL PRIMARY KEY,
+  quest_name TEXT NOT NULL,
+  is_achievement BOOLEAN NOT NULL,
+  quest_description TEXT,
+  title_reward TEXT,
+  poggers_reward INTEGER DEFAULT 0,
+  xp_reward INTEGER DEFAULT 0,
+  stat TEXT NOT NULL,
+  required_amount INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS player_quests (
+  steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
+  quest_id INTEGER REFERENCES quests (quest_id) ON UPDATE CASCADE,
+  quest_progress INTEGER DEFAULT 0,
+  created TIMESTAMP DEFAULT Now(),
+  claimed BOOLEAN DEFAULT FALSE,
+
+  CONSTRAINT player_quests_pkey PRIMARY KEY (steam_id, quest_id)
 );

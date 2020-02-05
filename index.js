@@ -3,9 +3,10 @@ const path = require("path");
 
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const testRouter = require("./routes/tests");
+// const testRouter = require("./routes/tests");
 const gamesRouter = require("./routes/games");
 const playersRouter = require("./routes/players");
+const questsRouter = require("./routes/quests");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,9 +22,10 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "client/dist")));
 
-app.use("/api/test", testRouter);
+// app.use("/api/test", testRouter);
 app.use("/api/games", gamesRouter);
 app.use("/api/players", playersRouter);
+app.use("/api/quests", questsRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/dist/index.html"));

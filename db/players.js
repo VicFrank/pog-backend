@@ -1,4 +1,5 @@
 const { query } = require("./index");
+const quests = require("./quests");
 
 module.exports = {
   async getAllPlayers(limit = 100, offset = 0) {
@@ -26,6 +27,60 @@ module.exports = {
       `;
       const { rows } = await query(sql_query, [steamID]);
       return rows[0].exists;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async createNewPlayer(steamID, username) {
+    try {
+      // Insert the player,
+      // Battle Pass is automatically created by the DB
+      const { rows } = await query(
+        `INSERT INTO players(steam_id, username)
+         values ($1, $2)
+         on conflict(steam_id)
+         do UPDATE SET username = $2
+         RETURNING *`,
+        [steamID, username]
+      );
+      // Create three random daily quests
+      await quests.createInitialDailyQuests(steamID, 3);
+
+      // Initialize achievements
+
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async upsertPlayer(steamID, username) {
+    try {
+      const { rows } = await query(
+        `INSERT INTO players(steam_id, username)
+         values ($1, $2)
+         on conflict(steam_id)
+         do UPDATE SET username = $2
+         RETURNING *`,
+        [steamID, username]
+      );
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async setAdmin(steamID, isAdmin, patreonLevel) {
+    try {
+      const { rows } = await query(
+        `UPDATE players
+         SET (is_admin, patreon_level) = ($2, $3)
+         WHERE steam_id = $1
+         RETURNING *`,
+        [steamID, isAdmin, patreonLevel]
+      );
+      return rows[0];
     } catch (error) {
       throw error;
     }
@@ -161,15 +216,15 @@ module.exports = {
     }
   },
 
-  async addBattlePass(steamID, bpName, level, points) {
+  async createBattlePass(steamID, bpName) {
     try {
       const { rows } = await query(
         `
-      INSERT INTO player_battle_pass (steam_id, bp_name, bp_level, points)
+      INSERT INTO player_battle_pass (steam_id, bp_name)
       VALUES ($1, $2, $3, $4)
       RETURNING *
       `,
-        [steamID, bpName, level, points]
+        [steamID, bpName]
       );
       return rows[0];
     } catch (error) {
@@ -177,19 +232,19 @@ module.exports = {
     }
   },
 
-  async updateBattlePass(steamID, bpName, level, points) {
+  async updateBattlePass(steamID, bpName, level, totalExperience) {
     try {
       const { rows } = await query(
         `
       UPDATE player_battle_pass
       SET bp_level = COALESCE($3, bp_level),
-          points = COALESCE($4, points)
+          total_experience = COALESCE($4, total_experience)
       WHERE
         steam_id = $1 AND
         bp_name = $2
       RETURNING *
       `,
-        [steamID, bpName, level, points]
+        [steamID, bpName, level, totalExperience]
       );
       return rows[0];
     } catch (error) {
@@ -200,7 +255,7 @@ module.exports = {
   async getBattlePasses(steamID) {
     try {
       const sql_query = `
-      SELECT bp_name, bp_level, points
+      SELECT *
       FROM player_battle_pass
       WHERE steam_id = $1
       `;
@@ -336,8 +391,8 @@ module.exports = {
                 effect,
               ]);
               const rowsDeleted = rows[0].count;
-              if (rowsDeleted == 0) {
-                throw new Error("Tried to remove non-existent companion");
+              if (rowsDeleted === 0) {
+                throw new Error("Tried to remove nonexistent companion");
               }
             }
           }
@@ -355,7 +410,38 @@ module.exports = {
         await query(queryText, [poggers, steamID]);
       }
 
-      // Add or remove misc items
+      // Update battle pass
+      if (transactionData.battlePass) {
+        const { battlePass } = transactionData;
+        const { upgradeTier, upgradeExpiration, bonusExp } = battlePass;
+
+        const xpToAdd = bonusExp || 0;
+
+        if (upgradeTier != undefined && upgradeExpiration) {
+          // set the upgrade tier, if possible
+          const queryText = `
+            UPDATE player_battle_pass
+            SET (tier, upgrade_expiration, total_experience)
+              = ($2, to_timestamp($3), total_experience + $4)
+            WHERE steam_id = $1
+          `;
+          await query(queryText, [
+            steamID,
+            upgradeTier,
+            upgradeExpiration,
+            xpToAdd,
+          ]);
+        } else {
+          const queryText = `
+            UPDATE player_battle_pass
+            SET total_experience = total_experience + $2
+            WHERE steam_id = $1
+          `;
+          await query(queryText, [steamID, xpToAdd]);
+        }
+      }
+
+      // Add or remove misc/cosmetic items
       if (transactionData.items) {
         const { items } = transactionData;
         const entries = Object.entries(items);

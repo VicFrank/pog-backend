@@ -219,6 +219,7 @@ const steamIDs = [
   "76561198052211234",
   "76561198015161808",
   "76561198007141460",
+  "76561198030851434",
 ];
 
 const usernames = {
@@ -229,6 +230,7 @@ const usernames = {
   "76561198052211234": "bukka",
   "76561198015161808": "EarthSalamander",
   "76561198007141460": "Firetoad",
+  "76561198030851434": "VicFrank",
 };
 
 function generateTeamInfo() {

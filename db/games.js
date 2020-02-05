@@ -130,6 +130,10 @@ module.exports = {
           [steamid, username]
         );
 
+        // TODO: Get battle pass name, and exp earned,
+        // update the total exp of the battle pass, create
+        // a battle pass if it doesn't exist
+
         const mmr = parseInt(playerRows[0].mmr);
 
         if (isRadiant) mmrData.radiant.push(mmr);
