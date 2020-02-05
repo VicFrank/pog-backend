@@ -95,8 +95,8 @@ router.post(
   async (req, res) => {
     try {
       const steamid = req.params.steamid;
-      const { companionID } = JSON.parse(JSON.stringify(req.body));
-      const rows = await players.setCompanion(steamid, companionID);
+      const companion = req.params.companion;
+      const rows = await players.setCompanion(steamid, companion);
       res.status(200).json(rows);
     } catch (error) {
       console.log(error);
