@@ -1,7 +1,7 @@
 const games = require("../db/games");
 const quests = require("../db/quests");
 const players = require("../db/players");
-const questsList = require("../config/quests-list");
+const questsList = require("./quests-list");
 const { generateRandomSampleData } = require("./sample-data");
 
 // create sample games
