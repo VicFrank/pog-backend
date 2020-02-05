@@ -325,23 +325,23 @@ module.exports = {
     }
   },
 
-  async setCompanion(steamID, companion) {
+  async setCompanion(steamID, companion_id) {
     try {
       // unequip current companion, and equip this one
       const query1 = `
-      UPDATE player_companions
-      SET equipped = FALSE
-      WHERE steam_id = $1;
+        UPDATE player_companions
+        SET equipped = FALSE
+        WHERE steam_id = $1;
       `;
       await query(query1, [steamID]);
 
       const query2 = `
-      UPDATE player_companions
-      SET equipped = TRUE
-      WHERE companion_name = $1
-      RETURNING *;
+        UPDATE player_companions
+        SET equipped = TRUE
+        WHERE companion_id  = $1
+        RETURNING *;
       `;
-      const { rows } = await query(query2, [companion]);
+      const { rows } = await query(query2, [companion_id]);
       return rows;
     } catch (error) {
       throw error;
