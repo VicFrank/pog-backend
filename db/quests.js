@@ -1,6 +1,16 @@
 const { query } = require("./index");
 
 module.exports = {
+  async getAllQuests() {
+    try {
+      const sql_query = `SELECT * FROM quests`;
+      const { rows } = await query(sql_query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getAllDailyQuests() {
     try {
       const sql_query = `
@@ -27,16 +37,16 @@ module.exports = {
     }
   },
 
-  async addNewQuest(
-    isAchievement,
+  async addNewQuest({
     name,
+    isAchievement,
     description,
     poggers,
     xp,
     stat,
     requiredAmount,
-    title
-  ) {
+    title,
+  }) {
     try {
       const sql_query = `
       INSERT INTO quests (quest_name, is_achievement, quest_description,
@@ -85,59 +95,13 @@ module.exports = {
 	    ORDER BY quest_id;
       `;
       const { rows } = await query(sql_query, [steamID]);
+
+      // Filter the achievements to only the ones to show in IO
+      // i.e. Highest Tier unclaimed
+      // If all tiers are claimed, show final tier
+
       return rows;
     } catch (error) {
-      throw error;
-    }
-  },
-
-  // Removes the given quest, and generates a new one that the player
-  // does not already have, and is not the given quest
-  async rerollDailyQuest(steamID, quest_id) {
-    try {
-      await query("BEGIN");
-
-      // Randomly choose a new quest
-      const allQuests = getAllDailyQuests();
-      const currentQuests = getDailyQuestsForPlayer(steamID);
-      const currentQuestIDs = currentQuests.map(quest => quest.quest_id);
-
-      const newQuests = allQuests.filter(quest => {
-        return currentQuestIDs.contains(quest.quest_id);
-      });
-
-      const questToAdd =
-        newQuests[Math.floor(Math.random() * newQuests.length)];
-      const questToAddID = questToAdd.quest_id;
-
-      // Remove the given quest
-      // TODO: return created and make sure it was >= 24 hours ago
-      const remove_query = `
-        WITH deleted AS
-        (DELETE FROM player_quests
-        WHERE steam_id = $1 AND quest_id = $2
-        RETURNING *)
-        SELECT count(*) FROM deleted;
-      `;
-      const { rows } = await query(remove_query, [steamID, quest_id]);
-      if (rows[0].count === 0) {
-        throw new Error(`Tried to reroll invalid Quest ID ${quest_id}`);
-      }
-
-      // Add the new quest
-      const insert_query = `
-        INSERT INTO player_quests (steam_id, quest_id) VALUES($1, $2)
-        RETURNING *;
-      `;
-      const { rows: rows2 } = await query(insert_query, [
-        steamID,
-        questToAddID,
-      ]);
-
-      await query("COMMIT");
-      return rows2[0];
-    } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },
@@ -181,26 +145,81 @@ module.exports = {
     try {
       await query("BEGIN");
 
-      const currentQuests = getDailyQuestsForPlayer(steamID);
+      const currentQuests = await this.getDailyQuestsForPlayer(steamID);
       if (currentQuests.length > 0) {
         throw new Error("Player Daily Quests have already been initialized!");
       }
 
       // Randomly choose three daily quests
-      const allQuests = getAllDailyQuests();
+      const allQuests = await this.getAllDailyQuests();
       const questsToInsert = this.randomSample(allQuests, numQuests);
 
       // Add the new quests
+      let quests = [];
       for (quest of questsToInsert) {
         const insert_query = `
           INSERT INTO player_quests (steam_id, quest_id) VALUES($1, $2)
           RETURNING *;
         `;
-        await query(insert_query, [steamID, quest.quest_id]);
+        const { rows } = await query(insert_query, [steamID, quest.quest_id]);
+        quests.push(rows[0]);
       }
 
       await query("COMMIT");
-      return rows[0];
+      return quests;
+    } catch (error) {
+      await query("ROLLBACK");
+      throw error;
+    }
+  },
+
+  /**
+   * Removes the given quest, and generates a new one that the player
+   * does not already have, and is not the given quest
+   */
+  async rerollDailyQuest(steamID, questID) {
+    try {
+      await query("BEGIN");
+
+      // Randomly choose a new quest
+      const allQuests = await this.getAllDailyQuests();
+      const currentQuests = await this.getDailyQuestsForPlayer(steamID);
+      const currentQuestIDs = currentQuests.map(quest => quest.quest_id);
+
+      const newQuests = allQuests.filter(quest => {
+        return !currentQuestIDs.includes(quest.quest_id);
+      });
+
+      const questToAdd =
+        newQuests[Math.floor(Math.random() * newQuests.length)];
+      const questToAddID = questToAdd.quest_id;
+
+      // Remove the given quest
+      // TODO: return created and make sure it was >= 24 hours ago
+      const remove_query = `
+        WITH deleted AS
+        (DELETE FROM player_quests
+        WHERE steam_id = $1 AND quest_id = $2
+        RETURNING *)
+        SELECT count(*) FROM deleted;
+      `;
+      const { rows } = await query(remove_query, [steamID, questID]);
+      if (rows[0].count === 0) {
+        throw new Error(`Tried to reroll invalid Quest ID ${questID}`);
+      }
+
+      // Add the new quest
+      const insert_query = `
+        INSERT INTO player_quests (steam_id, quest_id) VALUES($1, $2)
+        RETURNING *;
+      `;
+      const { rows: rows2 } = await query(insert_query, [
+        steamID,
+        questToAddID,
+      ]);
+
+      await query("COMMIT");
+      return { ...rows2[0], success: true };
     } catch (error) {
       await query("ROLLBACK");
       throw error;
@@ -210,9 +229,12 @@ module.exports = {
   /**
    * Claims the poggers/xp for a completed quest/achievement.
    * Only claims if the player has made enough progress to claim
+   * and the quest has not been already claimed
    * */
   async claimQuestReward(steamID, quest_id) {
     try {
+      // Get the quest rewards and requirements for the DB,
+      // and make sure the quest is actually complete
       let sql_query = `
         SELECT pq.quest_progress, pq.claimed, q.required_amount,
           q.poggers_reward, q.xp_reward
@@ -221,7 +243,7 @@ module.exports = {
         USING (quest_id)
         WHERE steam_id = $1 AND quest_id = $2
       `;
-      let { rows } = await query(sql_query, [steamID, quest_id]);
+      const { rows } = await query(sql_query, [steamID, quest_id]);
 
       if (rows.length === 0) {
         throw new Error(`Invalid Quest ID ${quest_id}`);
@@ -246,6 +268,7 @@ module.exports = {
         UPDATE player_quests
         SET claimed = TRUE
         WHERE steam_id = $1 AND quest_id = $2
+        RETURNING *
       `;
       await query(sql_query, [steamID, quest_id]);
 
@@ -265,7 +288,7 @@ module.exports = {
       `;
       await query(sql_query, [steamID, xp]);
 
-      return;
+      return { xp, poggers };
     } catch (error) {
       throw error;
     }

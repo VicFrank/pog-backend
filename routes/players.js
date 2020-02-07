@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const players = require("../db/players");
+const quests = require("../db/quests");
 const apicache = require("apicache");
 const { isFromDedicatedServer } = require("../middleware/auth");
 
@@ -15,6 +16,10 @@ router.get("/", async (req, res) => {
     res.status(500).send({ message: "Server Error" });
   }
 });
+
+//////////////////////////////////////////////
+// Player Stats
+//////////////////////////////////////////////
 
 router.get("/:steamid", async (req, res) => {
   try {
@@ -32,7 +37,106 @@ router.get("/:steamid", async (req, res) => {
   }
 });
 
-// Item Transactions
+router.get("/:steamid/games", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const limit = req.query.limit;
+    const recentMatches = await players.getGames(steamid, limit);
+    res.status(200).json(recentMatches);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+router.get("/:steamid/heroes", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const playerInfo = await players.getHeroStats(steamid);
+    res.status(200).json(playerInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+//////////////////////////////////////////////
+// Quests / Achievements
+//////////////////////////////////////////////
+
+router.get("/:steamid/daily_quests", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const dailyQuests = await quests.getDailyQuestsForPlayer(steamid);
+    res.status(200).json(dailyQuests);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+// /api/players/:steamid/daily_quests/reroll?questID=:questid
+router.post(
+  "/:steamid/daily_quests/reroll",
+  isFromDedicatedServer,
+  async (req, res) => {
+    try {
+      const steamid = req.params.steamid;
+      const questID = req.query.questID;
+      const dailyQuests = await quests.rerollDailyQuest(steamid, questID);
+      res.status(200).json(dailyQuests);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ message: "Server Error" });
+    }
+  }
+);
+
+// /api/players/:steamid/daily_quests/claim?questID=:questid
+router.post(
+  "/:steamid/daily_quests/claim",
+  isFromDedicatedServer,
+  async (req, res) => {
+    try {
+      const steamid = req.params.steamid;
+      const questID = req.query.questID;
+      const rewards = await quests.claimQuestReward(steamid, questID);
+      res.status(200).json(rewards);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ message: "Server Error" });
+    }
+  }
+);
+
+router.get("/:steamid/achievements", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const dailyQuests = await quests.getAchievementsForPlayer(steamid);
+    res.status(200).json(dailyQuests);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+// /api/players/:steamid/daily_quests/claim?questID=:questid
+router.post("/:steamid/achievements/claim", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const questID = req.query.questID;
+    const rewards = await quests.claimQuestReward(steamid, questID);
+    res.status(200).json(rewards);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+//////////////////////////////////////////////
+// Transactions
+//////////////////////////////////////////////
+
 router.post(
   "/:steamid/transaction",
   isFromDedicatedServer,
@@ -56,22 +160,15 @@ router.post(
   }
 );
 
-router.get("/:steamid/heroes", async (req, res) => {
-  try {
-    const steamid = req.params.steamid;
-    const playerInfo = await players.getHeroStats(steamid);
-    res.status(200).json(playerInfo);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: "Server Error" });
-  }
-});
+//////////////////////////////////////////////
+// Companions / Cosmetics / Battle Pass
+//////////////////////////////////////////////
 
 router.get("/:steamid/companions", async (req, res) => {
   try {
     const steamid = req.params.steamid;
-    const playerInfo = await players.getCompanions(steamid);
-    res.status(200).json(playerInfo);
+    const companions = await players.getCompanions(steamid);
+    res.status(200).json(companions);
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server Error" });
@@ -111,17 +208,6 @@ router.get("/:steamid/cosmetics", async (req, res) => {
     const filter = req.query.filter;
     const onlyEquipped = filter === "equipped";
     const playerInfo = await players.getPlayerCosmetics(steamid, onlyEquipped);
-    res.status(200).json(playerInfo);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: "Server Error" });
-  }
-});
-
-router.get("/:steamid/battle_pass", async (req, res) => {
-  try {
-    const steamid = req.params.steamid;
-    const playerInfo = await players.getBattlePasses(steamid);
     res.status(200).json(playerInfo);
   } catch (error) {
     console.log(error);
@@ -174,5 +260,16 @@ router.delete(
     }
   }
 );
+
+router.get("/:steamid/battle_pass", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const playerInfo = await players.getBattlePasses(steamid);
+    res.status(200).json(playerInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
 
 module.exports = router;

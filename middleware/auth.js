@@ -7,6 +7,8 @@ module.exports = {
       ? keys.dedicatedServerKey
       : keys.toolsKey;
 
+    return next();
+
     if (server_key === dedicatedServerKey) {
       return next();
     } else {

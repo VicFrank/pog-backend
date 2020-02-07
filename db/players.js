@@ -47,9 +47,7 @@ module.exports = {
       // Create three random daily quests
       await quests.createInitialDailyQuests(steamID, 3);
 
-      // Initialize achievements
-
-      return rows[0];
+      return rows;
     } catch (error) {
       throw error;
     }
@@ -106,20 +104,8 @@ module.exports = {
       SUM(gp.total_gold) as total_gold,
       SUM(gp.total_exp) as total_exp,
       
-      TRUNC(SUM(g.duration)::decimal / count(*), 2) as avg_game_duration,
-      TRUNC(SUM(gp.kills)::decimal / count(*), 2) as avg_kills,
-      TRUNC(SUM(gp.deaths)::decimal / count(*), 2) as avg_deaths,
-      TRUNC(SUM(gp.assists)::decimal / count(*), 2) as avg_assists,
-      TRUNC(SUM(gp.last_hits)::decimal / count(*), 2) as avg_last_hits,
-      TRUNC(SUM(gp.denies)::decimal / count(*), 2) as avg_denies,
-      TRUNC(SUM(gp.tp_used)::decimal / count(*), 2) as avg_tp_used,
-      TRUNC(SUM(gp.runes_used)::decimal / count(*), 2) as avg_runes_used,
-      TRUNC(60 * SUM(gp.total_gold)::decimal / SUM(g.duration), 2) as gpm,
-      TRUNC(60 * SUM(gp.total_exp)::decimal / SUM(g.duration), 2) as xpm,
-      
       COUNT(case when gp.abandoned then 1 end) as abandoned
       
-      --   TODO: buildings_destroyed, guardian_kills, avg_guardian_kills
       FROM players as p
       JOIN game_players as gp
       USING (steam_id)
@@ -187,6 +173,26 @@ module.exports = {
         buildingKills,
         guardianKills,
       };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getGames(steamID, limit = 100, offset = 0, hours) {
+    try {
+      const sql_query = `
+      SELECT *, g.radiant_win = gp.is_radiant as won
+      FROM game_players gp
+      JOIN games g
+      USING (game_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE p.steam_id = $1
+      ORDER BY created_at DESC
+      LIMIT $2 OFFSET $3;
+      `;
+      const { rows } = await query(sql_query, [steamID, limit, offset]);
+      return rows;
     } catch (error) {
       throw error;
     }

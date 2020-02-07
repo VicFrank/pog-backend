@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <Header />
+    <Header v-if="!this.isRoot" />
     <div class="main-layout">
-      <Sidebar />
-      <router-view></router-view>
+      <Sidebar v-if="!this.isRoot" />
+      <div v-bind:class="{ 'sidebar-open': sidebarOpen, 'neutral-div': true }">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -14,6 +16,14 @@ import Sidebar from "./components/Sidebar.vue";
 
 export default {
   name: "app",
+  computed: {
+    isRoot() {
+      return this.$route.path === "/";
+    },
+    sidebarOpen() {
+      return this.$store.state.ui.sidebarOpen;
+    },
+  },
   components: {
     Header,
     Sidebar,
@@ -36,6 +46,14 @@ export default {
   font-style: normal;
 }
 
+.sidebar-open {
+  margin-left: 220px;
+}
+
+.neutral-div {
+  width: 100%;
+}
+
 body {
   /* background-color: rgba(14, 19, 23, 0.94); */
   background-color: #13171d;
@@ -47,6 +65,14 @@ body {
 
 a:hover {
   text-decoration: none;
+}
+
+.win {
+  color: #a9cf54;
+}
+
+.loss {
+  color: #c23c2a;
 }
 
 #main-nav {
@@ -107,227 +133,11 @@ a:hover {
   flex-direction: row;
 }
 
-.main-layout__sidebar {
-  width: 220px;
-  position: fixed;
-  height: 100%;
-  z-index: 5;
-  border-right: 1px solid rgba(44, 133, 199, 0.2);
-}
-
-.main-layout__sidebar {
-  top: 0;
-  z-index: 5;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.main-layout__sidebar {
-  top: 0;
-  z-index: 5;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.sidebar-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 100%;
-  height: 100%;
-}
-
-.sidebar-content .user-info {
-  padding: 120px 0 15px 0;
-}
-
-.sidebar-content .user-info img {
-  height: 150px;
-  width: 150px;
-  display: block;
-  margin: 0 auto;
-  border: solid 1px #0b86c4;
-}
-
-.sidebar-content h3 {
-  font-size: 22px;
-  font-weight: 600;
-  font-family: "Radiance-Semibold";
-  letter-spacing: 1px;
-  text-align: center;
-  color: #0b86c4;
-}
-
-.notification {
-  position: relative;
-}
-
-.custom-badge {
-  position: absolute;
-  right: 40px;
-  bottom: -15px;
-  width: 25px;
-  height: 25px;
-  border-radius: 25px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-  background-color: #0b86c4;
-  font-size: 18px !important;
-  color: #fcfcfc;
-  display: inline-block;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-}
-
-.sidebar-nav {
-  width: 100%;
-  margin: 70px 0 0 0;
-  padding: 0;
-}
-
-.sidebar-nav__item {
-  position: relative;
-}
-
-.sidebar-nav__link {
-  position: relative;
-  letter-spacing: 1px;
-  display: flex;
-  padding: 14px 8px 14px 55px;
-  transition: 0.2s ease;
-  color: #fff;
-}
-
-.sidebar-nav__link:after,
-.sidebar-nav__link:before {
-  content: "";
-}
-
-.sidebar-nav__link:after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-left: 3px solid #0b86c4;
-  background: linear-gradient(
-    90deg,
-    rgba(83, 169, 255, 0.1) 0%,
-    rgba(83, 169, 255, 0.0001) 100%,
-    rgba(83, 169, 255, 0.1) 100%
-  );
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.2s ease;
-}
-
-.sidebar-nav__link:before {
-  position: absolute;
-  left: 20px;
-  top: -3px;
-  bottom: 0;
-  margin: auto 14px auto 0;
-  background-size: 100%;
-}
-
-.sidebar-nav__link.active {
-  color: #0b86c4;
-  font-weight: 500;
-  font-size: 18px;
-  letter-spacing: 1px;
-  text-decoration: none;
-}
-
-.sidebar-nav__link.active:after {
-  opacity: 1;
-  visibility: visible;
-}
-
-.sidebar-nav__link:hover:not(.active) {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 18px;
-  letter-spacing: 1px;
-}
-
-.sidebar-nav__link:hover:not(.active):after {
-  content: "";
-  opacity: 1;
-  visibility: visible;
-}
-
-.sidebar-nav__link_battlepass:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/book.svg");
-}
-
-.sidebar-nav__link_armory:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/columns.svg");
-}
-
-.sidebar-nav__link_battlepass:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/book.svg");
-}
-
-.sidebar-nav__link_achievements:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/gift.svg");
-}
-
-.sidebar-nav__link_dailyquest:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/calendar-alt.svg");
-}
-
-.sidebar-nav__link_stats:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/chart-bar.svg");
-}
-
-.sidebar-nav__link_friends:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/users.svg");
-}
-
-.sidebar-nav__link_settings:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/cog.svg");
-}
-
-.sidebar-nav__link_history:before {
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-image: url("./assets/images/history.svg");
-}
-
 .main-layout__content {
   display: flex;
   flex-direction: column;
   width: 100%;
   flex-grow: 1;
-  padding-left: 220px;
 }
 
 .main-layout__content {
@@ -346,7 +156,7 @@ a:hover {
   font-family: "Radiance-Semibold";
   letter-spacing: 1px;
   color: #0b86c4;
-  margin: 1em 0 2em 0;
+  margin: 0.5em;
   text-align: center;
 }
 
@@ -479,75 +289,6 @@ a:hover {
   border-radius: 10px;
   border: 4px solid rgb(41, 134, 196);
   z-index: 10;
-}
-
-/* achievements */
-
-.achievement {
-  width: 75%;
-  position: relative;
-  margin: 0.75em auto;
-  padding: 2em 4em;
-  border: solid 1.1px #364552;
-  /* border: solid 1px #202e3a;
-    background-color: #172126; */
-  background-color: #222e3b;
-}
-
-.achievement h3 {
-  font-family: "Radiance-Semibold";
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: 0.5px;
-  color: #fcfcfc;
-}
-
-.achievement p {
-  font-size: 18px;
-  color: #fcfcfc;
-}
-
-.achievement-progress {
-  background-color: rgba(188, 188, 188, 0.3);
-}
-
-.user-progress {
-  background-image: linear-gradient(to right, #0b86c4, #42728a);
-}
-
-.achievement span {
-  position: absolute;
-}
-
-.pog-gained {
-  right: 10em;
-  top: 2em;
-  background-image: linear-gradient(to bottom, #53b5e7 11%, #b3b9bf 83%);
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0.5px;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.xp-gained {
-  top: 2em;
-  right: 90px;
-  background-image: linear-gradient(
-    to bottom,
-    #8f6b29 11%,
-    #fde08d 46%,
-    #df9f28 83%
-  );
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0.5px;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* cosmetics  */
@@ -830,54 +571,6 @@ a:hover {
   content: "$";
 }
 
-.single-quest {
-  /* border: solid 1px #202e3a; */
-  border: solid 1.1px #364552;
-  background-color: #222e3b;
-  padding: 2em 1em;
-  border-bottom: 0;
-}
-
-.single-quest p {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: #fcfcfc;
-  font-family: "Radiance-Semibold";
-}
-
-.quest-xp {
-  height: 50px;
-  background-color: #1a232b;
-  border: solid 1.1px #364552;
-  border-top: 0;
-  border-bottom: 3px solid #125478;
-}
-
-.quest-xp span {
-  background-image: linear-gradient(
-    to bottom,
-    #8f6b29 11%,
-    #fde08d 46%,
-    #df9f28 83%
-  );
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: absolute;
-  bottom: 15px;
-  left: 35px;
-}
-
-.quest-xp img {
-  position: absolute;
-  right: 35px;
-  bottom: 10px;
-}
-
 /* store */
 
 .featured {
@@ -998,15 +691,6 @@ td {
   width: 35px;
 }
 
-td:hover {
-  transition: 0.25s ease-in-out;
-  box-shadow: 0 0 15px 0 #457296;
-  cursor: pointer;
-  transform: scale(1);
-  -webkit-transform: scale(1);
-  -moz-transform: scale(1);
-}
-
 .gold-color {
   color: #fbb829 !important;
 }
@@ -1070,17 +754,6 @@ td a:hover {
   text-align: center;
   margin-right: 1px;
   vertical-align: top;
-}
-
-.image-container {
-  position: relative;
-  display: inline-block;
-  margin-right: 2px;
-  overflow: hidden;
-}
-
-.image-container img {
-  width: 40px;
 }
 
 /* changelog */

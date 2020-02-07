@@ -1,5 +1,6 @@
 const { query } = require("./index");
 const { GetEloRatingChange } = require("../mmr/mmr");
+const players = require("./players");
 
 module.exports = {
   async create(gameData) {
@@ -121,18 +122,20 @@ module.exports = {
         // bots can have a null steamid
         if (!steamid) continue;
 
-        const { rows: playerRows } = await query(
-          `INSERT INTO players(steam_id, username)
-           values ($1, $2)
-           on conflict(steam_id)
-           do UPDATE SET username = $2
-           RETURNING (mmr)`,
+        // update the username and get the player (if it exists)
+        let { rows: playerRows } = await query(
+          `UPDATE players
+          SET username = $2
+          WHERE steam_id = $1
+          RETURNING *`,
           [steamid, username]
         );
 
-        // TODO: Get battle pass name, and exp earned,
-        // update the total exp of the battle pass, create
-        // a battle pass if it doesn't exist
+        // If the player did not exist, create it
+        if (playerRows.length === 0) {
+          // console.log("inserting new player");
+          playerRows = await players.createNewPlayer(steamid, username);
+        }
 
         const mmr = parseInt(playerRows[0].mmr);
 
@@ -239,9 +242,11 @@ module.exports = {
         whereClause = "WHERE created_at >= NOW() - $3 * INTERVAL '1 HOURS'";
       }
       const sql_query = `
-      SELECT g.*, string_agg(gb.hero, ', ') as bans
-        FROM games g 
-        JOIN game_bans gb
+      SELECT g.*, 
+        array_agg(gp.hero) FILTER (WHERE gp.is_radiant = TRUE) radiant,
+        array_agg(gp.hero) FILTER (WHERE gp.is_radiant = FALSE) dire
+        FROM games g
+        JOIN game_players gp
         USING (game_id)
         ${whereClause}
         GROUP BY game_id

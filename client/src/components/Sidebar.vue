@@ -3,10 +3,19 @@
     <div class="sidebar-content">
       <div class="user-info">
         <h3>SUNSfan</h3>
-        <router-link to="/Profile">
-          <img src="../assets/images/sunsfan.svg" alt />
+        <router-link to="/demo/profile">
+          <img
+            src="../assets/images/sunsfan.svg"
+            class="profile-picture"
+            alt="Profile Picture"
+          />
         </router-link>
         <div class="notification">
+          <img
+            src="../assets/images/badge1.png"
+            class="custom-badge-img"
+            alt="Battle Pass Badge"
+          />
           <span class="custom-badge">4</span>
         </div>
       </div>
@@ -14,51 +23,66 @@
       <ul class="sidebar-nav">
         <li class="sidebar-nav__item">
           <router-link
-            to="/"
+            to="/demo/profile"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >Home</router-link
+          >
+        </li>
+
+        <li class="sidebar-nav__item">
+          <router-link
+            to="/demo/profile/battle_pass"
             class="sidebar-nav__link sidebar-nav__link_battlepass"
             exact-active-class="active"
-          >Battle Pass</router-link>
+            >Battle Pass</router-link
+          >
         </li>
 
         <li class="sidebar-nav__item">
           <router-link
-            to="/Cosmetics"
+            to="/demo/profile/cosmetics"
             class="sidebar-nav__link sidebar-nav__link_armory"
             exact-active-class="active"
-          >Cosmetics</router-link>
+            >Cosmetics</router-link
+          >
         </li>
 
         <li class="sidebar-nav__item">
           <router-link
-            to="/Achievements"
+            to="/demo/profile/achievements"
             class="sidebar-nav__link sidebar-nav__link_achievements"
             exact-active-class="active"
-          >Achievements</router-link>
-        </li>
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/Quests"
-            class="sidebar-nav__link sidebar-nav__link_dailyquest"
-            exact-active-class="active"
-          >Daily Quests</router-link>
-        </li>
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/MyStats"
-            class="sidebar-nav__link sidebar-nav__link_stats"
-            exact-active-class="active"
-          >My Stats</router-link>
-        </li>
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/MatchHistory"
-            class="sidebar-nav__link sidebar-nav__link_history"
-            exact-active-class="active"
-          >Match History</router-link>
+            >Achievements</router-link
+          >
         </li>
         <!-- <li class="sidebar-nav__item">
           <router-link
-            to="/"
+            to="/demo/profile/quests"
+            class="sidebar-nav__link sidebar-nav__link_dailyquest"
+            exact-active-class="active"
+            >Daily Quests</router-link
+          >
+        </li> -->
+        <li class="sidebar-nav__item">
+          <router-link
+            to="/demo/profile/stats"
+            class="sidebar-nav__link sidebar-nav__link_stats"
+            exact-active-class="active"
+            >My Stats</router-link
+          >
+        </li>
+        <li class="sidebar-nav__item">
+          <router-link
+            to="/demo/profile/games"
+            class="sidebar-nav__link sidebar-nav__link_history"
+            exact-active-class="active"
+            >Match History</router-link
+          >
+        </li>
+        <!-- <li class="sidebar-nav__item">
+          <router-link
+            to="demo/"
             class="sidebar-nav__link sidebar-nav__link_settings"
             >Settings</router-link
           >
@@ -69,7 +93,253 @@
 </template>
 
 <script>
-export default {};
+import { TweenMax, Power4 } from "gsap";
+export default {
+  name: "sidebar",
+  mounted() {
+    const open = this.$store.state.ui.sidebarOpen;
+    TweenMax.set(this.$el, {
+      x: open ? 0 : -this.$el.offsetWidth,
+    });
+  },
+  computed: {
+    open() {
+      return this.$store.state.ui.sidebarOpen;
+    },
+  },
+  watch: {
+    open: function(open) {
+      const dX = open ? 0 : -this.$el.offsetWidth;
+      TweenMax.to(this.$el, 0.6, {
+        x: dX,
+        ease: Power4.easeOut,
+      });
+    },
+  },
+};
 </script>
 
-<style></style>
+<style>
+.main-layout__sidebar {
+  width: 220px;
+  position: fixed;
+  height: 100%;
+  z-index: 5;
+  border-right: 1px solid rgba(44, 133, 199, 0.2);
+  background-color: #13171d;
+}
+
+.main-layout__sidebar {
+  top: 0;
+  z-index: 5;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.main-layout__sidebar {
+  top: 0;
+  z-index: 5;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.sidebar-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100%;
+  height: 100%;
+}
+
+.sidebar-content .user-info {
+  padding: 120px 0 15px 0;
+}
+
+.profile-picture {
+  height: 150px;
+  width: 150px;
+  display: block;
+  margin: 0 auto;
+  border: solid 1px #0b86c4;
+}
+
+.sidebar-content h3 {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: "Radiance-Semibold";
+  letter-spacing: 1px;
+  text-align: center;
+  color: #0b86c4;
+}
+
+.sidebar-nav {
+  width: 100%;
+  margin: 70px 0 0 0;
+  padding: 0;
+}
+
+.sidebar-nav__item {
+  position: relative;
+}
+
+.sidebar-nav__link {
+  position: relative;
+  letter-spacing: 1px;
+  display: flex;
+  padding: 14px 8px 14px 55px;
+  transition: 0.2s ease;
+  color: #fff;
+}
+
+.sidebar-nav__link:after,
+.sidebar-nav__link:before {
+  content: "";
+}
+
+.sidebar-nav__link:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-left: 3px solid #0b86c4;
+  background: linear-gradient(
+    90deg,
+    rgba(83, 169, 255, 0.1) 0%,
+    rgba(83, 169, 255, 0.0001) 100%,
+    rgba(83, 169, 255, 0.1) 100%
+  );
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s ease;
+}
+
+.sidebar-nav__link:before {
+  position: absolute;
+  left: 20px;
+  top: -3px;
+  bottom: 0;
+  margin: auto 14px auto 0;
+  background-size: 100%;
+}
+
+.sidebar-nav__link.active {
+  color: #0b86c4;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.sidebar-nav__link.active:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar-nav__link:hover:not(.active) {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.sidebar-nav__link:hover:not(.active):after {
+  content: "";
+  opacity: 1;
+  visibility: visible;
+}
+
+.notification {
+  position: relative;
+}
+
+.custom-badge-img {
+  position: absolute;
+  right: 26px;
+  bottom: -26px;
+  width: 50px;
+  height: 50px;
+}
+
+.custom-badge {
+  position: absolute;
+  right: 40px;
+  bottom: -15px;
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  font-size: 18px !important;
+  color: #fcfcfc;
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+.sidebar-nav__link_battlepass:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/book.svg");
+}
+
+.sidebar-nav__link_armory:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/columns.svg");
+}
+
+.sidebar-nav__link_battlepass:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/book.svg");
+}
+
+.sidebar-nav__link_achievements:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/gift.svg");
+}
+
+.sidebar-nav__link_dailyquest:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/calendar-alt.svg");
+}
+
+.sidebar-nav__link_stats:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/chart-bar.svg");
+}
+
+.sidebar-nav__link_friends:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/users.svg");
+}
+
+.sidebar-nav__link_settings:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/cog.svg");
+}
+
+.sidebar-nav__link_history:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/history.svg");
+}
+</style>

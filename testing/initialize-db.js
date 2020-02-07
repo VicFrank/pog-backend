@@ -4,8 +4,6 @@ const players = require("../db/players");
 const questsList = require("./quests-list");
 const { generateRandomSampleData } = require("./sample-data");
 
-// create sample games
-
 /*
   Initializes the database with the daily quests/achievements
 */
@@ -19,29 +17,7 @@ async function loadQuests() {
 
   let promises = [];
   for (let questData of questsList) {
-    const {
-      isAchievement,
-      name,
-      title,
-      description,
-      xp,
-      poggers,
-      stat,
-      required,
-    } = questData;
-
-    promises.push(
-      quests.addNewQuest(
-        isAchievement,
-        name,
-        description,
-        poggers,
-        xp,
-        stat,
-        required,
-        title
-      )
-    );
+    promises.push(quests.addNewQuest(questData));
   }
 
   await Promise.all(promises);
@@ -69,13 +45,12 @@ async function initializeAdmins() {
   ];
 
   for (let steamID of adminList) {
-    const rows = await players.setAdmin(steamID, true, 1);
-    console.log(rows);
+    await players.setAdmin(steamID, true, 1);
   }
 }
 
 (async function() {
-  await addSampleGames(1000);
-  await initializeAdmins();
   await loadQuests();
+  await addSampleGames(10);
+  await initializeAdmins();
 })();

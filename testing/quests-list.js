@@ -7,7 +7,7 @@ module.exports = [
     poggers: 300,
     xp: 100,
     stat: "test",
-    required: 3,
+    requiredAmount: 3,
   },
   {
     isAchievement: false,
@@ -16,7 +16,7 @@ module.exports = [
     poggers: 0,
     xp: 100,
     stat: "runes_picked_up",
-    required: 5,
+    requiredAmount: 5,
   },
   {
     isAchievement: false,
@@ -25,7 +25,7 @@ module.exports = [
     poggers: 0,
     xp: 150,
     stat: "neutral_item_purchased",
-    required: 3,
+    requiredAmount: 3,
   },
   {
     isAchievement: false,
@@ -34,7 +34,7 @@ module.exports = [
     poggers: 0,
     xp: 150,
     stat: "games_won",
-    required: 2,
+    requiredAmount: 2,
   },
   {
     isAchievement: false,
@@ -43,7 +43,7 @@ module.exports = [
     poggers: 0,
     xp: 100,
     stat: "damage_dealt",
-    required: 30000,
+    requiredAmount: 30000,
   },
   {
     isAchievement: false,
@@ -52,7 +52,7 @@ module.exports = [
     poggers: 0,
     xp: 100,
     stat: "guardians_killed",
-    required: 1,
+    requiredAmount: 1,
   },
   {
     isAchievement: false,
@@ -61,7 +61,7 @@ module.exports = [
     poggers: 0,
     xp: 100,
     stat: "nokrah_purchased",
-    required: 1,
+    requiredAmount: 1,
   },
   {
     isAchievement: false,
@@ -70,7 +70,7 @@ module.exports = [
     poggers: 0,
     xp: 100,
     stat: "creeps_killed",
-    required: 200,
+    requiredAmount: 200,
   },
   // Achievements
   {
@@ -81,7 +81,7 @@ module.exports = [
     xp: 2000,
     poggers: 125,
     stat: "games_won",
-    required: 100,
+    requiredAmount: 100,
   },
   {
     isAchievement: true,
@@ -91,7 +91,7 @@ module.exports = [
     xp: 7500,
     poggers: 350,
     stat: "games_won",
-    required: 1000,
+    requiredAmount: 1000,
   },
   {
     isAchievement: true,
@@ -101,7 +101,7 @@ module.exports = [
     xp: 500,
     poggers: 30,
     stat: "gold_earned",
-    required: 100000,
+    requiredAmount: 100000,
   },
   {
     isAchievement: true,
@@ -111,7 +111,7 @@ module.exports = [
     xp: 2000,
     poggers: 125,
     stat: "gold_earned",
-    required: 1000000,
+    requiredAmount: 1000000,
   },
   {
     isAchievement: true,
@@ -121,7 +121,7 @@ module.exports = [
     xp: 750,
     poggers: 77,
     stat: "rampages",
-    required: 7,
+    requiredAmount: 7,
   },
   {
     isAchievement: true,
@@ -131,7 +131,7 @@ module.exports = [
     xp: 2500,
     poggers: 177,
     stat: "rampages",
-    required: 77,
+    requiredAmount: 77,
   },
   {
     isAchievement: true,
@@ -141,7 +141,7 @@ module.exports = [
     xp: 10000,
     poggers: 777,
     stat: "rampages",
-    required: 777,
+    requiredAmount: 777,
   },
   {
     isAchievement: true,
@@ -151,7 +151,7 @@ module.exports = [
     xp: 500,
     poggers: 30,
     stat: "guardians_killed",
-    required: 25,
+    requiredAmount: 25,
   },
   {
     isAchievement: true,
@@ -161,7 +161,7 @@ module.exports = [
     xp: 2000,
     poggers: 125,
     stat: "guardians_killed",
-    required: 250,
+    requiredAmount: 250,
   },
   {
     isAchievement: true,
@@ -171,7 +171,7 @@ module.exports = [
     xp: 7500,
     poggers: 350,
     stat: "guardians_killed",
-    required: 2500,
+    requiredAmount: 2500,
   },
   {
     isAchievement: true,
@@ -181,7 +181,7 @@ module.exports = [
     xp: 500,
     poggers: 30,
     stat: "healing_goblets",
-    required: 100,
+    requiredAmount: 100,
   },
   {
     isAchievement: true,
@@ -191,7 +191,7 @@ module.exports = [
     xp: 2000,
     poggers: 125,
     stat: "healing_goblets",
-    required: 1000,
+    requiredAmount: 1000,
   },
   {
     isAchievement: true,
@@ -201,7 +201,7 @@ module.exports = [
     xp: 7500,
     poggers: 350,
     stat: "healing_goblets",
-    required: 10000,
+    requiredAmount: 10000,
   },
   {
     isAchievement: true,
@@ -211,7 +211,7 @@ module.exports = [
     xp: 750,
     poggers: 30,
     stat: "total_healed",
-    required: 200000,
+    requiredAmount: 200000,
   },
   {
     isAchievement: true,
@@ -221,7 +221,7 @@ module.exports = [
     xp: 2500,
     poggers: 125,
     stat: "total_healed",
-    required: 2000000,
+    requiredAmount: 2000000,
   },
   {
     isAchievement: true,
@@ -231,7 +231,7 @@ module.exports = [
     xp: 10000,
     poggers: 350,
     stat: "total_healed",
-    required: 20000000,
+    requiredAmount: 20000000,
   },
   {
     isAchievement: true,
@@ -241,7 +241,7 @@ module.exports = [
     xp: 750,
     poggers: 30,
     stat: "guardian_buffs_received",
-    required: 20,
+    requiredAmount: 20,
   },
   {
     isAchievement: true,
@@ -251,7 +251,7 @@ module.exports = [
     xp: 2500,
     poggers: 125,
     stat: "guardian_buffs_received",
-    required: 200,
+    requiredAmount: 200,
   },
   {
     isAchievement: true,
@@ -261,7 +261,7 @@ module.exports = [
     xp: 10000,
     poggers: 350,
     stat: "guardian_buffs_received",
-    required: 2000,
+    requiredAmount: 2000,
   },
   {
     isAchievement: true,
@@ -271,7 +271,7 @@ module.exports = [
     xp: 750,
     poggers: 30,
     stat: "max_level",
-    required: 10,
+    requiredAmount: 10,
   },
   {
     isAchievement: true,
@@ -281,7 +281,7 @@ module.exports = [
     xp: 2500,
     poggers: 125,
     stat: "max_level",
-    required: 100,
+    requiredAmount: 100,
   },
   {
     isAchievement: true,
@@ -291,7 +291,7 @@ module.exports = [
     xp: 10000,
     poggers: 350,
     stat: "max_level",
-    required: 1000,
+    requiredAmount: 1000,
   },
   {
     isAchievement: true,
@@ -301,7 +301,7 @@ module.exports = [
     xp: 750,
     poggers: 30,
     stat: "building_damage",
-    required: 250000,
+    requiredAmount: 250000,
   },
   {
     isAchievement: true,
@@ -311,7 +311,7 @@ module.exports = [
     xp: 2500,
     poggers: 125,
     stat: "building_damage",
-    required: 2500000,
+    requiredAmount: 2500000,
   },
   {
     isAchievement: true,
@@ -321,7 +321,7 @@ module.exports = [
     xp: 10000,
     poggers: 350,
     stat: "building_damage",
-    required: 25000000,
+    requiredAmount: 25000000,
   },
   {
     isAchievement: true,
@@ -331,7 +331,7 @@ module.exports = [
     xp: 1000,
     poggers: 88,
     stat: "chests_opened",
-    required: 8,
+    requiredAmount: 8,
   },
   {
     isAchievement: true,
@@ -341,7 +341,7 @@ module.exports = [
     xp: 5000,
     poggers: 188,
     stat: "chests_opened",
-    required: 88,
+    requiredAmount: 88,
   },
   {
     isAchievement: true,
@@ -351,7 +351,7 @@ module.exports = [
     xp: 15000,
     poggers: 888,
     stat: "chests_opened",
-    required: 888,
+    requiredAmount: 888,
   },
   {
     isAchievement: true,
@@ -361,7 +361,7 @@ module.exports = [
     xp: 500,
     poggers: 30,
     stat: "high_fives",
-    required: 25,
+    requiredAmount: 25,
   },
   {
     isAchievement: true,
@@ -371,7 +371,7 @@ module.exports = [
     xp: 2000,
     poggers: 125,
     stat: "high_fives",
-    required: 200,
+    requiredAmount: 200,
   },
   {
     isAchievement: true,
@@ -381,6 +381,6 @@ module.exports = [
     xp: 5000,
     poggers: 350,
     stat: "high_fives",
-    required: 1000,
+    requiredAmount: 1000,
   },
 ];
