@@ -133,7 +133,6 @@ module.exports = {
 
         // If the player did not exist, create it
         if (playerRows.length === 0) {
-          // console.log("inserting new player");
           playerRows = await players.createNewPlayer(steamid, username);
         }
 

@@ -119,7 +119,7 @@ module.exports = {
       // sample without replacement
       if (k > arr.length) {
         throw new RangeError(
-          "Sample size must be less than or equal to array length         when sampling without replacement."
+          "Sample size must be less than or equal to array length when sampling without replacement."
         );
       }
       sample = arr

@@ -8,32 +8,51 @@ const { generateRandomSampleData } = require("./sample-data");
   Initializes the database with the daily quests/achievements
 */
 async function loadQuests() {
-  const loadedQuests = await quests.getAllAchievements();
+  try {
+    const loadedQuests = await quests.getAllAchievements();
 
-  if (loadedQuests.length > 0) {
-    console.log("Quests are already loaded");
-    return;
+    if (loadedQuests.length > 0) {
+      console.log("Quests are already loaded");
+      return;
+    }
+
+    let promises = [];
+    for (let questData of questsList) {
+      promises.push(quests.addNewQuest(questData));
+    }
+
+    await Promise.all(promises);
+
+    console.log("Added quests");
+  } catch (error) {
+    throw error;
   }
+}
 
-  let promises = [];
-  for (let questData of questsList) {
-    promises.push(quests.addNewQuest(questData));
+async function initPlayers(numGames) {
+  try {
+    for (let i = 0; i < 10; i++) {
+      await games.create(generateRandomSampleData());
+    }
+    console.log(`Ran 10 sample games to initialize players`);
+  } catch (error) {
+    throw error;
   }
-
-  await Promise.all(promises);
-
-  console.log("Added quests");
 }
 
 async function addSampleGames(numGames) {
-  let promises = [];
-  for (let i = 0; i < numGames; i++) {
-    promises.push(games.create(generateRandomSampleData()));
+  try {
+    let promises = [];
+    for (let i = 0; i < numGames; i++) {
+      promises.push(games.create(generateRandomSampleData()));
+    }
+
+    await Promise.all(promises);
+
+    console.log(`Added ${numGames} sample games`);
+  } catch (error) {
+    throw error;
   }
-
-  await Promise.all(promises);
-
-  console.log(`Added ${numGames} sample games`);
 }
 
 async function initializeAdmins() {
@@ -44,13 +63,18 @@ async function initializeAdmins() {
     "76561198030851434",
   ];
 
-  for (let steamID of adminList) {
-    await players.setAdmin(steamID, true, 1);
+  try {
+    for (let steamID of adminList) {
+      await players.setAdmin(steamID, true, 1);
+    }
+  } catch (error) {
+    throw error;
   }
 }
 
 (async function() {
   await loadQuests();
-  await addSampleGames(10);
+  await initPlayers();
+  await addSampleGames(100);
   await initializeAdmins();
 })();
