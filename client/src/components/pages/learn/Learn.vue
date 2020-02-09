@@ -6,7 +6,7 @@
         Path of Guardians (POG) is a custom game mode created by DotaCinema.
         It is currently in Beta. The goal of this custom game is to create
         a casual, stress-free environment for those that are looking for an
-        alternative to the regular grind of ranked Dota 2. Wether you're a
+        alternative to the regular grind of ranked Dota 2. Whether you're a
         veteran player, or someone who stopped playing Dota a long time ago,
         or have never even played Dota before, we want this to be a welcome
         experience for all. This custom game is loosely inspired by ARAM,
@@ -26,7 +26,7 @@
           <li>One Barracks - when destroyed, will deploy Mega Creeps</li>
           <li>Four minute Day/Night cycle</li>
         </ul>
-        <p>This is a condensed version of Dota 2. We want it to be as accessible as possible. As a result, many Neutral items can be purchased, and will take a regular item slot. The end goal is the same, destroy the enemy Ancient to win!</p>
+        <p>This is a condensed version of Dota 2. We want it to be as accessible as possible. As a result, many Neutral items can be purchased, and will occupy a regular item slot. The end goal is the same, destroy the enemy Ancient to win!</p>
       </div>
     </div>
     <div class="row">
@@ -41,7 +41,7 @@
           <li>Reduced Buyback cooldown</li>
           <li>Infinite, 0 mana TPs</li>
           <li>Multishot fountain</li>
-          <li>After 20 minutes, all buildings explode, exposing the Ancients and giving both team Mega Creeps</li>
+          <li>After 20 minutes, all buildings explode, exposing the Ancients and giving both teams Mega Creeps</li>
         </ul>
         <p>Fast, fast, fast! Games will typically take between 10-15 minutes. They won't go much longer, trust us!</p>
       </div>
@@ -57,10 +57,10 @@
         <h2>Restrictions</h2>
         <ul>
           <li>No couriers</li>
-          <li>Can't use other players' items</li>
+          <li>Can't pick up & deliver other players' items</li>
           <li>Can't purchase consumable regen (tangos, healing salves, clarities, etc.)</li>
         </ul>
-        <p>To prevent snowballing, we've kept the spirit of ARAM by restrictiong certain aspects of the game. It's a give and take. Is it worth it to go back to base to pick up your items, or should you continue to fight?</p>
+        <p>To prevent snowballing, we've kept to the spirit of ARAM by restricting certain aspects of the game. It's a give and take. Is it worth it to go back to base to pick up your items, or should you continue to fight?</p>
       </div>
     </div>
     <div class="row">
@@ -84,8 +84,8 @@
       <div class="col-sm my-auto">
         <h2>Guardians</h2>
         <ul>
-          <li>There are two Guardian pits on the map (three total guardians). Killing them provides a buff to your team for 5 minutes.</li>
-          <li>Both teams have vision of the north Guardian during the day, and the south Guardian at night</li>
+          <li>There are two Guardian pits on the map (three total Guardians). Killing them provides a buff to your team for 5 minutes.</li>
+          <li>Both teams have vision of the North Guardian during the day, and the South Guardian at night</li>
         </ul>
         <p>The Path of Guardians is protected by Ancient beings with very silly names. Defeat them to give your team an extra boost!</p>
       </div>
