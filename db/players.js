@@ -117,6 +117,8 @@ module.exports = {
       `;
       const { rows } = await query(sql_query, [steamID]);
 
+      const equippedCompanion = await this.getEquippedCompanion(steamID);
+
       const teamKillStats = await this.getTeamKillStats(steamID);
       return {
         ...rows[0],
@@ -124,6 +126,7 @@ module.exports = {
         guardian_kills: teamKillStats.guardianKills.guardian_kills,
         avg_guardian_kills:
           teamKillStats.guardianKills.guardian_kills / parseInt(rows[0].games),
+        companion: equippedCompanion,
       };
     } catch (error) {
       throw error;
@@ -278,6 +281,8 @@ module.exports = {
       const sql_query = `
       SELECT *
       FROM player_cosmetics
+      JOIN cosmetics
+      USING cosmetic_id
       WHERE steam_id = $1
       ${filter}
       `;
@@ -322,10 +327,12 @@ module.exports = {
       const sql_query = `
       SELECT *
       FROM player_companions
+      JOIN cosmetics
+      USING (cosmetic_id)
       WHERE steam_id = $1 AND equipped = TRUE
       `;
       const { rows } = await query(sql_query, [steamID]);
-      return rows;
+      return rows[0];
     } catch (error) {
       throw error;
     }
@@ -348,7 +355,7 @@ module.exports = {
         RETURNING *;
       `;
       const { rows } = await query(query2, [companion_id]);
-      return rows;
+      return rows[0];
     } catch (error) {
       throw error;
     }
@@ -362,17 +369,30 @@ module.exports = {
       if (transactionData.companions) {
         const { companions } = transactionData;
         for (const companionData of companions) {
-          const { name, effect, level, amount } = companionData;
+          let { name, cosmetic_id, effect, level, amount } = companionData;
 
           if (amount > 0) {
             for (let i = 0; i < amount; i++) {
-              const queryText = `
+              if (cosmetic_id == undefined) {
+                let queryText = `
+                SELECT cosmetic_id
+                FROM cosmetics
+                WHERE cosmetic_name = $1
+                `;
+                let { rows } = await query(queryText, [name]);
+                if (rows.length === 0) {
+                  throw new Error(`Cosmetic with name ${name} not found`);
+                }
+                cosmetic_id = rows[0].cosmetic_id;
+              }
+
+              queryText = `
               INSERT INTO player_companions as pc
-                (steam_id, companion_name, companion_level, effect)
+                (steam_id, cosmetic_id, companion_level, effect)
               VALUES
                 ($1, $2, $3, $4)
               `;
-              await query(queryText, [steamID, name, level, effect]);
+              await query(queryText, [steamID, cosmetic_id, level, effect]);
             }
           } else if (amount < 0) {
             for (let i = 0; i < amount * -1; i++) {
@@ -455,13 +475,23 @@ module.exports = {
         for (const [itemName, amount] of entries) {
           if (amount > 0) {
             for (let i = 0; i < amount; i++) {
-              const queryText = `
-              INSERT INTO player_cosmetics as pc
-                (steam_id, cosmetic_name)
-              VALUES
-                ($1, $2)
+              let queryText = `
+              SELECT cosmetic_id
+              FROM cosmetics
+              WHERE cosmetic_name = $1
               `;
-              await query(queryText, [steamID, itemName]);
+              let { rows } = await query(queryText, [name]);
+              if (rows.length === 0) {
+                throw new Error(`Cosmetic with name ${name} not found`);
+              }
+              const cosmetic_id = rows[0].cosmetic_id;
+
+              queryText = `
+              INSERT INTO player_cosmetics
+              (steam_id, cosmetic_id) VALUES
+              ($1, $2)
+              `;
+              await query(queryText, [steamID, cosmetic_id]);
             }
           } else if (amount < 0) {
             for (let i = 0; i < amount * -1; i++) {

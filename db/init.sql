@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS game_bans CASCADE;
 DROP TABLE IF EXISTS teams CASCADE;
 DROP TABLE IF EXISTS players CASCADE;
 DROP TABLE IF EXISTS game_players CASCADE;
+DROP TABLE IF EXISTS cosmetics CASCADE;
 DROP TABLE IF EXISTS player_cosmetics CASCADE;
 DROP TABLE IF EXISTS player_companions CASCADE;
 DROP TABLE IF EXISTS player_battle_pass CASCADE;
@@ -19,6 +20,9 @@ CREATE TABLE IF NOT EXISTS games (
 
   created_at TIMESTAMPTZ DEFAULT Now()
 );
+
+DROP INDEX IF EXISTS idx_games_created_at;
+CREATE INDEX idx_games_created_at ON games (created_at);
 
 CREATE TABLE IF NOT EXISTS game_bans (
   game_id INTEGER REFERENCES games (game_id) ON UPDATE CASCADE,
@@ -99,22 +103,35 @@ CREATE TABLE IF NOT EXISTS game_players (
   CONSTRAINT game_players_pkey PRIMARY KEY (game_id, steam_id)
 );
 
+CREATE TABLE IF NOT EXISTS cosmetics (
+  cosmetic_id SERIAL PRIMARY KEY,
+  cosmetic_name TEXT UNIQUE,
+  cosmetic_type TEXT,
+  equip_group TEXT,
+  english_name TEXT,
+  cost INTEGER,
+  rarity TEXT
+);
+
+DROP INDEX IF EXISTS idx_cosmetics_name;
+CREATE INDEX idx_cosmetics_name ON cosmetics (cosmetic_name);
+
 CREATE TABLE IF NOT EXISTS player_companions (
   companion_id SERIAL PRIMARY KEY,
+  cosmetic_id INTEGER REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
-  companion_name TEXT,
   companion_level INTEGER DEFAULT 0,
   equipped BOOLEAN DEFAULT FALSE,
   effect INTEGER DEFAULT -1
 );
 
+DROP INDEX IF EXISTS idx_player_companions;
 CREATE INDEX idx_player_companions
-ON player_companions (steam_id, companion_name, companion_level, effect);
+ON player_companions (steam_id, cosmetic_id, companion_level, effect);
 
 CREATE TABLE IF NOT EXISTS player_cosmetics (
-  cosmetic_id SERIAL PRIMARY KEY,
+  cosmetic_id INTEGER REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
-  cosmetic_name TEXT,
   created TIMESTAMP DEFAULT Now(),
   equipped BOOLEAN DEFAULT FALSE
 );

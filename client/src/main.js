@@ -16,6 +16,7 @@ import SplashPage from "./components/SplashPage";
 import Game from "./components/pages/games/Game";
 import RecentGames from "./components/pages/games/RecentGames";
 import HeroStatsList from "./components/pages/games/HeroStatsList";
+import Learn from "./components/pages/learn/Learn";
 
 import store from "./store/index.js";
 import filters from "./filters/filters";
@@ -35,16 +36,36 @@ const routes = [
     component: Home,
   },
   {
+    path: "/demo/changelog",
+    component: Changelog,
+  },
+  {
+    path: "/demo/learn",
+    component: Learn,
+  },
+  {
+    path: "/demo/games",
+    component: RecentGames,
+  },
+  {
+    path: "/demo/heroes",
+    component: HeroStatsList,
+  },
+  {
+    path: "/demo/store",
+    component: Store,
+  },
+  {
+    path: "/demo/profile",
+    component: Profile,
+  },
+  {
     path: "/demo/profile/battle_pass",
     component: BattlePass,
   },
   {
     path: "/demo/profile/achievements",
     component: Achievements,
-  },
-  {
-    path: "/demo/changelog",
-    component: Changelog,
   },
   {
     path: "/demo/profile/cosmetics",
@@ -55,14 +76,6 @@ const routes = [
     component: Game,
   },
   {
-    path: "/demo/games/",
-    component: RecentGames,
-  },
-  {
-    path: "/demo/heroes/",
-    component: HeroStatsList,
-  },
-  {
     path: "/demo/profile/games",
     component: MatchHistory,
   },
@@ -71,16 +84,8 @@ const routes = [
     component: MyStats,
   },
   {
-    path: "/demo/profile",
-    component: Profile,
-  },
-  {
     path: "/demo/profile/heroes",
     component: Stats,
-  },
-  {
-    path: "/demo/store",
-    component: Store,
   },
 ];
 

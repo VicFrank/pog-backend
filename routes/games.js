@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const games = require("../db/games");
 const apicache = require("apicache");
-const { isFromDedicatedServer } = require("../middleware/auth");
+const { isFromDedicatedServer } = require("../auth/auth");
 
 router.get("/", async (req, res) => {
   try {

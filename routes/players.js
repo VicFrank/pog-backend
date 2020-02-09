@@ -3,7 +3,7 @@ const router = express.Router();
 const players = require("../db/players");
 const quests = require("../db/quests");
 const apicache = require("apicache");
-const { isFromDedicatedServer } = require("../middleware/auth");
+const { isFromDedicatedServer } = require("../auth/auth");
 
 router.get("/", async (req, res) => {
   try {

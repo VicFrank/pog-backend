@@ -6,12 +6,12 @@
         <img src="../assets/images/logo.svg" alt="POG" />
       </router-link>
       <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex">
+        <li class="nav-item mr-5">
+          <router-link class="nav-link" to="/demo/learn">LEARN</router-link>
+        </li>
         <!-- <li class="nav-item mr-5">
-            <router-link class="nav-link" to="/Learn">LEARN</router-link>
-          </li>-->
-        <!-- <li class="nav-item mr-5">
-            <router-link class="nav-link" to="/Store">STORE</router-link>
-          </li>-->
+            <router-link class="nav-link" to="/demo/store">STORE</router-link>
+        </li>-->
         <li class="nav-item mr-5">
           <router-link class="nav-link" to="/demo/games">GAMES</router-link>
         </li>
@@ -27,8 +27,7 @@
         <a
           class="d-flex btn"
           href="https://steamcommunity.com/sharedfiles/filedetails/?id=1146215215"
-          >PLAY NOW</a
-        >
+        >PLAY NOW</a>
       </div>
     </nav>
   </header>
@@ -38,8 +37,8 @@
 import SidebarToggle from "./SidebarToggle.vue";
 export default {
   components: {
-    SidebarToggle,
-  },
+    SidebarToggle
+  }
 };
 </script>
 

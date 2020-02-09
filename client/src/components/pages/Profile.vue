@@ -12,9 +12,7 @@
               <PlayerGamesList v-bind:games="games"></PlayerGamesList>
 
               <div class="more">
-                <router-link to="/demo/profile/games" class="blue"
-                  >View All</router-link
-                >
+                <router-link to="/demo/profile/games" class="blue">View All</router-link>
               </div>
             </div>
 
@@ -41,9 +39,7 @@
                 </tbody>
               </table>
               <div class="more">
-                <router-link to="/demo/profile/stats" class="blue"
-                  >View All</router-link
-                >
+                <router-link to="/demo/profile/stats" class="blue">View All</router-link>
               </div>
             </div>
           </div>
@@ -60,13 +56,13 @@ import PlayerGamesList from "./games/PlayerGamesList.vue";
 export default {
   components: {
     DailyQuests,
-    PlayerGamesList,
+    PlayerGamesList
   },
 
   data: () => ({
     error: "",
     games: [],
-    playerStats: {},
+    playerStats: {}
   }),
 
   mounted() {
@@ -81,7 +77,7 @@ export default {
       .then(playerStats => {
         this.playerStats = playerStats;
       });
-  },
+  }
 };
 </script>
 

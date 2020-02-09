@@ -1,7 +1,9 @@
 const games = require("../db/games");
 const quests = require("../db/quests");
 const players = require("../db/players");
+const cosmetics = require("../db/cosmetics");
 const questsList = require("./quests-list");
+const cosmeticsList = require("./cosmetics-list");
 const { generateRandomSampleData } = require("./sample-data");
 
 /*
@@ -24,6 +26,31 @@ async function loadQuests() {
     await Promise.all(promises);
 
     console.log("Added quests");
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function loadCosmetics() {
+  try {
+    const loadedQuests = await cosmetics.getAllCosmetics();
+
+    if (loadedQuests.length > 0) {
+      console.log("Quests are already loaded");
+      return;
+    }
+
+    let promises = [];
+    for (let cosmeticData of cosmeticsList) {
+      const { name, rarity, cost, type, equip_group } = cosmeticData;
+      promises.push(
+        cosmetics.createCosmetic(name, rarity, cost, type, equip_group)
+      );
+    }
+
+    await Promise.all(promises);
+
+    console.log("Added cosmetics");
   } catch (error) {
     throw error;
   }
@@ -74,6 +101,7 @@ async function initializeAdmins() {
 
 (async function() {
   await loadQuests();
+  await loadCosmetics();
   await initPlayers();
   await addSampleGames(100);
   await initializeAdmins();
