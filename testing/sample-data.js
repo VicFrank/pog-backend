@@ -43,7 +43,7 @@ const sampleData = {
     },
     playerInfo: {
       "1": {
-        steamid: "76561198079741620", // steam64 ID
+        steamid: "76561197960956468", // steam64 ID
         username: "Dingleberry", // steam username
         team: "DOTA_TEAM_GOODGUYS",
         banChoice: "npc_dota_hero_batrider", // can be null
@@ -212,7 +212,7 @@ const heroes = [
 ];
 
 const steamIDs = [
-  "76561198079741620",
+  "76561197960956468",
   "76561197964547457",
   "76561198014254115",
   "76561197960287930",
@@ -223,7 +223,7 @@ const steamIDs = [
 ];
 
 const usernames = {
-  "76561198079741620": "DC | SunsFan",
+  "76561197960956468": "HIPPOcrit",
   "76561197964547457": "DC | @syndereNDota",
   "76561198014254115": "IceFrog",
   "76561197960287930": "Rabscuttle",

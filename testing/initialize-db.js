@@ -35,16 +35,30 @@ async function loadCosmetics() {
   try {
     const loadedQuests = await cosmetics.getAllCosmetics();
 
-    if (loadedQuests.length > 0) {
-      console.log("Quests are already loaded");
-      return;
-    }
+    // if (loadedQuests.length > 0) {
+    //   console.log("Cosmetics are already loaded");
+    //   return;
+    // }
 
     let promises = [];
     for (let cosmeticData of cosmeticsList) {
-      const { name, rarity, cost, type, equip_group } = cosmeticData;
+      const {
+        name,
+        rarity,
+        cost,
+        type,
+        equip_group,
+        entity_name,
+      } = cosmeticData;
       promises.push(
-        cosmetics.createCosmetic(name, rarity, cost, type, equip_group)
+        cosmetics.createCosmetic(
+          name,
+          rarity,
+          cost,
+          type,
+          equip_group,
+          entity_name
+        )
       );
     }
 
@@ -83,10 +97,10 @@ async function addSampleGames(numGames) {
 }
 
 async function initializeAdmins() {
+  console.log("Initializing Admins");
   const adminList = [
     "76561198015161808",
-    "76561198007141460",
-    "76561198079741620",
+    "76561197960956468",
     "76561198030851434",
   ];
 
