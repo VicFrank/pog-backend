@@ -278,6 +278,7 @@ function generatePlayerInfo(steamIDBucket, team) {
   playerInfo.assists = randomInt(0, 50).toString();
   playerInfo.lastHits = randomInt(0, 300).toString();
   playerInfo.denies = randomInt(0, 100).toString();
+  playerInfo.currentGold = randomInt(0, 999).toString();
   playerInfo.doubleKills = randomInt(0, 8).toString();
   playerInfo.rampages = randomInt(0, 2).toString();
   playerInfo.heroDamage = randomInt(0, 50000).toString();

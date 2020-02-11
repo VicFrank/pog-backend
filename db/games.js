@@ -1,6 +1,7 @@
 const { query } = require("./index");
 const { GetEloRatingChange } = require("../mmr/mmr");
 const players = require("./players");
+const quests = require("./quests");
 
 module.exports = {
   async create(gameData) {
@@ -107,6 +108,8 @@ module.exports = {
           abandoned,
         } = playerData;
 
+        const winner = team == winnerTeam;
+
         const isRadiant = team == "DOTA_TEAM_GOODGUYS";
         const item0 = finalInventory["0"];
         const item1 = finalInventory["1"];
@@ -118,6 +121,8 @@ module.exports = {
         const backpack1 = finalInventory["7"];
         const backpack2 = finalInventory["8"];
         const backpack3 = finalInventory["9"];
+
+        const teamData = teamInfo[team];
 
         // bots can have a null steamid
         if (!steamid) continue;
@@ -135,6 +140,9 @@ module.exports = {
         if (playerRows.length === 0) {
           playerRows = await players.createNewPlayer(steamid, username);
         }
+
+        // Add progress to all achievements/quests
+        quests.addGameQuestProgress({ ...playerData, winner }, teamData);
 
         const mmr = parseInt(playerRows[0].mmr);
 

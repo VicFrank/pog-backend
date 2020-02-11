@@ -74,7 +74,8 @@ module.exports = {
     try {
       const sql_query = `
       SELECT pq.*, q.*, p.patreon_level,
-        quest_progress > required_amount as quest_completed
+        quest_progress > required_amount as quest_completed,
+        created < current_timestamp - interval '23 hours' as can_reroll
       FROM player_quests pq
       JOIN quests q
       USING (quest_id)
@@ -102,14 +103,36 @@ module.exports = {
       LEFT JOIN player_quests USING (quest_id)
       WHERE q.is_achievement = TRUE AND
         (steam_id = $1 OR steam_id IS NULL)
-	    ORDER BY quest_id;
+	    ORDER BY quest_id
       `;
       const { rows } = await query(sql_query, [steamID]);
 
+      // TODO
       // Filter the achievements to only the ones to show in IO
       // i.e. Highest Tier unclaimed
       // If all tiers are claimed, show final tier
 
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Gets all active quests and achievements, including
+   * achievements that don't have a player_quests row yet
+   * @param {string} steamID
+   */
+  async getAllQuestsForPlayer(steamID) {
+    try {
+      const sql_query = `
+      SELECT * FROM quests q
+      LEFT JOIN player_quests USING (quest_id)
+      WHERE steam_id = $1 OR
+        (steam_id IS NULL AND is_achievement = TRUE)
+	    ORDER BY quest_id
+      `;
+      const { rows } = await query(sql_query, [steamID]);
       return rows;
     } catch (error) {
       throw error;
@@ -144,9 +167,7 @@ module.exports = {
   },
 
   /**
-   * Creates three random daily quests for the user.
-   * Quests are dated as 24 hours ago to allow the user to
-   * re-roll them immediately.
+   * Creates three random daily quests for the user.   *
    * This function should only be called when a player is
    * created for the first time.
    * @param {string} steamID
@@ -186,6 +207,8 @@ module.exports = {
   /**
    * Removes the given quest, and generates a new one that the player
    * does not already have, and is not the given quest
+   * @param {string} steamID
+   * @param {number} questID
    */
   async rerollDailyQuest(steamID, questID) {
     try {
@@ -242,6 +265,13 @@ module.exports = {
     }
   },
 
+  /**
+   * Returns if the player has the quest as one of their
+   * current quests. Doesn't count quests the player
+   * can't use due to patreon level
+   * @param {string} steamID
+   * @param {number} questID
+   */
   async playerHasQuest(steamID, questID) {
     const currentQuests = await this.getDailyQuestsForPlayer(steamID);
     for (let quest of currentQuests) {
@@ -313,6 +343,120 @@ module.exports = {
       return { xp, poggers, success: true };
     } catch (error) {
       throw error;
+    }
+  },
+
+  async incrementQuestProgress(steamID, questID, amount) {
+    try {
+      // insert the player_quest if they haven't started the
+      // achievement yet
+      console.log(steamID, questID, amount);
+      let sql_query = `
+        INSERT INTO player_quests (steam_id, quest_id, quest_progress)
+        VALUES ($1, $2, $3)
+        ON CONFLICT ON CONSTRAINT player_quests_pkey
+        DO UPDATE
+        SET quest_progress = EXCLUDED.quest_progress + $3
+      `;
+      await query(sql_query, [steamID, questID, amount]);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async addGameQuestProgress(playerData, teamData) {
+    const {
+      steamid: steamID,
+      username,
+      team,
+      banChoice, // can be null
+      availablePicks,
+      rerolledHeroes, // can be null
+      finalPick,
+      kills,
+      deaths,
+      assists,
+      lastHits,
+      denies,
+      doubleKills,
+      rampages,
+      heroDamage,
+      buildingDamage,
+      heroHealing,
+      tpScrollsUsed,
+      runesUsed,
+      healthDropDuration,
+      currentGold,
+      totalGold,
+      totalExp,
+      level,
+      abilities,
+      itemPurchases,
+      finalInventory,
+      permanentBuffs,
+      disconnectEvents,
+      abandoned,
+      winner,
+    } = playerData;
+
+    const { guardianKills, buildingKills } = teamData;
+
+    const activeQuests = await this.getAllQuestsForPlayer(steamID);
+
+    for (let quest of activeQuests) {
+      const questID = quest.quest_id;
+      let progress = 0;
+      switch (quest.stat) {
+        case "runes_picked_up":
+          progress = runesUsed;
+          break;
+        case "neutral_item_purchased":
+          // progress = ;
+          break;
+        case "games_won":
+          progress = winner ? 1 : 0;
+          break;
+        case "damage_dealt":
+          progress = heroDamage;
+          break;
+        case "guardians_killed":
+          progress = guardianKills ? Object.keys(guardianKills).length : 0;
+          break;
+        case "nokrah_purchased":
+          const nokrahPurchased = itemPurchases
+            ? Object.values(itemPurchases).indexOf("item_nokrash_blade") > -1
+            : 0;
+          progress = nokrahPurchased ? 1 : 0;
+          break;
+        case "creeps_killed":
+          progress = lastHits;
+          break;
+        case "gold_earned":
+          progress = totalGold;
+          break;
+        case "rampages":
+          progress = rampages;
+          break;
+        case "healing_goblets":
+          // progress = ;
+          break;
+        case "total_healed":
+          progress = heroHealing;
+          break;
+        case "guardian_buffs_received":
+          // progress = ;
+          break;
+        case "max_level":
+          progress = level == 30 ? 1 : 0;
+          break;
+        case "building_damage":
+          progress = buildingDamage;
+          break;
+        case "high_fives":
+          // progress = ;
+          break;
+      }
+      await this.incrementQuestProgress(steamID, questID, progress);
     }
   },
 };

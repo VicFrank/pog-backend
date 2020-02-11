@@ -2,15 +2,6 @@ module.exports = [
   // Daily Quests
   {
     isAchievement: false,
-    name: "Test Quest",
-    description: "Test description",
-    poggers: 300,
-    xp: 100,
-    stat: "test",
-    requiredAmount: 3,
-  },
-  {
-    isAchievement: false,
     name: "Pick up %x% Runes",
     description: "",
     poggers: 0,
@@ -38,7 +29,7 @@ module.exports = [
   },
   {
     isAchievement: false,
-    name: "Deal %x% damage",
+    name: "Deal %x% damage to Heroes",
     description: "",
     poggers: 0,
     xp: 100,

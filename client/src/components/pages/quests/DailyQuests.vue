@@ -36,7 +36,11 @@
                 >{{ quest.xp_reward }} XP</span
               >
             </div>
-            <a v-on:click="rerollQuest(quest)" class="reroll-button">
+            <a
+              v-if="quest.can - reroll"
+              v-on:click="rerollQuest(quest)"
+              class="reroll-button"
+            >
               <img src="./reroll.svg" alt />
             </a>
           </div>
