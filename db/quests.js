@@ -73,7 +73,8 @@ module.exports = {
   async getDailyQuestsForPlayer(steamID) {
     try {
       const sql_query = `
-      SELECT pq.*, q.*, p.patreon_level
+      SELECT pq.*, q.*, p.patreon_level,
+        quest_progress > required_amount as quest_completed
       FROM player_quests pq
       JOIN quests q
       USING (quest_id)
@@ -89,7 +90,6 @@ module.exports = {
       } else {
         return rows.slice(0, 3);
       }
-      return rows;
     } catch (error) {
       throw error;
     }
@@ -310,7 +310,7 @@ module.exports = {
       `;
       await query(sql_query, [steamID, xp]);
 
-      return { xp, poggers };
+      return { xp, poggers, success: true };
     } catch (error) {
       throw error;
     }

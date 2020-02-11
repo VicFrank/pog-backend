@@ -12,6 +12,14 @@
             <p>
               {{ quest.quest_name | parseQuestText(quest.required_amount) }}
             </p>
+            <button
+              v-on:click="claimQuest(quest)"
+              v-if="quest.quest_completed && !quest.claimed"
+              type="button"
+              class="btn btn-primary mb-3"
+            >
+              Claim
+            </button>
             <div class="achievement-progress">
               <div
                 class="user-progress"
@@ -19,7 +27,7 @@
               ></div>
             </div>
           </div>
-          <div class="quest-xp">
+          <div v-if="!quest.claimed" class="quest-xp">
             <div class="quest-rewards">
               <span v-if="quest.poggers_reward > 0" class="pog-text mr-3"
                 >{{ quest.poggers_reward }} POGGER</span
@@ -80,6 +88,22 @@ export default {
           }
         });
     },
+    claimQuest(quest) {
+      const { quest_id } = quest;
+      fetch(
+        `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/claim?questID=${quest_id}`,
+        {
+          method: "post",
+        }
+      )
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            // refresh the daily quests
+            this.getDailyQuests();
+          }
+        });
+    },
   },
 };
 </script>
@@ -119,9 +143,7 @@ export default {
 }
 
 .quest-rewards {
-  position: absolute;
-  bottom: 15px;
-  left: 35px;
+  padding: 1rem;
 }
 
 .quest-xp-text {
