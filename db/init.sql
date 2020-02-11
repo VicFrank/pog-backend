@@ -105,16 +105,13 @@ CREATE TABLE IF NOT EXISTS game_players (
 
 CREATE TABLE IF NOT EXISTS cosmetics (
   cosmetic_id SERIAL PRIMARY KEY,
-  cosmetic_name TEXT UNIQUE,
+  entity_name TEXT,
+  cosmetic_name TEXT,
   cosmetic_type TEXT,
   equip_group TEXT,
-  english_name TEXT,
   cost INTEGER,
   rarity TEXT
 );
-
-DROP INDEX IF EXISTS idx_cosmetics_name;
-CREATE INDEX idx_cosmetics_name ON cosmetics (cosmetic_name);
 
 CREATE TABLE IF NOT EXISTS player_companions (
   companion_id SERIAL PRIMARY KEY,

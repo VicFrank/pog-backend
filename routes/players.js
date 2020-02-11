@@ -87,7 +87,7 @@ router.post(
       res.status(200).json(dailyQuests);
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: "Server Error" });
+      res.status(500).json(error.toString());
     }
   }
 );
@@ -104,7 +104,7 @@ router.post(
       res.status(200).json(rewards);
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: "Server Error" });
+      res.status(500).json({ error: error.toString() });
     }
   }
 );
