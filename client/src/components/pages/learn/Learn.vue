@@ -31,7 +31,7 @@
     </div>
     <div class="row">
       <div class="col-sm my-auto">
-        <h2>Fast Paced</h2>
+        <h2>Low Stress & Fast Paced</h2>
         <ul>
           <li>Accelerated XP/Gold</li>
           <li>Partially shared XP/Gold between teammates/</li>
@@ -43,7 +43,7 @@
           <li>Multishot fountain</li>
           <li>After 20 minutes, all buildings explode, exposing the Ancients and giving both teams Mega Creeps</li>
         </ul>
-        <p>Fast, fast, fast! Games will typically take between 10-15 minutes. They won't go much longer, trust us!</p>
+        <p>Fast paced but low-stress! You can finally stop worrying about last hits as gold is partially shared. Games will typically take between 10-15 minutes. They won't go much longer, trust us!</p>
       </div>
       <div class="col-sm my-auto">
         <img class="img-fluid" src="./bullet_02_fast_paced.png" alt="Fast Paced" />
@@ -69,7 +69,7 @@
         <ul>
           <li>Two shrines provide 150% regeneration with a 2 minute cooldown</li>
           <li>Healing pods randomly appear after creeps die. Once activated, they provide hp/mana regeneration to units after 3 seconds</li>
-          <li>Fountains regen at 33%</li>
+          <li>Fountains regen at 50%</li>
         </ul>
         <p>Regeneration can be found aplenty in POG, just not in the usual places. Be sure to make use of the very low cooldown Shrines, and protect them at all cost!</p>
       </div>
