@@ -1,0 +1,36 @@
+<template>
+  <div></div>
+</template>
+
+<script>
+export default {
+  created() {
+    // get the current user and redirect to their profile
+    // it's necessary to get this first so that the user is recognized
+    // as logged in
+    fetch("/api/auth/steam/success", { credentials: "include" })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          const { displayName, photos, id } = res.user;
+
+          this.$store.commit({
+            type: "setUser",
+            username: displayName,
+            steamID: id,
+            bpLevel: 4,
+            picture: photos[2].value
+          });
+
+          this.$router.push("/demo/profile");
+        } else {
+          this.$store.commit({
+            type: "setNotLoggedIn"
+          });
+
+          this.$router.push("/demo");
+        }
+      });
+  }
+};
+</script>

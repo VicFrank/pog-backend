@@ -12,17 +12,14 @@
         <!-- <li class="nav-item mr-5">
             <router-link class="nav-link" to="/demo/store">STORE</router-link>
         </li>-->
-        <li class="nav-item mr-5">
-          <router-link class="nav-link" to="/demo/games">GAMES</router-link>
-        </li>
-        <li class="nav-item mr-5">
-          <router-link class="nav-link" to="/demo/heroes">HEROES</router-link>
-        </li>
+        <b-nav-item-dropdown text="STATS" class="mr-5">
+          <b-dropdown-item to="/demo/games">GAMES</b-dropdown-item>
+          <b-dropdown-item to="/demo/heroes">HEROES</b-dropdown-item>
+        </b-nav-item-dropdown>
         <li class="nav-item mr-5">
           <router-link class="nav-link" to="/demo/changelog">CHANGE LOG</router-link>
         </li>
       </ul>
-
       <div class="play">
         <a
           class="d-flex btn"

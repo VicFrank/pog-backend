@@ -3,6 +3,7 @@
     <div class="content">
       <h1 class="page-title">Achievements</h1>
       <div class="container">
+        <b-alert v-if="error != ''" show variant="danger" dismissible>{{error}}</b-alert>
         <div class="row" v-for="quest in achievements" :key="quest.quest_id">
           <div class="col-xl-12">
             <div class="achievement">
@@ -11,8 +12,8 @@
                   <h3>{{ quest.quest_name }}</h3>
                   <p class="achievement-description">
                     {{
-                      quest.quest_description
-                        | parseQuestText(quest.required_amount)
+                    quest.quest_description
+                    | parseQuestText(quest.required_amount)
                     }}
                   </p>
                 </div>
@@ -21,13 +22,14 @@
                   <p class="quest-xp-text">{{ quest.xp_reward }} XP</p>
                 </div>
               </div>
-              <div class="achievement-progress">
-                <div
-                  class="user-progress"
-                  :style="`width:${getProgressPercent(quest)}%;`"
-                ></div>
-              </div>
+              <ProgressBar :progress="quest.quest_progress" :required="quest.required_amount" />
             </div>
+            <button
+              v-on:click="claimQuest(quest)"
+              v-if="quest.quest_completed && !quest.claimed"
+              type="button"
+              class="btn btn-primary mb-3"
+            >Claim</button>
           </div>
         </div>
       </div>
@@ -36,19 +38,25 @@
 </template>
 
 <script>
+import ProgressBar from "../utility/ProgressBar";
+
 export default {
   data: () => ({
     error: "",
-    achievements: [],
+    achievements: []
   }),
 
-  mounted() {
+  components: {
+    ProgressBar
+  },
+
+  created() {
     this.getAchievements();
   },
 
   methods: {
     getProgressPercent(quest) {
-      const progress = quest.quest_progress;
+      const progress = quest.capped_quest_progress;
       const required = quest.required_amount;
 
       const percent = Math.min((progress * 100) / required, 100);
@@ -59,10 +67,34 @@ export default {
         .then(res => res.json())
         .then(quests => {
           this.achievements = quests;
-          console.log(quests);
         });
     },
-  },
+    claimQuest(quest) {
+      const { quest_id } = quest;
+      fetch(
+        `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/claim?questID=${quest_id}`,
+        { method: "post" }
+      )
+        .then(res => {
+          if (!res.ok) throw Error(res.statusText);
+          return res;
+        })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            this.getAchievements();
+          }
+        })
+        .catch(err => {
+          this.error = err;
+          window.scroll({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+          });
+        });
+    }
+  }
 };
 </script>
 
@@ -101,10 +133,6 @@ export default {
 
 .rewards {
   width: 25%;
-}
-
-.achievement-progress {
-  background-color: rgba(188, 188, 188, 0.3);
 }
 
 .quest-xp-text {

@@ -208,7 +208,8 @@ const heroes = [
   "npc_dota_hero_keeper_of_the_light",
   "npc_dota_hero_lina",
   "npc_dota_hero_slark",
-  "npc_dota_hero_scaldris",
+  "npc_dota_hero_zuus",
+  // "npc_dota_hero_scaldris",
 ];
 
 const steamIDs = [

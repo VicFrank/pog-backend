@@ -37,6 +37,10 @@ module.exports = {
     }
   },
 
+  /**
+   * Creates a new quest, either a daily quest or achievement
+   * @param {*} QuestValues
+   */
   async addNewQuest({
     name,
     isAchievement,
@@ -70,11 +74,18 @@ module.exports = {
     }
   },
 
+  /**
+   * Gets the active daily quests for a player.
+   * Returns two quests for patreon level 0, and three
+   * for higher
+   * @param {String} steamID
+   */
   async getDailyQuestsForPlayer(steamID) {
     try {
       const sql_query = `
       SELECT pq.*, q.*, p.patreon_level,
-        quest_progress > required_amount as quest_completed,
+        LEAST(quest_progress, required_amount) as capped_quest_progress,
+        quest_progress >= required_amount as quest_completed,
         created < current_timestamp - interval '23 hours' as can_reroll
       FROM player_quests pq
       JOIN quests q
@@ -82,7 +93,7 @@ module.exports = {
       JOIN players p
       USING (steam_id)
       WHERE steam_id = $1 AND q.is_achievement = FALSE
-      ORDER BY created DESC
+      ORDER BY quest_index DESC
       `;
       const { rows } = await query(sql_query, [steamID]);
 
@@ -99,20 +110,65 @@ module.exports = {
   async getAchievementsForPlayer(steamID) {
     try {
       const sql_query = `
-      SELECT * FROM quests q
-      LEFT JOIN player_quests USING (quest_id)
+      SELECT * FROM quests q,
+        LEAST(quest_progress, required_amount) as capped_quest_progress,
+        quest_progress >= required_amount as quest_completed
+      JOIN player_quests USING (quest_id)
       WHERE q.is_achievement = TRUE AND
-        (steam_id = $1 OR steam_id IS NULL)
+        steam_id = $1
+	    ORDER BY quest_id
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Only shows the highest active tier of achievements
+   * @param {String} steamID
+   */
+  async getActiveAchievementsForPlayer(steamID) {
+    try {
+      const sql_query = `
+      SELECT *,
+        LEAST(quest_progress, required_amount) as capped_quest_progress,
+        quest_progress >= required_amount as quest_completed
+      FROM quests q
+      JOIN player_quests USING (quest_id)
+      WHERE q.is_achievement = TRUE AND
+        steam_id = $1
 	    ORDER BY quest_id
       `;
       const { rows } = await query(sql_query, [steamID]);
 
-      // TODO
-      // Filter the achievements to only the ones to show in IO
-      // i.e. Highest Tier unclaimed
-      // If all tiers are claimed, show final tier
+      // Group by stat
+      let stats = new Set();
+      for (let quest of rows) {
+        const { stat } = quest;
+        stats.add(stat);
+      }
 
-      return rows;
+      let activeAchievements = [];
+      for (let stat of stats) {
+        // Get the highest achievement of this stat that is not claimed
+        let statQuests = rows.filter(quest => quest.stat == stat);
+        statQuests.sort((q1, q2) => q1.required_amount - q2.required_amount);
+
+        let questToAdd;
+        for (let quest of statQuests) {
+          if (!quest.claimed) {
+            questToAdd = quest;
+            break;
+          }
+        }
+        if (!questToAdd) questToAdd = statQuests.slice(-1).pop();
+
+        activeAchievements.push(questToAdd);
+      }
+
+      return activeAchievements;
     } catch (error) {
       throw error;
     }
@@ -127,9 +183,8 @@ module.exports = {
     try {
       const sql_query = `
       SELECT * FROM quests q
-      LEFT JOIN player_quests USING (quest_id)
-      WHERE steam_id = $1 OR
-        (steam_id IS NULL AND is_achievement = TRUE)
+      JOIN player_quests USING (quest_id)
+      WHERE steam_id = $1
 	    ORDER BY quest_id
       `;
       const { rows } = await query(sql_query, [steamID]);
@@ -187,19 +242,46 @@ module.exports = {
 
       // Add the new quests
       let quests = [];
+      let index = 1;
       for (quest of questsToInsert) {
         const insert_query = `
-          INSERT INTO player_quests (steam_id, quest_id) VALUES($1, $2)
+          INSERT INTO player_quests (steam_id, quest_id, quest_index) VALUES($1, $2, $3)
           RETURNING *;
         `;
-        const { rows } = await query(insert_query, [steamID, quest.quest_id]);
+        const { rows } = await query(insert_query, [
+          steamID,
+          quest.quest_id,
+          index,
+        ]);
         quests.push(rows[0]);
+
+        index++;
       }
 
       await query("COMMIT");
       return quests;
     } catch (error) {
       await query("ROLLBACK");
+      throw error;
+    }
+  },
+
+  /**
+   * Initializes all achievements for the player
+   * @param {string} steamID
+   */
+  async initializeAchievements(steamID) {
+    try {
+      const allAchievements = await this.getAllAchievements();
+
+      for (quest of allAchievements) {
+        const insert_query = `
+          INSERT INTO player_quests (steam_id, quest_id) VALUES($1, $2)
+        `;
+        await query(insert_query, [steamID, quest.quest_id]);
+      }
+      return;
+    } catch (error) {
       throw error;
     }
   },
@@ -240,20 +322,17 @@ module.exports = {
       if (!createdRows[0].can_reroll)
         throw new Error(`Can't reroll quest younger than 23 hours`);
 
-      // Remove the given quest
+      // Update the quest
       sql_query = `
-        DELETE FROM player_quests
+        UPDATE player_quests
+        SET (quest_id, quest_progress, created, claimed) =
+        ($3, DEFAULT, DEFAULT, DEFAULT)
         WHERE steam_id = $1 AND quest_id = $2
-      `;
-      await query(sql_query, [steamID, questID]);
-
-      // Add the new quest
-      sql_query = `
-        INSERT INTO player_quests (steam_id, quest_id) VALUES($1, $2)
-        RETURNING *;
+        RETURNING *
       `;
       const { rows: newQuestRows } = await query(sql_query, [
         steamID,
+        questID,
         questToAddID,
       ]);
 
@@ -303,7 +382,7 @@ module.exports = {
         throw new Error(`Invalid Quest ID ${questID}`);
       }
 
-      const questProgress = rows[0].questProgress;
+      const questProgress = rows[0].quest_progress;
       const required = rows[0].required_amount;
       const claimed = rows[0].claimed;
       const poggers = rows[0].poggers_reward;
@@ -348,9 +427,6 @@ module.exports = {
 
   async incrementQuestProgress(steamID, questID, amount) {
     try {
-      // insert the player_quest if they haven't started the
-      // achievement yet
-      console.log(steamID, questID, amount);
       let sql_query = `
         INSERT INTO player_quests (steam_id, quest_id, quest_progress)
         VALUES ($1, $2, $3)

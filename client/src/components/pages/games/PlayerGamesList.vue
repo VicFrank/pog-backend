@@ -51,21 +51,21 @@ export default {
   data: () => ({
     page: 1,
     itemsPerPage: 15,
-    gamesToShow: [],
+    gamesToShow: []
   }),
 
   components: {
     ItemImage,
-    HeroImage,
+    HeroImage
   },
 
   props: {
-    games: Array,
-  },
+    games: Array
+  }
 };
 </script>
 
-<style>
+<style scoped>
 tr {
   cursor: pointer;
 }

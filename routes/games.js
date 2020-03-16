@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const games = require("../db/games");
-const apicache = require("apicache");
-const { isFromDedicatedServer } = require("../auth/auth");
+const auth = require("../auth/auth");
 
 router.get("/", async (req, res) => {
   try {
@@ -22,7 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", isFromDedicatedServer, async (req, res) => {
+router.post("/", auth.adminAuth, async (req, res) => {
   try {
     const parsedData = JSON.parse(JSON.stringify(req.body));
     const insertedGameID = await games.create(parsedData);

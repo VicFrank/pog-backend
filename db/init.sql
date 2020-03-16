@@ -178,6 +178,7 @@ CREATE TABLE IF NOT EXISTS player_quests (
   quest_progress INTEGER DEFAULT 0,
   created TIMESTAMP DEFAULT Now(),
   claimed BOOLEAN DEFAULT FALSE,
+  quest_index INTEGER,
 
   CONSTRAINT player_quests_pkey PRIMARY KEY (steam_id, quest_id)
 );

@@ -1,8 +1,6 @@
 const GetEloProbability = (winnerRating, loserRating) => {
-  probablity =
-    (1.0 * 1.0) /
-    (1 + 1.0 * Math.pow(10, (1.0 * (loserRating - winnerRating)) / 400));
-  return probablity;
+  probability = 1.0 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
+  return probability;
 };
 
 const GetEloRatingChange = (winnerRank, loserRank, K = 50) => {

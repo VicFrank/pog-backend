@@ -2,6 +2,23 @@ var express = require("express"),
   router = express.Router(),
   passport = require("passport");
 
+// get the current logged in user
+router.get("/steam/success", (req, res) => {
+  if (req.user) {
+    res.json({
+      success: true,
+      message: "User has successfully authenticated",
+      user: req.user,
+      cookies: req.cookies,
+    });
+  } else {
+    res.json({
+      success: false,
+      message: "User has not logged in",
+    });
+  }
+});
+
 // GET /auth/steam
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  The first step in Steam authentication will involve redirecting
@@ -15,11 +32,15 @@ router.get(
   }
 );
 
+router.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/");
+});
+
 // GET /auth/steam/return
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
+//   login page.  Otherwise, the user will be redirected to their profile
 router.get(
   "/steam/return",
   // Issue #37 - Workaround for Express router module stripping the full url, causing assertion to fail
@@ -29,7 +50,8 @@ router.get(
   },
   passport.authenticate("steam", { failureRedirect: "/" }),
   function(req, res) {
-    res.redirect("/");
+    const baseUrl = process.env.IS_PRODUCTION ? "" : "http://localhost:8080";
+    res.redirect(`${baseUrl}/demo/redirect`);
   }
 );
 

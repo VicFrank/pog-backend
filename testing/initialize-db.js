@@ -119,6 +119,6 @@ async function initializeAdmins() {
   await loadQuests();
   await loadCosmetics();
   await initPlayers();
-  await addSampleGames(1);
+  await addSampleGames(1000);
   await initializeAdmins();
 })();

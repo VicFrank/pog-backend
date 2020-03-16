@@ -42,8 +42,8 @@ export default {
     playerStats: {},
   }),
 
-  mounted() {
-    fetch(`/api/players/76561198014254115/`)
+  created() {
+    fetch(`/api/players/${this.$store.state.auth.userSteamID}/`)
       .then(res => res.json())
       .then(playerStats => {
         this.playerStats = playerStats;

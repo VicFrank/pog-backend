@@ -12,7 +12,7 @@
       <tr v-for="player in players" :key="player.steam_id">
         <th scope="row">
           <HeroImage :hero="player.hero"></HeroImage>
-          {{ player.username }}
+          <RouterLink :to="`/demo/players/${player.steam_id}`">{{ player.username }}</RouterLink>
         </th>
         <td>{{ player.kills }}/{{ player.deaths }}/{{ player.assists }}</td>
         <td>{{ player.last_hits }}/{{ player.denies }}</td>
@@ -38,12 +38,12 @@ import HeroImage from "./HeroImage.vue";
 export default {
   components: {
     ItemImage,
-    HeroImage,
+    HeroImage
   },
 
   props: {
-    players: Array,
-  },
+    players: Array
+  }
 };
 </script>
 

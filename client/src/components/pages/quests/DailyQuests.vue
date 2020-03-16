@@ -2,47 +2,49 @@
   <div class="content">
     <h3 class="mb-5 text-center">Daily Quests</h3>
     <div class="quest container p-0">
+      <b-alert v-if="error != ''" show variant="danger" dismissible>{{error}}</b-alert>
       <div class="row">
         <div
-          v-for="quest in quests"
+          v-for="(quest, index) in quests"
           :key="quest.quest_id"
           class="col-sm-12 col-md-12 col-lg-4 col-xl-4"
         >
           <div class="single-quest">
-            <p>
-              {{ quest.quest_name | parseQuestText(quest.required_amount) }}
-            </p>
+            <p>{{ quest.quest_name | parseQuestText(quest.required_amount) }}</p>
             <button
-              v-on:click="claimQuest(quest)"
+              v-on:click="claimQuest(quest, index)"
               v-if="quest.quest_completed && !quest.claimed"
               type="button"
               class="btn btn-primary mb-3"
-            >
-              Claim
-            </button>
-            <div class="achievement-progress">
-              <div
-                class="user-progress"
-                :style="`width:${getProgressPercent(quest)}%;`"
-              ></div>
-            </div>
+            >Claim</button>
+            <ProgressBar :progress="quest.quest_progress" :required="quest.required_amount" />
           </div>
-          <div v-if="!quest.claimed" class="quest-xp">
-            <div class="quest-rewards">
-              <span v-if="quest.poggers_reward > 0" class="pog-text mr-3"
-                >{{ quest.poggers_reward }} POGGER</span
-              >
-              <span v-if="quest.xp_reward > 0" class="quest-xp-text"
-                >{{ quest.xp_reward }} XP</span
-              >
+          <div class="d-flex flex-row quest-xp">
+            <div v-if="!quest.claimed" class="quest-rewards">
+              <span
+                v-if="quest.poggers_reward > 0"
+                class="pog-text mr-3"
+              >{{ quest.poggers_reward }} POGGER</span>
+              <span v-if="quest.xp_reward > 0" class="quest-xp-text">{{ quest.xp_reward }} XP</span>
             </div>
+            <div v-else class="quest-rewards">Completed</div>
             <a
-              v-if="quest.can - reroll"
+              v-if="quest.can_reroll"
               v-on:click="rerollQuest(quest)"
-              class="reroll-button"
+              class="ml-auto mr-3 reroll-button"
             >
-              <img src="./reroll.svg" alt />
+              <img src="./reroll.svg" alt="Reroll" />
             </a>
+            <template v-else>
+              <span class="ml-auto mr-1 next-quest-text">
+                {{
+                getTimeUntilReroll(quest.created)
+                }}
+              </span>
+              <a v-on:click="rerollQuest(quest)" class="mr-3 reroll-button">
+                <img class="faded" src="./reroll.svg" alt="Reroll" />
+              </a>
+            </template>
           </div>
         </div>
       </div>
@@ -51,75 +53,90 @@
 </template>
 
 <script>
+import moment from "moment";
+import ProgressBar from "../../utility/ProgressBar";
+
 export default {
   data: () => ({
     error: "",
-    quests: [],
+    quests: []
   }),
 
-  mounted() {
+  components: {
+    ProgressBar
+  },
+
+  created() {
     this.getDailyQuests();
   },
 
   methods: {
-    getProgressPercent(quest) {
-      const progress = quest.quest_progress;
-      const required = quest.required_amount;
-
-      const percent = Math.min((progress * 100) / required, 100);
-      return percent;
+    getTimeUntilReroll(created) {
+      const time = moment(created)
+        .add(23, "hours")
+        .fromNow();
+      return `Can refresh ${time}`;
     },
     getDailyQuests() {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/daily_quests`)
         .then(res => res.json())
         .then(quests => {
           this.quests = quests;
-        });
+        })
+        .catch(err => (this.error = err));
     },
-    rerollQuest(quest) {
+    rerollQuest(quest, index) {
       const { quest_id } = quest;
       fetch(
         `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/reroll?questID=${quest_id}`,
-        {
-          method: "post",
-        }
+        { method: "post" }
       )
+        .then(res => {
+          if (!res.ok) throw Error(res.statusText);
+          return res;
+        })
         .then(res => res.json())
         .then(res => {
           if (res.success) {
+            this.quests = this.quests.splice(index);
             // refresh the daily quests
             this.getDailyQuests();
           }
-        });
+        })
+        .catch(err => (this.error = err));
     },
-    claimQuest(quest) {
+    claimQuest(quest, index) {
       const { quest_id } = quest;
       fetch(
         `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/claim?questID=${quest_id}`,
-        {
-          method: "post",
-        }
+        { method: "post" }
       )
         .then(res => res.json())
         .then(res => {
           if (res.success) {
+            // remove this quest from the list, and
+            this.quests = this.quests.splice(index);
             // refresh the daily quests
             this.getDailyQuests();
           }
-        });
-    },
-  },
+        })
+        .catch(err => (this.error = err));
+    }
+  }
 };
 </script>
 
 <style>
 .reroll-button {
   cursor: pointer;
+  line-height: 43px;
 }
 
-.user-progress {
-  background-image: linear-gradient(to right, #0b86c4, #42728a);
-  height: 20px;
+.reroll-button .faded {
+  opacity: 0.4;
+  filter: alpha(opacity=40); /* msie */
+  background-color: #000;
+  border-radius: 100%;
 }
 
 .single-quest {
@@ -146,6 +163,10 @@ export default {
   border-bottom: 3px solid #125478;
 }
 
+.next-quest-text {
+  line-height: 50px;
+}
+
 .quest-rewards {
   padding: 1rem;
 }
@@ -165,21 +186,10 @@ export default {
   -webkit-text-fill-color: transparent;
 }
 
-.quest-xp img {
-  position: absolute;
-  right: 35px;
-  bottom: 10px;
-}
-
-.user-progress {
-  background-image: linear-gradient(to right, #0b86c4, #42728a);
-}
-
 .pog-text {
   background-image: linear-gradient(to bottom, #53b5e7 11%, #b3b9bf 83%);
   font-size: 20px;
   font-weight: 600;
-  line-height: 1;
   letter-spacing: 0.5px;
   -webkit-background-clip: text;
   background-clip: text;

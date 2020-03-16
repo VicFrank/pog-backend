@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1 class="text-center">Learn</h1>
-    <div class="row">
+    <div class="row ml-1">
       <p>
         Path of Guardians (POG) is a custom game mode created by DotaCinema.
         It is currently in Beta. The goal of this custom game is to create

@@ -46,6 +46,7 @@ module.exports = {
       );
       // Create three random daily quests
       await quests.createInitialDailyQuests(steamID, 3);
+      await quests.initializeAchievements(steamID);
 
       return rows;
     } catch (error) {
@@ -118,8 +119,10 @@ module.exports = {
       const { rows } = await query(sql_query, [steamID]);
 
       const equippedCompanion = await this.getEquippedCompanion(steamID);
-
       const teamKillStats = await this.getTeamKillStats(steamID);
+      const dailyQuests = await quests.getDailyQuestsForPlayer(steamID);
+      const battlePass = await this.getBattlePasses(steamID);
+
       return {
         ...rows[0],
         buildings_destroyed: teamKillStats.buildingKills.buildings_destroyed,
@@ -127,6 +130,8 @@ module.exports = {
         avg_guardian_kills:
           teamKillStats.guardianKills.guardian_kills / parseInt(rows[0].games),
         companion: equippedCompanion,
+        dailyQuests: dailyQuests,
+        battlePass: battlePass,
       };
     } catch (error) {
       throw error;
@@ -356,6 +361,19 @@ module.exports = {
       `;
       const { rows } = await query(query2, [companion_id]);
       return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async modifyPoggers(steamID, amount) {
+    try {
+      const queryText = `
+        UPDATE players
+        SET poggers = poggers + $1
+        WHERE steam_id = $2
+      `;
+      await query(queryText, [amount, steamID]);
     } catch (error) {
       throw error;
     }

@@ -20,7 +20,7 @@ export default {
     games: [],
   }),
 
-  mounted() {
+  created() {
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/games`)
       .then(res => res.json())
       .then(games => {

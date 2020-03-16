@@ -1,121 +1,184 @@
 <template>
   <div class="main-layout__sidebar">
     <div class="sidebar-content">
-      <div class="user-info">
-        <h3>SUNSfan</h3>
-        <router-link to="/demo/profile">
-          <img
-            src="../assets/images/sunsfan.svg"
-            class="profile-picture"
-            alt="Profile Picture"
-          />
-        </router-link>
-        <div class="notification">
-          <img
-            src="../assets/images/badge1.png"
-            class="custom-badge-img"
-            alt="Battle Pass Badge"
-          />
-          <span class="custom-badge">4</span>
+      <template v-if="loggedIn">
+        <div class="user-info">
+          <h3>{{ username }}</h3>
+          <router-link to="/demo/profile">
+            <img :src="profilePicture" class="profile-picture" alt="Profile Picture" />
+          </router-link>
+          <div class="notification">
+            <img src="../assets/images/badge1.png" class="custom-badge-img" alt="Battle Pass Badge" />
+            <span class="custom-badge">{{ bpLevel }}</span>
+          </div>
         </div>
-      </div>
+        <ProgressBar class="bp-progress" :progress="bpLevelProgress" :required="bpLevelRequired" />
 
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/demo/profile"
-            class="sidebar-nav__link"
-            exact-active-class="active"
-            >Home</router-link
-          >
-        </li>
+        <ul class="sidebar-nav">
+          <li class="sidebar-nav__item d-lg-none">
+            <router-link
+              to="/demo/learn"
+              class="sidebar-nav__link"
+              exact-active-class="active"
+            >Learn</router-link>
+          </li>
+          <li class="sidebar-nav__item d-lg-none">
+            <router-link
+              to="/demo/games"
+              class="sidebar-nav__link"
+              exact-active-class="active"
+            >Games</router-link>
+          </li>
+          <li class="sidebar-nav__item d-lg-none">
+            <router-link
+              to="/demo/heroes"
+              class="sidebar-nav__link"
+              exact-active-class="active"
+            >Heroes</router-link>
+          </li>
+          <li class="sidebar-nav__item d-lg-none">
+            <router-link
+              to="/demo/changelog"
+              class="sidebar-nav__link"
+              exact-active-class="active"
+            >Changelog</router-link>
+          </li>
 
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/demo/profile/battle_pass"
-            class="sidebar-nav__link sidebar-nav__link_battlepass"
-            exact-active-class="active"
-            >Battle Pass</router-link
-          >
-        </li>
+          <hr class="d-lg-none" />
 
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/demo/profile/cosmetics"
-            class="sidebar-nav__link sidebar-nav__link_armory"
-            exact-active-class="active"
-            >Cosmetics</router-link
-          >
-        </li>
+          <li class="sidebar-nav__item">
+            <router-link
+              to="/demo/profile"
+              class="sidebar-nav__link"
+              exact-active-class="active"
+            >Home</router-link>
+          </li>
 
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/demo/profile/achievements"
-            class="sidebar-nav__link sidebar-nav__link_achievements"
-            exact-active-class="active"
-            >Achievements</router-link
-          >
-        </li>
-        <!-- <li class="sidebar-nav__item">
-          <router-link
-            to="/demo/profile/quests"
-            class="sidebar-nav__link sidebar-nav__link_dailyquest"
-            exact-active-class="active"
-            >Daily Quests</router-link
-          >
-        </li> -->
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/demo/profile/stats"
-            class="sidebar-nav__link sidebar-nav__link_stats"
-            exact-active-class="active"
-            >My Stats</router-link
-          >
-        </li>
-        <li class="sidebar-nav__item">
-          <router-link
-            to="/demo/profile/games"
-            class="sidebar-nav__link sidebar-nav__link_history"
-            exact-active-class="active"
-            >Match History</router-link
-          >
-        </li>
-        <!-- <li class="sidebar-nav__item">
-          <router-link
-            to="demo/"
-            class="sidebar-nav__link sidebar-nav__link_settings"
-            >Settings</router-link
-          >
-        </li>-->
-      </ul>
+          <li class="sidebar-nav__item">
+            <router-link
+              to="/demo/profile/battle_pass"
+              class="sidebar-nav__link sidebar-nav__link_battlepass"
+              exact-active-class="active"
+            >Battle Pass</router-link>
+          </li>
+
+          <li class="sidebar-nav__item">
+            <router-link
+              to="/demo/profile/cosmetics"
+              class="sidebar-nav__link sidebar-nav__link_armory"
+              exact-active-class="active"
+            >Cosmetics</router-link>
+          </li>
+
+          <li class="sidebar-nav__item">
+            <router-link
+              to="/demo/profile/achievements"
+              class="sidebar-nav__link sidebar-nav__link_achievements"
+              exact-active-class="active"
+            >Achievements</router-link>
+          </li>
+          <!-- <li class="sidebar-nav__item">
+            <router-link
+              to="/demo/profile/quests"
+              class="sidebar-nav__link sidebar-nav__link_dailyquest"
+              exact-active-class="active"
+              >Daily Quests</router-link
+            >
+          </li>-->
+          <li class="sidebar-nav__item">
+            <router-link
+              to="/demo/profile/stats"
+              class="sidebar-nav__link sidebar-nav__link_stats"
+              exact-active-class="active"
+            >My Stats</router-link>
+          </li>
+          <li class="sidebar-nav__item">
+            <router-link
+              to="/demo/profile/games"
+              class="sidebar-nav__link sidebar-nav__link_history"
+              exact-active-class="active"
+            >Match History</router-link>
+          </li>
+          <!-- <li class="sidebar-nav__item">
+            <router-link
+              to="demo/"
+              class="sidebar-nav__link sidebar-nav__link_settings"
+              >Settings</router-link
+            >
+          </li>-->
+        </ul>
+      </template>
+      <template v-else>
+        <div class="login-button">
+          <LoginButton></LoginButton>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { TweenMax, Power4 } from "gsap";
+import LoginButton from "./pages/login/LoginButton";
+import ProgressBar from "./utility/ProgressBar";
+
 export default {
   name: "sidebar",
+
+  components: {
+    LoginButton,
+    ProgressBar
+  },
+
   mounted() {
     const open = this.$store.state.ui.sidebarOpen;
     TweenMax.set(this.$el, {
-      x: open ? 0 : -this.$el.offsetWidth,
+      x: open ? 0 : -this.$el.offsetWidth
     });
+    if (this.$store.state.auth.loggedIn) {
+      fetch(`/api/players/${this.$store.state.auth.userSteamID}/battle_pass`)
+        .then(res => res.json())
+        .then(res => {
+          this.$store.commit({
+            type: "setBattlePass",
+            bpExp: res.total_experience,
+            bpTier: res.tier
+          });
+        });
+    }
   },
   computed: {
     open() {
       return this.$store.state.ui.sidebarOpen;
     },
+    username() {
+      return this.$store.state.auth.username;
+    },
+    profilePicture() {
+      return this.$store.state.auth.profilePictureLink;
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn;
+    },
+    bpLevel() {
+      return this.$store.getters.bpLevel;
+    },
+    bpLevelProgress() {
+      return this.$store.getters.bpLevelProgress;
+    },
+    bpLevelRequired() {
+      return this.$store.getters.bpLevelRequired;
+    }
   },
   watch: {
     open: function(open) {
       const dX = open ? 0 : -this.$el.offsetWidth;
       TweenMax.to(this.$el, 0.6, {
         x: dX,
-        ease: Power4.easeOut,
+        ease: Power4.easeOut
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -150,6 +213,11 @@ export default {
   height: 100%;
 }
 
+.login-button {
+  text-align: center;
+  margin-top: 80px;
+}
+
 .sidebar-content .user-info {
   padding: 120px 0 15px 0;
 }
@@ -171,9 +239,14 @@ export default {
   color: #0b86c4;
 }
 
+.bp-progress {
+  margin: auto;
+  width: 80%;
+}
+
 .sidebar-nav {
   width: 100%;
-  margin: 70px 0 0 0;
+  margin: 25px 0 0 0;
   padding: 0;
 }
 
@@ -251,33 +324,24 @@ export default {
 
 .notification {
   position: relative;
+  text-align: center;
+
+  width: 50px;
+  bottom: 25px;
+  right: 20px;
+  float: right;
 }
 
 .custom-badge-img {
-  position: absolute;
-  right: 26px;
-  bottom: -26px;
-  width: 50px;
-  height: 50px;
+  width: 100%;
 }
 
 .custom-badge {
   position: absolute;
-  right: 40px;
-  bottom: -15px;
-  width: 25px;
-  height: 25px;
-  border-radius: 25px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 18px !important;
-  color: #fcfcfc;
-  display: inline-block;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
 }
 
 .sidebar-nav__link_battlepass:before {

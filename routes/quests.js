@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const quests = require("../db/quests");
+const auth = require("../auth/auth");
 
 router.get("/", async (req, res) => {
   try {
@@ -12,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth.adminAuth, async (req, res) => {
   try {
     const parsedData = JSON.parse(JSON.stringify(req.body));
     const rows = await quests.addNewQuest(parsedData);

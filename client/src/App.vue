@@ -1,9 +1,12 @@
 <template>
   <div id="app">
     <Header v-if="!this.isRoot" />
-    <div class="main-layout">
+    <div class="main-layout" :key="loggedIn">
       <Sidebar v-if="!this.isRoot" />
-      <div v-bind:class="{ 'sidebar-open': sidebarOpen, 'neutral-div': true }">
+      <div
+        @click="onMainContentClicked"
+        v-bind:class="{ 'sidebar-open': sidebarOpen, 'neutral-div': true }"
+      >
         <router-view></router-view>
       </div>
     </div>
@@ -23,11 +26,43 @@ export default {
     sidebarOpen() {
       return this.$store.state.ui.sidebarOpen;
     },
+    loggedIn() {
+      return this.$store.state.auth.loggedIn;
+    }
+  },
+  methods: {
+    onMainContentClicked() {
+      if (this.sidebarOpen && window.innerWidth < 1200)
+        this.$store.dispatch("toggleSidebar");
+    }
+  },
+  created() {
+    // Get the login state of the user (this is used for the entire app)
+    // Probably should go in like App.vue
+    fetch("/api/auth/steam/success", { credentials: "include" })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          const { displayName, photos, id } = res.user;
+
+          this.$store.commit({
+            type: "setUser",
+            username: displayName,
+            steamID: id,
+            bpLevel: 4,
+            picture: photos[2].value
+          });
+        } else {
+          this.$store.commit({
+            type: "setNotLoggedIn"
+          });
+        }
+      });
   },
   components: {
     Header,
-    Sidebar,
-  },
+    Sidebar
+  }
 };
 </script>
 
@@ -46,8 +81,23 @@ export default {
   font-style: normal;
 }
 
-.sidebar-open {
-  margin-left: 220px;
+@media all and (max-width: 1199px) {
+  .sidebar-open:after {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    left: 0;
+    top: 0;
+    z-index: 0;
+  }
+}
+
+@media all and (min-width: 1200) {
+  .sidebar-open {
+    margin-left: 220px;
+  }
 }
 
 .neutral-div {
@@ -158,123 +208,6 @@ a:hover {
   color: #0b86c4;
   margin: 0.5em;
   text-align: center;
-}
-
-.battlepass-timeline {
-  position: relative;
-  width: 960px;
-  margin: 0 auto;
-  margin-top: 20px;
-  padding: 1em 0;
-  list-style-type: none;
-}
-
-.battlepass-timeline:before {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  content: " ";
-  display: block;
-  width: 6px;
-  height: 100%;
-  margin-left: -3px;
-  background-image: linear-gradient(
-    to bottom,
-    #135272,
-    #0b86c4 48%,
-    #135272 99%
-  );
-  z-index: 5;
-}
-
-.battlepass-timeline li:after {
-  content: "";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-.direction-l {
-  position: relative;
-  width: 300px;
-  float: left;
-  text-align: right;
-}
-
-.direction-l:before {
-  position: absolute;
-  left: 129%;
-  top: -14px;
-  transform: rotate(90deg);
-  content: " ";
-  display: block;
-  width: 6px;
-  height: 178px;
-  background-image: linear-gradient(
-    to bottom,
-    #135272,
-    #0b86c4 48%,
-    #135272 99%
-  );
-  z-index: 4;
-}
-
-.direction-l span {
-  position: relative;
-  left: 48%;
-  bottom: -31px;
-  font-size: 32px;
-  color: #fcfcfc;
-}
-
-.direction-r {
-  position: relative;
-  width: 300px;
-  float: right;
-}
-
-.direction-r:before {
-  position: absolute;
-  right: 129%;
-  top: -14px;
-  transform: rotate(90deg);
-  content: " ";
-  display: block;
-  width: 6px;
-  height: 178px;
-  background-image: linear-gradient(
-    to bottom,
-    #135272,
-    #0b86c4 48%,
-    #135272 99%
-  );
-  z-index: 4;
-}
-
-.direction-r span {
-  position: relative;
-  right: 48%;
-  bottom: -31px;
-  font-size: 32px;
-  color: #fcfcfc;
-}
-
-.lvl-wrapper {
-  position: relative;
-  display: inline-block;
-  text-align: center;
-  top: -1em;
-  box-shadow: 0 0 30px 0 rgba(11, 134, 196, 0.3);
-}
-
-.lvl-wrapper img {
-  height: 150px;
-}
-
-.lvl-locked {
-  box-shadow: unset;
-  filter: grayscale(100%);
 }
 
 .pointer:before {
@@ -842,7 +775,7 @@ td a:hover {
 
 /* media queries */
 
-@media (max-width: 575.98px) {
+/* @media (max-width: 575.98px) {
   .cosmetics__item {
     width: 100% !important;
   }
@@ -905,5 +838,5 @@ td a:hover {
   .cosmetics__item {
     width: 20%;
   }
-}
+} */
 </style>
