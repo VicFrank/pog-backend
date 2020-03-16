@@ -21,7 +21,7 @@ import PlayerPage from "../components/pages/player/PlayerPage";
 import PlayerGames from "../components/pages/player/PlayerGames";
 import LoginRedirect from "../components/pages/LoginRedirect";
 
-import Payment from "../components/pages/store/Payment";
+// import Payment from "../components/pages/store/Payment";
 
 Vue.use(VueRouter);
 
