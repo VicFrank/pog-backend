@@ -53,7 +53,7 @@ passport.deserializeUser(function(obj, next) {
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
 //   callback with a user object.
 const baseUrl = process.env.IS_PRODUCTION
-  ? "https://pathofguardians.com"
+  ? "https://www.pathofguardians.com"
   : "http://localhost:3000";
 passport.use(
   new SteamStrategy(
