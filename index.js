@@ -13,6 +13,9 @@ const playersRouter = require("./routes/players");
 const questsRouter = require("./routes/quests");
 const authRouter = require("./routes/auth");
 const paymentRouter = require("./routes/payments");
+const patreonRouter = require("./routes/patreon");
+
+const players = require("./db/players");
 
 const port = process.env.PORT || 3000;
 
@@ -28,7 +31,16 @@ const app = express();
 //   the user by ID when deserializing.  However, since this example does not
 //   have a database of user records, the complete Steam profile is serialized
 //   and deserialized.
-passport.serializeUser(function(user, next) {
+passport.serializeUser(async function(user, next) {
+  // create the user if they don't yet exist
+  const steamid = user.id;
+  const username = user.displayName;
+
+  const playerExists = await players.doesPlayerExist(steamid);
+  if (!playerExists) {
+    await players.createNewPlayer(steamid, username);
+  }
+
   next(null, user);
 });
 
@@ -56,14 +68,20 @@ passport.use(
   )
 );
 
-app.use(
-  session({
-    secret: keys.sessionKey,
-    name: "id",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+let sess = {
+  secret: keys.sessionKey,
+  name: "id",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {},
+};
+
+if (process.env.IS_PRODUCTION) {
+  app.set("trust proxy", 1);
+  sess.cookie.secure = true;
+}
+
+app.use(session(sess));
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
@@ -87,6 +105,7 @@ app.use("/api/players", playersRouter);
 app.use("/api/quests", questsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/payments", paymentRouter);
+app.use("/api/patreon", patreonRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/dist/index.html"));

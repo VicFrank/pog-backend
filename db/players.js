@@ -123,12 +123,40 @@ module.exports = {
       const dailyQuests = await quests.getDailyQuestsForPlayer(steamID);
       const battlePass = await this.getBattlePasses(steamID);
 
+      let buildings_destroyed = teamKillStats.buildingKills.buildings_destroyed;
+      let guardian_kills = teamKillStats.guardianKills.guardian_kills;
+
+      let playerStats = rows[0];
+      if (!playerStats) {
+        playerStats = {
+          poggers: 0,
+          mmr: 1000,
+          games: 0,
+          wins: 0,
+          losses: 0,
+          time_played: 0,
+          kills: 0,
+          deaths: 0,
+          assists: 0,
+          double_kills: 0,
+          rampages: 0,
+          last_hits: 0,
+          denies: 0,
+          tp_used: 0,
+          runes_used: 0,
+          total_gold: 0,
+          total_exp: 0,
+          abandoned: 0,
+        };
+
+        buildings_destroyed = 0;
+        guardian_kills = 0;
+      }
+
       return {
-        ...rows[0],
-        buildings_destroyed: teamKillStats.buildingKills.buildings_destroyed,
-        guardian_kills: teamKillStats.guardianKills.guardian_kills,
-        avg_guardian_kills:
-          teamKillStats.guardianKills.guardian_kills / parseInt(rows[0].games),
+        ...playerStats,
+        buildings_destroyed,
+        guardian_kills,
         companion: equippedCompanion,
         dailyQuests: dailyQuests,
         battlePass: battlePass,

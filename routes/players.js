@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const players = require("../db/players");
 const quests = require("../db/quests");
-const apicache = require("apicache");
 const auth = require("../auth/auth");
 
 router.get("/", async (req, res) => {

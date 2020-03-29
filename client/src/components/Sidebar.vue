@@ -8,7 +8,7 @@
             <img :src="profilePicture" class="profile-picture" alt="Profile Picture" />
           </router-link>
           <div class="notification">
-            <img src="../assets/images/badge1.png" class="custom-badge-img" alt="Battle Pass Badge" />
+            <img :src="badgeImage" class="custom-badge-img" alt="Battle Pass Badge" />
             <span class="custom-badge">{{ bpLevel }}</span>
           </div>
         </div>
@@ -168,6 +168,22 @@ export default {
     },
     bpLevelRequired() {
       return this.$store.getters.bpLevelRequired;
+    },
+    badgeImage() {
+      const level = this.$store.getters.bpLevel;
+      let badgeLevel = 1;
+      if (level >= 40) {
+        badgeLevel = 5;
+      } else if (level >= 30) {
+        badgeLevel = 4;
+      } else if (level >= 20) {
+        badgeLevel = 3;
+      } else if (level >= 10) {
+        badgeLevel = 2;
+      } else {
+        badgeLevel = 1;
+      }
+      return require(`../assets/images/badges/badge${badgeLevel}.png`);
     }
   },
   watch: {
@@ -342,6 +358,8 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 18px !important;
+
+  text-shadow: 1px 1px black;
 }
 
 .sidebar-nav__link_battlepass:before {

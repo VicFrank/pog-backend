@@ -13,6 +13,7 @@ import Stats from "../components/pages/Stats";
 import Store from "../components/pages/Store";
 import BattlePass from "../components/pages/battle_pass/BattlePass";
 import SplashPage from "../components/SplashPage";
+import Patrons from "../components/pages/Patrons";
 import Game from "../components/pages/games/Game";
 import RecentGames from "../components/pages/games/RecentGames";
 import HeroStatsList from "../components/pages/games/HeroStatsList";
@@ -49,6 +50,10 @@ const routes = [
   {
     path: "/demo/games",
     component: RecentGames,
+  },
+  {
+    path: "/demo/patrons",
+    component: Patrons,
   },
   {
     path: "/demo/games/:game_id",

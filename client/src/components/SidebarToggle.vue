@@ -1,5 +1,5 @@
 <template>
-  <i class="fas fa-bars fa-lg" @click="handleClick"></i>
+  <b-icon icon="justify" aria-hidden="true" font-scale="2" class="icon-button" @click="handleClick"></b-icon>
 </template>
 
 <script>
@@ -10,18 +10,18 @@ export default {
     // change when the sidebar is open/close
     open() {
       return this.$store.state.ui.sidebarOpen;
-    },
+    }
   },
   methods: {
     handleClick() {
       this.$store.dispatch("toggleSidebar");
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
-i {
+.icon-button {
   cursor: pointer;
 }
 </style>
