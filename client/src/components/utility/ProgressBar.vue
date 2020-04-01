@@ -40,6 +40,7 @@ export default {
   left: 50%;
   line-height: 20px;
   transform: translateX(-50%);
+  width: 100%;
 }
 
 .current-progress {

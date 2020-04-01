@@ -4,6 +4,7 @@ const players = require("../db/players");
 const cosmetics = require("../db/cosmetics");
 const questsList = require("./quests-list");
 const cosmeticsList = require("./cosmetics-list");
+const battlePassRewards = require("./battle-pass-rewards");
 const { generateRandomSampleData } = require("./sample-data");
 
 /*
@@ -18,14 +19,14 @@ async function loadQuests() {
       return;
     }
 
+    console.log("Adding Quests...");
+
     let promises = [];
     for (let questData of questsList) {
       promises.push(quests.addNewQuest(questData));
     }
 
     await Promise.all(promises);
-
-    console.log("Added quests");
   } catch (error) {
     throw error;
   }
@@ -33,44 +34,60 @@ async function loadQuests() {
 
 async function loadCosmetics() {
   try {
-    const loadedQuests = await cosmetics.getAllCosmetics();
+    const loadedCosmetics = await cosmetics.getAllCosmetics();
 
-    // if (loadedQuests.length > 0) {
-    //   console.log("Cosmetics are already loaded");
-    //   return;
-    // }
+    if (loadedCosmetics.length > 0) {
+      console.log("Cosmetics are already loaded");
+      return;
+    }
+
+    console.log("Adding cosmetics...");
 
     let promises = [];
     for (let cosmeticData of cosmeticsList) {
-      const {
-        name,
-        rarity,
-        cost,
-        type,
-        equip_group,
-        entity_name,
-      } = cosmeticData;
+      const { cost, cosmetic_id, rarity, type, equip_group } = cosmeticData;
       promises.push(
-        cosmetics.createCosmetic(
-          name,
-          rarity,
-          cost,
-          type,
-          equip_group,
-          entity_name
-        )
+        cosmetics.createCosmetic(cost, cosmetic_id, rarity, type, equip_group)
       );
     }
 
     await Promise.all(promises);
-
-    console.log("Added cosmetics");
   } catch (error) {
     throw error;
   }
 }
 
-async function initPlayers(numGames) {
+async function loadBattlePass() {
+  try {
+    const loadedBattlePass = await cosmetics.getBattlePass();
+
+    if (loadedBattlePass.length > 0) {
+      console.log("Battle Pass is already loaded");
+      return;
+    }
+
+    console.log("Loading Battle pass...");
+
+    let promises = [];
+    for (let rewards of battlePassRewards) {
+      const { level, cosmetic_id, chest_type, chest_amount } = rewards;
+      promises.push(
+        cosmetics.createBattlePassLevel(
+          level,
+          cosmetic_id,
+          chest_type,
+          chest_amount
+        )
+      );
+    }
+
+    await Promise.all(promises);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function initPlayers() {
   try {
     for (let i = 0; i < 10; i++) {
       await games.create(generateRandomSampleData());
@@ -118,7 +135,8 @@ async function initializeAdmins() {
 (async function() {
   await loadQuests();
   await loadCosmetics();
-  await initPlayers();
-  await addSampleGames(1000);
+  await loadBattlePass();
+  // await initPlayers();
+  // await addSampleGames(1000);
   await initializeAdmins();
 })();

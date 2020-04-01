@@ -2,13 +2,13 @@
   <header id="main-nav">
     <nav class="navbar navbar-expand-lg">
       <SidebarToggle class="navbar-nav ml-1 mr-4"></SidebarToggle>
-      <router-link to="/" class="navbar-brand">
+      <router-link to="/demo" class="navbar-brand">
         <img src="../assets/images/logo.svg" alt="POG" />
       </router-link>
       <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex">
-        <li class="nav-item mr-5">
+        <!-- <li class="nav-item mr-5">
           <router-link class="nav-link" to="/demo/learn">LEARN</router-link>
-        </li>
+        </li>-->
         <!-- <li class="nav-item mr-5">
             <router-link class="nav-link" to="/demo/store">STORE</router-link>
         </li>-->
@@ -24,6 +24,7 @@
         <a
           class="d-flex btn"
           href="https://steamcommunity.com/sharedfiles/filedetails/?id=1146215215"
+          target="_blank"
         >PLAY NOW</a>
       </div>
     </nav>

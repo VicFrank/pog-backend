@@ -9,12 +9,26 @@
             <div v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }">
               <img :src="getImgUrl(i)" @click="$bvModal.show(`bp-modal-${i}`)" :alt="`Level ${i}`" />
 
-              <b-modal
-                :id="`bp-modal-${i}`"
-                :title="`Level ${i}`"
-                centered
-                hide-footer
-              >Rewards Description</b-modal>
+              <b-modal :id="`bp-modal-${i}`" :title="`Level ${i} Reward`" centered hide-footer>
+                <div v-if="hasItemReward(i)" class="reward">
+                  <img
+                    v-if="getItemImage(i)"
+                    class="reward-image"
+                    v-bind:src="getItemImage(i)"
+                    :alt="getRewardItem(i)"
+                  />
+                  {{getRewardItem(i)}}
+                </div>
+                <div v-if="getChestAmount(i) > 0" class="reward">
+                  <img class="reward-image" v-bind:src="getChestImage(i)" alt="Chest Image" />
+                  <span v-if="getChestAmount(i) > 1">{{getChestAmount(i)}}x</span>
+                  {{getRewards(i).chest_type}}
+                  <template
+                    v-if="getChestAmount(i) === 1"
+                  >Chest</template>
+                  <template v-else>Chests</template>
+                </div>
+              </b-modal>
             </div>
           </div>
         </li>
@@ -24,6 +38,8 @@
 </template>
 
 <script>
+import rewards from "./battlePassRewards";
+
 export default {
   computed: {
     bpLevel() {
@@ -37,6 +53,29 @@ export default {
     getImgUrl(number) {
       const level = (number % 5) + 1;
       return require(`./lvl${level}.svg`);
+    },
+    getRewards(level) {
+      return rewards[level - 1];
+    },
+    getRewardItem(level) {
+      return rewards[level - 1].item;
+    },
+    hasItemReward(level) {
+      return rewards[level - 1].item !== "";
+    },
+    getChestAmount(level) {
+      return rewards[level - 1].chest_amount;
+    },
+    getItemImage(level) {
+      const imageName = rewards[level - 1].item_image;
+      if (!imageName || imageName === "") return false;
+
+      return require(`./rewards/${imageName}.png`);
+    },
+    getChestImage(level) {
+      const chestType = rewards[level - 1].chest_type.toLowerCase();
+
+      return require(`./rewards/chest_${chestType}.png`);
     }
   }
 };
@@ -44,11 +83,32 @@ export default {
 
 <style>
 .modal-content {
-  color: #212529;
+  /* color: #212529; */
+  background-color: #13171d;
+}
+
+.close {
+  color: white;
 }
 
 .modal-backdrop {
   opacity: 0.5;
+}
+
+.modal-title {
+  font-size: 36px;
+}
+
+.reward {
+  text-align: center;
+  margin-bottom: 10px;
+
+  font-size: 24px;
+}
+
+.reward-image {
+  width: auto;
+  height: 30px;
 }
 
 .battlepass-timeline {

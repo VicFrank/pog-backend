@@ -7,7 +7,8 @@
         @click="onMainContentClicked"
         v-bind:class="{ 'sidebar-open': sidebarOpen, 'neutral-div': true }"
       >
-        <router-view></router-view>
+        <router-view class="main-content"></router-view>
+        <Footer v-if="!this.isRoot" />
       </div>
     </div>
   </div>
@@ -15,6 +16,7 @@
 
 <script>
 import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
 import Sidebar from "./components/Sidebar.vue";
 
 export default {
@@ -61,6 +63,7 @@ export default {
   },
   components: {
     Header,
+    Footer,
     Sidebar
   }
 };
@@ -123,6 +126,10 @@ a:hover {
 
 .loss {
   color: #c23c2a;
+}
+
+.main-content {
+  min-height: 100vh;
 }
 
 #main-nav {
@@ -296,12 +303,11 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  /* padding: 20px 0 0px 40px; */
+  padding: 0px 50px;
 }
 
 .btns-bar {
   display: flex;
-  height: 38px;
   flex-wrap: wrap;
   margin-bottom: 1em;
 }
@@ -351,7 +357,6 @@ a:hover {
 }
 
 .btns-bar__btn_left {
-  /* margin: 0; */
   border-radius: 18px 0 0 18px;
   border-left: 1px solid #0b86c4;
 }
@@ -372,7 +377,6 @@ a:hover {
 .cosmetics {
   display: flex;
   flex-wrap: wrap;
-  padding: 20px 0 30px 30px;
   justify-content: space-around;
 }
 
@@ -430,7 +434,7 @@ a:hover {
 }
 
 .cosmetic__descr {
-  padding-top: 20px;
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -454,11 +458,9 @@ a:hover {
   width: 100%;
   padding: 0 1em;
   position: relative;
-  overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
   transition: 0.25s ease-in-out;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   font-stretch: normal;
   font-style: normal;
@@ -469,7 +471,7 @@ a:hover {
 }
 
 .cosmetic__descr:after {
-  width: 150px;
+  width: 80%;
   border-bottom: 2px solid #193544;
 }
 
@@ -775,7 +777,7 @@ td a:hover {
 
 /* media queries */
 
-/* @media (max-width: 575.98px) {
+@media (max-width: 575.98px) {
   .cosmetics__item {
     width: 100% !important;
   }
@@ -786,51 +788,28 @@ td a:hover {
     padding: 0;
   }
 
-  .btns-bar {
-    display: none;
+  .btns-bar__btn_left {
+    border-radius: 0;
+    border-left: 1px solid #0b86c4;
+  }
+
+  .btns-bar__btn_right {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .btns-bar__btn {
+    width: 100%;
   }
 }
 
 @media (max-width: 767.98px) {
-  .main-layout__content {
-    padding-left: 250px;
-  }
-
-  .achievement {
-    padding: 1em 2em;
-  }
-
-  .pog-gained {
-    display: none;
-  }
-
-  .xp-gained {
-    display: none;
-  }
-
   .cosmetics__item {
     width: 100% !important;
   }
 
   .btns-bar {
-    margin-bottom: 5em;
     flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 991.98px) {
-  .achievement {
-    padding: 2em 2em;
-  }
-
-  .pog-gained {
-    right: 1.5em;
-    top: 30px;
-  }
-
-  .xp-gained {
-    right: 1.5em;
-    top: 60px;
   }
 }
 
@@ -838,5 +817,5 @@ td a:hover {
   .cosmetics__item {
     width: 20%;
   }
-} */
+}
 </style>

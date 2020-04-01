@@ -36,7 +36,7 @@
               <img src="./reroll.svg" alt="Reroll" />
             </a>
             <template v-else>
-              <span class="ml-auto mr-1 next-quest-text">
+              <span class="ml-auto mr-2 next-quest-text">
                 {{
                 getTimeUntilReroll(quest.created)
                 }}

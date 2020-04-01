@@ -104,9 +104,7 @@ CREATE TABLE IF NOT EXISTS game_players (
 );
 
 CREATE TABLE IF NOT EXISTS cosmetics (
-  cosmetic_id SERIAL PRIMARY KEY,
-  entity_name TEXT,
-  cosmetic_name TEXT,
+  cosmetic_id TEXT PRIMARY KEY,
   cosmetic_type TEXT,
   equip_group TEXT,
   cost INTEGER,
@@ -115,7 +113,7 @@ CREATE TABLE IF NOT EXISTS cosmetics (
 
 CREATE TABLE IF NOT EXISTS player_companions (
   companion_id SERIAL PRIMARY KEY,
-  cosmetic_id INTEGER REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
+  cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   companion_level INTEGER DEFAULT 0,
   equipped BOOLEAN DEFAULT FALSE,
@@ -127,10 +125,21 @@ CREATE INDEX idx_player_companions
 ON player_companions (steam_id, cosmetic_id, companion_level, effect);
 
 CREATE TABLE IF NOT EXISTS player_cosmetics (
-  cosmetic_id INTEGER REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
+  cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   created TIMESTAMP DEFAULT Now(),
   equipped BOOLEAN DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS battle_pass_levels CASCADE;
+CREATE TABLE IF NOT EXISTS battle_pass_levels (
+  bp_version INTEGER DEFAULT 1,
+  bp_level INTEGER NOT NULL,
+  cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id),
+  chest INTEGER,
+  chest_amount INTEGER,
+
+  CONSTRAINT battle_pass_levels_pkey PRIMARY KEY (bp_version, bp_level)
 );
 
 CREATE TABLE IF NOT EXISTS player_battle_pass (

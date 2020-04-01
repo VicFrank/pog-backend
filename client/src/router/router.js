@@ -2,10 +2,10 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store";
 
-import Home from "../components/pages/Home";
+import Home from "../components/pages/home/Home";
 import Achievements from "../components/pages/Achievements";
 import Changelog from "../components/pages/Changelog";
-import Cosmetics from "../components/pages/Cosmetics";
+import Cosmetics from "../components/pages/cosmetics/Cosmetics";
 import MatchHistory from "../components/pages/MatchHistory";
 import MyStats from "../components/pages/MyStats";
 import Profile from "../components/pages/Profile";
@@ -21,12 +21,15 @@ import Learn from "../components/pages/learn/Learn";
 import PlayerPage from "../components/pages/player/PlayerPage";
 import PlayerGames from "../components/pages/player/PlayerGames";
 import LoginRedirect from "../components/pages/LoginRedirect";
+import NotFound from "../components/NotFound";
 
 // import Payment from "../components/pages/store/Payment";
 
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/404", alias: "*", component: NotFound },
+  { path: "*", redirect: "/404" },
   {
     path: "/",
     component: SplashPage,

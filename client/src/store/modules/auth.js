@@ -1,3 +1,5 @@
+import { getLevel, getToNextLevel } from "../battlePassExp";
+
 // initial state
 const state = {
   userSteamID: "",
@@ -15,9 +17,9 @@ const getters = {
   loggedIn: state => state.userSteamID !== "",
 
   bpExp: state => state.bpExp,
-  bpLevel: state => Math.floor(state.bpExp / 1000),
-  bpLevelProgress: state => state.bpExp % 1000,
-  bpLevelRequired: () => 1000,
+  bpLevel: state => getLevel(state.bpExp),
+  bpLevelProgress: state => getToNextLevel(state.bpExp).progress,
+  bpLevelRequired: () => getToNextLevel(state.bpExp).goal,
   bpTier: state => state.bpTier,
 };
 

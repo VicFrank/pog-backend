@@ -315,7 +315,7 @@ module.exports = {
       SELECT *
       FROM player_cosmetics
       JOIN cosmetics
-      USING cosmetic_id
+      USING (cosmetic_id)
       WHERE steam_id = $1
       ${filter}
       `;
@@ -411,27 +411,18 @@ module.exports = {
     try {
       await query("BEGIN");
 
+      if (!transactionData) {
+        throw new Error("No transaction supplied");
+      }
+
       // Add and remove companions
       if (transactionData.companions) {
         const { companions } = transactionData;
         for (const companionData of companions) {
-          let { name, cosmetic_id, effect, level, amount } = companionData;
+          let { cosmetic_id, effect, level, amount } = companionData;
 
           if (amount > 0) {
             for (let i = 0; i < amount; i++) {
-              if (cosmetic_id == undefined) {
-                let queryText = `
-                SELECT cosmetic_id
-                FROM cosmetics
-                WHERE cosmetic_name = $1
-                `;
-                let { rows } = await query(queryText, [name]);
-                if (rows.length === 0) {
-                  throw new Error(`Cosmetic with name ${name} not found`);
-                }
-                cosmetic_id = rows[0].cosmetic_id;
-              }
-
               queryText = `
               INSERT INTO player_companions as pc
                 (steam_id, cosmetic_id, companion_level, effect)
@@ -450,18 +441,12 @@ module.exports = {
                   SELECT companion_id
                   FROM player_companions
                   WHERE steam_id = $1 AND 
-                    companion_name = $2 AND
-                    companion_level = $3 AND
-                    effect = $4 LIMIT 1))
+                    companion_level = $2 AND
+                    effect = $3 LIMIT 1))
               RETURNING *)
               SELECT count(*) FROM deleted;
             `;
-              const { rows } = await query(queryText, [
-                steamID,
-                name,
-                level,
-                effect,
-              ]);
+              const { rows } = await query(queryText, [steamID, level, effect]);
               const rowsDeleted = rows[0].count;
               if (rowsDeleted === 0) {
                 throw new Error("Tried to remove nonexistent companion");
@@ -518,26 +503,15 @@ module.exports = {
         const { items } = transactionData;
         const entries = Object.entries(items);
 
-        for (const [itemName, amount] of entries) {
+        for (const [cosmeticID, amount] of entries) {
           if (amount > 0) {
             for (let i = 0; i < amount; i++) {
-              let queryText = `
-              SELECT cosmetic_id
-              FROM cosmetics
-              WHERE cosmetic_name = $1
-              `;
-              let { rows } = await query(queryText, [name]);
-              if (rows.length === 0) {
-                throw new Error(`Cosmetic with name ${name} not found`);
-              }
-              const cosmetic_id = rows[0].cosmetic_id;
-
               queryText = `
               INSERT INTO player_cosmetics
               (steam_id, cosmetic_id) VALUES
               ($1, $2)
               `;
-              await query(queryText, [steamID, cosmetic_id]);
+              await query(queryText, [steamID, cosmeticID]);
             }
           } else if (amount < 0) {
             for (let i = 0; i < amount * -1; i++) {
@@ -549,12 +523,12 @@ module.exports = {
                   SELECT cosmetic_id
                   FROM player_companions
                   WHERE steam_id = $1 AND 
-                  cosmetic_name = $2
+                  cosmetic_id = $2
                   LIMIT 1))
               RETURNING *)
               SELECT count(*) FROM deleted;
               `;
-              const { rows } = await query(queryText, [steamID, itemName]);
+              const { rows } = await query(queryText, [steamID, cosmeticID]);
               const rowsDeleted = rows[0].count;
               if (rowsDeleted == 0) {
                 throw new Error("Tried to remove non-existent cosmetic");

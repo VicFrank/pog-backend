@@ -3,16 +3,18 @@
     <div class="sidebar-content">
       <template v-if="loggedIn">
         <div class="user-info">
-          <h3>{{ username }}</h3>
           <router-link to="/demo/profile">
+            <h3>{{ username }}</h3>
             <img :src="profilePicture" class="profile-picture" alt="Profile Picture" />
           </router-link>
           <div class="notification">
-            <img :src="badgeImage" class="custom-badge-img" alt="Battle Pass Badge" />
             <span class="custom-badge">{{ bpLevel }}</span>
           </div>
         </div>
-        <ProgressBar class="bp-progress" :progress="bpLevelProgress" :required="bpLevelRequired" />
+        <div class="progress-row">
+          <img :src="badgeImage" class="custom-badge-img" alt="Battle Pass Badge" />
+          <ProgressBar class="bp-progress" :progress="bpLevelProgress" :required="bpLevelRequired" />
+        </div>
 
         <ul class="sidebar-nav">
           <li class="sidebar-nav__item d-lg-none">
@@ -106,6 +108,13 @@
               >Settings</router-link
             >
           </li>-->
+          <li>
+            <b-button
+              href="/api/auth/logout"
+              class="sign-out-button mt-3"
+              variant="outline-primary"
+            >Sign Out</b-button>
+          </li>
         </ul>
       </template>
       <template v-else>
@@ -234,8 +243,15 @@ export default {
   margin-top: 80px;
 }
 
+.sign-out-button {
+  width: 80%;
+  margin: auto;
+  background-color: transparent !important;
+  display: block;
+}
+
 .sidebar-content .user-info {
-  padding: 120px 0 15px 0;
+  margin-top: 100px;
 }
 
 .profile-picture {
@@ -253,11 +269,6 @@ export default {
   letter-spacing: 1px;
   text-align: center;
   color: #0b86c4;
-}
-
-.bp-progress {
-  margin: auto;
-  width: 80%;
 }
 
 .sidebar-nav {
@@ -342,14 +353,30 @@ export default {
   position: relative;
   text-align: center;
 
-  width: 50px;
-  bottom: 25px;
+  width: 30px;
+  height: 30px;
+  bottom: 20px;
   right: 20px;
+
+  background-color: #0b86c4;
+  border-radius: 50%;
+
   float: right;
 }
 
-.custom-badge-img {
+.progress-row {
+  display: flex;
   width: 100%;
+}
+
+.custom-badge-img {
+  width: 40px;
+  height: 40px;
+}
+
+.bp-progress {
+  margin: auto;
+  width: 75%;
 }
 
 .custom-badge {
