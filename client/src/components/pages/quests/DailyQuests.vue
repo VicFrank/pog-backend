@@ -73,7 +73,7 @@ export default {
   methods: {
     getTimeUntilReroll(created) {
       const time = moment(created)
-        .add(23, "hours")
+        .add(24, "hours")
         .fromNow();
       return `Can refresh ${time}`;
     },

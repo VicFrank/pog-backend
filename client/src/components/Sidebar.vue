@@ -17,13 +17,13 @@
         </div>
 
         <ul class="sidebar-nav">
-          <li class="sidebar-nav__item d-lg-none">
+          <!-- <li class="sidebar-nav__item d-lg-none">
             <router-link
               to="/demo/learn"
               class="sidebar-nav__link"
               exact-active-class="active"
             >Learn</router-link>
-          </li>
+          </li>-->
           <li class="sidebar-nav__item d-lg-none">
             <router-link
               to="/demo/games"
@@ -51,9 +51,9 @@
           <li class="sidebar-nav__item">
             <router-link
               to="/demo/profile"
-              class="sidebar-nav__link"
+              class="sidebar-nav__link sidebar-nav__link_profile"
               exact-active-class="active"
-            >Home</router-link>
+            >Profile</router-link>
           </li>
 
           <li class="sidebar-nav__item">
@@ -66,10 +66,10 @@
 
           <li class="sidebar-nav__item">
             <router-link
-              to="/demo/profile/cosmetics"
+              to="/demo/profile/armory"
               class="sidebar-nav__link sidebar-nav__link_armory"
               exact-active-class="active"
-            >Cosmetics</router-link>
+            >Armory</router-link>
           </li>
 
           <li class="sidebar-nav__item">
@@ -387,6 +387,13 @@ export default {
   font-size: 18px !important;
 
   text-shadow: 1px 1px black;
+}
+
+.sidebar-nav__link_profile:before {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-image: url("../assets/images/profile.png");
 }
 
 .sidebar-nav__link_battlepass:before {

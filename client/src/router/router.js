@@ -98,7 +98,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/demo/profile/cosmetics",
+    path: "/demo/profile/armory",
     component: Cosmetics,
     meta: { requiresAuth: true },
   },
@@ -125,7 +125,7 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (store.getters.loggedIn) {
       next();
     } else {
