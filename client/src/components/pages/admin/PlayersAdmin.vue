@@ -52,7 +52,7 @@
       </b-list-group>
     </b-card>
 
-    <b-card title="Cosmetics">
+    <b-card v-if="playerData.username" title="Cosmetics">
       <b-button v-b-toggle.collapse-1 variant="primary">Give Items</b-button>
       <b-collapse id="collapse-1" class="mt-2 mb-2">
         <b-card>

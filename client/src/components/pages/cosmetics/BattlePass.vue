@@ -109,52 +109,12 @@
 
 <script>
 import names from "./cosmeticNames";
+import webm from "./webmList";
 
 export default {
   data: () => ({
     error: "",
     rewards: [],
-    noWebm: new Set([
-      "badge1",
-      "badge2",
-      "badge3",
-      "badge4",
-      "badge5",
-      "baloon1",
-      "baloon2",
-      "baloon3",
-      "baloon4",
-      "baloon5",
-      "baloon6",
-      "baloon7",
-      "baloon8",
-      "baloon9",
-      "baloon10",
-      "baloon11",
-      "border1",
-      "border2",
-      "border3",
-      "border4",
-      "border5",
-      "bpaccel1",
-      "bpaccel2",
-      "deny1",
-      "deny2",
-      "deny3",
-      "deny4",
-      "deny5",
-      "highfive1",
-      "highfive2",
-      "highfive3",
-      "highfive4",
-      "highfive5",
-      "picking1",
-      "picking2",
-      "reroll",
-      "teleport1",
-      "teleport2",
-      "teleport3",
-    ]),
   }),
 
   created() {
@@ -217,7 +177,7 @@ export default {
     getMovie(level) {
       const cosmetic_id = this.rewards[level - 1].cosmetic_id;
       if (!cosmetic_id || cosmetic_id === null) return false;
-      if (this.noWebm.has(cosmetic_id)) return false;
+      if (!webm.has(cosmetic_id)) return false;
 
       return require(`./images/${cosmetic_id}.webm`);
     },
