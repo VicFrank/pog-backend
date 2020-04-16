@@ -30,7 +30,7 @@
         </li>
       </ul>
     </div>
-    <b-modal :id="1" title="Common Chest" centered hide-footer>
+    <b-modal :id="'1'" title="Common Chest" centered hide-footer>
       <h5>Gain a free Common Chest! It contains the following prizes:</h5>
       <ul>
         <li>[Guaranteed] A random Common item!</li>
@@ -39,7 +39,7 @@
         <li>[Small Chance] A bonus Rare item</li>
       </ul>
     </b-modal>
-    <b-modal :id="2" title="Uncommon Chest" centered hide-footer>
+    <b-modal :id="'2'" title="Uncommon Chest" centered hide-footer>
       <h5>Gain a free Uncommon Chest! It contains the following prizes:</h5>
       <ul>
         <li>[Guaranteed] A random Uncommon item!</li>
@@ -49,7 +49,7 @@
         <li>[Small Chance] A bonus Mythical item</li>
       </ul>
     </b-modal>
-    <b-modal :id="3" title="Rare Chest" centered hide-footer>
+    <b-modal :id="'3'" title="Rare Chest" centered hide-footer>
       <h5>Gain a free Rare Chest! It contains the following prizes:</h5>
       <ul>
         <li>[Guaranteed] A random Mythical item!</li>
@@ -60,7 +60,7 @@
         <li>[Very Small Chance] A bonus legendary item!</li>
       </ul>
     </b-modal>
-    <b-modal :id="4" title="Mythical Chest" centered hide-footer>
+    <b-modal :id="'4'" title="Mythical Chest" centered hide-footer>
       <h5>Gain a free Mythical Chest! It contains the following prizes:</h5>
       <ul>
         <li>[Guaranteed] A random Mythical item!</li>
@@ -74,7 +74,7 @@
         <li>[Very Small Chance] The unique Overgrown Emblem!</li>
       </ul>
     </b-modal>
-    <b-modal :id="5" title="Legendary Chest" centered hide-footer>
+    <b-modal :id="'5'" title="Legendary Chest" centered hide-footer>
       <h5>Gain a free Legendary Chest! It contains the following prizes:</h5>
       <ul>
         <li>[Guaranteed] A random Legendary item!</li>
