@@ -57,9 +57,13 @@
                       />
                     </div>
                     <div class="cosmetic__descr">
-                      <div class="cosmetic__name">{{cosmeticName(cosmetic.cosmetic_id)}}</div>
+                      <div class="cosmetic__name">
+                        {{ cosmeticName(cosmetic.cosmetic_id) }}
+                      </div>
                       <div class="cosmetic__price">
-                        <span class="cosmetic-price">{{cosmetic.cost}} Poggers</span>
+                        <span class="cosmetic-price"
+                          >{{ cosmetic.cost }} Poggers</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -70,7 +74,11 @@
                     hide-footer
                   >
                     <video width="360" height="360" autoplay>
-                      <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
+                      <source
+                        :src="cosmeticMovie(cosmetic.cosmetic_id)"
+                        type="video/webm"
+                      />
+                      Your browser does not support the video tag.
                     </video>
                   </b-modal>
                 </template>
@@ -83,9 +91,13 @@
                       />
                     </div>
                     <div class="cosmetic__descr">
-                      <div class="cosmetic__name">{{cosmeticName(cosmetic.cosmetic_id)}}</div>
+                      <div class="cosmetic__name">
+                        {{ cosmeticName(cosmetic.cosmetic_id) }}
+                      </div>
                       <div class="cosmetic__price">
-                        <span class="cosmetic-price">{{cosmetic.cost}} Poggers</span>
+                        <span class="cosmetic-price"
+                          >{{ cosmetic.cost }} Poggers</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -111,32 +123,32 @@ export default {
     cosmetics: [],
     filteredCosmetics: [],
     activeFilters: new Set(),
-    filters: []
+    filters: [],
   }),
 
   components: {
-    CosmeticsFilter
+    CosmeticsFilter,
   },
 
   created() {
     this.filters = filters;
 
     fetch(`/api/cosmetics`)
-      .then(res => res.json())
-      .then(cosmetics => {
-        const purchaseableCosmetics = cosmetics.filter(cosmetic => {
+      .then((res) => res.json())
+      .then((cosmetics) => {
+        const purchaseableCosmetics = cosmetics.filter((cosmetic) => {
           return cosmetic.cost > 0;
         });
         this.cosmetics = purchaseableCosmetics;
         this.filteredCosmetics = purchaseableCosmetics;
       })
-      .catch(err => (this.error = err));
+      .catch((err) => (this.error = err));
   },
 
   watch: {
     searchText: function() {
       this.updateFilteredCosmetics();
-    }
+    },
   },
 
   methods: {
@@ -148,7 +160,7 @@ export default {
       return require(`./images/${cosmeticID}.webm`);
     },
     cosmeticName(cosmeticID) {
-      return cosmeticsData[cosmeticID].name;
+      return cosmeticsData[cosmeticID];
     },
     toggleFilter(name, active) {
       if (name === "All") {
@@ -157,7 +169,7 @@ export default {
         if (active) {
           this.activeFilters.add(name);
           // remove all from the filters if another is active
-          this.filters = this.filters.map(filter =>
+          this.filters = this.filters.map((filter) =>
             filter.name === "All" ? { ...filter, active: false } : filter
           );
         } else {
@@ -165,13 +177,13 @@ export default {
         }
       }
 
-      this.filters = this.filters.map(filter =>
+      this.filters = this.filters.map((filter) =>
         filter.name === name ? { ...filter, active: !filter.active } : filter
       );
 
       // if there are no active filters, make "all active"
       if (this.hasNoFilters()) {
-        this.filters = this.filters.map(filter =>
+        this.filters = this.filters.map((filter) =>
           filter.name === "All" ? { ...filter, active: true } : filter
         );
       }
@@ -180,13 +192,16 @@ export default {
     },
     clearFilters() {
       this.activeFilters.clear();
-      this.filters = this.filters.map(filter => ({ ...filter, active: false }));
+      this.filters = this.filters.map((filter) => ({
+        ...filter,
+        active: false,
+      }));
     },
     hasNoFilters() {
       return this.activeFilters.size === 0;
     },
     updateFilteredCosmetics() {
-      this.filteredCosmetics = this.cosmetics.filter(cosmetic => {
+      this.filteredCosmetics = this.cosmetics.filter((cosmetic) => {
         // Type Filter
         const { cosmetic_type, equip_group } = cosmetic;
         if (this.hasNoFilters()) {
@@ -222,8 +237,8 @@ export default {
         }
         return false;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

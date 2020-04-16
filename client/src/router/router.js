@@ -11,7 +11,7 @@ import MyStats from "../components/pages/MyStats";
 import Profile from "../components/pages/Profile";
 import Stats from "../components/pages/Stats";
 // import Store from "../components/pages/cosmetics/Store";
-import BattlePass from "../components/pages/battle_pass/BattlePass";
+import BattlePass from "../components/pages/cosmetics/BattlePass";
 import SplashPage from "../components/SplashPage";
 import Patrons from "../components/pages/Patrons";
 import Game from "../components/pages/games/Game";
