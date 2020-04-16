@@ -120,6 +120,10 @@ export default {
   margin-right: 20px;
 }
 
+.ability-text {
+  width: 100%;
+}
+
 .ability-name {
   font-size: 36px;
   color: #0b86c4;

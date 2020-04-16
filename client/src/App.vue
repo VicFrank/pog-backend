@@ -38,20 +38,18 @@ export default {
     }
   },
   created() {
-    // Get the login state of the user (this is used for the entire app)
-    // Probably should go in like App.vue
     fetch("/api/auth/steam/success", { credentials: "include" })
       .then(res => res.json())
       .then(res => {
         if (res.success) {
-          const { displayName, photos, id } = res.user;
+          const { displayName, photos, id, isAdmin } = res.user;
 
           this.$store.commit({
             type: "setUser",
             username: displayName,
             steamID: id,
-            bpLevel: 4,
-            picture: photos[2].value
+            picture: photos[2].value,
+            isAdmin
           });
         } else {
           this.$store.commit({
@@ -229,75 +227,8 @@ a:hover {
   z-index: 10;
 }
 
-/* store */
-
-.featured {
-  position: relative;
-  /* margin-top: 50px; */
-  text-align: center;
-  margin-bottom: 120px;
-  box-shadow: 0 0 15px 0 #457296;
-  transform: scale(0.76);
-}
-
-.featured h3,
-.sale-one h3,
-.sale-two h3 {
-  font-size: 20px;
-  font-family: "Radiance-Semibold";
-  line-height: 1.2;
-  letter-spacing: 0.23px;
-  text-align: center;
-  color: #fcfcfc;
-  position: relative;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.featured p,
-.sale-one p,
-.sale-two p {
-  font-size: 18px;
-  font-family: "Radiance-Semibold";
-  line-height: 1;
-  letter-spacing: 0.45px;
-  text-align: center;
-  color: #0b86c4;
-}
-
-.featured img,
-.sale-one img,
-.sale-two img {
-  position: relative;
-  transition: 0.25s ease-in-out;
-  width: 100%;
-}
-
 .blue {
   color: #0b86c4;
-}
-
-.overlay {
-  height: 60px;
-  opacity: 0.8;
-  padding: 0.2em 1em 1em;
-  background-color: #000000;
-}
-
-.sale-one {
-  width: 60%;
-  text-align: center;
-  transform: scale(0.77);
-  margin: 0 auto 40px;
-  box-shadow: 0 0 15px 0 #457296;
-}
-
-.sale-two {
-  transform: scale(0.77);
-  width: 60%;
-  margin: 0 auto;
-  text-align: center;
-  box-shadow: 0 0 15px 0 #457296;
 }
 
 /* my stats */

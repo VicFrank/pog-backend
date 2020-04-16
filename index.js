@@ -32,7 +32,7 @@ const app = express();
 //   the user by ID when deserializing.  However, since this example does not
 //   have a database of user records, the complete Steam profile is serialized
 //   and deserialized.
-passport.serializeUser(async function(user, next) {
+passport.serializeUser(async function (user, next) {
   // create the user if they don't yet exist
   const steamid = user.id;
   const username = user.displayName;
@@ -42,10 +42,18 @@ passport.serializeUser(async function(user, next) {
     await players.createNewPlayer(steamid, username);
   }
 
+  const isAdmin = await players.isAdmin(steamid);
+
+  // add db info to the user
+  user = {
+    ...user,
+    isAdmin,
+  };
+
   next(null, user);
 });
 
-passport.deserializeUser(function(obj, next) {
+passport.deserializeUser(function (obj, next) {
   next(null, obj);
 });
 
@@ -63,7 +71,7 @@ passport.use(
       realm: baseUrl,
       apiKey: keys.steamAPIKey,
     },
-    function(identifier, profile, next) {
+    function (identifier, profile, next) {
       return next(null, profile);
     }
   )

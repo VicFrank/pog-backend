@@ -7,28 +7,31 @@ const state = {
   profilePictureLink: "",
   bpExp: 0,
   bpTier: 0,
+  isAdmin: false,
 };
 
 // getters
 const getters = {
-  userSteamID: state => state.userSteamID,
-  username: state => state.username,
-  profilePictureLink: state => state.profilePictureLink,
-  loggedIn: state => state.userSteamID !== "",
+  userSteamID: (state) => state.userSteamID,
+  username: (state) => state.username,
+  profilePictureLink: (state) => state.profilePictureLink,
+  loggedIn: (state) => state.userSteamID !== "",
+  isAdmin: (state) => state.isAdmin,
 
-  bpExp: state => state.bpExp,
-  bpLevel: state => getLevel(state.bpExp),
-  bpLevelProgress: state => getToNextLevel(state.bpExp).progress,
+  bpExp: (state) => state.bpExp,
+  bpLevel: (state) => getLevel(state.bpExp),
+  bpLevelProgress: (state) => getToNextLevel(state.bpExp).progress,
   bpLevelRequired: () => getToNextLevel(state.bpExp).goal,
-  bpTier: state => state.bpTier,
+  bpTier: (state) => state.bpTier,
 };
 
 const mutations = {
-  setUser(state, { username, steamID, picture }) {
+  setUser(state, { username, steamID, picture, isAdmin }) {
     state.username = username;
     state.userSteamID = steamID;
     state.profilePictureLink = picture;
     state.loggedIn = true;
+    state.isAdmin = isAdmin;
   },
   setNotLoggedIn(state) {
     state.username = "";

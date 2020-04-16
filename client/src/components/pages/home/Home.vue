@@ -132,6 +132,16 @@
     </div>
     <h2 class="title">Guardians</h2>
     <GuardianInfo v-for="guardian in guardians" :key="guardian.name" :guardianData="guardian" />
+
+    <h2 class="title">Videos</h2>
+    <div>
+      <b-embed
+        type="iframe"
+        aspect="16by9"
+        src="https://www.youtube.com/embed/FGWtWZAcY70?list=PLpZEgzu1Qm_sDFx8IVRFjcjaBQFuUgWnh"
+        allowfullscreen
+      ></b-embed>
+    </div>
   </div>
 </template>
 

@@ -10,7 +10,8 @@ import MatchHistory from "../components/pages/MatchHistory";
 import MyStats from "../components/pages/MyStats";
 import Profile from "../components/pages/Profile";
 import Stats from "../components/pages/Stats";
-import Store from "../components/pages/Store";
+import Store from "../components/pages/cosmetics/Store";
+// import Store2 from "../components/pages/Store";
 import BattlePass from "../components/pages/battle_pass/BattlePass";
 import SplashPage from "../components/SplashPage";
 import Patrons from "../components/pages/Patrons";
@@ -21,6 +22,7 @@ import Learn from "../components/pages/learn/Learn";
 import PlayerPage from "../components/pages/player/PlayerPage";
 import PlayerGames from "../components/pages/player/PlayerGames";
 import LoginRedirect from "../components/pages/LoginRedirect";
+import Admin from "../components/pages/admin/Admin";
 import NotFound from "../components/NotFound";
 
 // import Payment from "../components/pages/store/Payment";
@@ -77,6 +79,10 @@ const routes = [
   {
     path: "/demo/store",
     component: Store,
+  },
+  {
+    path: "/demo/admin",
+    component: Admin,
   },
   {
     path: "/demo/redirect",

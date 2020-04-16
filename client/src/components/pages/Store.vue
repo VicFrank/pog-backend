@@ -10,14 +10,14 @@
           <h2 class="text-center blue">Featured</h2>
           <div class="featured owl-carousel owl-theme owl-dot">
             <div class="single-featured item">
-              <img src="../../assets/images/featured.svg" alt />
+              <!-- <img src="../../assets/images/featured.svg" alt /> -->
               <div class="overlay">
                 <h3>Immortal Treasure III</h3>
                 <p>$15.22</p>
               </div>
             </div>
             <div class="single-featured item">
-              <img src="../../assets/images/featured2.svg" alt />
+              <!-- <img src="../../assets/images/featured2.svg" alt /> -->
               <div class="overlay">
                 <h3>Immortal Treasure III</h3>
                 <p>$15.22</p>
@@ -30,14 +30,14 @@
           <h2 class="text-center blue">Sales</h2>
           <p class="text-center">1 day 2 hours 43mins</p>
           <div class="sale-one">
-            <img src="../../assets/images/sale1.svg" alt />
+            <!-- <img src="../../assets/images/sale1.svg" alt /> -->
             <div class="overlay">
               <h3>Immortal Treasure III</h3>
               <p>$15.22</p>
             </div>
           </div>
           <div class="sale-two">
-            <img src="../../assets/images/sale2.svg" alt />
+            <!-- <img src="../../assets/images/sale2.svg" alt /> -->
             <div class="overlay">
               <h3>Immortal Treasure III</h3>
               <p>$15.22</p>

@@ -14,13 +14,12 @@
                 <router-link
                   :to="`/demo/players/${$route.params.steam_id}/games`"
                   class="blue"
-                  >View All</router-link
-                >
+                >View All</router-link>
               </div>
             </div>
 
             <div class="my-stats position-relative">
-              <h3 class="mt-5 mb-5 text-center">My Stats</h3>
+              <h3 class="mt-5 mb-5 text-center">Stats</h3>
               <table class="table mb-5">
                 <tbody>
                   <tr>
@@ -50,13 +49,13 @@ import PlayerGamesList from "../games/PlayerGamesList.vue";
 
 export default {
   components: {
-    PlayerGamesList,
+    PlayerGamesList
   },
 
   data: () => ({
     error: "",
     games: [],
-    playerStats: {},
+    playerStats: {}
   }),
 
   created() {
@@ -73,7 +72,7 @@ export default {
       .then(playerStats => {
         this.playerStats = playerStats;
       });
-  },
+  }
 };
 </script>
 

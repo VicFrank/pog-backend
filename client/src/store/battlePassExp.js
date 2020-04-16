@@ -501,7 +501,7 @@ const levelTable = [
   },
 ];
 
-const getLevel = xp => {
+const getLevel = (xp) => {
   if (xp >= 372125) {
     return 101 + Math.floor((xp - 372125) / 8000);
   }
@@ -509,15 +509,16 @@ const getLevel = xp => {
   for (const levelData of levelTable) {
     const { level, totalXP, toNextLevel } = levelData;
     if (xp < totalXP + toNextLevel) {
+      console.log(level);
       return level;
     }
   }
 };
 
-const getToNextLevel = xp => {
+const getToNextLevel = (xp) => {
   const level = getLevel(xp);
   const { toNextLevel, totalXP } = levelTable.find(
-    levelData => levelData.level === level
+    (levelData) => levelData.level === level
   );
 
   return {

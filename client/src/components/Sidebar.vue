@@ -4,7 +4,10 @@
       <template v-if="loggedIn">
         <div class="user-info">
           <router-link to="/demo/profile">
-            <h3>{{ username }}</h3>
+            <h3>
+              {{ username }}
+              <span v-if="isAdmin">(Admin)</span>
+            </h3>
             <img :src="profilePicture" class="profile-picture" alt="Profile Picture" />
           </router-link>
           <div class="notification">
@@ -101,13 +104,9 @@
               exact-active-class="active"
             >Match History</router-link>
           </li>
-          <!-- <li class="sidebar-nav__item">
-            <router-link
-              to="demo/"
-              class="sidebar-nav__link sidebar-nav__link_settings"
-              >Settings</router-link
-            >
-          </li>-->
+          <li class="sidebar-nav__item">
+            <router-link to="/demo/admin" class="sidebar-nav__link sidebar-nav__link_settings">Admin</router-link>
+          </li>
           <li>
             <b-button
               href="/api/auth/logout"
@@ -121,6 +120,7 @@
         <div class="login-button">
           <LoginButton></LoginButton>
         </div>
+        <img src="../assets/images/login_sample.jpg" />
       </template>
     </div>
   </div>
@@ -177,6 +177,9 @@ export default {
     },
     bpLevelRequired() {
       return this.$store.getters.bpLevelRequired;
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin;
     },
     badgeImage() {
       const level = this.$store.getters.bpLevel;

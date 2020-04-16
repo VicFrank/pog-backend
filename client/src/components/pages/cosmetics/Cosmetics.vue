@@ -7,30 +7,12 @@
           <div class="col-xl-12">
             <div class="search-bar mb-3">
               <div class="search-input">
-                <input type="text" name="search" placeholder="Search..." />
+                <input type="text" name="search" placeholder="Search..." v-model="searchText" />
               </div>
             </div>
 
             <div class="cosmetic-bar">
               <div class="btns-bar">
-                <!-- <label class="btns-bar__btn btns-bar__btn_left" for="companions">
-                  <span>Companions</span>
-                </label>
-                <label class="btns-bar__btn" for="companions-fx">
-                  <span>Companions FX</span>
-                </label>
-                <label class="btns-bar__btn" for="chests">
-                  <span>Chests</span>
-                </label>
-                <label class="btns-bar__btn" for="special-fx">
-                  <span>Special FX</span>
-                </label>
-                <label class="btns-bar__btn" for="rarity">
-                  <span>Misc</span>
-                </label>
-                <label class="btns-bar__btn active-filter btns-bar__btn_right" for="all">
-                  <span>All</span>
-                </label>-->
                 <cosmeticsFilter
                   v-for="filter in filters"
                   :key="filter.name"
@@ -49,14 +31,45 @@
                 v-for="cosmetic in filteredCosmetics"
                 :key="cosmetic.cosmetic_id"
               >
-                <a href="#" class="cosmetic">
-                  <div class="cosmetic__picture">
-                    <img v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)" />
+                <template v-if="cosmeticMovie(cosmetic.cosmetic_id)">
+                  <div
+                    class="cosmetic has-modal"
+                    @click="$bvModal.show(`bp-modal-${cosmetic.cosmetic_id}`)"
+                  >
+                    <div class="cosmetic__picture">
+                      <img
+                        v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
+                        :alt="cosmetic.cosmetic_id"
+                      />
+                    </div>
+                    <div class="cosmetic__descr">
+                      <div class="cosmetic__name">{{cosmeticName(cosmetic.cosmetic_id)}}</div>
+                    </div>
                   </div>
-                  <div class="cosmetic__descr">
-                    <div class="cosmetic__name">{{cosmeticName(cosmetic.cosmetic_id)}}</div>
+                  <b-modal
+                    :id="`bp-modal-${cosmetic.cosmetic_id}`"
+                    :title="cosmeticName(cosmetic.cosmetic_id)"
+                    centered
+                    hide-footer
+                  >
+                    <video width="360" height="360" autoplay>
+                      <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
+                    </video>
+                  </b-modal>
+                </template>
+                <template v-else>
+                  <div class="cosmetic">
+                    <div class="cosmetic__picture">
+                      <img
+                        v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
+                        :alt="cosmetic.cosmetic_id"
+                      />
+                    </div>
+                    <div class="cosmetic__descr">
+                      <div class="cosmetic__name">{{cosmeticName(cosmetic.cosmetic_id)}}</div>
+                    </div>
                   </div>
-                </a>
+                </template>
               </div>
             </div>
           </div>
@@ -68,6 +81,8 @@
 
 <script>
 import cosmeticsData from "./cosmeticNames";
+import webm from "./webmList";
+import filters from "./filters";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
 
 export default {
@@ -76,33 +91,8 @@ export default {
     cosmetics: [],
     filteredCosmetics: [],
     activeFilters: new Set(),
-    filters: [
-      {
-        name: "Companions",
-        active: false
-      },
-      {
-        name: "Companions FX",
-        active: false
-      },
-      {
-        name: "Chests",
-        active: false
-      },
-      {
-        name: "Special FX",
-        active: false
-      },
-      {
-        name: "Misc",
-        active: false
-      },
-      {
-        name: "All",
-        isRight: true,
-        active: true
-      }
-    ]
+    searchText: "",
+    filters: []
   }),
 
   components: {
@@ -110,6 +100,8 @@ export default {
   },
 
   created() {
+    this.filters = filters;
+
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
       .then(res => res.json())
       .then(cosmetics => {
@@ -119,15 +111,24 @@ export default {
       .catch(err => (this.error = err));
   },
 
+  watch: {
+    searchText: function() {
+      this.updateFilteredCosmetics();
+    }
+  },
+
   methods: {
     cosmeticImageSrc(cosmeticID) {
-      return require(`./images/${cosmeticID}.jpg`);
+      return require(`./images/${cosmeticID}.png`);
+    },
+    cosmeticMovie(cosmeticID) {
+      if (!webm.has(cosmeticID)) return false;
+      return require(`./images/${cosmeticID}.webm`);
     },
     cosmeticName(cosmeticID) {
       return cosmeticsData[cosmeticID].name;
     },
     toggleFilter(name, active) {
-      console.log(name, active);
       if (name === "All") {
         this.clearFilters();
       } else {
@@ -139,16 +140,19 @@ export default {
           );
         } else {
           this.activeFilters.delete(name);
-          // if there are no active filters, make "all active"
-          this.filters = this.filters.map(filter =>
-            filter.name === "All" ? { ...filter, active: false } : filter
-          );
         }
       }
 
       this.filters = this.filters.map(filter =>
         filter.name === name ? { ...filter, active: !filter.active } : filter
       );
+
+      // if there are no active filters, make "all active"
+      if (this.hasNoFilters()) {
+        this.filters = this.filters.map(filter =>
+          filter.name === "All" ? { ...filter, active: true } : filter
+        );
+      }
 
       this.updateFilteredCosmetics();
     },
@@ -160,43 +164,57 @@ export default {
       return this.activeFilters.size === 0;
     },
     updateFilteredCosmetics() {
-      if (this.hasNoFilters()) {
-        this.filteredCosmetics = this.cosmetics;
-        return;
-      }
-
-      this.filteredCosmetics = this.cosmetics.filter(cosmetic => {
-        const { cosmetic_type, equip_group } = cosmetic;
-        if (this.activeFilters.has("Companions")) {
-          if (equip_group === "companion") {
+      this.filteredCosmetics = this.cosmetics
+        .filter(cosmetic => {
+          // Type Filter
+          const { cosmetic_type, equip_group } = cosmetic;
+          if (this.hasNoFilters()) {
             return true;
           }
-        }
-        if (this.activeFilters.has("Companions FX")) {
-          if (equip_group === "companion_fx") {
-            return true;
+          if (this.activeFilters.has("Companions")) {
+            if (equip_group === "companion") {
+              return true;
+            }
           }
-        }
-        if (this.activeFilters.has("Chests")) {
-          if (cosmetic_type === "Chest") {
-            return true;
+          if (this.activeFilters.has("Companions FX")) {
+            if (equip_group === "companion_fx") {
+              return true;
+            }
           }
-        }
-        if (this.activeFilters.has("Special FX")) {
+          if (this.activeFilters.has("Chests")) {
+            if (cosmetic_type === "Chest") {
+              return true;
+            }
+          }
+          if (this.activeFilters.has("Special FX")) {
+            if (
+              cosmetic_type === "Battlepass FX" ||
+              cosmetic_type === "Companion FX"
+            ) {
+              return true;
+            }
+          }
+          if (this.activeFilters.has("Misc")) {
+            if (cosmetic_type === "Avatar" || cosmetic_type === "Border") {
+              return true;
+            }
+          }
+          return false;
+        })
+        .filter(cosmetic => {
+          // Text Search Filter
+          const { cosmetic_id } = cosmetic;
+          const name = this.cosmeticName(cosmetic_id).toLowerCase();
+          const search = this.searchText.toLowerCase();
           if (
-            cosmetic_type === "Battlepass FX" ||
-            cosmetic_type === "Companion FX"
+            search === "" ||
+            name.includes(search) ||
+            cosmetic_id.includes(search)
           ) {
             return true;
           }
-        }
-        if (this.activeFilters.has("Misc")) {
-          if (cosmetic_type === "Avatar" || cosmetic_type === "Border") {
-            return true;
-          }
-        }
-        return false;
-      });
+          return false;
+        });
     }
   }
 };
@@ -383,6 +401,10 @@ export default {
   border-bottom-color: #0b86c4;
 }
 
+.has-modal {
+  cursor: pointer;
+}
+
 .cosmetic__price {
   padding: 10px 20px;
   font-size: 18px;
@@ -399,7 +421,8 @@ export default {
 .cosmetic__picture img {
   position: relative;
   z-index: 2;
-  width: 100%;
+  width: 200px;
+  height: 200px;
   margin: 0 auto;
 }
 
@@ -426,6 +449,7 @@ export default {
 
 .cosmetic__name {
   width: 100%;
+  min-height: 36px;
   padding: 0 1em;
   position: relative;
   text-overflow: ellipsis;

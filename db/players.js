@@ -70,6 +70,20 @@ module.exports = {
     }
   },
 
+  async isAdmin(steamID) {
+    try {
+      const { rows } = await query(
+        `SELECT is_admin
+         FROM players
+         WHERE steam_id = $1`,
+        [steamID]
+      );
+      return rows[0].is_admin;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async setAdmin(steamID, isAdmin, patreonLevel) {
     try {
       const { rows } = await query(

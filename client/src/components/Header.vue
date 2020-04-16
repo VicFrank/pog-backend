@@ -4,16 +4,10 @@
       <div class="d-flex align-items-center">
         <SidebarToggle class="navbar-nav mr-1"></SidebarToggle>
         <router-link to="/demo" class="navbar-brand">
-          <img src="../assets/images/logo_alt.png" alt="POG" />
+          <img src="../assets/images/logo.png" alt="POG" />
         </router-link>
       </div>
       <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex">
-        <!-- <li class="nav-item mr-5">
-          <router-link class="nav-link" to="/demo/learn">LEARN</router-link>
-        </li>-->
-        <!-- <li class="nav-item mr-5">
-            <router-link class="nav-link" to="/demo/store">STORE</router-link>
-        </li>-->
         <b-nav-item-dropdown text="STATS" class="mr-5">
           <b-dropdown-item to="/demo/games">GAMES</b-dropdown-item>
           <b-dropdown-item to="/demo/heroes">HEROES</b-dropdown-item>
@@ -29,8 +23,9 @@
             target="_blank"
             class="fa fa-youtube mr-3"
           ></a>
+          <a href="https://www.twitch.tv/sunsfantv" target="_blank" class="fa fa-twitch mr-3"></a>
           <a href="http://discord.gg/sunsfan" target="_blank" class="fab fa-discord mr-3"></a>
-          <a href="https://www.reddit.com/r/DotaCinema/" class="fa fa-reddit mr-3"></a>
+          <a href="https://www.reddit.com/r/DotaCinema/" target="_blank" class="fa fa-reddit mr-3"></a>
           <a href="https://twitter.com/DotaCinema" target="_blank" class="fa fa-twitter mr-3"></a>
           <a
             href="https://www.facebook.com/DotaCinema/"
