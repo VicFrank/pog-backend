@@ -133,7 +133,7 @@
               >Match History</router-link
             >
           </li>
-          <li class="sidebar-nav__item">
+          <li v-if="isAdmin" class="sidebar-nav__item">
             <router-link
               to="/demo/admin"
               class="sidebar-nav__link sidebar-nav__link_settings"

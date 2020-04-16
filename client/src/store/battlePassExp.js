@@ -509,7 +509,6 @@ const getLevel = (xp) => {
   for (const levelData of levelTable) {
     const { level, totalXP, toNextLevel } = levelData;
     if (xp < totalXP + toNextLevel) {
-      console.log(level);
       return level;
     }
   }

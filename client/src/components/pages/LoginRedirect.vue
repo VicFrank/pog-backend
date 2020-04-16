@@ -9,28 +9,28 @@ export default {
     // it's necessary to get this first so that the user is recognized
     // as logged in
     fetch("/api/auth/steam/success", { credentials: "include" })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.success) {
-          const { displayName, photos, id } = res.user;
+          const { displayName, photos, id, isAdmin } = res.user;
 
           this.$store.commit({
             type: "setUser",
             username: displayName,
             steamID: id,
-            bpLevel: 4,
-            picture: photos[2].value
+            picture: photos[2].value,
+            isAdmin,
           });
 
           this.$router.push("/demo/profile");
         } else {
           this.$store.commit({
-            type: "setNotLoggedIn"
+            type: "setNotLoggedIn",
           });
 
           this.$router.push("/demo");
         }
       });
-  }
+  },
 };
 </script>
