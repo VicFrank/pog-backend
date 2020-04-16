@@ -4,9 +4,16 @@
       <h1 class="page-title">Battle Pass</h1>
       <ul class="battlepass-timeline">
         <li v-for="i in rewards.length" :key="i">
-          <div v-bind:class="{ 'direction-r': isEven(i), 'direction-l': !isEven(i) }">
-            <span>Level {{i}}</span>
-            <div v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }">
+          <div
+            v-bind:class="{
+              'direction-r': isEven(i),
+              'direction-l': !isEven(i),
+            }"
+          >
+            <span>Level {{ i }}</span>
+            <div
+              v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }"
+            >
               <img
                 v-if="getItemImage(i)"
                 :src="getItemImage(i)"
@@ -20,9 +27,15 @@
                 @click="$bvModal.show(getChestLevel(i))"
               />
 
-              <b-modal :id="`bp-modal-${i}`" :title="getItemName(i)" centered hide-footer>
+              <b-modal
+                :id="`bp-modal-${i}`"
+                :title="getItemName(i)"
+                centered
+                hide-footer
+              >
                 <video v-if="getMovie(i)" width="100%" height="360" autoplay>
-                  <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
+                  <source :src="getMovie(i)" type="video/webm" />
+                  Your browser does not support the video tag.
                 </video>
               </b-modal>
             </div>
@@ -116,6 +129,7 @@ export default {
       "border2",
       "border3",
       "border4",
+      "border5",
       "bpaccel1",
       "bpaccel2",
       "deny1",
@@ -133,23 +147,23 @@ export default {
       "reroll",
       "teleport1",
       "teleport2",
-      "teleport3"
-    ])
+      "teleport3",
+    ]),
   }),
 
   created() {
     fetch(`/api/cosmetics/battle_pass`)
-      .then(res => res.json())
-      .then(rewards => {
+      .then((res) => res.json())
+      .then((rewards) => {
         this.rewards = rewards;
       })
-      .catch(err => (this.error = err));
+      .catch((err) => (this.error = err));
   },
 
   computed: {
     bpLevel() {
       return this.$store.getters.bpLevel;
-    }
+    },
   },
 
   methods: {
@@ -192,7 +206,7 @@ export default {
       const chest = this.rewards[level - 1].chest;
       if (!chest || chest === null) return false;
 
-      return chest;
+      return chest.toString();
     },
     getMovie(level) {
       const cosmetic_id = this.rewards[level - 1].cosmetic_id;
@@ -200,8 +214,8 @@ export default {
       if (this.noWebm.has(cosmetic_id)) return false;
 
       return require(`./rewards/${cosmetic_id}.webm`);
-    }
-  }
+    },
+  },
 };
 </script>
 

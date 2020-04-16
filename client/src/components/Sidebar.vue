@@ -8,15 +8,27 @@
               {{ username }}
               <span v-if="isAdmin">(Admin)</span>
             </h3>
-            <img :src="profilePicture" class="profile-picture" alt="Profile Picture" />
+            <img
+              :src="profilePicture"
+              class="profile-picture"
+              alt="Profile Picture"
+            />
           </router-link>
           <div class="notification">
             <span class="custom-badge">{{ bpLevel }}</span>
           </div>
         </div>
         <div class="progress-row">
-          <img :src="badgeImage" class="custom-badge-img" alt="Battle Pass Badge" />
-          <ProgressBar class="bp-progress" :progress="bpLevelProgress" :required="bpLevelRequired" />
+          <img
+            :src="badgeImage"
+            class="custom-badge-img"
+            alt="Battle Pass Badge"
+          />
+          <ProgressBar
+            class="bp-progress"
+            :progress="bpLevelProgress"
+            :required="bpLevelRequired"
+          />
         </div>
 
         <ul class="sidebar-nav">
@@ -29,24 +41,35 @@
           </li>-->
           <li class="sidebar-nav__item d-lg-none">
             <router-link
+              to="/demo/store"
+              class="sidebar-nav__link"
+              exact-active-class="active"
+              >Store</router-link
+            >
+          </li>
+          <li class="sidebar-nav__item d-lg-none">
+            <router-link
               to="/demo/games"
               class="sidebar-nav__link"
               exact-active-class="active"
-            >Games</router-link>
+              >Games</router-link
+            >
           </li>
           <li class="sidebar-nav__item d-lg-none">
             <router-link
               to="/demo/heroes"
               class="sidebar-nav__link"
               exact-active-class="active"
-            >Heroes</router-link>
+              >Heroes</router-link
+            >
           </li>
           <li class="sidebar-nav__item d-lg-none">
             <router-link
               to="/demo/changelog"
               class="sidebar-nav__link"
               exact-active-class="active"
-            >Changelog</router-link>
+              >Changelog</router-link
+            >
           </li>
 
           <hr class="d-lg-none" />
@@ -56,7 +79,8 @@
               to="/demo/profile"
               class="sidebar-nav__link sidebar-nav__link_profile"
               exact-active-class="active"
-            >Profile</router-link>
+              >Profile</router-link
+            >
           </li>
 
           <li class="sidebar-nav__item">
@@ -64,7 +88,8 @@
               to="/demo/profile/battle_pass"
               class="sidebar-nav__link sidebar-nav__link_battlepass"
               exact-active-class="active"
-            >Battle Pass</router-link>
+              >Battle Pass</router-link
+            >
           </li>
 
           <li class="sidebar-nav__item">
@@ -72,7 +97,8 @@
               to="/demo/profile/armory"
               class="sidebar-nav__link sidebar-nav__link_armory"
               exact-active-class="active"
-            >Armory</router-link>
+              >Armory</router-link
+            >
           </li>
 
           <li class="sidebar-nav__item">
@@ -80,7 +106,8 @@
               to="/demo/profile/achievements"
               class="sidebar-nav__link sidebar-nav__link_achievements"
               exact-active-class="active"
-            >Achievements</router-link>
+              >Achievements</router-link
+            >
           </li>
           <!-- <li class="sidebar-nav__item">
             <router-link
@@ -95,24 +122,31 @@
               to="/demo/profile/stats"
               class="sidebar-nav__link sidebar-nav__link_stats"
               exact-active-class="active"
-            >My Stats</router-link>
+              >My Stats</router-link
+            >
           </li>
           <li class="sidebar-nav__item">
             <router-link
               to="/demo/profile/games"
               class="sidebar-nav__link sidebar-nav__link_history"
               exact-active-class="active"
-            >Match History</router-link>
+              >Match History</router-link
+            >
           </li>
           <li class="sidebar-nav__item">
-            <router-link to="/demo/admin" class="sidebar-nav__link sidebar-nav__link_settings">Admin</router-link>
+            <router-link
+              to="/demo/admin"
+              class="sidebar-nav__link sidebar-nav__link_settings"
+              >Admin</router-link
+            >
           </li>
           <li>
             <b-button
               href="/api/auth/logout"
               class="sign-out-button mt-3"
               variant="outline-primary"
-            >Sign Out</b-button>
+              >Sign Out</b-button
+            >
           </li>
         </ul>
       </template>
@@ -136,22 +170,22 @@ export default {
 
   components: {
     LoginButton,
-    ProgressBar
+    ProgressBar,
   },
 
   mounted() {
     const open = this.$store.state.ui.sidebarOpen;
     TweenMax.set(this.$el, {
-      x: open ? 0 : -this.$el.offsetWidth
+      x: open ? 0 : -this.$el.offsetWidth,
     });
     if (this.$store.state.auth.loggedIn) {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/battle_pass`)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           this.$store.commit({
             type: "setBattlePass",
             bpExp: res.total_experience,
-            bpTier: res.tier
+            bpTier: res.tier,
           });
         });
     }
@@ -196,17 +230,17 @@ export default {
         badgeLevel = 1;
       }
       return require(`../assets/images/badges/badge${badgeLevel}.png`);
-    }
+    },
   },
   watch: {
     open: function(open) {
       const dX = open ? 0 : -this.$el.offsetWidth;
       TweenMax.to(this.$el, 0.6, {
         x: dX,
-        ease: Power4.easeOut
+        ease: Power4.easeOut,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
