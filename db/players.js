@@ -130,7 +130,7 @@ module.exports = {
         ranked = True
       GROUP BY p.steam_id
       `;
-      const { rows } = await query(sql_query, [steamID]);
+      let { rows } = await query(sql_query, [steamID]);
 
       const equippedCompanion = await this.getEquippedCompanion(steamID);
       const teamKillStats = await this.getTeamKillStats(steamID);
@@ -142,7 +142,12 @@ module.exports = {
 
       let playerStats = rows[0];
       if (!playerStats) {
+        let { rows } = await query(
+          `SELECT * FROM players WHERE steam_id = $1`,
+          [steamID]
+        );
         playerStats = {
+          ...rows[0],
           poggers: 0,
           mmr: 1000,
           games: 0,

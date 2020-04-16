@@ -33,7 +33,13 @@
                 centered
                 hide-footer
               >
-                <video v-if="getMovie(i)" width="100%" height="360" autoplay>
+                <video
+                  v-if="getMovie(i)"
+                  width="100%"
+                  height="360"
+                  autoplay
+                  muted
+                >
                   <source :src="getMovie(i)" type="video/webm" />
                   Your browser does not support the video tag.
                 </video>
