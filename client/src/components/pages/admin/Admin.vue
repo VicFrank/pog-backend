@@ -5,10 +5,10 @@
       <div class="container">
         <b-card no-body>
           <b-tabs pills card>
-            <b-tab title-link-class="tab" title="Players">
+            <b-tab title-link-class="tab" title="Players" active>
               <PlayersAdmin />
             </b-tab>
-            <b-tab title-link-class="tab" title="Cosmetics" active>
+            <b-tab title-link-class="tab" title="Cosmetics">
               <CosmeticsAdmin />
             </b-tab>
             <b-tab title-link-class="tab" title="Battle Pass">
@@ -34,8 +34,8 @@ export default {
     BattlePassAdmin,
     CosmeticsAdmin,
     PlayersAdmin,
-    QuestsAdmin
-  }
+    QuestsAdmin,
+  },
 };
 </script>
 
