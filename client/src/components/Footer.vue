@@ -1,8 +1,9 @@
 <template>
-  <footer>
-    <div class="footer">
-      <img class="ml-5" src="../assets/images/logo_alt.png" alt="POG" />
-    </div>
+  <footer class="d-flex justify-content-end align-items-center">
+    © 2020 Double Edge Studios LLC
+    <router-link to="/demo/credits" class="float-right ml-3 mr-5"
+      >Our Team</router-link
+    >
   </footer>
 </template>
 
@@ -10,23 +11,13 @@
 export default {};
 </script>
 
-<style scoped>
-.footer {
+<style>
+footer {
   bottom: 0;
 
   width: 100%;
-  height: 60px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  height: 40px;
 
   background-color: rgb(26, 35, 43);
-}
-
-.social {
-  display: flex;
-
-  font-size: 20px;
 }
 </style>

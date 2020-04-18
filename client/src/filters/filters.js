@@ -416,15 +416,16 @@ export default {
     },
     round: function(value, decimals) {
       {
-        if(!value) {
+        if (!value) {
           value = 0;
         }
-      
-        if(!decimals) {
+
+        if (!decimals) {
           decimals = 0;
         }
-      
-        value = Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
+
+        value =
+          Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
         return value;
       }
     },

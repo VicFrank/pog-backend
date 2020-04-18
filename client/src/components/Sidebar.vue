@@ -32,48 +32,6 @@
         </div>
 
         <ul class="sidebar-nav">
-          <!-- <li class="sidebar-nav__item d-lg-none">
-            <router-link
-              to="/demo/learn"
-              class="sidebar-nav__link"
-              exact-active-class="active"
-            >Learn</router-link>
-          </li>-->
-          <li class="sidebar-nav__item d-lg-none">
-            <router-link
-              to="/demo/store"
-              class="sidebar-nav__link"
-              exact-active-class="active"
-              >Store</router-link
-            >
-          </li>
-          <li class="sidebar-nav__item d-lg-none">
-            <router-link
-              to="/demo/games"
-              class="sidebar-nav__link"
-              exact-active-class="active"
-              >Games</router-link
-            >
-          </li>
-          <li class="sidebar-nav__item d-lg-none">
-            <router-link
-              to="/demo/heroes"
-              class="sidebar-nav__link"
-              exact-active-class="active"
-              >Heroes</router-link
-            >
-          </li>
-          <li class="sidebar-nav__item d-lg-none">
-            <router-link
-              to="/demo/changelog"
-              class="sidebar-nav__link"
-              exact-active-class="active"
-              >Changelog</router-link
-            >
-          </li>
-
-          <hr class="d-lg-none" />
-
           <li class="sidebar-nav__item">
             <router-link
               to="/demo/profile"
@@ -109,14 +67,6 @@
               >Achievements</router-link
             >
           </li>
-          <!-- <li class="sidebar-nav__item">
-            <router-link
-              to="/demo/profile/quests"
-              class="sidebar-nav__link sidebar-nav__link_dailyquest"
-              exact-active-class="active"
-              >Daily Quests</router-link
-            >
-          </li>-->
           <li class="sidebar-nav__item">
             <router-link
               to="/demo/profile/stats"
@@ -156,6 +106,65 @@
         </div>
         <img src="../assets/images/login_sample.jpg" />
       </template>
+      <hr class="d-lg-none" />
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/demo/store"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >Store</router-link
+          >
+        </li>
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/demo/games"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >Games</router-link
+          >
+        </li>
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/demo/heroes"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >Heroes</router-link
+          >
+        </li>
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/demo/changelog"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >Changelog</router-link
+          >
+        </li>
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/demo/faq"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >FAQ</router-link
+          >
+        </li>
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/demo/guardians"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >Guardians</router-link
+          >
+        </li>
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/demo/media"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            >Media</router-link
+          >
+        </li>
+      </ul>
     </div>
   </div>
 </template>

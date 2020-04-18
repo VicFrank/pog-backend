@@ -15,6 +15,11 @@
           <b-dropdown-item to="/demo/games">GAMES</b-dropdown-item>
           <b-dropdown-item to="/demo/heroes">HEROES</b-dropdown-item>
         </b-nav-item-dropdown>
+        <b-nav-item-dropdown text="LEARN" class="mr-5">
+          <b-dropdown-item to="/demo/faq">FAQ</b-dropdown-item>
+          <b-dropdown-item to="/demo/guardians">GUARDIANS</b-dropdown-item>
+          <b-dropdown-item to="/demo/media">MEDIA</b-dropdown-item>
+        </b-nav-item-dropdown>
         <li class="nav-item">
           <router-link class="nav-link" to="/demo/changelog"
             >CHANGE LOG</router-link

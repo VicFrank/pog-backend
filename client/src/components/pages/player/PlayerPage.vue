@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout__content">
     <div class="content">
-      <div class="container">
+      <div class="container" v-if="playerStats.username">
         <h1>{{ playerStats.username }}</h1>
         <div class="row">
           <div class="col-xl-12">
@@ -14,7 +14,8 @@
                 <router-link
                   :to="`/demo/players/${$route.params.steam_id}/games`"
                   class="blue"
-                >View All</router-link>
+                  >View All</router-link
+                >
               </div>
             </div>
 
@@ -40,6 +41,9 @@
           </div>
         </div>
       </div>
+      <div class="container" v-else>
+        <h2>Player not found</h2>
+      </div>
     </div>
   </div>
 </template>
@@ -49,30 +53,30 @@ import PlayerGamesList from "../games/PlayerGamesList.vue";
 
 export default {
   components: {
-    PlayerGamesList
+    PlayerGamesList,
   },
 
   data: () => ({
     error: "",
     games: [],
-    playerStats: {}
+    playerStats: {},
   }),
 
   created() {
     const steamID = this.$route.params.steam_id;
 
     fetch(`/api/players/${steamID}/games?limit=3`)
-      .then(res => res.json())
-      .then(games => {
+      .then((res) => res.json())
+      .then((games) => {
         this.games = games;
       });
 
     fetch(`/api/players/${steamID}/`)
-      .then(res => res.json())
-      .then(playerStats => {
+      .then((res) => res.json())
+      .then((playerStats) => {
         this.playerStats = playerStats;
       });
-  }
+  },
 };
 </script>
 

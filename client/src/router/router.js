@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store";
 
-// import Home from "../components/pages/home/Home";
 import Achievements from "../components/pages/Achievements";
 import Changelog from "../components/pages/Changelog";
 import Cosmetics from "../components/pages/cosmetics/Cosmetics";
@@ -10,23 +9,24 @@ import MatchHistory from "../components/pages/MatchHistory";
 import MyStats from "../components/pages/MyStats";
 import Profile from "../components/pages/Profile";
 import Stats from "../components/pages/Stats";
-// import Store from "../components/pages/cosmetics/Store";
 import BattlePass from "../components/pages/cosmetics/BattlePass";
 import SplashPage from "../components/SplashPage";
 import Patrons from "../components/pages/Patrons";
 import Game from "../components/pages/games/Game";
 import RecentGames from "../components/pages/games/RecentGames";
 import HeroStatsList from "../components/pages/games/HeroStatsList";
-import Learn from "../components/pages/learn/Learn";
+import FAQ from "../components/pages/learn/FAQ";
+import Guardians from "../components/pages/learn/Guardians";
+import Media from "../components/pages/learn/Media";
 import PlayerPage from "../components/pages/player/PlayerPage";
 import PlayerGames from "../components/pages/player/PlayerGames";
 import LoginRedirect from "../components/pages/LoginRedirect";
-// import Admin from "../components/pages/admin/Admin";
 import NotFound from "../components/NotFound";
 
 const Store = () => import("../components/pages/cosmetics/Store");
 const Admin = () => import("../components/pages/admin/Admin");
 const Home = () => import("../components/pages/home/Home");
+const Credits = () => import("../components/pages/credits/Credits");
 
 // import Payment from "../components/pages/store/Payment";
 
@@ -52,8 +52,16 @@ const routes = [
     component: Changelog,
   },
   {
-    path: "/demo/learn",
-    component: Learn,
+    path: "/demo/faq",
+    component: FAQ,
+  },
+  {
+    path: "/demo/guardians",
+    component: Guardians,
+  },
+  {
+    path: "/demo/media",
+    component: Media,
   },
   {
     path: "/demo/games",
@@ -82,6 +90,10 @@ const routes = [
   {
     path: "/demo/store",
     component: Store,
+  },
+  {
+    path: "/demo/credits",
+    component: Credits,
   },
   {
     path: "/demo/admin",

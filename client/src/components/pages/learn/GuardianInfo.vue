@@ -1,27 +1,38 @@
 <template>
   <div class="abilities">
     <div class="guardian-titles">
-      <div class="guardian-name">{{guardianData.name}}</div>
-      <div class="guardian-title">{{guardianData.title}}</div>
+      <div class="guardian-name">{{ guardianData.name }}</div>
+      <div class="guardian-title">{{ guardianData.title }}</div>
     </div>
+    <b-img
+      :src="guardianData.img"
+      :alt="guardianData.name"
+      class="mb-4"
+      fluid
+    />
     <div class="abilities-list">
       <img
         v-for="ability in guardianData.abilities"
         :key="ability.name"
         :src="abilityImage(ability)"
         :alt="ability.name"
-        v-bind:class="{ 
-            'ability-image': true, 
-            'active-image': ability.name === currentAbility.name }"
+        v-bind:class="{
+          'ability-image': true,
+          'active-image': ability.name === currentAbility.name,
+        }"
         v-on:click="setCurrentAbility(ability)"
       />
     </div>
 
     <div class="ability-info">
-      <img :src="abilityImage(currentAbility)" alt="Shattered Helm" class="current-ability" />
+      <img
+        :src="abilityImage(currentAbility)"
+        alt="Shattered Helm"
+        class="current-ability"
+      />
       <div class="ability-text">
-        <h3 class="ability-name">{{currentAbility.name}}</h3>
-        <div class="ability-description">{{currentAbility.description}}</div>
+        <h3 class="ability-name">{{ currentAbility.name }}</h3>
+        <div class="ability-description">{{ currentAbility.description }}</div>
       </div>
     </div>
   </div>
@@ -32,7 +43,7 @@ export default {
   props: ["guardianData"],
 
   data: () => ({
-    currentAbility: {}
+    currentAbility: {},
   }),
 
   mounted() {
@@ -47,8 +58,8 @@ export default {
     },
     setCurrentAbility(ability) {
       this.currentAbility = ability;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -78,12 +89,14 @@ export default {
   color: #0b86c4;
 
   line-height: normal;
+  text-align: center;
 }
 
 .guardian-title {
   font-size: 24px;
 
   line-height: normal;
+  text-align: center;
 }
 
 .ability-image {
@@ -109,7 +122,7 @@ export default {
 
 .ability-info {
   display: flex;
-  margin-bottom: 20px;
+  min-height: 120px;
 }
 
 .current-ability {
@@ -121,7 +134,7 @@ export default {
 }
 
 .ability-text {
-  width: 100%;
+  width: 480px;
 }
 
 .ability-name {
@@ -131,5 +144,11 @@ export default {
 
 .ability-description {
   font-size: 1rem;
+}
+
+@media (max-width: 599px) {
+  .abilities-list {
+    margin-left: 0px;
+  }
 }
 </style>

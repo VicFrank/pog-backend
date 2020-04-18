@@ -8,7 +8,7 @@
         v-bind:class="{ 'sidebar-open': sidebarOpen, 'neutral-div': true }"
       >
         <router-view class="main-content"></router-view>
-        <!-- <Footer v-if="!this.isRoot" /> -->
+        <Footer v-if="!this.isRoot" />
       </div>
     </div>
   </div>
@@ -17,6 +17,7 @@
 <script>
 import Header from "./components/Header.vue";
 import Sidebar from "./components/Sidebar.vue";
+import Footer from "./components/Footer.vue";
 
 export default {
   name: "app",
@@ -60,7 +61,8 @@ export default {
   },
   components: {
     Header,
-    Sidebar
+    Sidebar,
+    Footer
   }
 };
 </script>

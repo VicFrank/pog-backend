@@ -334,4 +334,8 @@ export default {
   box-shadow: unset;
   filter: grayscale(100%);
 }
+
+.lvl-locked:hover {
+  filter: grayscale(0%);
+}
 </style>
