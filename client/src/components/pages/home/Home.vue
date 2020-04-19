@@ -34,7 +34,7 @@
         <h2>Low Stress & Fast Paced</h2>
         <ul>
           <li>Accelerated XP/Gold</li>
-          <li>Partially shared XP/Gold between teammates/</li>
+          <li>Partially shared XP/Gold between teammates</li>
           <li>Accelerated respawn times</li>
           <li>Creeps spawn every 15 seconds</li>
           <li>No gold lost on death</li>
@@ -84,7 +84,7 @@
       <div class="col-sm my-auto">
         <h2>Guardians</h2>
         <ul>
-          <li>There are two Guardian pits on the map (three total Guardians). Killing them provides a buff to your team for 5 minutes.</li>
+          <li>There are two Guardian pits on the map ( <a href="https://www.pathofguardians.com/demo/guardians" target="_blank">three total Guardians</a>). Killing them provides a buff to your team for 5 minutes.</li>
           <li>Both teams have vision of the North Guardian during the day, and the South Guardian at night</li>
         </ul>
         <p>The Path of Guardians is protected by Ancient beings with very silly names. Defeat them to give your team an extra boost!</p>
@@ -111,11 +111,11 @@
         <h2>Battle Pass & Progression System</h2>
         <ul>
           <li>Free to all</li>
-          <li>Level your Battle Pass to upgrade item effects and much more!</li>
+          <li>Level your  <a href="https://www.pathofguardians.com/demo/profile/battle_pass" target="_blank">Battle Pass</a> to upgrade item effects and much more!</li>
           <li>Complete daily quests to give XP and POGGERS</li>
           <li>Finish long term Achievements to further increase your XP and POGGERS</li>
         </ul>
-        <p>Just in case you needed another reason to keep playing POG, we've implemented a progression system that will be ever-evolving. Also be sure to keep an eye on the Store page for weekly sales!</p>
+        <p>Just in case you needed another reason to keep playing POG, we've implemented a progression system that will be ever-evolving. Also be sure to keep an eye on the  <a href="https://www.pathofguardians.com/demo/store" target="_blank">Store Page</a> for weekly sales!</p>
       </div>
     </div>
     <div class="row">
