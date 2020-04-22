@@ -116,7 +116,6 @@
 <script>
 import cosmeticsData from "./cosmeticNames";
 import webm from "./webmList";
-import filters from "./filters";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
 import LoginButton from "../login/LoginButton";
 
@@ -128,7 +127,25 @@ export default {
     cosmetics: [],
     filteredCosmetics: [],
     activeFilters: new Set(),
-    filters: []
+    filters: [
+      {
+        name: "Companions",
+        active: false
+      },
+      {
+        name: "Companions FX",
+        active: false
+      },
+      {
+        name: "Chests",
+        active: false
+      },
+      {
+        name: "All",
+        isRight: true,
+        active: true
+      }
+    ]
   }),
 
   components: {
@@ -149,8 +166,6 @@ export default {
   },
 
   created() {
-    this.filters = filters;
-
     fetch(`/api/cosmetics`)
       .then(res => res.json())
       .then(cosmetics => {
@@ -285,6 +300,7 @@ export default {
       return this.activeFilters.size === 0;
     },
     updateFilteredCosmetics() {
+      console.log(this.activeFilters.has("Battle Pass"));
       this.filteredCosmetics = this.cosmetics.filter(cosmetic => {
         // Type Filter
         const { cosmetic_type, equip_group } = cosmetic;
@@ -306,16 +322,17 @@ export default {
             return true;
           }
         }
-        if (this.activeFilters.has("Special FX")) {
+        if (this.activeFilters.has("Battle Pass")) {
           if (
             cosmetic_type === "Battlepass FX" ||
-            cosmetic_type === "Companion FX"
+            cosmetic_type === "Avatar" ||
+            cosmetic_type === "Border"
           ) {
             return true;
           }
         }
-        if (this.activeFilters.has("Misc")) {
-          if (cosmetic_type === "Avatar" || cosmetic_type === "Border") {
+        if (this.activeFilters.has("Announcer")) {
+          if (equip_group === "announcer") {
             return true;
           }
         }

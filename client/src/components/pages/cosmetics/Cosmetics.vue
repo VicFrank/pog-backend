@@ -177,7 +177,10 @@ export default {
             return true;
           }
           if (this.activeFilters.has("Companions")) {
-            if (equip_group === "companion") {
+            if (
+              equip_group === "companion" ||
+              cosmetic_type === "Companion FX"
+            ) {
               return true;
             }
           }
@@ -191,16 +194,17 @@ export default {
               return true;
             }
           }
-          if (this.activeFilters.has("Special FX")) {
+          if (this.activeFilters.has("Battle Pass")) {
             if (
               cosmetic_type === "Battlepass FX" ||
-              cosmetic_type === "Companion FX"
+              cosmetic_type === "Avatar" ||
+              cosmetic_type === "Border"
             ) {
               return true;
             }
           }
-          if (this.activeFilters.has("Misc")) {
-            if (cosmetic_type === "Avatar" || cosmetic_type === "Border") {
+          if (this.activeFilters.has("Announcer")) {
+            if (equip_group === "announcer") {
               return true;
             }
           }

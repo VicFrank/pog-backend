@@ -1,27 +1,27 @@
 export default [
   {
     name: "Companions",
-    active: false
+    active: false,
   },
   {
     name: "Companions FX",
-    active: false
+    active: false,
   },
   {
     name: "Chests",
-    active: false
+    active: false,
   },
   {
-    name: "Special FX",
-    active: false
+    name: "Battle Pass",
+    active: false,
   },
   {
-    name: "Misc",
-    active: false
+    name: "Announcer",
+    active: false,
   },
   {
     name: "All",
     isRight: true,
-    active: true
-  }
+    active: true,
+  },
 ];
