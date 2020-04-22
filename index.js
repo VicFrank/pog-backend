@@ -42,12 +42,13 @@ passport.serializeUser(async function (user, next) {
     await players.createNewPlayer(steamid, username);
   }
 
-  const isAdmin = await players.isAdmin(steamid);
+  const { is_admin, poggers } = await players.getBasicPlayer(steamid);
 
   // add db info to the user
   user = {
     ...user,
-    isAdmin,
+    isAdmin: is_admin,
+    poggers,
   };
 
   next(null, user);

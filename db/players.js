@@ -99,6 +99,17 @@ module.exports = {
     }
   },
 
+  async getBasicPlayer(steamID) {
+    try {
+      let { rows } = await query("SELECT * FROM players WHERE steam_id = $1", [
+        steamID,
+      ]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getPlayer(steamID) {
     try {
       const sql_query = `

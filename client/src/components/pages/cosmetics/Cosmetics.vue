@@ -7,12 +7,7 @@
           <div class="col-xl-12">
             <div class="search-bar mb-3">
               <div class="search-input">
-                <input
-                  type="text"
-                  name="search"
-                  placeholder="Search..."
-                  v-model="searchText"
-                />
+                <input type="text" name="search" placeholder="Search..." v-model="searchText" />
               </div>
             </div>
 
@@ -50,9 +45,7 @@
                       />
                     </div>
                     <div class="cosmetic__descr">
-                      <div class="cosmetic__name">
-                        {{ cosmeticName(cosmetic.cosmetic_id) }}
-                      </div>
+                      <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
                     </div>
                   </div>
                   <b-modal
@@ -61,12 +54,8 @@
                     centered
                     hide-footer
                   >
-                    <video width="360" height="360" autoplay>
-                      <source
-                        :src="cosmeticMovie(cosmetic.cosmetic_id)"
-                        type="video/webm"
-                      />
-                      Your browser does not support the video tag.
+                    <video width="360" height="360" autoplay muted>
+                      <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
                     </video>
                   </b-modal>
                 </template>
@@ -79,9 +68,7 @@
                       />
                     </div>
                     <div class="cosmetic__descr">
-                      <div class="cosmetic__name">
-                        {{ cosmeticName(cosmetic.cosmetic_id) }}
-                      </div>
+                      <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
                     </div>
                   </div>
                 </template>
@@ -107,29 +94,29 @@ export default {
     filteredCosmetics: [],
     activeFilters: new Set(),
     searchText: "",
-    filters: [],
+    filters: []
   }),
 
   components: {
-    CosmeticsFilter,
+    CosmeticsFilter
   },
 
   created() {
     this.filters = filters;
 
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
-      .then((res) => res.json())
-      .then((cosmetics) => {
+      .then(res => res.json())
+      .then(cosmetics => {
         this.cosmetics = cosmetics;
         this.filteredCosmetics = cosmetics;
       })
-      .catch((err) => (this.error = err));
+      .catch(err => (this.error = err));
   },
 
   watch: {
     searchText: function() {
       this.updateFilteredCosmetics();
-    },
+    }
   },
 
   methods: {
@@ -150,7 +137,7 @@ export default {
         if (active) {
           this.activeFilters.add(name);
           // remove all from the filters if another is active
-          this.filters = this.filters.map((filter) =>
+          this.filters = this.filters.map(filter =>
             filter.name === "All" ? { ...filter, active: false } : filter
           );
         } else {
@@ -158,13 +145,13 @@ export default {
         }
       }
 
-      this.filters = this.filters.map((filter) =>
+      this.filters = this.filters.map(filter =>
         filter.name === name ? { ...filter, active: !filter.active } : filter
       );
 
       // if there are no active filters, make "all active"
       if (this.hasNoFilters()) {
-        this.filters = this.filters.map((filter) =>
+        this.filters = this.filters.map(filter =>
           filter.name === "All" ? { ...filter, active: true } : filter
         );
       }
@@ -173,9 +160,9 @@ export default {
     },
     clearFilters() {
       this.activeFilters.clear();
-      this.filters = this.filters.map((filter) => ({
+      this.filters = this.filters.map(filter => ({
         ...filter,
-        active: false,
+        active: false
       }));
     },
     hasNoFilters() {
@@ -183,7 +170,7 @@ export default {
     },
     updateFilteredCosmetics() {
       this.filteredCosmetics = this.cosmetics
-        .filter((cosmetic) => {
+        .filter(cosmetic => {
           // Type Filter
           const { cosmetic_type, equip_group } = cosmetic;
           if (this.hasNoFilters()) {
@@ -219,7 +206,7 @@ export default {
           }
           return false;
         })
-        .filter((cosmetic) => {
+        .filter(cosmetic => {
           // Text Search Filter
           if (!this.searchText) {
             return true;
@@ -236,8 +223,8 @@ export default {
           }
           return false;
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

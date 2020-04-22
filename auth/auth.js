@@ -10,8 +10,10 @@ function checkServerKey(req) {
 }
 
 module.exports = {
-  adminAuth: function(req, res, next) {
+  adminAuth: function (req, res, next) {
     if (checkServerKey(req)) {
+      return next();
+    } else if (req.user.isAdmin) {
       return next();
     } else {
       res
@@ -20,14 +22,14 @@ module.exports = {
       return;
     }
   },
-  userAuth: function(req, res, next) {
+  userAuth: function (req, res, next) {
     if (checkServerKey(req)) {
       return next();
     }
     if (req.isAuthenticated()) {
       // ensure the user matches
       const steamid = req.params.steamid;
-      if (steamid === req.user.id) {
+      if (steamid === req.user.id || req.user.isAdmin) {
         return next();
       }
     }

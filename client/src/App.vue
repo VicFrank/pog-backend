@@ -43,14 +43,15 @@ export default {
       .then(res => res.json())
       .then(res => {
         if (res.success) {
-          const { displayName, photos, id, isAdmin } = res.user;
+          const { displayName, photos, id, isAdmin, poggers } = res.user;
 
           this.$store.commit({
             type: "setUser",
             username: displayName,
             steamID: id,
             picture: photos[2].value,
-            isAdmin
+            isAdmin,
+            poggers
           });
         } else {
           this.$store.commit({
@@ -161,8 +162,8 @@ a:hover {
   font-size: 14px;
   letter-spacing: 2px;
   border-radius: 3px;
-  border: solid 1px #0b86c4;
-  background-color: #0b86c4;
+  /* border: solid 1px #0b86c4;
+  background-color: #0b86c4; */
   color: #ffffff;
   padding: 6px 30px;
 }
