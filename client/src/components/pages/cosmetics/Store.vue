@@ -202,8 +202,8 @@ export default {
       this.$refs[`bp-modal-${cosmeticID}`][0].hide();
     },
     buyItem(cosmetic) {
-      this.hideModal(cosmetic_id);
       const { cosmetic_id, cosmetic_type, cost } = cosmetic;
+      this.hideModal(cosmetic_id);
 
       // We can't afford this item
       if (this.poggers < cost) {
