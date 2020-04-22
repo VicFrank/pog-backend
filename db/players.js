@@ -159,8 +159,6 @@ module.exports = {
         );
         playerStats = {
           ...rows[0],
-          poggers: 0,
-          mmr: 1000,
           games: 0,
           wins: 0,
           losses: 0,
