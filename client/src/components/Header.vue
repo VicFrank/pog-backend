@@ -21,9 +21,7 @@
           <b-dropdown-item to="/demo/media">MEDIA</b-dropdown-item>
         </b-nav-item-dropdown>
         <li class="nav-item">
-          <router-link class="nav-link" to="/demo/changelog"
-            >CHANGE LOG</router-link
-          >
+          <router-link class="nav-link" to="/demo/changelog">CHANGE LOG</router-link>
         </li>
       </ul>
       <div class="d-flex align-items-center">
@@ -33,26 +31,10 @@
             target="_blank"
             class="fa fa-youtube mr-3"
           ></a>
-          <a
-            href="https://www.twitch.tv/sunsfantv"
-            target="_blank"
-            class="fa fa-twitch mr-3"
-          ></a>
-          <a
-            href="http://discord.gg/sunsfan"
-            target="_blank"
-            class="fab fa-discord mr-3"
-          ></a>
-          <a
-            href="https://www.reddit.com/r/DotaCinema/"
-            target="_blank"
-            class="fa fa-reddit mr-3"
-          ></a>
-          <a
-            href="https://twitter.com/DotaCinema"
-            target="_blank"
-            class="fa fa-twitter mr-3"
-          ></a>
+          <a href="https://www.twitch.tv/sunsfantv" target="_blank" class="fa fa-twitch mr-3"></a>
+          <a href="http://discord.gg/sunsfan" target="_blank" class="fab fa-discord mr-3"></a>
+          <a href="https://www.reddit.com/r/DotaCinema/" target="_blank" class="fa fa-reddit mr-3"></a>
+          <a href="https://twitter.com/DotaCinema" target="_blank" class="fa fa-twitter mr-3"></a>
           <a
             href="https://www.facebook.com/DotaCinema/"
             target="_blank"
@@ -60,12 +42,12 @@
           ></a>
         </div>
         <div>
-          <a
-            class="d-flex btn"
+          <b-button
+            class="d-flex"
             href="https://steamcommunity.com/sharedfiles/filedetails/?id=1146215215"
             target="_blank"
-            >PLAY NOW</a
-          >
+            variant="primary"
+          >PLAY NOW</b-button>
         </div>
       </div>
     </nav>
@@ -76,8 +58,8 @@
 import SidebarToggle from "./SidebarToggle.vue";
 export default {
   components: {
-    SidebarToggle,
-  },
+    SidebarToggle
+  }
 };
 </script>
 

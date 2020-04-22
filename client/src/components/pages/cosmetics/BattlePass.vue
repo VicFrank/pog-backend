@@ -11,9 +11,7 @@
             }"
           >
             <span>Level {{ i }}</span>
-            <div
-              v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }"
-            >
+            <div v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }">
               <img
                 v-if="getItemImage(i)"
                 :src="getItemImage(i)"
@@ -27,21 +25,9 @@
                 @click="$bvModal.show(getChestLevel(i))"
               />
 
-              <b-modal
-                :id="`bp-modal-${i}`"
-                :title="getItemName(i)"
-                centered
-                hide-footer
-              >
-                <video
-                  v-if="getMovie(i)"
-                  width="100%"
-                  height="360"
-                  autoplay
-                  muted
-                >
-                  <source :src="getMovie(i)" type="video/webm" />
-                  Your browser does not support the video tag.
+              <b-modal :id="`bp-modal-${i}`" :title="getItemName(i)" centered hide-footer>
+                <video v-if="getMovie(i)" width="100%" height="360" autoplay muted>
+                  <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
                 </video>
               </b-modal>
             </div>
@@ -52,56 +38,31 @@
     <b-modal :id="'1'" title="Common Chest" centered hide-footer>
       <h5>Gain a free Common Chest! It contains the following prizes:</h5>
       <ul>
-        <li>[Guaranteed] A random Common item!</li>
-        <li>[Guaranteed] Up to 125 Poggers!</li>
-        <li>[Chance] A bonus Uncommon item</li>
-        <li>[Small Chance] A bonus Rare item</li>
+        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
       </ul>
     </b-modal>
     <b-modal :id="'2'" title="Uncommon Chest" centered hide-footer>
       <h5>Gain a free Uncommon Chest! It contains the following prizes:</h5>
       <ul>
-        <li>[Guaranteed] A random Uncommon item!</li>
-        <li>[Guaranteed] Up to 250 Poggers!</li>
-        <li>[High chance] A bonus random Common item</li>
-        <li>[Chance] A bonus Rare item</li>
-        <li>[Small Chance] A bonus Mythical item</li>
+        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
       </ul>
     </b-modal>
     <b-modal :id="'3'" title="Rare Chest" centered hide-footer>
       <h5>Gain a free Rare Chest! It contains the following prizes:</h5>
       <ul>
-        <li>[Guaranteed] A random Mythical item!</li>
-        <li>[Guaranteed] Up to 450 Poggers!</li>
-        <li>[High chance] A bonus random Common item</li>
-        <li>[High chance] A bonus random Uncommon item</li>
-        <li>[Chance] A bonus Mythical item</li>
-        <li>[Very Small Chance] A bonus legendary item!</li>
+        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
       </ul>
     </b-modal>
     <b-modal :id="'4'" title="Mythical Chest" centered hide-footer>
       <h5>Gain a free Mythical Chest! It contains the following prizes:</h5>
       <ul>
-        <li>[Guaranteed] A random Mythical item!</li>
-        <li>[Guaranteed] Up to 1100 Poggers!</li>
-        <li>[Chance] Up to 10,000 bonus battle pass exp!</li>
-        <li>[Guaranteed] A bonus Common item</li>
-        <li>[High chance] A bonus random Uncommon item</li>
-        <li>[High chance] A bonus random Rare item</li>
-        <li>[Chance] A bonus Mythical item</li>
-        <li>[Small Chance] A bonus Legendary item</li>
-        <li>[Very Small Chance] The unique Overgrown Emblem!</li>
+        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
       </ul>
     </b-modal>
     <b-modal :id="'5'" title="Legendary Chest" centered hide-footer>
       <h5>Gain a free Legendary Chest! It contains the following prizes:</h5>
       <ul>
-        <li>[Guaranteed] A random Legendary item!</li>
-        <li>[Guaranteed] Up to 2000 Poggers!</li>
-        <li>[Guaranteed] A bonus Common item</li>
-        <li>[Guaranteed] A bonus Uncommon item</li>
-        <li>[Guaranteed] A bonus Rare item</li>
-        <li>[Chance] A bonus Mythical item</li>
+        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
       </ul>
     </b-modal>
   </div>
@@ -110,26 +71,30 @@
 <script>
 import names from "./cosmeticNames";
 import webm from "./webmList";
+import chestRewards from "./chests";
 
 export default {
   data: () => ({
     error: "",
     rewards: [],
+    chestRewards
   }),
 
   created() {
+    this.chestRewards = chestRewards;
+
     fetch(`/api/cosmetics/battle_pass`)
-      .then((res) => res.json())
-      .then((rewards) => {
+      .then(res => res.json())
+      .then(rewards => {
         this.rewards = rewards;
       })
-      .catch((err) => (this.error = err));
+      .catch(err => (this.error = err));
   },
 
   computed: {
     bpLevel() {
       return this.$store.getters.bpLevel;
-    },
+    }
   },
 
   methods: {
@@ -180,8 +145,8 @@ export default {
       if (!webm.has(cosmetic_id)) return false;
 
       return require(`./images/${cosmetic_id}.webm`);
-    },
-  },
+    }
+  }
 };
 </script>
 

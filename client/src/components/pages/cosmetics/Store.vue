@@ -87,6 +87,15 @@
                       />
                     </div>
                   </template>
+                  <div v-if="cosmetic.cosmetic_type === 'Chest'" class="mt-3">
+                    This chest contains the following prizes:
+                    <ul class="mt-1">
+                      <li
+                        v-for="reward in chestRewards[cosmetic.cosmetic_id]"
+                        :key="reward"
+                      >{{reward}}</li>
+                    </ul>
+                  </div>
                   <div v-if="loggedIn" class="mt-4 d-flex justify-content-end">
                     <b-button
                       class="mr-2"
@@ -118,6 +127,7 @@ import cosmeticsData from "./cosmeticNames";
 import webm from "./webmList";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
 import LoginButton from "../login/LoginButton";
+import chestRewards from "./chests";
 
 export default {
   data: () => ({
@@ -127,6 +137,7 @@ export default {
     cosmetics: [],
     filteredCosmetics: [],
     activeFilters: new Set(),
+    chestRewards,
     filters: [
       {
         name: "Companions",
@@ -166,6 +177,8 @@ export default {
   },
 
   created() {
+    this.chestRewards = chestRewards;
+
     fetch(`/api/cosmetics`)
       .then(res => res.json())
       .then(cosmetics => {
