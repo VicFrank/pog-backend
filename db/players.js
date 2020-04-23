@@ -369,12 +369,14 @@ module.exports = {
     }
   },
 
-  async getCompanions(steamID) {
+  async getCompanions(steamID, onlyEquipped = false) {
     try {
+      const filter = onlyEquipped ? "AND equipped = TRUE" : "";
       const sql_query = `
       SELECT *
       FROM player_companions
       WHERE steam_id = $1
+      ${filter}
       `;
       const { rows } = await query(sql_query, [steamID]);
       return rows;
@@ -394,6 +396,16 @@ module.exports = {
       `;
       const { rows } = await query(sql_query, [steamID]);
       return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getAllCosmetics(steamID, onlyEquipped = false) {
+    try {
+      const cosmetics = await this.getPlayerCosmetics(steamID, onlyEquipped);
+      const companions = await this.getCompanions(steamID, onlyEquipped);
+      return [...cosmetics, ...companions];
     } catch (error) {
       throw error;
     }

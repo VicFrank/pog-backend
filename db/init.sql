@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS cosmetics (
 
 CREATE TABLE IF NOT EXISTS player_companions (
   companion_id SERIAL PRIMARY KEY,
-  cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
+  cosmetic_id TEXT NOT NULL REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   companion_level INTEGER DEFAULT 0,
   equipped BOOLEAN DEFAULT FALSE,

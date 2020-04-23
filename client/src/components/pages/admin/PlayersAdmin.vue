@@ -127,7 +127,7 @@ export default {
       for (const item of selectedItems) {
         if (item.cosmetic_type === "Companion") {
           companions.push({
-            name: item.cosmetic_id,
+            cosmetic_id: item.cosmetic_id,
             effect: "-1",
             level: "1",
             amount: "1"

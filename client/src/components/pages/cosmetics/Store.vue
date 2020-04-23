@@ -217,7 +217,7 @@ export default {
           itemTransaction: {
             companions: [
               {
-                name: cosmetic_id,
+                cosmetic_id: cosmetic_id,
                 effect: "-1",
                 level: "1",
                 amount: "1"
