@@ -75,7 +75,17 @@
       >Yes! We have many custom heroes in the works that we plan to announce more on in the near future.</div>
       <div class="question">Where can I report bugs?</div>
       <div class="answer">Please report bugs via the <a href="https://www.reddit.com/r/DotaCinema/" target="_blank">DotaCinema subreddit</a>.</div>
+     
+     <div class="question">How do the Healing Pods work?</div>
       <div
+        class="answer"
+      >A healing pod will drop randomly upon the death of creeps. They will stay indefinitely on the ground until a hero walks over to activate them. Once activated, pods will provide healing and mana regeneration to ANY heroes that are within the given area after a 3 second period. This 3 second period should be ovvious via both visually and audio cues. The regeneration will not be canceled from taking damage, but the pods themselves to not stack. If you activate multiple pods on top of each other, they will instead refresh the duration of the regeneration buff.</div>
+       
+       <div class="question">Will you be balancing heroes specifically for this mode?</div>
+      <div
+        class="answer"
+      >We will be gathering data during the open beta period to see if this is necessary. There are certainly some heroes that are very good in this mode specifically, but we also want to make sure we don't overwhelm newer players to a bunch of changes to the heroes themselves (at least not right away). Based on both data and feedback we will consider tweaking certain heroes. </div>
+    <div
         class="question"
       >When there is a gameplay patch for Dota, does it automatically apply to POG?</div>
       <div class="answer">This is a tricky question to answer. For number changes, it almost always updates automatically. There are some exceptions for certain items that we've had to re-create with special effects (Pipe, Shivas, etc). When things like hero stats/talents/aghs are changed, they should work right away in our mod. However, there are times when an update could break custom games in general. In these rare cases, you can expect a speedy update from us to remedy the situation.</div>
