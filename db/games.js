@@ -214,28 +214,30 @@ module.exports = {
         );
       }
 
-      const radiantMMR =
-        mmrData.radiant.reduce((a, b) => a + b) / mmrData.radiant.length;
-      const direMMR =
-        mmrData.dire.reduce((a, b) => a + b) / mmrData.dire.length;
+      if (rankedGame) {
+        const radiantMMR =
+          mmrData.radiant.reduce((a, b) => a + b) / mmrData.radiant.length;
+        const direMMR =
+          mmrData.dire.reduce((a, b) => a + b) / mmrData.dire.length;
 
-      let ratingChange;
-      if (radiantWin) ratingChange = GetEloRatingChange(radiantMMR, direMMR);
-      else ratingChange = GetEloRatingChange(direMMR, radiantMMR);
+        let ratingChange;
+        if (radiantWin) ratingChange = GetEloRatingChange(radiantMMR, direMMR);
+        else ratingChange = GetEloRatingChange(direMMR, radiantMMR);
 
-      if (ratingChange && rankedGame) {
-        for (let playerData of Object.values(playerInfo)) {
-          const { steamid, team } = playerData;
-          const mmr = mmrData.playerMMR[steamid];
-          const mmrChange = team == winnerTeam ? ratingChange : -ratingChange;
+        if (ratingChange) {
+          for (let playerData of Object.values(playerInfo)) {
+            const { steamid, team } = playerData;
+            const mmr = mmrData.playerMMR[steamid];
+            const mmrChange = team == winnerTeam ? ratingChange : -ratingChange;
 
-          if (mmr) {
-            await query(
-              `UPDATE players
-              SET mmr = mmr + $1
-              WHERE steam_id = $2`,
-              [mmrChange, steamid]
-            );
+            if (mmr) {
+              await query(
+                `UPDATE players
+                SET mmr = mmr + $1
+                WHERE steam_id = $2`,
+                [mmrChange, steamid]
+              );
+            }
           }
         }
       }
