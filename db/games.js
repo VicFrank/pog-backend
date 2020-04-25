@@ -216,7 +216,7 @@ module.exports = {
         );
       }
 
-      if (rankedGame) {
+      if (rankedGame && mmrData.radiant.length > 0 && mmrData.dire.length > 0) {
         const radiantMMR =
           mmrData.radiant.reduce((a, b) => a + b) / mmrData.radiant.length;
         const direMMR =
