@@ -40,7 +40,7 @@
           <li>No gold lost on death</li>
           <li>Reduced Buyback cooldown</li>
           <li>Infinite, 0 mana TPs</li>
-          <li>Multishot fountain</li>
+          <li>Fountain deals more damage, has multishot, and applies Break</li>
           <li>After 20 minutes, all buildings explode, exposing the Ancients and giving both teams Mega Creeps</li>
         </ul>
         <p>Fast paced but low-stress! You can finally stop worrying about last hits as gold is partially shared. Games will typically take between 10-15 minutes. They won't go much longer, trust us!</p>
