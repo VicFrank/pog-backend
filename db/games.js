@@ -6,6 +6,8 @@ const quests = require("./quests");
 module.exports = {
   async create(gameData) {
     try {
+      await query("BEGIN");
+
       const {
         gameDuration,
         cheatsEnabled,
@@ -242,8 +244,10 @@ module.exports = {
         }
       }
 
+      await query("COMMIT");
       return gameID;
     } catch (error) {
+      await query("ROLLBACK");
       throw error;
     }
   },
