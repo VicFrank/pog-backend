@@ -232,10 +232,7 @@ export default {
 
           const { cosmetic_type, equip_group, equipped } = cosmetic;
           if (this.currentFilter === "Companions") {
-            if (
-              equip_group === "companion" ||
-              cosmetic_type === "Companion FX"
-            ) {
+            if (equip_group === "companion") {
               return true;
             }
           }
