@@ -2,14 +2,9 @@
   <div class="abilities">
     <div class="guardian-titles">
       <div class="guardian-name">{{ guardianData.name }}</div>
-      <div class="guardian-title">{{ guardianData.title }}</div>
+      <div class="h4">{{ guardianData.title }}</div>
     </div>
-    <b-img
-      :src="guardianData.img"
-      :alt="guardianData.name"
-      class="mb-4"
-      fluid
-    />
+    <b-img :src="guardianData.img" :alt="guardianData.name" class="mb-3" fluid />
     <div class="abilities-list">
       <img
         v-for="ability in guardianData.abilities"
@@ -25,11 +20,7 @@
     </div>
 
     <div class="ability-info">
-      <img
-        :src="abilityImage(currentAbility)"
-        alt="Shattered Helm"
-        class="current-ability"
-      />
+      <img :src="abilityImage(currentAbility)" alt="Shattered Helm" class="current-ability" />
       <div class="ability-text">
         <h3 class="ability-name">{{ currentAbility.name }}</h3>
         <div class="ability-description">{{ currentAbility.description }}</div>
@@ -43,7 +34,7 @@ export default {
   props: ["guardianData"],
 
   data: () => ({
-    currentAbility: {},
+    currentAbility: {}
   }),
 
   mounted() {
@@ -58,8 +49,8 @@ export default {
     },
     setCurrentAbility(ability) {
       this.currentAbility = ability;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -70,10 +61,6 @@ export default {
   margin: auto;
 
   margin-top: 20px;
-}
-
-.guardian-titles {
-  margin-bottom: 20px;
 }
 
 .abilities-list {
@@ -87,14 +74,9 @@ export default {
   font-weight: 800;
   letter-spacing: 2px;
   color: #0b86c4;
-
-  line-height: normal;
-  text-align: center;
 }
 
-.guardian-title {
-  font-size: 24px;
-
+.guardian-titles {
   line-height: normal;
   text-align: center;
 }
@@ -118,6 +100,7 @@ export default {
 
 .active-image {
   filter: grayscale(0%);
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.3);
 }
 
 .ability-info {

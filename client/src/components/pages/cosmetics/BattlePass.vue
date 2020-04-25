@@ -26,7 +26,7 @@
               />
 
               <b-modal :id="`bp-modal-${i}`" :title="getItemName(i)" centered hide-footer>
-                <video v-if="getMovie(i)" width="100%" height="360" autoplay muted>
+                <video v-if="getMovie(i)" width="100%" height="360" autoplay muted loop>
                   <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
                 </video>
               </b-modal>
@@ -290,9 +290,12 @@ export default {
 
 .lvl-wrapper img {
   height: 150px;
-  box-shadow: 0 0 30px 0 rgba(11, 134, 196, 0.3);
 
   cursor: pointer;
+}
+
+.lvl-wrapper img:hover {
+  box-shadow: 0 0 30px 0 rgba(11, 134, 196, 0.3);
 }
 
 .lvl-locked {

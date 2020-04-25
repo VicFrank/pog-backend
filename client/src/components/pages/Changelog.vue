@@ -45,7 +45,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => ({
+    error: "",
+    changes: []
+  }),
+
+  created() {
+    // const API_URL =
+    //   "https://www.dota2.com/webapi/IWorkshop/GetChangeLog/v0001/?fileid=626780182";
+  }
+};
 </script>
 
 <style>

@@ -7,17 +7,21 @@
         <!-- <p class="text-center">1 day 2 hours 43mins</p> -->
         <div class="row">
           <div class="sale">
-            <img src="./images/companion3.png" alt />
+            <img src="./images/doomling.png" alt />
             <div class="overlay">
               <h3>Doomling</h3>
-              <p>100 Poggers</p>
+              <p>
+                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 100 POGGERS
+              </p>
             </div>
           </div>
           <div class="sale">
-            <img src="./images/companion4.png" alt />
+            <img src="./images/huntling.png" alt />
             <div class="overlay">
               <h3>Huntling</h3>
-              <p>100 Poggers</p>
+              <p>
+                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 100 POGGERS
+              </p>
             </div>
           </div>
         </div>
@@ -33,6 +37,19 @@
                   v-for="filter in filters"
                   :key="filter.name"
                   v-on:toggle-filter="toggleFilter"
+                  :filterName="filter.name"
+                  :isLeft="filter.isLeft"
+                  :isRight="filter.isRight"
+                  :active="filter.active"
+                />
+              </div>
+            </div>
+            <div class="cosmetic-bar">
+              <div class="btns-bar">
+                <cosmeticsFilter
+                  v-for="filter in rarityFilters"
+                  :key="filter.name"
+                  v-on:toggle-filter="toggleRarityFilter"
                   :filterName="filter.name"
                   :isLeft="filter.isLeft"
                   :isRight="filter.isRight"
@@ -60,7 +77,10 @@
                   <div class="cosmetic__descr">
                     <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
                     <div class="cosmetic__price">
-                      <span class="cosmetic-price">{{ cosmetic.cost }} Poggers</span>
+                      <span class="cosmetic-price">
+                        <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+                        {{ cosmetic.cost }} POGGERS
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -72,9 +92,12 @@
                   hide-footer
                 >
                   <p class="text-center h3">{{cosmeticName(cosmetic.cosmetic_id)}}</p>
-                  <p class="text-center">{{ cosmetic.cost }} Poggers</p>
+                  <p class="text-center">
+                    <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+                    {{ cosmetic.cost }} POGGERS
+                  </p>
                   <template v-if="cosmeticMovie(cosmetic.cosmetic_id)">
-                    <video width="100%" height="360" autoplay muted>
+                    <video width="100%" height="360" autoplay muted loop>
                       <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
                     </video>
                   </template>
@@ -106,7 +129,8 @@
                       :disabled="poggers < cosmetic.cost"
                       class="mr-2"
                       variant="primary"
-                      @click="buyItem(cosmetic)"
+                      v-b-modal.modal-confirm-purchase
+                      @click="currentCosmetic=cosmetic"
                     >Buy</b-button>
                   </div>
                   <div v-else class="mt-4 d-flex justify-content-center">
@@ -119,6 +143,7 @@
         </div>
       </div>
     </div>
+    <ConfirmPurchase :cosmetic="currentCosmetic" v-on:buy="buyItem" v-on:cancel="hideModal" />
   </div>
 </template>
 
@@ -126,6 +151,7 @@
 import cosmeticsData from "./cosmeticNames";
 import webm from "./webmList";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
+import ConfirmPurchase from "./ConfirmPurchase.vue";
 import LoginButton from "../login/LoginButton";
 import chestRewards from "./chests";
 
@@ -134,9 +160,10 @@ export default {
     error: "",
     success: false,
     loading: false,
+    currentCosmetic: {},
     cosmetics: [],
     filteredCosmetics: [],
-    activeFilters: new Set(),
+    currentFilter: "All",
     chestRewards,
     filters: [
       {
@@ -156,12 +183,23 @@ export default {
         isRight: true,
         active: true
       }
-    ]
+    ],
+    rarityFilters: [
+      { name: "Common", active: false },
+      { name: "Uncommon", active: false },
+      { name: "Rare", active: false },
+      { name: "Legendary", active: false },
+      { name: "Mythical", active: false },
+      // { name: "Ancient", active: false },
+      { name: "All", active: true, isRight: true }
+    ],
+    activeRarityFilters: new Set()
   }),
 
   components: {
     CosmeticsFilter,
-    LoginButton
+    LoginButton,
+    ConfirmPurchase
   },
 
   computed: {
@@ -274,83 +312,118 @@ export default {
     cosmeticName(cosmeticID) {
       return cosmeticsData[cosmeticID];
     },
-    toggleFilter(name, active) {
+    toggleFilter(name) {
+      this.filters = this.filters.map(filter => ({
+        ...filter,
+        active: filter.name === name
+      }));
+
+      this.currentFilter = name;
+
+      this.updateFilteredCosmetics();
+    },
+    toggleRarityFilter(name, active) {
       if (name === "All") {
-        this.clearFilters();
+        this.activeRarityFilters.clear();
+        this.rarityFilters = this.rarityFilters.map(filter => ({
+          ...filter,
+          active: false
+        }));
       } else {
         if (active) {
-          this.activeFilters.add(name);
+          this.activeRarityFilters.add(name);
           // remove all from the filters if another is active
-          this.filters = this.filters.map(filter =>
+          this.rarityFilters = this.rarityFilters.map(filter =>
             filter.name === "All" ? { ...filter, active: false } : filter
           );
         } else {
-          this.activeFilters.delete(name);
+          this.activeRarityFilters.delete(name);
         }
       }
 
-      this.filters = this.filters.map(filter =>
+      this.rarityFilters = this.rarityFilters.map(filter =>
         filter.name === name ? { ...filter, active: !filter.active } : filter
       );
 
       // if there are no active filters, make "all active"
-      if (this.hasNoFilters()) {
-        this.filters = this.filters.map(filter =>
+      if (this.activeRarityFilters.size === 0) {
+        this.rarityFilters = this.rarityFilters.map(filter =>
           filter.name === "All" ? { ...filter, active: true } : filter
         );
       }
 
       this.updateFilteredCosmetics();
     },
-    clearFilters() {
-      this.activeFilters.clear();
-      this.filters = this.filters.map(filter => ({
-        ...filter,
-        active: false
-      }));
-    },
-    hasNoFilters() {
-      return this.activeFilters.size === 0;
-    },
     updateFilteredCosmetics() {
-      console.log(this.activeFilters.has("Battle Pass"));
-      this.filteredCosmetics = this.cosmetics.filter(cosmetic => {
-        // Type Filter
-        const { cosmetic_type, equip_group } = cosmetic;
-        if (this.hasNoFilters()) {
+      this.filteredCosmetics = this.cosmetics
+        .filter(cosmetic => {
+          // Type Filter
+          if (this.currentFilter === "All") {
+            return true;
+          }
+
+          const { cosmetic_type, equip_group, equipped } = cosmetic;
+          if (this.currentFilter === "Companions") {
+            if (
+              equip_group === "companion" ||
+              cosmetic_type === "Companion FX"
+            ) {
+              return true;
+            }
+          }
+          if (this.currentFilter === "Companions FX") {
+            if (equip_group === "companion_fx") {
+              return true;
+            }
+          }
+          if (this.currentFilter === "Chests") {
+            if (cosmetic_type === "Chest") {
+              return true;
+            }
+          }
+          if (this.currentFilter === "Battle Pass") {
+            if (
+              cosmetic_type === "Battlepass FX" ||
+              cosmetic_type === "Avatar" ||
+              cosmetic_type === "Border"
+            ) {
+              return true;
+            }
+          }
+          if (this.currentFilter === "Announcer") {
+            if (equip_group === "announcer") {
+              return true;
+            }
+          }
+          if (this.currentFilter === "Equipped") {
+            return equipped;
+          }
+          return false;
+        })
+        .filter(cosmetic => {
+          // Rarity Filter
+          if (this.activeRarityFilters.size > 0) {
+            return this.activeRarityFilters.has(cosmetic.rarity);
+          }
           return true;
-        }
-        if (this.activeFilters.has("Companions")) {
-          if (equip_group === "companion") {
+        })
+        .filter(cosmetic => {
+          // Text Search Filter
+          if (!this.searchText) {
             return true;
           }
-        }
-        if (this.activeFilters.has("Companions FX")) {
-          if (equip_group === "companion_fx") {
-            return true;
-          }
-        }
-        if (this.activeFilters.has("Chests")) {
-          if (cosmetic_type === "Chest") {
-            return true;
-          }
-        }
-        if (this.activeFilters.has("Battle Pass")) {
+          const { cosmetic_id } = cosmetic;
+          const name = this.cosmeticName(cosmetic_id).toLowerCase();
+          const search = this.searchText.toLowerCase();
           if (
-            cosmetic_type === "Battlepass FX" ||
-            cosmetic_type === "Avatar" ||
-            cosmetic_type === "Border"
+            search === "" ||
+            name.includes(search) ||
+            cosmetic_id.includes(search)
           ) {
             return true;
           }
-        }
-        if (this.activeFilters.has("Announcer")) {
-          if (equip_group === "announcer") {
-            return true;
-          }
-        }
-        return false;
-      });
+          return false;
+        });
     }
   }
 };

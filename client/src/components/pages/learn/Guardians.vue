@@ -22,7 +22,7 @@ export default {
       {
         name: "Monkey",
         title: "Guardian of War",
-        img: require("./images/monkey.jpg"),
+        img: require("./images/guardian_01.png"),
         abilities: [
           {
             name: "Monkey Business",
@@ -53,7 +53,7 @@ export default {
       {
         name: "Pooky",
         title: "Guardian of Power",
-        img: require("./images/pooky.jpg"),
+        img: require("./images/guardian_02.png"),
         abilities: [
           {
             name: "Obese Reality",
@@ -84,7 +84,7 @@ export default {
       {
         name: "Bucket",
         title: "Guardian of Time",
-        img: require("./images/bucket.jpg"),
+        img: require("./images/guardian_03.png"),
         abilities: [
           {
             name: "Tea Time",

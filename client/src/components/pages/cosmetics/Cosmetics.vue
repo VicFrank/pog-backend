@@ -24,6 +24,19 @@
                 />
               </div>
             </div>
+            <div class="cosmetic-bar">
+              <div class="btns-bar">
+                <cosmeticsFilter
+                  v-for="filter in rarityFilters"
+                  :key="filter.name"
+                  v-on:toggle-filter="toggleRarityFilter"
+                  :filterName="filter.name"
+                  :isLeft="filter.isLeft"
+                  :isRight="filter.isRight"
+                  :active="filter.active"
+                />
+              </div>
+            </div>
 
             <div class="cosmetics">
               <div
@@ -54,7 +67,7 @@
                     centered
                     hide-footer
                   >
-                    <video width="360" height="360" autoplay muted>
+                    <video width="360" height="360" autoplay muted loop>
                       <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
                     </video>
                   </b-modal>
@@ -84,7 +97,6 @@
 <script>
 import cosmeticsData from "./cosmeticNames";
 import webm from "./webmList";
-import filters from "./filters";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
 
 export default {
@@ -92,9 +104,49 @@ export default {
     error: "",
     cosmetics: [],
     filteredCosmetics: [],
-    activeFilters: new Set(),
+    currentFilter: "All",
     searchText: "",
-    filters: []
+    filters: [
+      {
+        name: "Companions",
+        active: false
+      },
+      {
+        name: "Companions FX",
+        active: false
+      },
+      {
+        name: "Chests",
+        active: false
+      },
+      {
+        name: "Battle Pass",
+        active: false
+      },
+      {
+        name: "Announcer",
+        active: false
+      },
+      {
+        name: "Equipped",
+        active: false
+      },
+      {
+        name: "All",
+        isRight: true,
+        active: true
+      }
+    ],
+    rarityFilters: [
+      { name: "Common", active: false },
+      { name: "Uncommon", active: false },
+      { name: "Rare", active: false },
+      { name: "Legendary", active: false },
+      { name: "Mythical", active: false },
+      { name: "Ancient", active: false },
+      { name: "All", active: true, isRight: true }
+    ],
+    activeRarityFilters: new Set()
   }),
 
   components: {
@@ -102,8 +154,6 @@ export default {
   },
 
   created() {
-    this.filters = filters;
-
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
       .then(res => res.json())
       .then(cosmetics => {
@@ -130,53 +180,58 @@ export default {
     cosmeticName(cosmeticID) {
       return cosmeticsData[cosmeticID];
     },
-    toggleFilter(name, active) {
+    toggleFilter(name) {
+      this.filters = this.filters.map(filter => ({
+        ...filter,
+        active: filter.name === name
+      }));
+
+      this.currentFilter = name;
+
+      this.updateFilteredCosmetics();
+    },
+    toggleRarityFilter(name, active) {
       if (name === "All") {
-        this.clearFilters();
+        this.activeRarityFilters.clear();
+        this.rarityFilters = this.rarityFilters.map(filter => ({
+          ...filter,
+          active: false
+        }));
       } else {
         if (active) {
-          this.activeFilters.add(name);
+          this.activeRarityFilters.add(name);
           // remove all from the filters if another is active
-          this.filters = this.filters.map(filter =>
+          this.rarityFilters = this.rarityFilters.map(filter =>
             filter.name === "All" ? { ...filter, active: false } : filter
           );
         } else {
-          this.activeFilters.delete(name);
+          this.activeRarityFilters.delete(name);
         }
       }
 
-      this.filters = this.filters.map(filter =>
+      this.rarityFilters = this.rarityFilters.map(filter =>
         filter.name === name ? { ...filter, active: !filter.active } : filter
       );
 
       // if there are no active filters, make "all active"
-      if (this.hasNoFilters()) {
-        this.filters = this.filters.map(filter =>
+      if (this.activeRarityFilters.size === 0) {
+        this.rarityFilters = this.rarityFilters.map(filter =>
           filter.name === "All" ? { ...filter, active: true } : filter
         );
       }
 
       this.updateFilteredCosmetics();
     },
-    clearFilters() {
-      this.activeFilters.clear();
-      this.filters = this.filters.map(filter => ({
-        ...filter,
-        active: false
-      }));
-    },
-    hasNoFilters() {
-      return this.activeFilters.size === 0;
-    },
     updateFilteredCosmetics() {
       this.filteredCosmetics = this.cosmetics
         .filter(cosmetic => {
           // Type Filter
-          const { cosmetic_type, equip_group } = cosmetic;
-          if (this.hasNoFilters()) {
+          if (this.currentFilter === "All") {
             return true;
           }
-          if (this.activeFilters.has("Companions")) {
+
+          const { cosmetic_type, equip_group, equipped } = cosmetic;
+          if (this.currentFilter === "Companions") {
             if (
               equip_group === "companion" ||
               cosmetic_type === "Companion FX"
@@ -184,17 +239,17 @@ export default {
               return true;
             }
           }
-          if (this.activeFilters.has("Companions FX")) {
+          if (this.currentFilter === "Companions FX") {
             if (equip_group === "companion_fx") {
               return true;
             }
           }
-          if (this.activeFilters.has("Chests")) {
+          if (this.currentFilter === "Chests") {
             if (cosmetic_type === "Chest") {
               return true;
             }
           }
-          if (this.activeFilters.has("Battle Pass")) {
+          if (this.currentFilter === "Battle Pass") {
             if (
               cosmetic_type === "Battlepass FX" ||
               cosmetic_type === "Avatar" ||
@@ -203,12 +258,22 @@ export default {
               return true;
             }
           }
-          if (this.activeFilters.has("Announcer")) {
+          if (this.currentFilter === "Announcer") {
             if (equip_group === "announcer") {
               return true;
             }
           }
+          if (this.currentFilter === "Equipped") {
+            return equipped;
+          }
           return false;
+        })
+        .filter(cosmetic => {
+          // Rarity Filter
+          if (this.activeRarityFilters.size > 0) {
+            return this.activeRarityFilters.has(cosmetic.rarity);
+          }
+          return true;
         })
         .filter(cosmetic => {
           // Text Search Filter

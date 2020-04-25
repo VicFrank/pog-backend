@@ -6,9 +6,14 @@
           <h1 class="page-title">Our Team</h1>
           <div class="change-log">
             <ul>
-              <li>SUNSfan: Project Lead</li>
+              <li>
+                SUNSfan - Project Lead
+                <a href="mailto:sunsfan@sunsfan.gg">(Contact)</a>
+              </li>
               <li>Firetoad - Lead Programmer</li>
               <li>Cookies - Programmer</li>
+              <li>Neil - Asset Manager</li>
+              <li>Sajedene - 2D Artist & Administration</li>
               <li>Hawf - 3D Artist</li>
               <li>Toyoka - VFX Artist</li>
               <li>Nibuja - VFX Artist</li>

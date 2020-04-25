@@ -121,6 +121,7 @@ async function initializeAdmins() {
     "76561198030851434",
     "76561198007141460",
     "76561198052211234",
+    "76561197983098727",
   ];
 
   try {
@@ -132,11 +133,11 @@ async function initializeAdmins() {
   }
 }
 
-(async function() {
+(async function () {
   await loadQuests();
   await loadCosmetics();
   await loadBattlePass();
-  // await initPlayers();
-  // await addSampleGames(1000);
+  await initPlayers();
+  await addSampleGames(1000);
   await initializeAdmins();
 })();

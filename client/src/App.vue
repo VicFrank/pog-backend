@@ -69,6 +69,13 @@ export default {
 </script>
 
 <style>
+.pogcoin {
+  display: inline-block;
+  width: 1rem !important;
+  height: 1rem !important;
+  vertical-align: top;
+}
+
 @font-face {
   font-family: "Radiance-Regular";
   src: url("./assets/fonts/Radiance-Regular.otf");

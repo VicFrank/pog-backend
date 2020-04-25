@@ -18,7 +18,10 @@
                   </p>
                 </div>
                 <div class="rewards">
-                  <p class="pog-text">{{ quest.poggers_reward }} POGGERS</p>
+                  <p class="pog-text">
+                    <img class="pogcoin" src="../../assets/images/pogcoin_gold.png" alt="Pog Coin" />
+                    {{ quest.poggers_reward }} POGGERS
+                  </p>
                   <p class="quest-xp-text">{{ quest.xp_reward }} XP</p>
                 </div>
               </div>

@@ -21,10 +21,10 @@
           </div>
           <div class="d-flex flex-row quest-xp">
             <div v-if="!quest.claimed" class="quest-rewards">
-              <span
-                v-if="quest.poggers_reward > 0"
-                class="pog-text mr-3"
-              >{{ quest.poggers_reward }} POGGER</span>
+              <span v-if="quest.poggers_reward > 0" class="pog-text mr-3">
+                <img class="pogcoin" src="../../../assets/images/pogcoin_gold.png" alt="Pog Coin" />
+                {{ quest.poggers_reward }} POGGERS
+              </span>
               <span v-if="quest.xp_reward > 0" class="quest-xp-text">{{ quest.xp_reward }} XP</span>
             </div>
             <div v-else class="quest-rewards">Completed</div>
