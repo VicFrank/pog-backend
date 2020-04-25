@@ -27,7 +27,7 @@ router.post("/", auth.adminAuth, async (req, res) => {
     const insertedGameID = await games.create(parsedData);
     res.status(201).send({ message: `Created game with ID ${insertedGameID}` });
   } catch (error) {
-    console.log(JSON.stringify(req.body.data));
+    console.log(JSON.stringify(req.body));
     console.log(error);
     res.status(500).send({ message: "Server Error" });
   }
