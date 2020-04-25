@@ -6,9 +6,6 @@ function checkServerKey(req) {
     ? keys.dedicatedServerKey
     : keys.toolsKey;
 
-  console.log(server_key);
-  console.log(dedicatedServerKey);
-
   return server_key === dedicatedServerKey;
 }
 
