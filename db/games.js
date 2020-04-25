@@ -43,6 +43,10 @@ module.exports = {
       for (const [team, teamData] of Object.entries(teamInfo)) {
         const isTeamRadiant = team == "DOTA_TEAM_GOODGUYS";
 
+        if (teamData == undefined || teamData == null) {
+          continue;
+        }
+
         const {
           kills,
           deaths,
