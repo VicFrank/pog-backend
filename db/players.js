@@ -557,16 +557,14 @@ module.exports = {
             for (let i = 0; i < amount * -1; i++) {
               const queryText = `
               WITH deleted AS
-              (DELETE FROM player_cosmetics
-                WHERE cosmetic_id = 
-                any (array(
-                  SELECT cosmetic_id
-                  FROM player_companions
-                  WHERE steam_id = $1 AND 
-                  cosmetic_id = $2
-                  LIMIT 1))
-              RETURNING *)
-              SELECT count(*) FROM deleted;
+                (DELETE FROM player_cosmetics
+                WHERE ctid IN (
+                  SELECT ctid
+                  FROM player_cosmetics
+                  WHERE steam_id = $1 AND cosmetic_id = $2
+                  LIMIT 1)
+                RETURNING *)
+                SELECT count(*) FROM deleted;
               `;
               const { rows } = await query(queryText, [steamID, cosmeticID]);
               const rowsDeleted = rows[0].count;

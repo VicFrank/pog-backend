@@ -137,7 +137,7 @@ async function initializeAdmins() {
   await loadQuests();
   await loadCosmetics();
   await loadBattlePass();
-  await initPlayers();
-  await addSampleGames(1000);
-  await initializeAdmins();
+  // await initPlayers();
+  // await addSampleGames(1000);
+  // await initializeAdmins();
 })();

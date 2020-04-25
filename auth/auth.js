@@ -6,6 +6,10 @@ function checkServerKey(req) {
     ? keys.dedicatedServerKey
     : keys.toolsKey;
 
+  console.log(req);
+  console.log(server_key);
+  console.log(dedicatedServerKey);
+
   return server_key === dedicatedServerKey;
 }
 
@@ -13,7 +17,7 @@ module.exports = {
   adminAuth: function (req, res, next) {
     if (checkServerKey(req)) {
       return next();
-    } else if (req.user.isAdmin) {
+    } else if (req.user && req.user.isAdmin) {
       return next();
     } else {
       res

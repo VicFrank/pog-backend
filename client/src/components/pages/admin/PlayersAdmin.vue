@@ -37,6 +37,10 @@
         <b-list-group-item>
           Battle Pass XP:
           {{ playerData.battlePass.total_experience }}
+          <b-button v-b-modal.give-bp variant="success" size="sm" class="ml-5">+</b-button>
+          <b-modal id="give-bp" title="Give Battle Pass XP" @ok="giveBP">
+            <b-form-input type="number" v-model="bp"></b-form-input>
+          </b-modal>
         </b-list-group-item>
         <b-list-group-item>Battle Pass Tier: {{ playerData.battlePass.tier }}</b-list-group-item>
       </b-list-group>
@@ -60,8 +64,19 @@
       >
         {{ cosmetic.cosmetic_id }}
         <span v-if="cosmetic.equipped">: Equipped</span>
+        <b-button
+          v-b-modal.delete-item
+          variant="danger"
+          size="sm"
+          class="ml-5"
+          @click="setItem(cosmetic)"
+        >x</b-button>
       </b-list-group-item>
     </b-card>
+    <b-modal id="delete-item" title="Delete Item" @ok="deleteItem">
+      <p>Delete this item from this player's inventory?</p>
+      {{currentItem}}
+    </b-modal>
   </div>
 </template>
 
@@ -76,7 +91,9 @@ export default {
     selected: [],
     loading: false,
     success: "",
-    poggers: 0
+    poggers: null,
+    bp: null,
+    currentItem: {}
   }),
 
   created() {
@@ -102,6 +119,9 @@ export default {
   },
 
   methods: {
+    setItem(cosmetic) {
+      this.currentItem = cosmetic;
+    },
     getPlayerData(steamID) {
       fetch(`/api/players/${steamID}`)
         .then(res => res.json())
@@ -119,6 +139,32 @@ export default {
           this.cosmetics = cosmetics;
         })
         .catch(err => (this.error = err));
+    },
+    deleteItem() {
+      const itemToDelete = this.currentItem;
+      let items = {};
+      let companions = [];
+
+      if (itemToDelete.companion_id != undefined) {
+        companions.push({
+          cosmetic_id: itemToDelete.cosmetic_id,
+          effect: itemToDelete.effect,
+          level: itemToDelete.companion_level,
+          amount: "-1"
+        });
+      } else {
+        items[itemToDelete.cosmetic_id] = "-1";
+      }
+
+      const transaction = {
+        itemTransaction: {
+          items,
+          companions
+        }
+      };
+
+      this.currentItem = {};
+      this.doTransaction(transaction);
     },
     addCosmeticItem() {
       const selectedItems = this.selected;
@@ -153,6 +199,15 @@ export default {
         }
       });
     },
+    giveBP() {
+      this.doTransaction({
+        itemTransaction: {
+          battlePass: {
+            bonusExp: this.bp
+          }
+        }
+      });
+    },
     doTransaction(transaction) {
       this.loading = true;
 
@@ -164,7 +219,7 @@ export default {
         body: JSON.stringify(transaction)
       })
         .then(res => {
-          if (!res.ok) throw Error(res.statusText);
+          if (!res.ok) throw Error("Transaction failed");
           return res;
         })
         .then(res => res.json())
@@ -172,14 +227,12 @@ export default {
           this.loading = false;
           this.success = res.message;
           this.getPlayerData(this.steamID);
-          document.documentElement.scrollTop = 0;
           if (this.steamID === this.yourSteamID)
-            this.$store.dispatch("refreshPoggers");
+            this.$store.dispatch("refreshPlayer");
         })
         .catch(err => {
           this.error == err;
           this.loading = false;
-          document.documentElement.scrollTop = 0;
         });
     }
   }

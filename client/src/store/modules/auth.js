@@ -53,6 +53,13 @@ const mutations = {
   SAVE_POGGERS(state, poggers) {
     state.poggers = poggers;
   },
+  SAVE_USER(state, { username, steamID, isAdmin, poggers }) {
+    state.username = username;
+    state.userSteamID = steamID;
+    state.loggedIn = true;
+    state.isAdmin = isAdmin;
+    state.poggers = poggers;
+  },
 };
 
 // actions
@@ -62,6 +69,38 @@ const actions = {
       .then((res) => res.json())
       .then((player) => {
         commit("SAVE_POGGERS", player.poggers);
+      })
+      .catch((err) => {
+        throw new Error(`API: ${err}`);
+      });
+  },
+  refreshBattlePass({ commit, state }) {
+    fetch(`/api/players/${state.userSteamID}`)
+      .then((res) => res.json())
+      .then((player) => {
+        commit("setBattlePass", {
+          bpTier: player.battlePass.tier,
+          bpExp: player.battlePass.total_experience,
+        });
+      })
+      .catch((err) => {
+        throw new Error(`API: ${err}`);
+      });
+  },
+  refreshPlayer({ commit, state }) {
+    fetch(`/api/players/${state.userSteamID}`)
+      .then((res) => res.json())
+      .then((player) => {
+        commit("setBattlePass", {
+          bpTier: player.battlePass.tier,
+          bpExp: player.battlePass.total_experience,
+        });
+        commit("SAVE_USER", {
+          username: player.username,
+          steamID: player.steam_id,
+          isAdmin: player.is_admin,
+          poggers: player.poggers,
+        });
       })
       .catch((err) => {
         throw new Error(`API: ${err}`);
