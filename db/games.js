@@ -6,8 +6,6 @@ const quests = require("./quests");
 module.exports = {
   async create(gameData) {
     try {
-      await query("BEGIN");
-
       const {
         gameDuration,
         cheatsEnabled,
@@ -112,6 +110,7 @@ module.exports = {
           permanentBuffs,
           disconnectEvents,
           abandoned,
+          spentRerolls,
         } = playerData;
 
         const winner = team == winnerTeam;
@@ -145,6 +144,11 @@ module.exports = {
         // If the player did not exist, create it
         if (playerRows.length === 0) {
           playerRows = await players.createNewPlayer(steamid, username);
+        }
+
+        // Log rerolls
+        for (let i = 0; i < spentRerolls; i++) {
+          players.addPlayerLog(steamid, "hero-reroll");
         }
 
         // Add progress to all achievements/quests
@@ -243,11 +247,8 @@ module.exports = {
           }
         }
       }
-
-      await query("COMMIT");
       return gameID;
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },

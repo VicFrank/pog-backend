@@ -134,10 +134,10 @@ async function initializeAdmins() {
 }
 
 (async function () {
-  await loadQuests();
-  await loadCosmetics();
-  await loadBattlePass();
+  // await loadQuests();
+  // await loadCosmetics();
+  // await loadBattlePass();
   // await initPlayers();
-  // await addSampleGames(1000);
+  await addSampleGames(10);
   // await initializeAdmins();
 })();

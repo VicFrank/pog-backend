@@ -74,6 +74,7 @@ const sampleData = {
         totalGold: "21357",
         totalExp: "19822",
         level: "24",
+        spentRerolls: "1",
         abilities: {
           // ability name: final level (includes talents)
           lina_dragon_slave: "4",
@@ -148,6 +149,7 @@ const sampleData = {
         totalGold: "21357",
         totalExp: "19822",
         level: "24",
+        spentRerolls: "3",
         abilities: {
           lina_dragon_slave: "4",
           lina_light_strike_array: "4",
@@ -291,6 +293,7 @@ function generatePlayerInfo(steamIDBucket, team) {
   playerInfo.totalGold = randomInt(1000, 10000).toString();
   playerInfo.totalExp = randomInt(1000, 10000).toString();
   playerInfo.level = randomInt(1, 25).toString();
+  playerInfo.spentRerolls = randomInt(0, 3).toString();
 
   playerInfo.abilities = {
     lina_dragon_slave: "4",

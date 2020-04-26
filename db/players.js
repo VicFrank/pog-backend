@@ -336,6 +336,33 @@ module.exports = {
     }
   },
 
+  async addPlayerLog(steamID, event) {
+    try {
+      const sql_query = `
+      INSERT INTO player_logs (steam_id, log_event)
+      VALUES ($1, $2)
+      `;
+      await query(sql_query, [steamID, event]);
+      return;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getRecentRerolls(steamID) {
+    try {
+      const sql_query = `
+      SELECT log_event, log_time FROM player_logs
+      WHERE steam_id = $1 AND log_event = 'hero-reroll'
+      LIMIT 10
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getPlayerCosmetics(steamID, onlyEquipped = false) {
     try {
       const filter = onlyEquipped ? "AND equipped = TRUE" : "";

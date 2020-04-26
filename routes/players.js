@@ -189,6 +189,17 @@ router.post("/:steamid/equipped_companion", auth.userAuth, async (req, res) => {
   }
 });
 
+router.get("/:steamid/rerolls", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const rows = await players.getRecentRerolls(steamid);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
 router.get("/:steamid/cosmetics", async (req, res) => {
   try {
     const steamid = req.params.steamid;

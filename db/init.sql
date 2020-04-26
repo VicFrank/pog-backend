@@ -191,3 +191,10 @@ CREATE TABLE IF NOT EXISTS player_quests (
 
   CONSTRAINT player_quests_pkey PRIMARY KEY (steam_id, quest_id)
 );
+
+DROP TABLE IF EXISTS player_logs;
+CREATE TABLE IF NOT EXISTS player_logs (
+  steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
+  log_event TEXT NOT NULL,
+  log_time TIMESTAMPTZ DEFAULT Now()
+);
