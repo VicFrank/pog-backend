@@ -199,7 +199,7 @@ module.exports = {
             doubleKills,
             tpScrollsUsed,
             runesUsed,
-            healthDropDuration,
+            math.floor(healthDropDuration),
             totalGold,
             totalExp,
             level,
