@@ -18,6 +18,7 @@ module.exports = {
       } = gameData;
 
       const radiantWin = winnerTeam == "DOTA_TEAM_GOODGUYS";
+      const roundedDuration = Math.floor(gameDuration);
 
       const { rows: gameRows } = await query(
         `
@@ -25,7 +26,7 @@ module.exports = {
       VALUES ($1, $2, $3, $4, $5)
       RETURNING game_id
       `,
-        [radiantWin, rankedGame, gameDuration, healthDrops, cheatsEnabled]
+        [radiantWin, rankedGame, roundedDuration, healthDrops, cheatsEnabled]
       );
 
       const gameID = gameRows[0].game_id;
