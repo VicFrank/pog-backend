@@ -18,7 +18,7 @@ module.exports = {
       } = gameData;
 
       const radiantWin = winnerTeam == "DOTA_TEAM_GOODGUYS";
-      const roundedDuration = M.floor(gameDuration);
+      const roundedDuration = Math.floor(gameDuration);
 
       const { rows: gameRows } = await query(
         `
