@@ -150,11 +150,11 @@ module.exports = {
 
         // Log rerolls
         for (let i = 0; i < spentRerolls; i++) {
-          players.addPlayerLog(steamid, "hero-reroll");
+          await players.addPlayerLog(steamid, "hero-reroll");
         }
 
         // Add progress to all achievements/quests
-        quests.addGameQuestProgress({ ...playerData, winner }, teamData);
+        await quests.addGameQuestProgress({ ...playerData, winner }, teamData);
 
         const mmr = parseInt(playerRows[0].mmr);
 

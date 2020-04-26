@@ -153,7 +153,7 @@ module.exports = {
       let activeAchievements = [];
       for (let stat of stats) {
         // Get the highest achievement of this stat that is not claimed
-        let statQuests = rows.filter(quest => quest.stat == stat);
+        let statQuests = rows.filter((quest) => quest.stat == stat);
         statQuests.sort((q1, q2) => q1.required_amount - q2.required_amount);
 
         let questToAdd;
@@ -211,12 +211,12 @@ module.exports = {
         );
       }
       sample = arr
-        .map(a => [a, Math.random()])
+        .map((a) => [a, Math.random()])
         .sort((a, b) => {
           return a[1] < b[1] ? -1 : 1;
         })
         .slice(0, k)
-        .map(a => a[0]);
+        .map((a) => a[0]);
     }
     return sample;
   },
@@ -299,9 +299,9 @@ module.exports = {
       // Randomly choose a new quest
       const allQuests = await this.getAllDailyQuests();
       const currentQuests = await this.getDailyQuestsForPlayer(steamID);
-      const currentQuestIDs = currentQuests.map(quest => quest.quest_id);
+      const currentQuestIDs = currentQuests.map((quest) => quest.quest_id);
 
-      const newQuests = allQuests.filter(quest => {
+      const newQuests = allQuests.filter((quest) => {
         return !currentQuestIDs.includes(quest.quest_id);
       });
 
@@ -428,11 +428,9 @@ module.exports = {
   async incrementQuestProgress(steamID, questID, amount) {
     try {
       let sql_query = `
-        INSERT INTO player_quests (steam_id, quest_id, quest_progress)
-        VALUES ($1, $2, $3)
-        ON CONFLICT ON CONSTRAINT player_quests_pkey
-        DO UPDATE
-        SET quest_progress = EXCLUDED.quest_progress + $3
+      UPDATE player_quests
+      SET quest_progress = quest_progress + $3
+      WHERE steam_id = $1 AND quest_id = $2
       `;
       await query(sql_query, [steamID, questID, amount]);
     } catch (error) {
@@ -514,7 +512,7 @@ module.exports = {
           progress = rampages;
           break;
         case "healing_goblets":
-          // progress = ;
+          // progress = Math.floor(healthDropDuration / 7);
           break;
         case "total_healed":
           progress = heroHealing;

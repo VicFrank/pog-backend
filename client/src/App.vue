@@ -53,6 +53,8 @@ export default {
             isAdmin,
             poggers
           });
+
+          this.$store.dispatch("refreshPlayer");
         } else {
           this.$store.commit({
             type: "setNotLoggedIn"
