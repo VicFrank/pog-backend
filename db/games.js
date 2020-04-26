@@ -18,7 +18,7 @@ module.exports = {
       } = gameData;
 
       const radiantWin = winnerTeam == "DOTA_TEAM_GOODGUYS";
-      const roundedDuration = Math.floor(gameDuration);
+      const roundedDuration = M.floor(gameDuration);
 
       const { rows: gameRows } = await query(
         `
@@ -199,7 +199,7 @@ module.exports = {
             doubleKills,
             tpScrollsUsed,
             runesUsed,
-            math.floor(healthDropDuration),
+            Math.floor(healthDropDuration),
             totalGold,
             totalExp,
             level,
