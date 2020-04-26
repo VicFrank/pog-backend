@@ -5,7 +5,7 @@ const cosmetics = require("../db/cosmetics");
 const questsList = require("./quests-list");
 const cosmeticsList = require("./cosmetics-list");
 const battlePassRewards = require("./battle-pass-rewards");
-const { generateRandomSampleData } = require("./sample-data");
+const { generateRandomSampleData, realSample } = require("./sample-data");
 
 /*
   Initializes the database with the daily quests/achievements
@@ -113,6 +113,16 @@ async function addSampleGames(numGames) {
   }
 }
 
+async function addRealSample() {
+  try {
+    await games.create(realSample);
+
+    console.log(`Added real sample games`);
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function initializeAdmins() {
   console.log("Initializing Admins");
   const adminList = [
@@ -138,6 +148,7 @@ async function initializeAdmins() {
   // await loadCosmetics();
   // await loadBattlePass();
   // await initPlayers();
-  await addSampleGames(10);
+  // await addSampleGames(10);
   // await initializeAdmins();
+  await addRealSample();
 })();

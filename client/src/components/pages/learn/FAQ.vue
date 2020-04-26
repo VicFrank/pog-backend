@@ -79,7 +79,7 @@
      <div class="question">How do the Healing Pods work?</div>
       <div
         class="answer"
-      >A healing pod will drop randomly upon the death of creeps. They will stay indefinitely on the ground until a hero walks over to activate them. Once activated, pods will provide healing and mana regeneration to ANY heroes that are within the given area after a 3 second period. This 3 second period should be ovvious via both visually and audio cues. The regeneration will not be canceled from taking damage, but the pods themselves to not stack. If you activate multiple pods on top of each other, they will instead refresh the duration of the regeneration buff.</div>
+      >A healing pod will drop randomly upon the death of creeps. They will stay indefinitely on the ground until a hero walks over to activate them. Once activated, pods will provide healing and mana regeneration to ANY heroes that are within the given area after a 3 second period. This 3 second period should be obvious via both visually and audio cues. The regeneration will not be canceled from taking damage, but the pods themselves to not stack. If you activate multiple pods on top of each other, they will instead refresh the duration of the regeneration buff.</div>
        
        <div class="question">Will you be balancing heroes specifically for this mode?</div>
       <div

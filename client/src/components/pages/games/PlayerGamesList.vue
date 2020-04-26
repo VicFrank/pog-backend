@@ -28,12 +28,12 @@
               <td>{{ game.duration | hhmmss }}</td>
               <td>{{ game.kills }}/{{ game.deaths }}/{{ game.assists }}</td>
               <td>
-                <ItemImage :itemName="game.item_0"></ItemImage>
-                <ItemImage :itemName="game.item_1"></ItemImage>
-                <ItemImage :itemName="game.item_2"></ItemImage>
-                <ItemImage :itemName="game.item_3"></ItemImage>
-                <ItemImage :itemName="game.item_4"></ItemImage>
-                <ItemImage :itemName="game.item_5"></ItemImage>
+                <ItemImage v-if="game.item_0" :itemName="game.item_0"></ItemImage>
+                <ItemImage v-if="game.item_1" :itemName="game.item_1"></ItemImage>
+                <ItemImage v-if="game.item_2" :itemName="game.item_2"></ItemImage>
+                <ItemImage v-if="game.item_3" :itemName="game.item_3"></ItemImage>
+                <ItemImage v-if="game.item_4" :itemName="game.item_4"></ItemImage>
+                <ItemImage v-if="game.item_5" :itemName="game.item_5"></ItemImage>
               </td>
             </router-link>
           </tbody>

@@ -48,13 +48,14 @@ module.exports = {
           continue;
         }
 
-        const {
-          kills,
-          deaths,
-          assists,
-          guardianKills,
-          buildingKills,
-        } = teamData;
+        let { kills, deaths, assists, guardianKills, buildingKills } = teamData;
+
+        if (Array.isArray(guardianKills)) {
+          guardianKills = {};
+        }
+        if (Array.isArray(buildingKills)) {
+          buildingKills = {};
+        }
 
         await query(
           `
