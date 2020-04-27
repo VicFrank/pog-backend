@@ -38,53 +38,74 @@
               </div>
             </div>
 
+            <b-alert v-model="showError" show variant="danger" dismissible>{{error}}</b-alert>
+
             <div class="cosmetics">
               <div
                 class="cosmetics__item"
-                v-for="cosmetic in filteredCosmetics"
+                v-for="[i, cosmetic] of filteredCosmetics.entries()"
                 :key="
-                  cosmetic.cosmetic_id + cosmetic.created + cosmetic.equipped
+                  cosmetic.cosmetic_id + cosmetic.created + cosmetic.equipped + i
                 "
               >
-                <template v-if="cosmeticMovie(cosmetic.cosmetic_id)">
-                  <div
-                    class="cosmetic has-modal"
-                    @click="$bvModal.show(`bp-modal-${cosmetic.cosmetic_id}`)"
-                  >
-                    <div class="cosmetic__picture">
+                <div class="cosmetic" @click="$bvModal.show(`modal-${i}`)">
+                  <div class="cosmetic__picture">
+                    <img
+                      v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
+                      :alt="cosmetic.cosmetic_id"
+                    />
+                  </div>
+                  <div class="cosmetic__descr">
+                    <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
+                  </div>
+                </div>
+                <b-modal
+                  :id="`modal-${i}`"
+                  :ref="`modal-${i}`"
+                  :title="cosmeticName(cosmetic.cosmetic_id)"
+                  centered
+                  hide-footer
+                  @hide="onHide"
+                >
+                  <template v-if="cosmetic.cosmetic_type !== 'Chest'">
+                    <div v-if="cosmeticMovie(cosmetic.cosmetic_id)">
+                      <video width="360" height="360" autoplay muted loop>
+                        <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
+                      </video>
+                    </div>
+                    <div v-else>
                       <img
                         v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
                         :alt="cosmetic.cosmetic_id"
                       />
                     </div>
-                    <div class="cosmetic__descr">
-                      <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
+                    <div class="mt-4 d-flex justify-content-end">
+                      <template v-if="equippable(cosmetic)">
+                        <b-button class="mr-2" variant="secondary" @click="hideModal(i)">Cancel</b-button>
+                        <b-button
+                          v-if="!cosmetic.equipped"
+                          class="mr-2"
+                          variant="primary"
+                          @click="equipCosmetic(cosmetic, true, i)"
+                        >Equip</b-button>
+                        <b-button
+                          v-else
+                          class="mr-2"
+                          variant="primary"
+                          @click="equipCosmetic(cosmetic, false, i)"
+                        >Unequip</b-button>
+                      </template>
                     </div>
-                  </div>
-                  <b-modal
-                    :id="`bp-modal-${cosmetic.cosmetic_id}`"
-                    :title="cosmeticName(cosmetic.cosmetic_id)"
-                    centered
-                    hide-footer
-                  >
-                    <video width="360" height="360" autoplay muted loop>
-                      <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
-                    </video>
-                  </b-modal>
-                </template>
-                <template v-else>
-                  <div class="cosmetic">
-                    <div class="cosmetic__picture">
-                      <img
-                        v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
-                        :alt="cosmetic.cosmetic_id"
-                      />
-                    </div>
-                    <div class="cosmetic__descr">
-                      <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
-                    </div>
-                  </div>
-                </template>
+                  </template>
+                  <template v-else>
+                    <ChestOpener
+                      :cosmetic="cosmetic"
+                      v-on:cancel="hideModal(i)"
+                      v-on:open="open()"
+                      v-on:claim="claim()"
+                    />
+                  </template>
+                </b-modal>
               </div>
             </div>
           </div>
@@ -98,14 +119,17 @@
 import cosmeticsData from "./cosmeticNames";
 import webm from "./webmList";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
+import ChestOpener from "./ChestOpener.vue";
 
 export default {
   data: () => ({
     error: "",
+    showError: false,
     cosmetics: [],
     filteredCosmetics: [],
     currentFilter: "All",
     searchText: "",
+    needReload: false,
     filters: [
       {
         name: "Companions",
@@ -141,8 +165,8 @@ export default {
       { name: "Common", active: false },
       { name: "Uncommon", active: false },
       { name: "Rare", active: false },
-      { name: "Legendary", active: false },
       { name: "Mythical", active: false },
+      { name: "Legendary", active: false },
       { name: "Ancient", active: false },
       { name: "All", active: true, isRight: true }
     ],
@@ -150,17 +174,18 @@ export default {
   }),
 
   components: {
-    CosmeticsFilter
+    CosmeticsFilter,
+    ChestOpener
+  },
+
+  computed: {
+    steamID() {
+      return this.$store.state.auth.userSteamID;
+    }
   },
 
   created() {
-    fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
-      .then(res => res.json())
-      .then(cosmetics => {
-        this.cosmetics = cosmetics;
-        this.filteredCosmetics = cosmetics;
-      })
-      .catch(err => (this.error = err));
+    this.getPlayerCosmetics();
   },
 
   watch: {
@@ -170,6 +195,37 @@ export default {
   },
 
   methods: {
+    getPlayerCosmetics() {
+      fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
+        .then(res => res.json())
+        .then(cosmetics => {
+          this.cosmetics = cosmetics;
+          this.filteredCosmetics = cosmetics;
+        })
+        .catch(err => {
+          this.showError = true;
+          this.error = err;
+        });
+    },
+    hideModal(i) {
+      this.$refs[`modal-${i}`][0].hide();
+    },
+    open() {
+      this.needReload = true;
+    },
+    onHide() {
+      if (this.needReload) {
+        this.needReload = false;
+        this.getPlayerCosmetics();
+      }
+    },
+    claim() {
+      this.needReload = false;
+      this.getPlayerCosmetics();
+    },
+    equippable(cosmetic) {
+      return cosmetic.cosmetic_type !== "Chest";
+    },
     cosmeticImageSrc(cosmeticID) {
       return require(`./images/${cosmeticID}.png`);
     },
@@ -289,6 +345,55 @@ export default {
           }
           return false;
         });
+    },
+    equipCosmetic(cosmetic, equip, i) {
+      const cosmeticID = cosmetic.cosmetic_id;
+      const isCompanion = cosmetic.companion_level != undefined;
+
+      if (isCompanion) {
+        fetch(`/api/players/${this.steamID}/equipped_companion`, {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            companionID: cosmetic.companion_id
+          })
+        })
+          .then(res => {
+            if (!res.ok) throw Error(res.statusText);
+            return res;
+          })
+          .then(res => res.json())
+          .then(() => {
+            this.getPlayerCosmetics();
+            this.hideModal(i);
+          })
+          .catch(err => {
+            this.error = err;
+            this.showError = true;
+          });
+      } else {
+        fetch(
+          `/api/players/${this.steamID}/cosmetics/${cosmeticID}/equip?equip=${equip}`,
+          {
+            method: "post"
+          }
+        )
+          .then(res => {
+            if (!res.ok) throw Error(res.statusText);
+            return res;
+          })
+          .then(res => res.json())
+          .then(() => {
+            this.getPlayerCosmetics();
+            this.hideModal(i);
+          })
+          .catch(err => {
+            this.error = err;
+            this.showError = true;
+          });
+      }
     }
   }
 };
@@ -459,6 +564,8 @@ export default {
   text-decoration: none;
   transition: 0.25s ease-in-out;
   z-index: 1;
+
+  cursor: pointer;
 }
 
 .cosmetic:hover {
@@ -473,10 +580,6 @@ export default {
 
 .cosmetic:hover .cosmetic__descr:after {
   border-bottom-color: #0b86c4;
-}
-
-.has-modal {
-  cursor: pointer;
 }
 
 .cosmetic__price {

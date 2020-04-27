@@ -6,6 +6,7 @@ const questsList = require("./quests-list");
 const cosmeticsList = require("./cosmetics-list");
 const battlePassRewards = require("./battle-pass-rewards");
 const { generateRandomSampleData, realSample } = require("./sample-data");
+const { dropOdds, poggerOdds } = require("./chest-rewards");
 
 /*
   Initializes the database with the daily quests/achievements
@@ -49,6 +50,39 @@ async function loadCosmetics() {
       promises.push(
         cosmetics.createCosmetic(cost, cosmetic_id, rarity, type, equip_group)
       );
+    }
+
+    await Promise.all(promises);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function loadChestRewards() {
+  try {
+    const loadedRewards = await cosmetics.getAllChestRewards();
+
+    if (loadedRewards.length > 0) {
+      console.log("Chest Rewards are already loaded");
+      return;
+    }
+
+    console.log("Adding Chest Rewards...");
+
+    let promises = [];
+    for (let [chestID, chestRewards] of Object.entries(dropOdds)) {
+      for (let reward of chestRewards) {
+        const { rarity, odds } = reward;
+        promises.push(cosmetics.addChestItemReward(chestID, rarity, odds));
+      }
+    }
+    for (let [chestID, chestRewards] of Object.entries(poggerOdds)) {
+      for (let reward of chestRewards) {
+        const { cumSum, poggers } = reward;
+        promises.push(
+          cosmetics.addChestPoggersReward(chestID, poggers, cumSum)
+        );
+      }
     }
 
     await Promise.all(promises);
@@ -146,9 +180,10 @@ async function initializeAdmins() {
 (async function () {
   // await loadQuests();
   // await loadCosmetics();
+  await loadChestRewards();
   // await loadBattlePass();
   // await initPlayers();
   // await addSampleGames(10);
   // await initializeAdmins();
-  await addRealSample();
+  // await addRealSample();
 })();

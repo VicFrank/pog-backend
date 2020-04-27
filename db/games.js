@@ -148,13 +148,18 @@ module.exports = {
           playerRows = await players.createNewPlayer(steamid, username);
         }
 
-        // Log rerolls
-        for (let i = 0; i < spentRerolls; i++) {
-          await players.addPlayerLog(steamid, "hero-reroll");
-        }
+        if (rankedGame) {
+          // Log rerolls
+          for (let i = 0; i < spentRerolls; i++) {
+            await players.addPlayerLog(steamid, "hero-reroll");
+          }
 
-        // Add progress to all achievements/quests
-        await quests.addGameQuestProgress({ ...playerData, winner }, teamData);
+          // Add progress to all achievements/quests
+          await quests.addGameQuestProgress(
+            { ...playerData, winner },
+            teamData
+          );
+        }
 
         const mmr = parseInt(playerRows[0].mmr);
 

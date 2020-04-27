@@ -7,7 +7,8 @@
         <!-- <p class="text-center">1 day 2 hours 43mins</p> -->
         <div class="row">
           <div class="sale">
-            <img src="./images/doomling.png" alt />
+            <img src="./images/doomling.png" alt="Doomling" />
+            <img src="./images/discount.png" class="sales-overlay" alt />
             <div class="overlay">
               <h3>Doomling</h3>
               <p>
@@ -16,7 +17,8 @@
             </div>
           </div>
           <div class="sale">
-            <img src="./images/huntling.png" alt />
+            <img src="./images/huntling.png" alt="huntling" />
+            <img src="./images/discount.png" class="sales-overlay" alt />
             <div class="overlay">
               <h3>Huntling</h3>
               <p>
@@ -27,8 +29,7 @@
         </div>
       </div>
       <div class="container">
-        <b-alert v-if="error" show variant="danger" dismissible>{{error}}</b-alert>
-        <b-alert v-if="success" show variant="success" dismissible>Purchase Complete!</b-alert>
+        <b-alert v-model="showError" variant="danger" dismissible>{{error}}</b-alert>
         <div class="row">
           <div class="col-xl-12">
             <div class="cosmetic-bar">
@@ -158,6 +159,7 @@ import chestRewards from "./chests";
 export default {
   data: () => ({
     error: "",
+    showError: false,
     success: false,
     loading: false,
     currentCosmetic: {},
@@ -188,8 +190,8 @@ export default {
       { name: "Common", active: false },
       { name: "Uncommon", active: false },
       { name: "Rare", active: false },
-      { name: "Legendary", active: false },
       { name: "Mythical", active: false },
+      { name: "Legendary", active: false },
       // { name: "Ancient", active: false },
       { name: "All", active: true, isRight: true }
     ],
@@ -226,7 +228,10 @@ export default {
         this.cosmetics = purchaseableCosmetics;
         this.filteredCosmetics = purchaseableCosmetics;
       })
-      .catch(err => (this.error = err));
+      .catch(err => {
+        this.error = err;
+        this.showError = true;
+      });
   },
 
   watch: {
@@ -299,6 +304,7 @@ export default {
         .catch(err => {
           this.error = err;
           this.loading = false;
+          this.showError = true;
           document.documentElement.scrollTop = 0;
         });
     },
@@ -447,6 +453,10 @@ export default {
   width: 200px;
 }
 
+.sale {
+  position: relative;
+}
+
 .featured h3,
 .sale h3 {
   font-size: 20px;
@@ -474,6 +484,14 @@ export default {
 .sale img {
   position: relative;
   transition: 0.25s ease-in-out;
+  width: 100%;
+}
+
+.sales-overlay {
+  position: absolute !important;
+  bottom: 0;
+  top: 0;
+  left: 0;
   width: 100%;
 }
 

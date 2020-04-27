@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS teams (
 CREATE TABLE IF NOT EXISTS players (
   steam_id TEXT PRIMARY KEY,
   username TEXT,
-  mmr INTEGER DEFAULT 1000,
+  mmr INTEGER DEFAULT 2000,
   poggers INTEGER DEFAULT 0 CHECK (poggers >= 0),
   patreon_level INTEGER DEFAULT 0,
   is_admin BOOLEAN DEFAULT FALSE,
@@ -190,6 +190,24 @@ CREATE TABLE IF NOT EXISTS player_quests (
   quest_index INTEGER,
 
   CONSTRAINT player_quests_pkey PRIMARY KEY (steam_id, quest_id)
+);
+
+DROP TABLE IF EXISTS chest_item_rewards;
+CREATE TABLE IF NOT EXISTS chest_item_rewards (
+  cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id),
+  reward_rarity TEXT NOT NULL,
+  reward_odds INTEGER NOT NULL,
+
+  CONSTRAINT chest_item_rewards_pkey PRIMARY KEY (cosmetic_id, reward_rarity)
+);
+
+DROP TABLE IF EXISTS chest_pogger_rewards;
+CREATE TABLE IF NOT EXISTS chest_pogger_rewards (
+  cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id),
+  cum_sum INTEGER NOT NULL,
+  poggers INTEGER NOT NULL,
+
+  CONSTRAINT chest_pogger_rewards_pkey PRIMARY KEY (cosmetic_id, reward_rarity)
 );
 
 DROP TABLE IF EXISTS player_logs;

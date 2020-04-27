@@ -17,7 +17,7 @@
               type="button"
               class="btn btn-primary mb-3"
             >Claim</button>
-            <ProgressBar :progress="quest.quest_progress" :required="quest.required_amount" />
+            <ProgressBar :progress="quest.capped_quest_progress" :required="quest.required_amount" />
           </div>
           <div class="d-flex flex-row quest-xp">
             <div v-if="!quest.claimed" class="quest-rewards">
@@ -118,6 +118,7 @@ export default {
             this.quests = this.quests.splice(index);
             // refresh the daily quests
             this.getDailyQuests();
+            this.$store.dispatch("refreshPlayer");
           }
         })
         .catch(err => (this.error = err));

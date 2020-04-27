@@ -471,6 +471,9 @@ module.exports = {
       disconnectEvents,
       abandoned,
       winner,
+      neutralItems,
+      healingGoblets,
+      highFives,
     } = playerData;
 
     const { guardianKills, buildingKills } = teamData;
@@ -485,7 +488,7 @@ module.exports = {
           progress = runesUsed;
           break;
         case "neutral_item_purchased":
-          // progress = ;
+          progress = neutralItems;
           break;
         case "games_won":
           progress = winner ? 1 : 0;
@@ -512,7 +515,7 @@ module.exports = {
           progress = rampages;
           break;
         case "healing_goblets":
-          // progress = Math.floor(healthDropDuration / 7);
+          progress = healingGoblets;
           break;
         case "total_healed":
           progress = heroHealing;
@@ -527,7 +530,7 @@ module.exports = {
           progress = buildingDamage;
           break;
         case "high_fives":
-          // progress = ;
+          progress = highFives;
           break;
       }
       await this.incrementQuestProgress(steamID, questID, progress);

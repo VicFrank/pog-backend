@@ -381,15 +381,41 @@ module.exports = {
     }
   },
 
-  async equipCosmetics(cosmeticID, equipped) {
+  async equipCosmetics(steamID, cosmeticID, equipped) {
     try {
+      if (equipped) {
+        // unequip all other items in this equip group
+        let { rows } = await query(
+          `
+          SELECT equip_group
+          FROM cosmetics
+          WHERE cosmetic_id = $1
+        `,
+          [cosmeticID]
+        );
+
+        const equipGroup = rows[0].equip_group;
+
+        await query(
+          `UPDATE player_cosmetics pc
+          SET equipped = FALSE
+          FROM cosmetics c
+          WHERE pc.steam_id = $1
+            AND c.equip_group = $2
+            AND c.cosmetic_id = pc.cosmetic_id
+          `,
+          [steamID, equipGroup]
+        );
+      }
+
       const sql_query = `
       UPDATE player_cosmetics
       SET equipped = ${equipped}
-      WHERE cosmetic_id = $1
+      WHERE steam_id = $1 AND cosmetic_id = $2
       RETURNING *
       `;
-      const { rows } = await query(sql_query, [cosmeticID]);
+      let { rows } = await query(sql_query, [steamID, cosmeticID]);
+
       return rows;
     } catch (error) {
       throw error;
@@ -616,6 +642,165 @@ module.exports = {
       await query("COMMIT");
     } catch (error) {
       await query("ROLLBACK");
+      throw error;
+    }
+  },
+
+  async getRandomReward(steamID, rarity, bucket = []) {
+    try {
+      let { rows: potentialRewards } = await query(
+        `
+      SELECT * FROM cosmetics
+      WHERE rarity = $1
+      AND cost > 0
+      AND cosmetic_type != 'Chest'
+      `,
+        [rarity]
+      );
+      const existingItems = await this.getAllCosmetics(steamID);
+
+      potentialRewards = potentialRewards.filter((cosmetic) => {
+        const alreadyHasItem = existingItems.some((existingCosmetic) => {
+          return cosmetic.cosmetic_id === existingCosmetic.cosmetic_id;
+        });
+        // the bucket tracks what we're rewarding in this chest
+        const inBucket = bucket.some((existingCosmetic) => {
+          return cosmetic.cosmetic_id === existingCosmetic.cosmetic_id;
+        });
+        const isChest = cosmetic.cosmetic_type === "Chest";
+
+        return !alreadyHasItem && !inBucket && !isChest;
+      });
+
+      if (potentialRewards.length === 0) {
+        return null;
+      }
+
+      // return a random reward
+      return potentialRewards[
+        Math.floor(Math.random() * potentialRewards.length)
+      ];
+    } catch (error) {
+      throw error;
+    }
+  },
+  async openChest(steamID, chestID) {
+    try {
+      const { rows: existingChests } = await query(
+        `SELECT * FROM player_cosmetics
+        WHERE cosmetic_id = $1 AND steam_id = $2`,
+        [chestID, steamID]
+      );
+
+      if (existingChests.length === 0) {
+        throw new Error("Tried to open non-existent chest");
+      }
+
+      const { rows: itemRewards } = await query(
+        `SELECT * FROM chest_item_rewards
+        WHERE cosmetic_id = $1`,
+        [chestID]
+      );
+      const { rows: poggerRewards } = await query(
+        `SELECT * FROM chest_pogger_rewards
+        WHERE cosmetic_id = $1
+        ORDER BY cum_sum `,
+        [chestID]
+      );
+
+      let chestItems = [];
+      let pityPoggers = 0;
+      for (const itemReward of itemRewards) {
+        let { reward_rarity, reward_odds } = itemReward;
+
+        while (reward_odds > 0) {
+          const rewardProbability = reward_odds;
+          // generate a random number (1-100) (inclusive)
+          const roll = Math.floor(Math.random() * 100) + 1;
+
+          if (rewardProbability >= roll) {
+            const randomReward = await this.getRandomReward(
+              steamID,
+              reward_rarity,
+              chestItems
+            );
+
+            if (randomReward !== null) {
+              chestItems.push(randomReward);
+            } else {
+              // If you already have the item, convert it to poggers
+              switch (reward_rarity) {
+                case "Common":
+                  pityPoggers += 50;
+                  break;
+                case "Uncommon":
+                  pityPoggers += 100;
+                  break;
+                case "Rare":
+                  pityPoggers += 200;
+                  break;
+                case "Mythical":
+                  pityPoggers += 500;
+                  break;
+                case "Legendary":
+                  pityPoggers += 1000;
+                  break;
+              }
+            }
+          }
+
+          reward_odds -= 100;
+        }
+      }
+
+      let chestPoggers = 0;
+      chestPoggers += pityPoggers;
+
+      // generate a random number (1-100) (inclusive)
+      const roll = Math.floor(Math.random() * 100) + 1;
+
+      for (const itemReward of poggerRewards) {
+        const { cum_sum, poggers } = itemReward;
+
+        if (cum_sum >= roll) {
+          chestPoggers += poggers;
+          break;
+        }
+      }
+
+      let items = {};
+      let companions = [];
+
+      for (const item of chestItems) {
+        if (item.cosmetic_type === "Companion") {
+          companions.push({
+            cosmetic_id: item.cosmetic_id,
+            effect: "-1",
+            level: "1",
+            amount: "1",
+          });
+        } else {
+          items[item.cosmetic_id] = "1";
+        }
+      }
+
+      // consume this chest as part of the transaction
+      items[chestID] = "-1";
+
+      const transaction = {
+        poggers: chestPoggers,
+        items,
+        companions,
+      };
+
+      // add the rewards to the player
+      await this.itemTransaction(steamID, transaction);
+
+      return {
+        items: chestItems,
+        poggers: chestPoggers,
+      };
+    } catch (error) {
       throw error;
     }
   },

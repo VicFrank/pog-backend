@@ -185,7 +185,7 @@ router.post("/:steamid/equipped_companion", auth.userAuth, async (req, res) => {
     res.status(200).json(rows);
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: "Server Error" });
+    res.status(500).send({ error: error.message });
   }
 });
 
@@ -218,13 +218,18 @@ router.post(
   auth.userAuth,
   async (req, res) => {
     try {
+      const steamid = req.params.steamid;
       const cosmetic_id = req.params.cosmetic_id;
       const equip = req.query.equip == "true";
-      const playerInfo = await players.equipCosmetics(cosmetic_id, equip);
+      const playerInfo = await players.equipCosmetics(
+        steamid,
+        cosmetic_id,
+        equip
+      );
       res.status(200).json(playerInfo);
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: "Server Error" });
+      res.status(500).send({ error: error.message });
     }
   }
 );
@@ -239,7 +244,7 @@ router.put(
       res.status(200).json(playerInfo);
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: "Server Error" });
+      res.status(500).send({ error: error.message });
     }
   }
 );
@@ -254,7 +259,7 @@ router.delete(
       res.status(200).json(playerInfo);
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: "Server Error" });
+      res.status(500).send({ error: error.message });
     }
   }
 );
@@ -269,5 +274,21 @@ router.get("/:steamid/battle_pass", async (req, res) => {
     res.status(500).send({ message: "Server Error" });
   }
 });
+
+router.post(
+  "/:steamid/open_chest/:chestid",
+  auth.userAuth,
+  async (req, res) => {
+    try {
+      const steamid = req.params.steamid;
+      const chestid = req.params.chestid;
+      const rows = await players.openChest(steamid, chestid);
+      res.status(200).json(rows);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ error: error.message });
+    }
+  }
+);
 
 module.exports = router;

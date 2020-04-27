@@ -75,6 +75,9 @@ const sampleData = {
         totalExp: "19822",
         level: "24",
         spentRerolls: "1",
+        neutralItems: 1,
+        healingGoblets: 1,
+        highFives: 0,
         abilities: {
           // ability name: final level (includes talents)
           lina_dragon_slave: "4",
@@ -150,6 +153,9 @@ const sampleData = {
         totalExp: "19822",
         level: "24",
         spentRerolls: "3",
+        neutralItems: 1,
+        healingGoblets: 1,
+        highFives: 0,
         abilities: {
           lina_dragon_slave: "4",
           lina_light_strike_array: "4",
@@ -225,6 +231,9 @@ const realSample = {
       healthDropDuration: 63.966430664062,
       assists: 8,
       spentRerolls: 0,
+      neutralItems: 1,
+      healingGoblets: 1,
+      highFives: 0,
       availablePicks: [
         "npc_dota_hero_centaur",
         "npc_dota_hero_dazzle",
@@ -285,6 +294,9 @@ const realSample = {
       healthDropDuration: 95.73046875,
       assists: 18,
       spentRerolls: 0,
+      neutralItems: 1,
+      healingGoblets: 1,
+      highFives: 0,
       availablePicks: [
         "npc_dota_hero_mars",
         "npc_dota_hero_mirana",
@@ -345,6 +357,9 @@ const realSample = {
       healthDropDuration: 35,
       assists: 7,
       spentRerolls: 0,
+      neutralItems: 1,
+      healingGoblets: 1,
+      highFives: 0,
       availablePicks: [
         "npc_dota_hero_luna",
         "npc_dota_hero_grimstroke",
@@ -406,6 +421,9 @@ const realSample = {
       healthDropDuration: 21.66650390625,
       assists: 11,
       spentRerolls: 0,
+      neutralItems: 1,
+      healingGoblets: 1,
+      highFives: 0,
       availablePicks: [
         "npc_dota_hero_earthshaker",
         "npc_dota_hero_chen",
@@ -468,6 +486,9 @@ const realSample = {
       healthDropDuration: 64.299682617188,
       assists: 5,
       spentRerolls: 0,
+      neutralItems: 1,
+      healingGoblets: 1,
+      highFives: 0,
       availablePicks: [
         "npc_dota_hero_drow_ranger",
         "npc_dota_hero_sand_king",
@@ -527,6 +548,9 @@ const realSample = {
       healthDropDuration: 99.696166992188,
       assists: 17,
       spentRerolls: 0,
+      neutralItems: 1,
+      healingGoblets: 1,
+      highFives: 0,
       availablePicks: [
         "npc_dota_hero_skywrath_mage",
         "npc_dota_hero_pangolier",
@@ -699,6 +723,9 @@ function generatePlayerInfo(steamIDBucket, team) {
   playerInfo.totalExp = randomInt(1000, 10000).toString();
   playerInfo.level = randomInt(1, 25).toString();
   playerInfo.spentRerolls = randomInt(0, 3).toString();
+  playerInfo.neutralItems = randomInt(0, 3).toString();
+  playerInfo.healingGoblets = randomInt(0, 3).toString();
+  playerInfo.highFives = randomInt(0, 3).toString();
 
   playerInfo.abilities = {
     lina_dragon_slave: "4",

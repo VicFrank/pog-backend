@@ -79,4 +79,66 @@ module.exports = {
       throw error;
     }
   },
+  async addChestItemReward(chestID, rarity, odds) {
+    try {
+      const sql_query = `
+        INSERT INTO chest_item_rewards
+        (cosmetic_id, reward_rarity, reward_odds)
+        VALUES
+        ($1, $2, $3)
+        RETURNING *
+      `;
+      const { rows } = await query(sql_query, [chestID, rarity, odds]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async addChestPoggersReward(chestID, poggers, cumSum) {
+    try {
+      const sql_query = `
+        INSERT INTO chest_pogger_rewards
+        (cosmetic_id, poggers, cum_sum)
+        VALUES
+        ($1, $2, $3)
+        RETURNING *
+      `;
+      const { rows } = await query(sql_query, [chestID, poggers, cumSum]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getAllChestRewards() {
+    try {
+      const { rows: itemRewards } = await query(
+        `SELECT * FROM chest_item_rewards`
+      );
+      const { rows: poggerRewards } = await query(
+        `SELECT * FROM chest_pogger_rewards`
+      );
+      return [...itemRewards, ...poggerRewards];
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getPotentialChestRewards(chestID) {
+    try {
+      const {
+        rows: itemRewards,
+      } = await query(
+        `SELECT * FROM chest_item_rewards WHERE cosmetic_id = $1`,
+        [chestID]
+      );
+      const {
+        rows: poggerRewards,
+      } = await query(
+        `SELECT * FROM chest_pogger_rewards WHERE cosmetic_id = $1`,
+        [chestID]
+      );
+      return [...itemRewards, ...poggerRewards];
+    } catch (error) {
+      throw error;
+    }
+  },
 };
