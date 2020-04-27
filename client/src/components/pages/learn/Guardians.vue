@@ -46,7 +46,7 @@ export default {
             name: "Artifact - Shattered Helm",
             image: "guardian_buff_shatterd_helm.png",
             description: `Upon death, the team that slays Monkey receives an Artifact belonging to the Guardian of War for 5 minutes.
-              Effects: +75% damage, health, and attack speed to allied creeps.`,
+              Effects: +50% damage, health, and attack speed to allied creeps.`,
           },
         ],
       },
