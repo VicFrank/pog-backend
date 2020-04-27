@@ -69,10 +69,11 @@
                   class="cosmetic shop-item"
                   @click="$bvModal.show(`bp-modal-${cosmetic.cosmetic_id}`)"
                 >
-                  <div class="cosmetic__picture">
+                  <div>
                     <img
                       v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
                       :alt="cosmetic.cosmetic_id"
+                      class="preview-image"
                     />
                   </div>
                   <div class="cosmetic__descr">
