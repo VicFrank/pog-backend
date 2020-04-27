@@ -218,6 +218,27 @@ module.exports = [
   },
   {
     cost: -1,
+    cosmetic_id: "reroll1",
+    rarity: "",
+    type: "Reroll",
+    equip_group: "",
+  },
+  {
+    cost: -1,
+    cosmetic_id: "reroll",
+    rarity: "",
+    type: "Reroll",
+    equip_group: "",
+  },
+  {
+    cost: -1,
+    cosmetic_id: "reroll2",
+    rarity: "",
+    type: "Reroll",
+    equip_group: "",
+  },
+  {
+    cost: -1,
     cosmetic_id: "greaves1",
     rarity: "",
     type: "Battlepass FX",

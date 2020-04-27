@@ -281,8 +281,8 @@ module.exports = [
   },
   {
     level: 41,
-    item: "",
-    cosmetic_id: null,
+    item: "Level up FX 3",
+    cosmetic_id: "levelup3",
     chest_type: 3,
     chest_amount: 1,
   },
@@ -435,8 +435,8 @@ module.exports = [
   },
   {
     level: 63,
-    item: "Teleport FX 3",
-    cosmetic_id: "teleport3",
+    item: "Plus 1 Daily Re-Roll Token",
+    cosmetic_id: "reroll",
     chest_type: null,
     chest_amount: 0,
   },
@@ -456,7 +456,7 @@ module.exports = [
   },
   {
     level: 66,
-    item: "Plus 1 Daily Re-Roll Token",
+    item: "",
     cosmetic_id: null,
     chest_type: 2,
     chest_amount: 2,
@@ -674,7 +674,7 @@ module.exports = [
   {
     level: 97,
     item: "Plus 1 Daily Re-Roll Token",
-    cosmetic_id: null,
+    cosmetic_id: "reroll",
     chest_type: 3,
     chest_amount: 1,
   },
