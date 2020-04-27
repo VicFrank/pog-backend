@@ -83,30 +83,30 @@ async function loadNewCosmetics(newCosmetics) {
 
 async function loadChestRewards() {
   try {
-    // const loadedRewards = await cosmetics.getAllChestRewards();
+    const loadedRewards = await cosmetics.getAllChestRewards();
 
-    // if (loadedRewards.length > 0) {
-    //   console.log("Chest Rewards are already loaded");
-    //   return;
-    // }
+    if (loadedRewards.length > 0) {
+      console.log("Chest Rewards are already loaded");
+      return;
+    }
 
-    // console.log("Adding Chest Rewards...");
+    console.log("Adding Chest Rewards...");
 
     let promises = [];
-    // for (let [chestID, chestRewards] of Object.entries(dropOdds)) {
-    //   for (let reward of chestRewards) {
-    //     const { rarity, odds } = reward;
-    //     promises.push(cosmetics.addChestItemReward(chestID, rarity, odds));
-    //   }
-    // }
-    // for (let [chestID, chestRewards] of Object.entries(poggerOdds)) {
-    //   for (let reward of chestRewards) {
-    //     const { cumSum, poggers } = reward;
-    //     promises.push(
-    //       cosmetics.addChestPoggersReward(chestID, poggers, cumSum)
-    //     );
-    //   }
-    // }
+    for (let [chestID, chestRewards] of Object.entries(dropOdds)) {
+      for (let reward of chestRewards) {
+        const { rarity, odds } = reward;
+        promises.push(cosmetics.addChestItemReward(chestID, rarity, odds));
+      }
+    }
+    for (let [chestID, chestRewards] of Object.entries(poggerOdds)) {
+      for (let reward of chestRewards) {
+        const { cumSum, poggers } = reward;
+        promises.push(
+          cosmetics.addChestPoggersReward(chestID, poggers, cumSum)
+        );
+      }
+    }
     for (let [chestID, chestRewards] of Object.entries(bonusOdds)) {
       for (let bonusReward of chestRewards) {
         const { cumSum, reward } = bonusReward;
@@ -207,10 +207,10 @@ async function initializeAdmins() {
 }
 
 (async function () {
-  await loadQuests();
-  await loadCosmetics();
-  await loadChestRewards();
-  await loadBattlePass();
+  // await loadQuests();
+  // await loadCosmetics();
+  // await loadChestRewards();
+  // await loadBattlePass();
   // await initPlayers();
   // await addSampleGames(10);
   await initializeAdmins();
