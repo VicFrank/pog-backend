@@ -6,7 +6,7 @@ const questsList = require("./quests-list");
 const cosmeticsList = require("./cosmetics-list");
 const battlePassRewards = require("./battle-pass-rewards");
 const { generateRandomSampleData, realSample } = require("./sample-data");
-const { dropOdds, poggerOdds } = require("./chest-rewards");
+const { dropOdds, poggerOdds, bonusOdds } = require("./chest-rewards");
 
 /*
   Initializes the database with the daily quests/achievements
@@ -31,6 +31,11 @@ async function loadQuests() {
   } catch (error) {
     throw error;
   }
+}
+
+async function addQuest(quest) {
+  console.log("Adding Quest");
+  quests.addNewQuest(quest);
 }
 
 async function loadCosmetics() {
@@ -58,30 +63,54 @@ async function loadCosmetics() {
   }
 }
 
-async function loadChestRewards() {
+async function loadNewCosmetics(newCosmetics) {
   try {
-    const loadedRewards = await cosmetics.getAllChestRewards();
-
-    if (loadedRewards.length > 0) {
-      console.log("Chest Rewards are already loaded");
-      return;
-    }
-
-    console.log("Adding Chest Rewards...");
+    console.log("Adding New cosmetics...");
 
     let promises = [];
-    for (let [chestID, chestRewards] of Object.entries(dropOdds)) {
-      for (let reward of chestRewards) {
-        const { rarity, odds } = reward;
-        promises.push(cosmetics.addChestItemReward(chestID, rarity, odds));
-      }
+    for (let cosmeticData of newCosmetics) {
+      const { cost, cosmetic_id, rarity, type, equip_group } = cosmeticData;
+      promises.push(
+        cosmetics.createCosmetic(cost, cosmetic_id, rarity, type, equip_group)
+      );
     }
-    for (let [chestID, chestRewards] of Object.entries(poggerOdds)) {
-      for (let reward of chestRewards) {
-        const { cumSum, poggers } = reward;
-        promises.push(
-          cosmetics.addChestPoggersReward(chestID, poggers, cumSum)
-        );
+
+    await Promise.all(promises);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function loadChestRewards() {
+  try {
+    // const loadedRewards = await cosmetics.getAllChestRewards();
+
+    // if (loadedRewards.length > 0) {
+    //   console.log("Chest Rewards are already loaded");
+    //   return;
+    // }
+
+    // console.log("Adding Chest Rewards...");
+
+    let promises = [];
+    // for (let [chestID, chestRewards] of Object.entries(dropOdds)) {
+    //   for (let reward of chestRewards) {
+    //     const { rarity, odds } = reward;
+    //     promises.push(cosmetics.addChestItemReward(chestID, rarity, odds));
+    //   }
+    // }
+    // for (let [chestID, chestRewards] of Object.entries(poggerOdds)) {
+    //   for (let reward of chestRewards) {
+    //     const { cumSum, poggers } = reward;
+    //     promises.push(
+    //       cosmetics.addChestPoggersReward(chestID, poggers, cumSum)
+    //     );
+    //   }
+    // }
+    for (let [chestID, chestRewards] of Object.entries(bonusOdds)) {
+      for (let bonusReward of chestRewards) {
+        const { cumSum, reward } = bonusReward;
+        promises.push(cosmetics.addChestBonusReward(chestID, reward, cumSum));
       }
     }
 
@@ -178,12 +207,12 @@ async function initializeAdmins() {
 }
 
 (async function () {
-  // await loadQuests();
+  await loadQuests();
   await loadCosmetics();
   await loadChestRewards();
   await loadBattlePass();
   // await initPlayers();
   // await addSampleGames(10);
-  // await initializeAdmins();
+  await initializeAdmins();
   // await addRealSample();
 })();

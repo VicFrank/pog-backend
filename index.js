@@ -17,6 +17,7 @@ const patreonRouter = require("./routes/patreon");
 const cosmeticsRouter = require("./routes/cosmetics");
 
 const players = require("./db/players");
+const quests = require("./db/quests");
 
 const port = process.env.PORT || 3000;
 
@@ -43,6 +44,9 @@ passport.serializeUser(async function (user, next) {
   }
 
   const { is_admin, poggers } = await players.getBasicPlayer(steamid);
+
+  // Increment quest progress for logging into the website
+  quests.addQuestProgressByStat(steamid, "website_visits", 1);
 
   // add db info to the user
   user = {

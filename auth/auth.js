@@ -9,7 +9,24 @@ function checkServerKey(req) {
   return server_key === dedicatedServerKey;
 }
 
+function checkUserAuth(req) {
+  if (checkServerKey(req)) {
+    return true;
+  }
+  if (req.isAuthenticated()) {
+    // ensure the user matches
+    const steamid = req.params.steamid;
+    if (steamid === req.user.id || req.user.isAdmin) {
+      return true;
+    }
+  }
+  return false;
+}
+
 module.exports = {
+  isAuthenticatedUser: function (req) {
+    return checkUserAuth(req);
+  },
   adminAuth: function (req, res, next) {
     if (checkServerKey(req)) {
       return next();
@@ -23,15 +40,8 @@ module.exports = {
     }
   },
   userAuth: function (req, res, next) {
-    if (checkServerKey(req)) {
+    if (checkUserAuth(req)) {
       return next();
-    }
-    if (req.isAuthenticated()) {
-      // ensure the user matches
-      const steamid = req.params.steamid;
-      if (steamid === req.user.id || req.user.isAdmin) {
-        return next();
-      }
     }
     res.status(401).send({ message: "Not Authorized" });
   },

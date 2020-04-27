@@ -207,7 +207,16 @@ CREATE TABLE IF NOT EXISTS chest_pogger_rewards (
   cum_sum INTEGER NOT NULL,
   poggers INTEGER NOT NULL,
 
-  CONSTRAINT chest_pogger_rewards_pkey PRIMARY KEY (cosmetic_id, reward_rarity)
+  CONSTRAINT chest_pogger_rewards_pkey PRIMARY KEY (cosmetic_id, cum_sum)
+);
+
+DROP TABLE IF EXISTS chest_bonus_rewards;
+CREATE TABLE IF NOT EXISTS chest_bonus_rewards (
+  cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id),
+  cum_sum INTEGER NOT NULL,
+  reward_id TEXT REFERENCES cosmetics (cosmetic_id),
+
+  CONSTRAINT chest_bonus_rewards_pkey PRIMARY KEY (cosmetic_id, cum_sum)
 );
 
 DROP TABLE IF EXISTS player_logs;

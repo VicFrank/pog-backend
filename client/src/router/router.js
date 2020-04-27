@@ -98,7 +98,7 @@ const routes = [
   {
     path: "/demo/admin",
     component: Admin,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: "/demo/redirect",

@@ -37,6 +37,19 @@ module.exports = {
     }
   },
 
+  async getAllQuestsWithStat(stat) {
+    try {
+      const sql_query = `
+      SELECT * FROM quests
+      WHERE stat = $1
+      `;
+      const { rows } = await query(sql_query, [stat]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   /**
    * Creates a new quest, either a daily quest or achievement
    * @param {*} QuestValues
@@ -434,6 +447,18 @@ module.exports = {
       WHERE steam_id = $1 AND quest_id = $2
       `;
       await query(sql_query, [steamID, questID, amount]);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async addQuestProgressByStat(steamID, stat, amount) {
+    try {
+      const quests = await this.getAllQuestsWithStat(stat);
+      for (const quest of quests) {
+        const { quest_id } = quest;
+        this.incrementQuestProgress(steamID, quest_id, amount);
+      }
     } catch (error) {
       throw error;
     }

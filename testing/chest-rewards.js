@@ -2,11 +2,11 @@ const dropOdds = {
   chest1: [
     {
       rarity: "Common",
-      odds: 125,
+      odds: 100,
     },
     {
       rarity: "Uncommon",
-      odds: 20,
+      odds: 30,
     },
     {
       rarity: "Rare",
@@ -28,15 +28,15 @@ const dropOdds = {
     },
     {
       rarity: "Uncommon",
-      odds: 120,
+      odds: 100,
     },
     {
       rarity: "Rare",
-      odds: 15,
+      odds: 25,
     },
     {
       rarity: "Mythical",
-      odds: 2,
+      odds: 3,
     },
     {
       rarity: "Legendary",
@@ -46,67 +46,67 @@ const dropOdds = {
   chest3: [
     {
       rarity: "Common",
-      odds: 75,
+      odds: 0,
     },
     {
       rarity: "Uncommon",
-      odds: 50,
+      odds: 0,
     },
     {
       rarity: "Rare",
-      odds: 110,
+      odds: 100,
     },
     {
       rarity: "Mythical",
-      odds: 12,
+      odds: 20,
     },
     {
       rarity: "Legendary",
-      odds: 1,
+      odds: 3,
     },
   ],
   chest4: [
     {
       rarity: "Common",
-      odds: 100,
+      odds: 0,
     },
     {
       rarity: "Uncommon",
-      odds: 75,
+      odds: 0,
     },
     {
       rarity: "Rare",
-      odds: 50,
+      odds: 0,
     },
     {
       rarity: "Mythical",
-      odds: 110,
+      odds: 125,
     },
     {
       rarity: "Legendary",
-      odds: 10,
+      odds: 15,
     },
   ],
   chest5: [
     {
       rarity: "Common",
-      odds: 250,
+      odds: 0,
     },
     {
       rarity: "Uncommon",
-      odds: 150,
+      odds: 0,
     },
     {
       rarity: "Rare",
-      odds: 100,
+      odds: 0,
     },
     {
       rarity: "Mythical",
-      odds: 35,
+      odds: 50,
     },
     {
       rarity: "Legendary",
-      odds: 105,
+      odds: 125,
     },
   ],
 };
@@ -115,7 +115,7 @@ const poggerOdds = {
   chest1: [
     {
       cumSum: 1,
-      poggers: 125,
+      poggers: 150,
     },
     {
       cumSum: 10,
@@ -133,7 +133,7 @@ const poggerOdds = {
   chest2: [
     {
       cumSum: 1,
-      poggers: 250,
+      poggers: 300,
     },
     {
       cumSum: 10,
@@ -151,11 +151,11 @@ const poggerOdds = {
   chest3: [
     {
       cumSum: 1,
-      poggers: 450,
+      poggers: 600,
     },
     {
       cumSum: 10,
-      poggers: 200,
+      poggers: 225,
     },
     {
       cumSum: 45,
@@ -169,29 +169,29 @@ const poggerOdds = {
   chest4: [
     {
       cumSum: 1,
-      poggers: 1100,
+      poggers: 1500,
     },
     {
       cumSum: 10,
-      poggers: 400,
+      poggers: 500,
     },
     {
       cumSum: 45,
-      poggers: 100,
+      poggers: 125,
     },
     {
       cumSum: 100,
-      poggers: 50,
+      poggers: 60,
     },
   ],
   chest5: [
     {
       cumSum: 1,
-      poggers: 2000,
+      poggers: 3000,
     },
     {
       cumSum: 10,
-      poggers: 750,
+      poggers: 1000,
     },
     {
       cumSum: 45,
@@ -199,7 +199,80 @@ const poggerOdds = {
     },
     {
       cumSum: 100,
-      poggers: 100,
+      poggers: 150,
+    },
+  ],
+};
+
+const bonusOdds = {
+  chest1: [
+    {
+      cumSum: 1,
+      reward: "xp_coupon_2000",
+    },
+    {
+      cumSum: 5,
+      reward: "xp_coupon_1000",
+    },
+    {
+      cumSum: 20,
+      reward: "xp_coupon_500",
+    },
+  ],
+  chest2: [
+    {
+      cumSum: 1,
+      reward: "xp_coupon_5000",
+    },
+    {
+      cumSum: 5,
+      reward: "xp_coupon_2000",
+    },
+    {
+      cumSum: 20,
+      reward: "xp_coupon_1000",
+    },
+  ],
+  chest3: [
+    {
+      cumSum: 1,
+      reward: "xp_coupon_10000",
+    },
+    {
+      cumSum: 5,
+      reward: "xp_coupon_5000",
+    },
+    {
+      cumSum: 20,
+      reward: "xp_coupon_2000",
+    },
+  ],
+  chest4: [
+    {
+      cumSum: 1,
+      reward: "xp_coupon_25000",
+    },
+    {
+      cumSum: 5,
+      reward: "xp_coupon_10000",
+    },
+    {
+      cumSum: 20,
+      reward: "xp_coupon_5000",
+    },
+  ],
+  chest5: [
+    {
+      cumSum: 1,
+      reward: "icefrog",
+    },
+    {
+      cumSum: 5,
+      reward: "xp_coupon_25000",
+    },
+    {
+      cumSum: 20,
+      reward: "xp_coupon_10000",
     },
   ],
 };
@@ -207,4 +280,5 @@ const poggerOdds = {
 module.exports = {
   dropOdds,
   poggerOdds,
+  bonusOdds,
 };

@@ -8,7 +8,12 @@
         <div class="row">
           <div class="sale">
             <img src="./images/doomling.png" alt="Doomling" />
-            <img src="./images/discount.png" class="sales-overlay" alt />
+            <img
+              src="./images/discount.png"
+              @click="$bvModal.show(`bp-modal-doomling`)"
+              class="sales-overlay"
+              alt
+            />
             <div class="overlay">
               <h3>Doomling</h3>
               <p>
@@ -18,7 +23,12 @@
           </div>
           <div class="sale">
             <img src="./images/huntling.png" alt="huntling" />
-            <img src="./images/discount.png" class="sales-overlay" alt />
+            <img
+              src="./images/discount.png"
+              @click="$bvModal.show(`bp-modal-huntling`)"
+              class="sales-overlay"
+              alt
+            />
             <div class="overlay">
               <h3>Huntling</h3>
               <p>
@@ -121,6 +131,10 @@
                       >{{reward}}</li>
                     </ul>
                   </div>
+                  <div
+                    v-if="alreadyOwn(cosmetic.cosmetic_id)"
+                    class="text-center mt-3"
+                  >You already own this item!</div>
                   <div v-if="loggedIn" class="mt-4 d-flex justify-content-end">
                     <b-button
                       class="mr-2"
@@ -128,7 +142,12 @@
                       @click="hideModal(cosmetic.cosmetic_id)"
                     >Cancel</b-button>
                     <b-button
-                      :disabled="poggers < cosmetic.cost"
+                      v-if="poggers < cosmetic.cost"
+                      class="mr-2"
+                      variant="primary"
+                    >Get more POGGERS</b-button>
+                    <b-button
+                      :disabled="poggers < cosmetic.cost || alreadyOwn(cosmetic.cosmetic_id)"
                       class="mr-2"
                       variant="primary"
                       v-b-modal.modal-confirm-purchase
@@ -156,6 +175,7 @@ import CosmeticsFilter from "./CosmeticsFilter.vue";
 import ConfirmPurchase from "./ConfirmPurchase.vue";
 import LoginButton from "../login/LoginButton";
 import chestRewards from "./chests";
+import filterCosmetics from "./cosmeticFilters";
 
 export default {
   data: () => ({
@@ -196,7 +216,8 @@ export default {
       // { name: "Ancient", active: false },
       { name: "All", active: true, isRight: true }
     ],
-    activeRarityFilters: new Set()
+    activeRarityFilters: new Set(),
+    ownedCosmetics: []
   }),
 
   components: {
@@ -220,12 +241,42 @@ export default {
   created() {
     this.chestRewards = chestRewards;
 
+    if (this.loggedIn && this.steamID) {
+      fetch(`/api/players/${this.steamID}/cosmetics`)
+        .then(res => res.json())
+        .then(cosmetics => {
+          this.ownedCosmetics = cosmetics;
+        })
+        .catch(err => {
+          this.showError = true;
+          this.error = err;
+        });
+    }
+
     fetch(`/api/cosmetics`)
       .then(res => res.json())
       .then(cosmetics => {
-        const purchaseableCosmetics = cosmetics.filter(cosmetic => {
-          return cosmetic.cost > 0;
-        });
+        const purchaseableCosmetics = cosmetics
+          .filter(cosmetic => {
+            return cosmetic.cost > 0;
+          })
+          .sort((c1, c2) => {
+            if (c1.cosmetic_type === "Chest" && c2.cosmetic_type !== "Chest") {
+              return -1;
+            } else if (
+              c2.cosmetic_type === "Chest" &&
+              c1.cosmetic_type !== "Chest"
+            ) {
+              return 1;
+            } else if (
+              c1.cosmetic_type === "Chest" &&
+              c2.cosmetic_type === "Chest"
+            ) {
+              return c1.cosmetic_id.localeCompare(c2.cosmetic_id);
+            }
+            return c1.cosmetic_type.localeCompare(c2.cosmetic_type);
+          });
+
         this.cosmetics = purchaseableCosmetics;
         this.filteredCosmetics = purchaseableCosmetics;
       })
@@ -246,7 +297,7 @@ export default {
       this.$refs[`bp-modal-${cosmeticID}`][0].hide();
     },
     buyItem(cosmetic) {
-      const { cosmetic_id, cosmetic_type, cost } = cosmetic;
+      const { cosmetic_id, cost } = cosmetic;
       this.hideModal(cosmetic_id);
 
       // We can't afford this item
@@ -254,53 +305,23 @@ export default {
         return;
       }
 
-      let transaction;
-
-      if (cosmetic_type === "Companion") {
-        transaction = {
-          itemTransaction: {
-            companions: [
-              {
-                cosmetic_id: cosmetic_id,
-                effect: "-1",
-                level: "1",
-                amount: "1"
-              }
-            ],
-            poggers: -cost
-          }
-        };
-      } else {
-        let items = {};
-        items[cosmetic_id] = "1";
-        transaction = {
-          itemTransaction: {
-            items,
-            poggers: -cost
-          }
-        };
-      }
-
       this.selected = [];
       this.loading = true;
 
-      fetch(`/api/players/${this.steamID}/transaction`, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(transaction)
+      fetch(`/api/players/${this.steamID}/buy_item/${cosmetic_id}`, {
+        method: "post"
       })
-        .then(res => {
-          if (!res.ok) throw Error(res.statusText);
-          return res;
-        })
         .then(res => res.json())
-        .then(() => {
+        .then(res => {
           this.loading = false;
           document.documentElement.scrollTop = 0;
-          this.success = true;
-          this.$store.dispatch("refreshPoggers");
+          if (res.error) {
+            this.error = res.error;
+            this.showError = true;
+          } else {
+            this.success = true;
+            this.$store.dispatch("refreshPoggers");
+          }
         })
         .catch(err => {
           this.error = err;
@@ -318,6 +339,11 @@ export default {
     },
     cosmeticName(cosmeticID) {
       return cosmeticsData[cosmeticID];
+    },
+    alreadyOwn(cosmeticID) {
+      return this.ownedCosmetics.some(
+        cosmetic => cosmetic.cosmetic_id === cosmeticID
+      );
     },
     toggleFilter(name) {
       this.filters = this.filters.map(filter => ({
@@ -362,72 +388,12 @@ export default {
       this.updateFilteredCosmetics();
     },
     updateFilteredCosmetics() {
-      this.filteredCosmetics = this.cosmetics
-        .filter(cosmetic => {
-          // Type Filter
-          if (this.currentFilter === "All") {
-            return true;
-          }
-
-          const { cosmetic_type, equip_group, equipped } = cosmetic;
-          if (this.currentFilter === "Companions") {
-            if (equip_group === "companion") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Companions FX") {
-            if (equip_group === "companion_fx") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Chests") {
-            if (cosmetic_type === "Chest") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Battle Pass") {
-            if (
-              cosmetic_type === "Battlepass FX" ||
-              cosmetic_type === "Avatar" ||
-              cosmetic_type === "Border"
-            ) {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Announcer") {
-            if (equip_group === "announcer") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Equipped") {
-            return equipped;
-          }
-          return false;
-        })
-        .filter(cosmetic => {
-          // Rarity Filter
-          if (this.activeRarityFilters.size > 0) {
-            return this.activeRarityFilters.has(cosmetic.rarity);
-          }
-          return true;
-        })
-        .filter(cosmetic => {
-          // Text Search Filter
-          if (!this.searchText) {
-            return true;
-          }
-          const { cosmetic_id } = cosmetic;
-          const name = this.cosmeticName(cosmetic_id).toLowerCase();
-          const search = this.searchText.toLowerCase();
-          if (
-            search === "" ||
-            name.includes(search) ||
-            cosmetic_id.includes(search)
-          ) {
-            return true;
-          }
-          return false;
-        });
+      this.filteredCosmetics = filterCosmetics(
+        this.cosmetics,
+        this.currentFilter,
+        this.activeRarityFilters,
+        this.searchText
+      );
     }
   }
 };
@@ -486,6 +452,8 @@ export default {
   position: relative;
   transition: 0.25s ease-in-out;
   width: 100%;
+
+  cursor: pointer;
 }
 
 .sales-overlay {

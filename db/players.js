@@ -1,5 +1,6 @@
 const { query } = require("./index");
 const quests = require("./quests");
+const cosmetics = require("./cosmetics");
 
 module.exports = {
   async getAllPlayers(limit = 100, offset = 0) {
@@ -195,6 +196,23 @@ module.exports = {
         battlePass: battlePass,
         achievementsToClaim,
       };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getPoggers(steamID) {
+    try {
+      const { rows } = await query(
+        `
+        SELECT poggers FROM players WHERE steam_id = $1
+      `,
+        [steamID]
+      );
+      if (rows[0]) {
+        return rows[0].poggers;
+      }
+      return 0;
     } catch (error) {
       throw error;
     }
@@ -470,6 +488,17 @@ module.exports = {
     }
   },
 
+  async hasCosmetic(steamID, cosmeticID) {
+    try {
+      const allCosmetics = await this.getAllCosmetics(steamID);
+      return allCosmetics.some(
+        (cosmetic) => cosmetic.cosmetic_id === cosmeticID
+      );
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async setCompanion(steamID, companion_id) {
     try {
       // unequip current companion, and equip this one
@@ -652,6 +681,65 @@ module.exports = {
     }
   },
 
+  async buyCosmetic(steamID, cosmeticID) {
+    try {
+      await query("BEGIN");
+      const cosmetic = await cosmetics.getCosmetic(cosmeticID);
+
+      if (!cosmetic) {
+        throw new Error("Invalid cosmeticID");
+      }
+      // Make sure the player has enough poggers
+      const poggers = await this.getPoggers(steamID);
+      const price = cosmetic.cost;
+
+      console.log(poggers, price);
+      if (poggers < price) {
+        throw new Error("Not enough poggers!");
+      }
+      if (price < 1) {
+        throw new Error("Item is not purchaseable with poggers");
+      }
+
+      // Don't allow purchasing duplicate cosmetics (with some exceptions)
+      const cosmeticType = cosmetic.cosmetic_type;
+      const canBuyMultiple =
+        cosmeticType == "BP Accelerator" ||
+        cosmeticType == "Chest" ||
+        cosmeticType == "Consumable";
+
+      if (!canBuyMultiple) {
+        const hasCosmetic = await this.hasCosmetic(steamID, cosmeticID);
+        if (hasCosmetic) {
+          throw new Error("Can't buy duplicate cosmetics of this type");
+        }
+      }
+
+      // Pay the price
+      await this.modifyPoggers(steamID, -price);
+
+      // Add the cosmetic/companion
+      if (cosmetic.cosmetic_type === "Companion") {
+        let queryText = `
+        INSERT INTO player_companions (steam_id, cosmetic_id)
+        VALUES ($1, $2)
+        `;
+        await query(queryText, [steamID, cosmeticID]);
+      } else {
+        let queryText = `
+        INSERT INTO player_cosmetics (steam_id, cosmetic_id)
+        VALUES ($1, $2)
+        `;
+        await query(queryText, [steamID, cosmeticID]);
+      }
+
+      await query("COMMIT");
+    } catch (error) {
+      await query("ROLLBACK");
+      throw error;
+    }
+  },
+
   async getRandomReward(steamID, rarity, bucket = []) {
     try {
       let { rows: potentialRewards } = await query(
@@ -702,6 +790,9 @@ module.exports = {
         throw new Error("Tried to open non-existent chest");
       }
 
+      // Increment chest opening progress
+      quests.addQuestProgressByStat(steamID, "chests_opened", 1);
+
       const { rows: itemRewards } = await query(
         `SELECT * FROM chest_item_rewards
         WHERE cosmetic_id = $1`,
@@ -709,6 +800,12 @@ module.exports = {
       );
       const { rows: poggerRewards } = await query(
         `SELECT * FROM chest_pogger_rewards
+        WHERE cosmetic_id = $1
+        ORDER BY cum_sum `,
+        [chestID]
+      );
+      const { rows: bonusRewards } = await query(
+        `SELECT * FROM chest_bonus_rewards
         WHERE cosmetic_id = $1
         ORDER BY cum_sum `,
         [chestID]
@@ -763,13 +860,26 @@ module.exports = {
       chestPoggers += pityPoggers;
 
       // generate a random number (1-100) (inclusive)
-      const roll = Math.floor(Math.random() * 100) + 1;
+      let roll = Math.floor(Math.random() * 100) + 1;
 
       for (const itemReward of poggerRewards) {
         const { cum_sum, poggers } = itemReward;
 
         if (cum_sum >= roll) {
           chestPoggers += poggers;
+          break;
+        }
+      }
+
+      // Choose a potential bonus reward
+      roll = Math.floor(Math.random() * 100) + 1;
+
+      for (const itemReward of bonusRewards) {
+        const { cum_sum, reward_id } = itemReward;
+
+        if (cum_sum >= roll) {
+          const bonusReward = await cosmetics.getCosmetic(reward_id);
+          chestItems.push(bonusReward);
           break;
         }
       }

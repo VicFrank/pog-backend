@@ -344,4 +344,14 @@ module.exports = [
     stat: "high_fives",
     requiredAmount: 1000,
   },
+  {
+    isAchievement: true,
+    name: "Check this out!",
+    title: "",
+    description: "Visit the website for the first time",
+    xp: 100,
+    poggers: 0,
+    stat: "website_visits",
+    requiredAmount: 1,
+  },
 ];

@@ -126,6 +126,7 @@ import cosmeticsData from "./cosmeticNames";
 import webm from "./webmList";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
 import ChestOpener from "./ChestOpener.vue";
+import filterCosmetics from "./cosmeticFilters";
 
 export default {
   data: () => ({
@@ -285,72 +286,12 @@ export default {
       this.updateFilteredCosmetics();
     },
     updateFilteredCosmetics() {
-      this.filteredCosmetics = this.cosmetics
-        .filter(cosmetic => {
-          // Type Filter
-          if (this.currentFilter === "All") {
-            return true;
-          }
-
-          const { cosmetic_type, equip_group, equipped } = cosmetic;
-          if (this.currentFilter === "Companions") {
-            if (equip_group === "companion") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Companions FX") {
-            if (equip_group === "companion_fx") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Chests") {
-            if (cosmetic_type === "Chest") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Battle Pass") {
-            if (
-              cosmetic_type === "Battlepass FX" ||
-              cosmetic_type === "Avatar" ||
-              cosmetic_type === "Border"
-            ) {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Announcer") {
-            if (equip_group === "announcer") {
-              return true;
-            }
-          }
-          if (this.currentFilter === "Equipped") {
-            return equipped;
-          }
-          return false;
-        })
-        .filter(cosmetic => {
-          // Rarity Filter
-          if (this.activeRarityFilters.size > 0) {
-            return this.activeRarityFilters.has(cosmetic.rarity);
-          }
-          return true;
-        })
-        .filter(cosmetic => {
-          // Text Search Filter
-          if (!this.searchText) {
-            return true;
-          }
-          const { cosmetic_id } = cosmetic;
-          const name = this.cosmeticName(cosmetic_id).toLowerCase();
-          const search = this.searchText.toLowerCase();
-          if (
-            search === "" ||
-            name.includes(search) ||
-            cosmetic_id.includes(search)
-          ) {
-            return true;
-          }
-          return false;
-        });
+      this.filteredCosmetics = filterCosmetics(
+        this.cosmetics,
+        this.currentFilter,
+        this.activeRarityFilters,
+        this.searchText
+      );
     },
     equipCosmetic(cosmetic, equip, i) {
       const cosmeticID = cosmetic.cosmetic_id;

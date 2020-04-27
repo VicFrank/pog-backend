@@ -29,6 +29,9 @@ router.get("/:steamid", async (req, res) => {
       return;
     }
     const playerInfo = await players.getPlayer(steamid);
+    if (!auth.isAuthenticatedUser(req)) {
+      delete playerInfo.mmr;
+    }
     res.status(200).json(playerInfo);
   } catch (error) {
     console.log(error);
@@ -63,7 +66,7 @@ router.get("/:steamid/heroes", async (req, res) => {
 // Quests / Achievements
 //////////////////////////////////////////////
 
-router.get("/:steamid/daily_quests", async (req, res) => {
+router.get("/:steamid/daily_quests", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const dailyQuests = await quests.getDailyQuestsForPlayer(steamid);
@@ -132,7 +135,7 @@ router.post("/:steamid/achievements/claim", auth.userAuth, async (req, res) => {
 // Transactions
 //////////////////////////////////////////////
 
-router.post("/:steamid/transaction", auth.userAuth, async (req, res) => {
+router.post("/:steamid/transaction", auth.adminAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const { itemTransaction } = JSON.parse(JSON.stringify(req.body));
@@ -150,6 +153,29 @@ router.post("/:steamid/transaction", auth.userAuth, async (req, res) => {
       .json({ message: "Transaction Failed", error: error.toString() });
   }
 });
+
+router.post(
+  "/:steamid/buy_item/:cosmetic_id",
+  auth.userAuth,
+  async (req, res) => {
+    try {
+      const steamid = req.params.steamid;
+      const cosmetic_id = req.params.cosmetic_id;
+      const playerExists = await players.doesPlayerExist(steamid);
+      if (!playerExists) {
+        res.status(404).send({ message: "Player not found" });
+        return;
+      }
+      await players.buyCosmetic(steamid, cosmetic_id);
+      res.status(200).send({ message: "Transaction Complete" });
+    } catch (error) {
+      // console.log(error);
+      res
+        .status(500)
+        .json({ message: "Transaction Failed", error: error.toString() });
+    }
+  }
+);
 
 //////////////////////////////////////////////
 // Companions / Cosmetics / Battle Pass
@@ -189,7 +215,7 @@ router.post("/:steamid/equipped_companion", auth.userAuth, async (req, res) => {
   }
 });
 
-router.get("/:steamid/rerolls", async (req, res) => {
+router.get("/:steamid/rerolls", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const rows = await players.getRecentRerolls(steamid);
@@ -264,7 +290,7 @@ router.delete(
   }
 );
 
-router.get("/:steamid/battle_pass", async (req, res) => {
+router.get("/:steamid/battle_pass", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const playerInfo = await players.getBattlePasses(steamid);
