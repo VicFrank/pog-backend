@@ -135,6 +135,9 @@ const cosmeticsData = {
   ethereal_flame: "Ethereal Flame",
   star_blaze: "Star Blaze",
   trail_of_burning_doom: "Trail Of Burning Doom",
+  reroll: "Reroll",
+  reroll1: "Plus 1 Daily Re-Roll Token",
+  reroll2: "Plus 1 Daily Re-Roll Token",
 };
 
 export default cosmeticsData;
