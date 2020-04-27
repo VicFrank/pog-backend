@@ -54,7 +54,13 @@
               to="/demo/profile/achievements"
               class="sidebar-nav__link sidebar-nav__link_achievements"
               exact-active-class="active"
-            >Achievements</router-link>
+            >
+              Achievements
+              <b-badge v-if="numAchievements > 0" variant="primary" class="ml-1">
+                {{numAchievements}}
+                <span class="sr-only">unclaimed achievements</span>
+              </b-badge>
+            </router-link>
           </li>
           <li class="sidebar-nav__item">
             <router-link
@@ -185,6 +191,9 @@ export default {
     },
     poggers() {
       return this.$store.getters.poggers;
+    },
+    numAchievements() {
+      return this.$store.getters.achievementsToClaim;
     },
     badgeImage() {
       const level = this.$store.getters.bpLevel;

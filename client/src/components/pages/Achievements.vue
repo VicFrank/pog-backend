@@ -86,6 +86,7 @@ export default {
         .then(res => {
           if (res.success) {
             this.getAchievements();
+            this.$store.dispatch("refreshPlayer");
           }
         })
         .catch(err => {

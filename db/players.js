@@ -146,10 +146,15 @@ module.exports = {
       const equippedCompanion = await this.getEquippedCompanion(steamID);
       const teamKillStats = await this.getTeamKillStats(steamID);
       const dailyQuests = await quests.getDailyQuestsForPlayer(steamID);
+      const achievements = await quests.getAchievementsForPlayer(steamID);
       const battlePass = await this.getBattlePasses(steamID);
 
       let buildings_destroyed = teamKillStats.buildingKills.buildings_destroyed;
       let guardian_kills = teamKillStats.guardianKills.guardian_kills;
+
+      const achievementsToClaim = achievements.filter((achievement) => {
+        return achievement.quest_completed && !achievement.claimed;
+      }).length;
 
       let playerStats = rows[0];
       if (!playerStats) {
@@ -188,6 +193,7 @@ module.exports = {
         companion: equippedCompanion,
         dailyQuests: dailyQuests,
         battlePass: battlePass,
+        achievementsToClaim,
       };
     } catch (error) {
       throw error;

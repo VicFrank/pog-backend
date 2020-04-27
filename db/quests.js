@@ -110,9 +110,10 @@ module.exports = {
   async getAchievementsForPlayer(steamID) {
     try {
       const sql_query = `
-      SELECT * FROM quests q,
+      SELECT *,
         LEAST(quest_progress, required_amount) as capped_quest_progress,
         quest_progress >= required_amount as quest_completed
+      FROM quests q
       JOIN player_quests USING (quest_id)
       WHERE q.is_achievement = TRUE AND
         steam_id = $1

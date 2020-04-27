@@ -9,6 +9,7 @@ const state = {
   bpTier: 0,
   isAdmin: false,
   poggers: 0,
+  achievementsToClaim: 0,
 };
 
 // getters
@@ -26,6 +27,7 @@ const getters = {
   bpLevelRequired: () => getToNextLevel(state.bpExp).goal,
   bpTier: (state) => state.bpTier,
   poggers: (state) => state.poggers,
+  achievementsToClaim: (state) => state.achievementsToClaim,
 };
 
 const mutations = {
@@ -53,12 +55,16 @@ const mutations = {
   SAVE_POGGERS(state, poggers) {
     state.poggers = poggers;
   },
-  SAVE_USER(state, { username, steamID, isAdmin, poggers }) {
+  SAVE_USER(
+    state,
+    { username, steamID, isAdmin, poggers, achievementsToClaim }
+  ) {
     state.username = username;
     state.userSteamID = steamID;
     state.loggedIn = true;
     state.isAdmin = isAdmin;
     state.poggers = poggers;
+    state.achievementsToClaim = achievementsToClaim;
   },
 };
 
@@ -100,6 +106,7 @@ const actions = {
           steamID: player.steam_id,
           isAdmin: player.is_admin,
           poggers: player.poggers,
+          achievementsToClaim: player.achievementsToClaim,
         });
       })
       .catch((err) => {

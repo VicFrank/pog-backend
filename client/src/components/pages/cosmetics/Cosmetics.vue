@@ -54,6 +54,12 @@
                       v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
                       :alt="cosmetic.cosmetic_id"
                     />
+                    <img
+                      v-if="cosmetic.equipped"
+                      src="./images/equipped.png"
+                      class="equipped-overlay"
+                      alt
+                    />
                   </div>
                   <div class="cosmetic__descr">
                     <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
@@ -407,6 +413,14 @@ export default {
   padding: 0 50px;
 }
 
+.equipped-overlay {
+  position: absolute !important;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
 .search-input {
   position: relative;
   height: 37px;
@@ -595,12 +609,17 @@ export default {
   background-color: #212e3a;
 }
 
+.cosmetic__picture {
+  width: 90%;
+  margin: auto;
+}
+
 .cosmetic__picture img {
   position: relative;
   z-index: 2;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .cosmetic__descr {
