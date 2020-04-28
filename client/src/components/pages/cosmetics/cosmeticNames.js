@@ -138,6 +138,12 @@ const cosmeticsData = {
   reroll: "Reroll",
   reroll1: "Plus 1 Daily Re-Roll Token",
   reroll2: "Plus 1 Daily Re-Roll Token",
+  xp_coupon_500: "500 bonus XP pack",
+  xp_coupon_1000: "1000 bonus XP pack",
+  xp_coupon_2000: "2000 bonus XP pack",
+  xp_coupon_5000: "5000 bonus XP pack",
+  xp_coupon_10000: "10000 bonus XP pack",
+  xp_coupon_25000: "25000 bonus XP pack",
 };
 
 export default cosmeticsData;

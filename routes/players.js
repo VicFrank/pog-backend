@@ -85,7 +85,7 @@ router.post(
     try {
       const steamid = req.params.steamid;
       const questID = req.query.questID;
-      const dailyQuests = await quests.rerollDailyQuest(steamid, questID);
+      const dailyQuests = await players.rerollDailyQuest(steamid, questID);
       res.status(200).json(dailyQuests);
     } catch (error) {
       console.log(error);
@@ -99,7 +99,7 @@ router.post("/:steamid/daily_quests/claim", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const questID = req.query.questID;
-    const rewards = await quests.claimQuestReward(steamid, questID);
+    const rewards = await players.claimQuestReward(steamid, questID);
     res.status(200).json(rewards);
   } catch (error) {
     console.log(error);
@@ -123,7 +123,7 @@ router.post("/:steamid/achievements/claim", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const questID = req.query.questID;
-    const rewards = await quests.claimQuestReward(steamid, questID);
+    const rewards = await players.claimQuestReward(steamid, questID);
     res.status(200).json(rewards);
   } catch (error) {
     console.log(error);
@@ -293,7 +293,7 @@ router.delete(
 router.get("/:steamid/battle_pass", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
-    const playerInfo = await players.getBattlePasses(steamid);
+    const playerInfo = await players.getPlayerBattlePass(steamid);
     res.status(200).json(playerInfo);
   } catch (error) {
     console.log(error);
@@ -316,5 +316,22 @@ router.post(
     }
   }
 );
+
+router.post("/:steamid/use_item/:itemid", auth.userAuth, async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const itemid = req.params.itemid;
+    if (itemid === "bpaccel1" || itemid === "bpaccel2") {
+      const battlePass = await players.useBPAccelerator(steamid, itemid);
+      res.status(200).json(battlePass);
+    } else {
+      const experience = await players.consumeItem(steamid, itemid);
+      res.status(200).json(experience);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+});
 
 module.exports = router;

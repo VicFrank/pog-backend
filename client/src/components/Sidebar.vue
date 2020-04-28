@@ -8,18 +8,45 @@
               {{ username }}
               <span v-if="isAdmin">(Admin)</span>
             </h3>
-            <img :src="profilePicture" class="profile-picture" alt="Profile Picture" />
+            <div class="profile-picture-container">
+              <img
+                :src="profilePicture"
+                v-bind:style="borderStyle"
+                class="profile-picture"
+                alt="Profile Picture"
+              />
+              <div class="notification">
+                <span class="custom-badge">{{ bpLevel }}</span>
+              </div>
+            </div>
           </router-link>
-          <div class="notification">
-            <span class="custom-badge">{{ bpLevel }}</span>
-          </div>
-        </div>
-        <div class="progress-row">
-          <img :src="badgeImage" class="custom-badge-img" alt="Battle Pass Badge" />
-          <ProgressBar class="bp-progress" :progress="bpLevelProgress" :required="bpLevelRequired" />
         </div>
 
-        <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex justify-content-center align-items-center mt-1">
+          <img :src="badgeImage" class="custom-badge-img" alt="Battle Pass Badge" />
+          <img
+            v-if="bpTier === 1"
+            src="../assets/images/bp_tier1.png"
+            class="custom-badge-img"
+            alt="Battle Pass Badge"
+          />
+          <img
+            v-if="bpTier === 2"
+            src="../assets/images/bp_tier2.png"
+            class="custom-badge-img"
+            alt="Battle Pass Badge"
+          />
+        </div>
+
+        <div class="row">
+          <ProgressBar
+            class="bp-progress mt-1"
+            :progress="bpLevelProgress"
+            :required="bpLevelRequired"
+          />
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center mt-1">
           <img src="../assets/images/pogcoin_gold.png" class="poggers-img mr-1" alt="Poggers" />
           {{poggers}}
         </div>
@@ -142,6 +169,8 @@ import ProgressBar from "./utility/ProgressBar";
 export default {
   name: "sidebar",
 
+  data: () => ({}),
+
   components: {
     LoginButton,
     ProgressBar
@@ -152,19 +181,53 @@ export default {
     TweenMax.set(this.$el, {
       x: open ? 0 : -this.$el.offsetWidth
     });
-    if (this.$store.state.auth.loggedIn) {
-      fetch(`/api/players/${this.$store.state.auth.userSteamID}/battle_pass`)
-        .then(res => res.json())
-        .then(res => {
-          this.$store.commit({
-            type: "setBattlePass",
-            bpExp: res.total_experience,
-            bpTier: res.tier
-          });
-        });
-    }
   },
   computed: {
+    borderStyle() {
+      if (this.bpLevel < 10) {
+        // no border
+        return {
+          borderStyle: "solid",
+          borderColor: "white",
+          borderWidth: "1px"
+        };
+      } else if (this.bpLevel < 30) {
+        // border1
+        return {
+          borderStyle: "solid",
+          borderColor: "#4B69FF",
+          borderWidth: "1px"
+        };
+      } else if (this.bpLevel < 50) {
+        // border2
+        return {
+          borderStyle: "solid",
+          borderColor: "#8847FF",
+          borderWidth: "1px"
+        };
+      } else if (this.bpLevel < 70) {
+        // border3
+        return {
+          borderStyle: "solid",
+          borderColor: "#D32CE6",
+          borderWidth: "1px"
+        };
+      } else if (this.bpLevel < 90) {
+        // border4
+        return {
+          borderStyle: "solid",
+          borderColor: "#EFAA15",
+          borderWidth: "1px"
+        };
+      } else {
+        // border5
+        return {
+          borderStyle: "solid",
+          borderColor: "#EFAA15",
+          borderWidth: "1px"
+        };
+      }
+    },
     open() {
       return this.$store.state.ui.sidebarOpen;
     },
@@ -185,6 +248,9 @@ export default {
     },
     bpLevelRequired() {
       return this.$store.getters.bpLevelRequired;
+    },
+    bpTier() {
+      return this.$store.getters.bpTier;
     },
     isAdmin() {
       return this.$store.getters.isAdmin;
@@ -271,12 +337,15 @@ export default {
   margin-top: 100px;
 }
 
+.profile-picture-container {
+  position: relative;
+}
+
 .profile-picture {
   height: 150px;
   width: 150px;
   display: block;
   margin: 0 auto;
-  border: solid 1px #0b86c4;
 }
 
 .sidebar-content h3 {
@@ -367,23 +436,18 @@ export default {
 }
 
 .notification {
-  position: relative;
+  position: absolute;
   text-align: center;
 
   width: 30px;
   height: 30px;
-  bottom: 20px;
+  bottom: -12px;
   right: 20px;
 
   background-color: #0b86c4;
   border-radius: 50%;
 
   float: right;
-}
-
-.progress-row {
-  display: flex;
-  width: 100%;
 }
 
 .custom-badge-img {
@@ -409,6 +473,7 @@ export default {
   font-size: 18px !important;
 
   text-shadow: 1px 1px black;
+  color: white;
 }
 
 .sidebar-nav__link_profile:before {

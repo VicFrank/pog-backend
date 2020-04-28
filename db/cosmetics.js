@@ -53,11 +53,7 @@ module.exports = {
   async getBattlePass() {
     try {
       const sql_query = `
-      SELECT
-        bp_level,
-        cosmetic_id,
-        chest,
-        chest_amount
+      SELECT *
       FROM battle_pass_levels
       ORDER BY bp_level`;
       const { rows } = await query(sql_query);
@@ -66,14 +62,56 @@ module.exports = {
       throw error;
     }
   },
-  async createBattlePassLevel(level, cosmeticID, chest, chestAmount) {
+  async getBattlePassRewardsFromRange(minLevel, maxLevel) {
+    try {
+      const sql_query = `
+      SELECT *
+      FROM battle_pass_levels
+      WHERE bp_level >= $1 AND
+        bp_level <= $2
+      `;
+      const { rows } = await query(sql_query, [minLevel, maxLevel]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  /**
+   * Expects a battle pass from getBattlePass, ordered by level
+   * Calculates what level you would be at given a certain amount
+   * of xp. Past 100, it takes 8000 xp to level up
+   * @param {*} battlePass
+   * @param {*} totalXP
+   */
+  calculateBattlePassLevel(battlePass, totalXP) {
+    let lastLevel = 0;
+    for (const level of battlePass) {
+      const { total_xp } = level;
+      if (totalXP < total_xp) {
+        return lastLevel;
+      }
+      lastLevel++;
+    }
+
+    const level100TotalXP = battlePass[99].total_exp;
+    const overflowXP = totalXP - level100TotalXP;
+
+    return 100 + Math.floor(overflowXP / 8000);
+  },
+  async createBattlePassLevel(
+    level,
+    cosmeticID,
+    chest,
+    chestAmount,
+    next_level_xp,
+    total_xp
+  ) {
     const version = 1;
     try {
       const sql_query = `
         INSERT INTO battle_pass_levels
-        (bp_version, bp_level, cosmetic_id, chest, chest_amount)
-        VALUES
-        ($1, $2, $3, $4, $5)
+        (bp_version, bp_level, cosmetic_id, chest, chest_amount, next_level_xp, total_xp)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
       `;
       const { rows } = await query(sql_query, [
@@ -82,8 +120,39 @@ module.exports = {
         cosmeticID,
         chest,
         chestAmount,
+        next_level_xp,
+        total_xp,
       ]);
       return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getBattlePassLevel(level) {
+    try {
+      const sql_query = `
+        SELECT * FROM battle_pass_levels
+        WHERE bp_level = $1
+      `;
+      const { rows } = await query(sql_query, [level]);
+
+      // If the level doesn't exist, they're above level 100
+      if (rows.length === 0) {
+        let total_xp = 0;
+        let next_level_xp = 0;
+        if (level > 100) {
+          total_xp = 372125 + 8000 * level - 100;
+          next_level_xp = 8000;
+        }
+
+        return {
+          bp_version: 1,
+          bp_level: level,
+          next_level_xp,
+          total_xp,
+        };
+      }
+      return rows[0];
     } catch (error) {
       throw error;
     }

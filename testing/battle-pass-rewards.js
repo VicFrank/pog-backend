@@ -1,6 +1,17 @@
 module.exports = [
   {
+    level: 0,
+    next_level_xp: 1000,
+    total_xp: 0,
+    item: "Bronze Badge",
+    cosmetic_id: "badge1",
+    chest_type: null,
+    chest_amount: 0,
+  },
+  {
     level: 1,
+    next_level_xp: 1000,
+    total_xp: 1000,
     item: "Bronze Badge",
     cosmetic_id: "badge1",
     chest_type: null,
@@ -8,6 +19,8 @@ module.exports = [
   },
   {
     level: 2,
+    next_level_xp: 1000,
+    total_xp: 2000,
     item: "High Five 1",
     cosmetic_id: "highfive1",
     chest_type: 1,
@@ -15,6 +28,8 @@ module.exports = [
   },
   {
     level: 3,
+    next_level_xp: 1000,
+    total_xp: 3000,
     item: "Fountain FX 1",
     cosmetic_id: "fountain1",
     chest_type: null,
@@ -22,6 +37,8 @@ module.exports = [
   },
   {
     level: 4,
+    next_level_xp: 1000,
+    total_xp: 4000,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -29,6 +46,8 @@ module.exports = [
   },
   {
     level: 5,
+    next_level_xp: 1000,
+    total_xp: 5000,
     item: "Level up FX 1",
     cosmetic_id: "levelup1",
     chest_type: null,
@@ -36,6 +55,8 @@ module.exports = [
   },
   {
     level: 6,
+    next_level_xp: 1000,
+    total_xp: 6000,
     item: "Deny FX 1",
     cosmetic_id: "deny1",
     chest_type: 1,
@@ -43,6 +64,8 @@ module.exports = [
   },
   {
     level: 7,
+    next_level_xp: 1000,
+    total_xp: 7000,
     item: "Blink FX 1",
     cosmetic_id: "blink1",
     chest_type: null,
@@ -50,6 +73,8 @@ module.exports = [
   },
   {
     level: 8,
+    next_level_xp: 1000,
+    total_xp: 8000,
     item: "Balloon 1",
     cosmetic_id: "baloon1",
     chest_type: 1,
@@ -57,6 +82,8 @@ module.exports = [
   },
   {
     level: 9,
+    next_level_xp: 1100,
+    total_xp: 9000,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -64,6 +91,8 @@ module.exports = [
   },
   {
     level: 10,
+    next_level_xp: 1125,
+    total_xp: 10100,
     item: "Avatar Border 1",
     cosmetic_id: "border1",
     chest_type: 3,
@@ -71,6 +100,8 @@ module.exports = [
   },
   {
     level: 11,
+    next_level_xp: 1150,
+    total_xp: 11225,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -78,6 +109,8 @@ module.exports = [
   },
   {
     level: 12,
+    next_level_xp: 1175,
+    total_xp: 12375,
     item: "Force Staff FX 1",
     cosmetic_id: "force1",
     chest_type: null,
@@ -85,6 +118,8 @@ module.exports = [
   },
   {
     level: 13,
+    next_level_xp: 1200,
+    total_xp: 13550,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -92,6 +127,8 @@ module.exports = [
   },
   {
     level: 14,
+    next_level_xp: 1225,
+    total_xp: 14750,
     item: "Phase Boots FX 1",
     cosmetic_id: "phase1",
     chest_type: null,
@@ -99,6 +136,8 @@ module.exports = [
   },
   {
     level: 15,
+    next_level_xp: 1250,
+    total_xp: 15975,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -106,6 +145,8 @@ module.exports = [
   },
   {
     level: 16,
+    next_level_xp: 1275,
+    total_xp: 17225,
     item: "Fountain FX 2",
     cosmetic_id: "fountain2",
     chest_type: null,
@@ -113,6 +154,8 @@ module.exports = [
   },
   {
     level: 17,
+    next_level_xp: 1300,
+    total_xp: 18500,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -120,6 +163,8 @@ module.exports = [
   },
   {
     level: 18,
+    next_level_xp: 1325,
+    total_xp: 19800,
     item: "Mekansm / greaves FX 1",
     cosmetic_id: "mek1",
     chest_type: null,
@@ -127,6 +172,8 @@ module.exports = [
   },
   {
     level: 19,
+    next_level_xp: 1550,
+    total_xp: 21125,
     item: "High Five 2",
     cosmetic_id: "highfive2",
     chest_type: 1,
@@ -134,6 +181,8 @@ module.exports = [
   },
   {
     level: 20,
+    next_level_xp: 1575,
+    total_xp: 22675,
     item: "Balloon 2",
     cosmetic_id: "baloon2",
     chest_type: null,
@@ -141,6 +190,8 @@ module.exports = [
   },
   {
     level: 21,
+    next_level_xp: 1600,
+    total_xp: 24250,
     item: "Plus 1 Daily Re-Roll Token",
     cosmetic_id: null,
     chest_type: 2,
@@ -148,6 +199,8 @@ module.exports = [
   },
   {
     level: 22,
+    next_level_xp: 1625,
+    total_xp: 25850,
     item: "Level up FX 2",
     cosmetic_id: "levelup2",
     chest_type: null,
@@ -155,6 +208,8 @@ module.exports = [
   },
   {
     level: 23,
+    next_level_xp: 1650,
+    total_xp: 27475,
     item: "Blink FX 2",
     cosmetic_id: "blink2",
     chest_type: null,
@@ -162,6 +217,8 @@ module.exports = [
   },
   {
     level: 24,
+    next_level_xp: 1675,
+    total_xp: 29125,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -169,6 +226,8 @@ module.exports = [
   },
   {
     level: 25,
+    next_level_xp: 1700,
+    total_xp: 30800,
     item: "Silver Badge",
     cosmetic_id: "badge2",
     chest_type: 3,
@@ -176,6 +235,8 @@ module.exports = [
   },
   {
     level: 26,
+    next_level_xp: 1725,
+    total_xp: 32500,
     item: "Balloon 3",
     cosmetic_id: "baloon3",
     chest_type: 2,
@@ -183,6 +244,8 @@ module.exports = [
   },
   {
     level: 27,
+    next_level_xp: 1750,
+    total_xp: 34225,
     item: "Radiance FX 1",
     cosmetic_id: "radiance1",
     chest_type: null,
@@ -190,6 +253,8 @@ module.exports = [
   },
   {
     level: 28,
+    next_level_xp: 1775,
+    total_xp: 35975,
     item: "Euls FX 1",
     cosmetic_id: "cyclone1",
     chest_type: null,
@@ -197,6 +262,8 @@ module.exports = [
   },
   {
     level: 29,
+    next_level_xp: 2100,
+    total_xp: 37750,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -204,6 +271,8 @@ module.exports = [
   },
   {
     level: 30,
+    next_level_xp: 2125,
+    total_xp: 39850,
     item: "Avatar Border 2",
     cosmetic_id: "border2",
     chest_type: 2,
@@ -211,6 +280,8 @@ module.exports = [
   },
   {
     level: 31,
+    next_level_xp: 2150,
+    total_xp: 41975,
     item: "Deny FX 2",
     cosmetic_id: "deny2",
     chest_type: 1,
@@ -218,6 +289,8 @@ module.exports = [
   },
   {
     level: 32,
+    next_level_xp: 2175,
+    total_xp: 44125,
     item: "Maelstrom / Mjollnir FX 1",
     cosmetic_id: "mjollnir1",
     chest_type: null,
@@ -225,6 +298,8 @@ module.exports = [
   },
   {
     level: 33,
+    next_level_xp: 2200,
+    total_xp: 46300,
     item: "Shiva's FX 1",
     cosmetic_id: "shiva1",
     chest_type: null,
@@ -232,6 +307,8 @@ module.exports = [
   },
   {
     level: 34,
+    next_level_xp: 2225,
+    total_xp: 48500,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -239,6 +316,8 @@ module.exports = [
   },
   {
     level: 35,
+    next_level_xp: 2250,
+    total_xp: 50725,
     item: "Vladmir Aura FX 1",
     cosmetic_id: "vlads1",
     chest_type: null,
@@ -246,6 +325,8 @@ module.exports = [
   },
   {
     level: 36,
+    next_level_xp: 2275,
+    total_xp: 52975,
     item: "High Five 3",
     cosmetic_id: "highfive3",
     chest_type: 1,
@@ -253,6 +334,8 @@ module.exports = [
   },
   {
     level: 37,
+    next_level_xp: 2300,
+    total_xp: 55250,
     item: "Force Staff FX 2",
     cosmetic_id: "force2",
     chest_type: null,
@@ -260,6 +343,8 @@ module.exports = [
   },
   {
     level: 38,
+    next_level_xp: 2325,
+    total_xp: 57550,
     item: "Phase Boots FX 2",
     cosmetic_id: "phase2",
     chest_type: null,
@@ -267,6 +352,8 @@ module.exports = [
   },
   {
     level: 39,
+    next_level_xp: 2750,
+    total_xp: 59875,
     item: "Balloon 4",
     cosmetic_id: "baloon4",
     chest_type: 2,
@@ -274,6 +361,8 @@ module.exports = [
   },
   {
     level: 40,
+    next_level_xp: 2775,
+    total_xp: 62625,
     item: "Earn +1 Picking Slot",
     cosmetic_id: "picking1",
     chest_type: null,
@@ -281,6 +370,8 @@ module.exports = [
   },
   {
     level: 41,
+    next_level_xp: 2800,
+    total_xp: 65400,
     item: "Level up FX 3",
     cosmetic_id: "levelup3",
     chest_type: 3,
@@ -288,6 +379,8 @@ module.exports = [
   },
   {
     level: 42,
+    next_level_xp: 2825,
+    total_xp: 68200,
     item: "Mekansm / Greaves FX 2",
     cosmetic_id: "mek2",
     chest_type: null,
@@ -295,6 +388,8 @@ module.exports = [
   },
   {
     level: 43,
+    next_level_xp: 2850,
+    total_xp: 71025,
     item: "Pipe Aura FX 1",
     cosmetic_id: "pipe1",
     chest_type: null,
@@ -302,6 +397,8 @@ module.exports = [
   },
   {
     level: 44,
+    next_level_xp: 2875,
+    total_xp: 73875,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -309,6 +406,8 @@ module.exports = [
   },
   {
     level: 45,
+    next_level_xp: 2900,
+    total_xp: 76750,
     item: "Deny FX 3",
     cosmetic_id: "deny3",
     chest_type: null,
@@ -316,6 +415,8 @@ module.exports = [
   },
   {
     level: 46,
+    next_level_xp: 2925,
+    total_xp: 79650,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -323,6 +424,8 @@ module.exports = [
   },
   {
     level: 47,
+    next_level_xp: 2950,
+    total_xp: 82575,
     item: "Radiance FX 2",
     cosmetic_id: "radiance2",
     chest_type: null,
@@ -330,6 +433,8 @@ module.exports = [
   },
   {
     level: 48,
+    next_level_xp: 2975,
+    total_xp: 85525,
     item: "Shivas Aura FX 1",
     cosmetic_id: "shivaaura1",
     chest_type: null,
@@ -337,6 +442,8 @@ module.exports = [
   },
   {
     level: 49,
+    next_level_xp: 3500,
+    total_xp: 88500,
     item: "Balloon 5",
     cosmetic_id: "baloon5",
     chest_type: 1,
@@ -344,6 +451,8 @@ module.exports = [
   },
   {
     level: 50,
+    next_level_xp: 3525,
+    total_xp: 92000,
     item: "Avatar Border 3",
     cosmetic_id: "border3",
     chest_type: 4,
@@ -351,6 +460,8 @@ module.exports = [
   },
   {
     level: 51,
+    next_level_xp: 3550,
+    total_xp: 95525,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -358,6 +469,8 @@ module.exports = [
   },
   {
     level: 52,
+    next_level_xp: 3575,
+    total_xp: 99075,
     item: "Euls FX 2",
     cosmetic_id: "cyclone2",
     chest_type: null,
@@ -365,6 +478,8 @@ module.exports = [
   },
   {
     level: 53,
+    next_level_xp: 3600,
+    total_xp: 102650,
     item: "Greaves Aura FX 1",
     cosmetic_id: "greaves1",
     chest_type: null,
@@ -372,6 +487,8 @@ module.exports = [
   },
   {
     level: 54,
+    next_level_xp: 3625,
+    total_xp: 106250,
     item: "High Five 4",
     cosmetic_id: "highfive4",
     chest_type: 1,
@@ -379,6 +496,8 @@ module.exports = [
   },
   {
     level: 55,
+    next_level_xp: 3650,
+    total_xp: 109875,
     item: "Gold Badge",
     cosmetic_id: "badge3",
     chest_type: 3,
@@ -386,6 +505,8 @@ module.exports = [
   },
   {
     level: 56,
+    next_level_xp: 3675,
+    total_xp: 113525,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -393,6 +514,8 @@ module.exports = [
   },
   {
     level: 57,
+    next_level_xp: 3700,
+    total_xp: 117200,
     item: "Maelstrom / Mjollnir FX 2",
     cosmetic_id: "mjollnir2",
     chest_type: null,
@@ -400,6 +523,8 @@ module.exports = [
   },
   {
     level: 58,
+    next_level_xp: 3725,
+    total_xp: 120900,
     item: "AC Aura FX 1",
     cosmetic_id: "assault1",
     chest_type: null,
@@ -407,6 +532,8 @@ module.exports = [
   },
   {
     level: 59,
+    next_level_xp: 4350,
+    total_xp: 124625,
     item: "Balloon 6",
     cosmetic_id: "baloon6",
     chest_type: 1,
@@ -414,6 +541,8 @@ module.exports = [
   },
   {
     level: 60,
+    next_level_xp: 4375,
+    total_xp: 128975,
     item: "Fountain FX 3",
     cosmetic_id: "fountain3",
     chest_type: null,
@@ -421,6 +550,8 @@ module.exports = [
   },
   {
     level: 61,
+    next_level_xp: 4400,
+    total_xp: 133350,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -428,6 +559,8 @@ module.exports = [
   },
   {
     level: 62,
+    next_level_xp: 4425,
+    total_xp: 137750,
     item: "Shivas FX 2",
     cosmetic_id: "shiva2",
     chest_type: null,
@@ -435,6 +568,8 @@ module.exports = [
   },
   {
     level: 63,
+    next_level_xp: 4450,
+    total_xp: 142175,
     item: "Plus 1 Daily Re-Roll Token",
     cosmetic_id: "reroll",
     chest_type: null,
@@ -442,6 +577,8 @@ module.exports = [
   },
   {
     level: 64,
+    next_level_xp: 4475,
+    total_xp: 146625,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -449,6 +586,8 @@ module.exports = [
   },
   {
     level: 65,
+    next_level_xp: 4500,
+    total_xp: 151100,
     item: "Vladmir Aura FX 2",
     cosmetic_id: "vlads2",
     chest_type: null,
@@ -456,6 +595,8 @@ module.exports = [
   },
   {
     level: 66,
+    next_level_xp: 4525,
+    total_xp: 155600,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -463,6 +604,8 @@ module.exports = [
   },
   {
     level: 67,
+    next_level_xp: 4550,
+    total_xp: 160125,
     item: "Blink FX 3",
     cosmetic_id: "blink3",
     chest_type: null,
@@ -470,6 +613,8 @@ module.exports = [
   },
   {
     level: 68,
+    next_level_xp: 4575,
+    total_xp: 164675,
     item: "Pipe Aura FX 2",
     cosmetic_id: "pipe2",
     chest_type: null,
@@ -477,6 +622,8 @@ module.exports = [
   },
   {
     level: 69,
+    next_level_xp: 5300,
+    total_xp: 169250,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -484,6 +631,8 @@ module.exports = [
   },
   {
     level: 70,
+    next_level_xp: 5325,
+    total_xp: 174550,
     item: "Avatar Border 4",
     cosmetic_id: "border4",
     chest_type: 3,
@@ -491,6 +640,8 @@ module.exports = [
   },
   {
     level: 71,
+    next_level_xp: 5350,
+    total_xp: 179875,
     item: "Balloon 7",
     cosmetic_id: "baloon7",
     chest_type: 2,
@@ -498,6 +649,8 @@ module.exports = [
   },
   {
     level: 72,
+    next_level_xp: 5375,
+    total_xp: 185225,
     item: "Force Staff FX 3",
     cosmetic_id: "force3",
     chest_type: null,
@@ -505,6 +658,8 @@ module.exports = [
   },
   {
     level: 73,
+    next_level_xp: 5400,
+    total_xp: 190600,
     item: "Phase Boots FX 3",
     cosmetic_id: "phase3",
     chest_type: null,
@@ -512,6 +667,8 @@ module.exports = [
   },
   {
     level: 74,
+    next_level_xp: 5425,
+    total_xp: 196000,
     item: "Shivas Aura FX 2",
     cosmetic_id: "shivaaura2",
     chest_type: null,
@@ -519,6 +676,8 @@ module.exports = [
   },
   {
     level: 75,
+    next_level_xp: 5450,
+    total_xp: 201425,
     item: "Platinum Badge",
     cosmetic_id: "badge4",
     chest_type: 3,
@@ -526,6 +685,8 @@ module.exports = [
   },
   {
     level: 76,
+    next_level_xp: 5475,
+    total_xp: 206875,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -533,6 +694,8 @@ module.exports = [
   },
   {
     level: 77,
+    next_level_xp: 5500,
+    total_xp: 212350,
     item: "Mekansm/Greaves FX 3",
     cosmetic_id: "mek3",
     chest_type: null,
@@ -540,6 +703,8 @@ module.exports = [
   },
   {
     level: 78,
+    next_level_xp: 5525,
+    total_xp: 217850,
     item: "Radiance FX 3",
     cosmetic_id: "radiance3",
     chest_type: null,
@@ -547,6 +712,8 @@ module.exports = [
   },
   {
     level: 79,
+    next_level_xp: 6350,
+    total_xp: 223375,
     item: "Greaves Aura FX 2",
     cosmetic_id: "greaves2",
     chest_type: null,
@@ -554,6 +721,8 @@ module.exports = [
   },
   {
     level: 80,
+    next_level_xp: 6375,
+    total_xp: 229725,
     item: "Balloon 8",
     cosmetic_id: "baloon8",
     chest_type: null,
@@ -561,6 +730,8 @@ module.exports = [
   },
   {
     level: 81,
+    next_level_xp: 6400,
+    total_xp: 236100,
     item: "High Five 5",
     cosmetic_id: "highfive5",
     chest_type: 2,
@@ -568,6 +739,8 @@ module.exports = [
   },
   {
     level: 82,
+    next_level_xp: 6425,
+    total_xp: 242500,
     item: "Maelstrom/Mjollnir FX 3",
     cosmetic_id: "mjollnir3",
     chest_type: null,
@@ -575,6 +748,8 @@ module.exports = [
   },
   {
     level: 83,
+    next_level_xp: 6450,
+    total_xp: 248925,
     item: "Shivas FX 3",
     cosmetic_id: "shiva3",
     chest_type: null,
@@ -582,6 +757,8 @@ module.exports = [
   },
   {
     level: 84,
+    next_level_xp: 6475,
+    total_xp: 255375,
     item: "AC Aura FX 2",
     cosmetic_id: "assault2",
     chest_type: null,
@@ -589,6 +766,8 @@ module.exports = [
   },
   {
     level: 85,
+    next_level_xp: 6500,
+    total_xp: 261850,
     item: "Deny FX 4",
     cosmetic_id: "deny4",
     chest_type: null,
@@ -596,6 +775,8 @@ module.exports = [
   },
   {
     level: 86,
+    next_level_xp: 6525,
+    total_xp: 268350,
     item: "",
     cosmetic_id: null,
     chest_type: 2,
@@ -603,6 +784,8 @@ module.exports = [
   },
   {
     level: 87,
+    next_level_xp: 6550,
+    total_xp: 274875,
     item: "Vladmir Aura FX 3",
     cosmetic_id: "vlads3",
     chest_type: null,
@@ -610,6 +793,8 @@ module.exports = [
   },
   {
     level: 88,
+    next_level_xp: 6575,
+    total_xp: 281425,
     item: "Pipe Aura FX 3",
     cosmetic_id: "pipe3",
     chest_type: null,
@@ -617,6 +802,8 @@ module.exports = [
   },
   {
     level: 89,
+    next_level_xp: 7500,
+    total_xp: 288000,
     item: "",
     cosmetic_id: null,
     chest_type: 1,
@@ -624,6 +811,8 @@ module.exports = [
   },
   {
     level: 90,
+    next_level_xp: 7525,
+    total_xp: 295500,
     item: "Avatar Border 5",
     cosmetic_id: "border5",
     chest_type: 3,
@@ -631,6 +820,8 @@ module.exports = [
   },
   {
     level: 91,
+    next_level_xp: 7550,
+    total_xp: 303025,
     item: "Balloon 9",
     cosmetic_id: "baloon9",
     chest_type: 3,
@@ -638,6 +829,8 @@ module.exports = [
   },
   {
     level: 92,
+    next_level_xp: 7575,
+    total_xp: 310575,
     item: "Shivas Aura FX 3",
     cosmetic_id: "shivaaura3",
     chest_type: null,
@@ -645,6 +838,8 @@ module.exports = [
   },
   {
     level: 93,
+    next_level_xp: 7600,
+    total_xp: 318150,
     item: "",
     cosmetic_id: null,
     chest_type: 3,
@@ -652,6 +847,8 @@ module.exports = [
   },
   {
     level: 94,
+    next_level_xp: 7625,
+    total_xp: 325750,
     item: "Greaves Aura FX 3",
     cosmetic_id: "greaves3",
     chest_type: null,
@@ -659,6 +856,8 @@ module.exports = [
   },
   {
     level: 95,
+    next_level_xp: 7650,
+    total_xp: 333375,
     item: "",
     cosmetic_id: null,
     chest_type: 4,
@@ -666,6 +865,8 @@ module.exports = [
   },
   {
     level: 96,
+    next_level_xp: 7675,
+    total_xp: 341025,
     item: "AC Aura FX 3",
     cosmetic_id: "assault3",
     chest_type: null,
@@ -673,6 +874,8 @@ module.exports = [
   },
   {
     level: 97,
+    next_level_xp: 7700,
+    total_xp: 348700,
     item: "Plus 1 Daily Re-Roll Token",
     cosmetic_id: "reroll",
     chest_type: 3,
@@ -680,6 +883,8 @@ module.exports = [
   },
   {
     level: 98,
+    next_level_xp: 7725,
+    total_xp: 356400,
     item: "Deny FX 5",
     cosmetic_id: "deny5",
     chest_type: null,
@@ -687,6 +892,8 @@ module.exports = [
   },
   {
     level: 99,
+    next_level_xp: 8000,
+    total_xp: 364125,
     item: "Balloon 10",
     cosmetic_id: "baloon10",
     chest_type: 3,
@@ -694,6 +901,8 @@ module.exports = [
   },
   {
     level: 100,
+    next_level_xp: 8000,
+    total_xp: 372125,
     item: "Royal Badge",
     cosmetic_id: "badge5",
     chest_type: 5,

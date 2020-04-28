@@ -1,11 +1,11 @@
-import { getLevel, getToNextLevel } from "../battlePassExp";
-
 // initial state
 const state = {
   userSteamID: "",
   username: "",
   profilePictureLink: "",
-  bpExp: 0,
+  bpLevel: 0,
+  bpLevelProgress: 0,
+  bpLevelRequired: 0,
   bpTier: 0,
   isAdmin: false,
   poggers: 0,
@@ -20,11 +20,9 @@ const getters = {
   loggedIn: (state) => state.userSteamID !== "",
   isAdmin: (state) => state.isAdmin,
 
-  bpExp: (state) => state.bpExp,
-  // my bp level calculator is one level off
-  bpLevel: (state) => getLevel(state.bpExp) - 1,
-  bpLevelProgress: (state) => getToNextLevel(state.bpExp).progress,
-  bpLevelRequired: () => getToNextLevel(state.bpExp).goal,
+  bpLevel: (state) => state.bpLevel,
+  bpLevelProgress: (state) => state.bpLevelProgress,
+  bpLevelRequired: (state) => state.bpLevelRequired,
   bpTier: (state) => state.bpTier,
   poggers: (state) => state.poggers,
   achievementsToClaim: (state) => state.achievementsToClaim,
@@ -48,9 +46,14 @@ const mutations = {
     state.profilePictureLink = "";
     state.loggedIn = false;
   },
-  setBattlePass(state, { bpExp, bpTier }) {
-    state.bpExp = bpExp;
+  SAVE_BATTLE_PASS(
+    state,
+    { bpLevel, bpTier, bpLevelProgress, bpLevelRequired }
+  ) {
+    state.bpLevel = bpLevel;
     state.bpTier = bpTier;
+    state.bpLevelProgress = bpLevelProgress;
+    state.bpLevelRequired = bpLevelRequired;
   },
   SAVE_POGGERS(state, poggers) {
     state.poggers = poggers;
@@ -84,9 +87,19 @@ const actions = {
     fetch(`/api/players/${state.userSteamID}`)
       .then((res) => res.json())
       .then((player) => {
-        commit("setBattlePass", {
-          bpTier: player.battlePass.tier,
-          bpExp: player.battlePass.total_experience,
+        const {
+          tier,
+          total_experience,
+          next_level_xp,
+          total_xp,
+          bp_level,
+        } = player.battlePass;
+        const progress = total_xp - total_experience;
+        commit("SAVE_BATTLE_PASS", {
+          bpTier: tier,
+          bpLevel: bp_level,
+          bpLevelProgress: progress,
+          bpLevelRequired: next_level_xp,
         });
       })
       .catch((err) => {
@@ -97,16 +110,34 @@ const actions = {
     fetch(`/api/players/${state.userSteamID}`)
       .then((res) => res.json())
       .then((player) => {
-        commit("setBattlePass", {
-          bpTier: player.battlePass.tier,
-          bpExp: player.battlePass.total_experience,
+        const {
+          battlePass,
+          username,
+          steam_id,
+          is_admin,
+          poggers,
+          achievementsToClaim,
+        } = player;
+        const {
+          tier,
+          total_experience,
+          next_level_xp,
+          total_xp,
+          bp_level,
+        } = battlePass;
+        const progress = total_xp - total_experience;
+        commit("SAVE_BATTLE_PASS", {
+          bpTier: tier,
+          bpLevel: bp_level,
+          bpLevelProgress: progress,
+          bpLevelRequired: next_level_xp,
         });
         commit("SAVE_USER", {
-          username: player.username,
-          steamID: player.steam_id,
-          isAdmin: player.is_admin,
-          poggers: player.poggers,
-          achievementsToClaim: player.achievementsToClaim,
+          username: username,
+          steamID: steam_id,
+          isAdmin: is_admin,
+          poggers: poggers,
+          achievementsToClaim: achievementsToClaim,
         });
       })
       .catch((err) => {

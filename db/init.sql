@@ -135,6 +135,8 @@ DROP TABLE IF EXISTS battle_pass_levels CASCADE;
 CREATE TABLE IF NOT EXISTS battle_pass_levels (
   bp_version INTEGER DEFAULT 1,
   bp_level INTEGER NOT NULL,
+  next_level_xp INTEGER NOT NULL,
+  total_xp INTEGER NOT NULL,
   cosmetic_id TEXT REFERENCES cosmetics (cosmetic_id),
   chest INTEGER,
   chest_amount INTEGER,
@@ -223,5 +225,9 @@ DROP TABLE IF EXISTS player_logs;
 CREATE TABLE IF NOT EXISTS player_logs (
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   log_event TEXT NOT NULL,
+  log_data JSON,
   log_time TIMESTAMPTZ DEFAULT Now()
 );
+
+DROP INDEX IF EXISTS idx_player_logs_steam_id;
+CREATE INDEX idx_player_logs_steam_id ON player_logs (steam_id);

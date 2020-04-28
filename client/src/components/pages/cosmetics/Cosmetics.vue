@@ -75,16 +75,20 @@
                 >
                   <template v-if="cosmetic.cosmetic_type !== 'Chest'">
                     <div v-if="cosmeticMovie(cosmetic.cosmetic_id)">
-                      <video width="360" height="360" autoplay muted loop>
+                      <video width="100%" height="360" autoplay muted loop>
                         <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
                       </video>
                     </div>
-                    <div v-else>
+                    <div v-else class="text-center">
                       <img
                         v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
                         :alt="cosmetic.cosmetic_id"
                       />
                     </div>
+                    <div
+                      v-if="illegalAccelerator(cosmetic)"
+                      class="text-center"
+                    >You can't use an accelerator lower than your current level.</div>
                     <div class="mt-4 d-flex justify-content-end">
                       <template v-if="equippable(cosmetic)">
                         <b-button class="mr-2" variant="secondary" @click="hideModal(i)">Cancel</b-button>
@@ -101,6 +105,13 @@
                           @click="equipCosmetic(cosmetic, false, i)"
                         >Unequip</b-button>
                       </template>
+
+                      <b-button
+                        v-if="isUsable(cosmetic)"
+                        class="mr-2"
+                        variant="primary"
+                        @click="consumeItem(cosmetic)"
+                      >Use</b-button>
                     </div>
                   </template>
                   <template v-else>
@@ -188,6 +199,9 @@ export default {
   computed: {
     steamID() {
       return this.$store.state.auth.userSteamID;
+    },
+    bpTier() {
+      return this.$store.state.auth.bpTier;
     }
   },
 
@@ -206,13 +220,51 @@ export default {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
         .then(res => res.json())
         .then(cosmetics => {
-          this.cosmetics = cosmetics;
-          this.filteredCosmetics = cosmetics;
+          const sortedCosmetics = cosmetics.sort((c1, c2) => {
+            if (this.isConsumableOrChest(c1) && !this.isConsumableOrChest(c2)) {
+              return -1;
+            } else if (
+              this.isConsumableOrChest(c2) &&
+              !this.isConsumableOrChest(c1)
+            ) {
+              return 1;
+            } else if (
+              this.isConsumableOrChest(c1) &&
+              this.isConsumableOrChest(c2)
+            ) {
+              return c1.cosmetic_id.localeCompare(c2.cosmetic_id);
+            }
+            const c1type = c1.cosmetic_type || "Companion";
+            const c2type = c2.cosmetic_type || "Companion";
+            return c1type.localeCompare(c2type);
+          });
+          this.cosmetics = sortedCosmetics;
+          this.filteredCosmetics = sortedCosmetics;
         })
         .catch(err => {
           this.showError = true;
           this.error = err;
         });
+    },
+    isConsumableOrChest(cosmetic) {
+      return (
+        cosmetic.cosmetic_type === "Chest" ||
+        cosmetic.cosmetic_type === "XP" ||
+        cosmetic.cosmetic_type === "Chest XP" ||
+        cosmetic.cosmetic_type === "BP Accelerator"
+      );
+    },
+    isUsable(cosmetic) {
+      console.log("Is Usable");
+      if (this.illegalAccelerator(cosmetic)) return false;
+      return (
+        cosmetic.cosmetic_type === "XP" ||
+        cosmetic.cosmetic_type === "Chest XP" ||
+        cosmetic.cosmetic_type === "BP Accelerator"
+      );
+    },
+    illegalAccelerator(cosmetic) {
+      return cosmetic.cosmetic_id === "bpaccel1" && this.bpTier === 2;
     },
     hideModal(i) {
       this.$refs[`modal-${i}`][0].hide();
@@ -231,7 +283,7 @@ export default {
       this.getPlayerCosmetics();
     },
     equippable(cosmetic) {
-      return cosmetic.cosmetic_type !== "Chest";
+      return !this.isConsumableOrChest(cosmetic);
     },
     cosmeticImageSrc(cosmeticID) {
       return require(`./images/${cosmeticID}.png`);
@@ -341,6 +393,31 @@ export default {
             this.showError = true;
           });
       }
+    },
+    consumeItem(cosmetic) {
+      const cosmeticID = cosmetic.cosmetic_id;
+
+      fetch(`/api/players/${this.steamID}/use_item/${cosmeticID}`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.error) {
+            this.error = res.error;
+            this.showError = true;
+          } else {
+            this.success = true;
+            this.$store.dispatch("refreshBattlePass");
+            this.getPlayerCosmetics();
+          }
+        })
+        .catch(err => {
+          this.error = err;
+          this.showError = true;
+        });
     }
   }
 };

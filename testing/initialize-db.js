@@ -133,13 +133,22 @@ async function loadBattlePass() {
 
     let promises = [];
     for (let rewards of battlePassRewards) {
-      const { level, cosmetic_id, chest_type, chest_amount } = rewards;
+      const {
+        level,
+        cosmetic_id,
+        chest_type,
+        chest_amount,
+        next_level_xp,
+        total_xp,
+      } = rewards;
       promises.push(
         cosmetics.createBattlePassLevel(
           level,
           cosmetic_id,
           chest_type,
-          chest_amount
+          chest_amount,
+          next_level_xp,
+          total_xp
         )
       );
     }
@@ -207,12 +216,12 @@ async function initializeAdmins() {
 }
 
 (async function () {
-  // await loadQuests();
-  // await loadCosmetics();
-  // await loadChestRewards();
-  // await loadBattlePass();
+  await loadQuests();
+  await loadCosmetics();
+  await loadChestRewards();
+  await loadBattlePass();
   // await initPlayers();
-  // await addSampleGames(10);
+  // await addSampleGames(100);
   await initializeAdmins();
   // await addRealSample();
 })();

@@ -28,7 +28,7 @@ const Admin = () => import("../components/pages/admin/Admin");
 const Home = () => import("../components/pages/home/Home");
 const Credits = () => import("../components/pages/credits/Credits");
 
-// import Payment from "../components/pages/store/Payment";
+import Payment from "../components/pages/store/Payment";
 
 Vue.use(VueRouter);
 
@@ -43,10 +43,11 @@ const routes = [
     path: "/demo/",
     component: Home,
   },
-  // {
-  //   path: "/demo/payment",
-  //   component: Payment,
-  // },
+  {
+    path: "/demo/payment",
+    component: Payment,
+    meta: { requiresAdmin: true },
+  },
   {
     path: "/demo/changelog",
     component: Changelog,

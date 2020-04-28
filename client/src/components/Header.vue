@@ -4,7 +4,7 @@
       <div class="d-flex align-items-center">
         <SidebarToggle class="navbar-nav mr-1"></SidebarToggle>
         <router-link to="/demo" class="navbar-brand">
-          <img src="../assets/images/logo.png" alt="POG" />
+          <img src="../assets/images/logo_beta.png" alt="POG" />
         </router-link>
       </div>
       <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex">

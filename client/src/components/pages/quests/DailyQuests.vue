@@ -41,7 +41,7 @@
                 getTimeUntilReroll(quest.created)
                 }}
               </span>
-              <a v-on:click="rerollQuest(quest)" class="mr-3 reroll-button">
+              <a class="mr-3 reroll-button">
                 <img class="faded" src="./reroll.svg" alt="Reroll" />
               </a>
             </template>
@@ -138,6 +138,8 @@ export default {
   filter: alpha(opacity=40); /* msie */
   background-color: #000;
   border-radius: 100%;
+
+  cursor: default;
 }
 
 .single-quest {

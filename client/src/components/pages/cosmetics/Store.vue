@@ -90,8 +90,11 @@
                     <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
                     <div class="cosmetic__price">
                       <span class="cosmetic-price">
-                        <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
-                        {{ cosmetic.cost }} POGGERS
+                        <template v-if="cosmetic.cost > 0">
+                          <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+                          {{ cosmetic.cost }} POGGERS
+                        </template>
+                        <template v-else>${{getPrice(cosmetic)}}</template>
                       </span>
                     </div>
                   </div>
@@ -132,7 +135,7 @@
                     </ul>
                   </div>
                   <div
-                    v-if="alreadyOwn(cosmetic.cosmetic_id)"
+                    v-if="alreadyOwn(cosmetic)"
                     class="text-center mt-3"
                   >You already own this item!</div>
                   <div v-if="loggedIn" class="mt-4 d-flex justify-content-end">
@@ -147,7 +150,15 @@
                       variant="primary"
                     >Get more POGGERS</b-button>
                     <b-button
-                      :disabled="poggers < cosmetic.cost || alreadyOwn(cosmetic.cosmetic_id)"
+                      v-if="cosmetic.cosmetic_type === 'XP'"
+                      class="mr-2"
+                      variant="primary"
+                      :to="`/demo/payment?item=${cosmetic.cosmetic_id}`"
+                      @click="currentCosmetic=cosmetic"
+                    >Buy</b-button>
+                    <b-button
+                      v-else
+                      :disabled="poggers < cosmetic.cost || alreadyOwn(cosmetic)"
                       class="mr-2"
                       variant="primary"
                       v-b-modal.modal-confirm-purchase
@@ -258,7 +269,7 @@ export default {
       .then(cosmetics => {
         const purchaseableCosmetics = cosmetics
           .filter(cosmetic => {
-            return cosmetic.cost > 0;
+            return cosmetic.cost > 0 || cosmetic.cosmetic_type === "XP";
           })
           .sort((c1, c2) => {
             if (c1.cosmetic_type === "Chest" && c2.cosmetic_type !== "Chest") {
@@ -330,6 +341,21 @@ export default {
           document.documentElement.scrollTop = 0;
         });
     },
+    getPrice(cosmetic) {
+      const { cosmetic_id } = cosmetic;
+      switch (cosmetic_id) {
+        case "xp_1":
+          return 5;
+        case "xp_2":
+          return 10;
+        case "xp_3":
+          return 20;
+        case "xp_4":
+          return 50;
+        case "xp_5":
+          return 100;
+      }
+    },
     cosmeticImageSrc(cosmeticID) {
       return require(`./images/${cosmeticID}.png`);
     },
@@ -340,9 +366,15 @@ export default {
     cosmeticName(cosmeticID) {
       return cosmeticsData[cosmeticID];
     },
-    alreadyOwn(cosmeticID) {
+    alreadyOwn(cosmetic) {
+      const { cosmetic_type, cosmetic_id } = cosmetic;
+      const canBuyMultiple =
+        cosmetic_type == "BP Accelerator" ||
+        cosmetic_type == "Chest" ||
+        cosmetic_type == "XP";
+      if (canBuyMultiple) return false;
       return this.ownedCosmetics.some(
-        cosmetic => cosmetic.cosmetic_id === cosmeticID
+        cosmetic => cosmetic.cosmetic_id === cosmetic_id
       );
     },
     toggleFilter(name) {
