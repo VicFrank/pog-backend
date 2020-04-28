@@ -60,6 +60,7 @@ const filterCosmetics = (
     .filter((cosmetic) => {
       // Rarity Filter
       if (activeRarityFilters.size > 0) {
+        console.log(activeRarityFilters.has(cosmetic.rarity));
         return activeRarityFilters.has(cosmetic.rarity);
       }
       return true;

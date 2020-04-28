@@ -287,6 +287,13 @@ export default {
               this.isConsumableOrChest(c1) &&
               this.isConsumableOrChest(c2)
             ) {
+              // I didn't really think about how this works, I just kind of
+              // hoped that it would and it did
+              const c1Chest = c1.cosmetic_type == "Chest" ? 1 : -1;
+              const c2Chest = c2.cosmetic_type == "Chest" ? 1 : -1;
+              if (c1Chest != c2Chest) {
+                return c2Chest - c1Chest;
+              }
               return c1.cosmetic_id.localeCompare(c2.cosmetic_id);
             }
             const c1type = c1.cosmetic_type || "Companion";

@@ -84,6 +84,7 @@ export default {
           this.items = res.items;
           this.poggers = res.poggers;
           this.opened = true;
+          this.$store.dispatch("refreshPoggers");
           this.$emit("open");
         })
         .catch(err => {

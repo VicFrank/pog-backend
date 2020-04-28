@@ -828,7 +828,7 @@ module.exports = [
   {
     cost: -1,
     cosmetic_id: "icefrog",
-    rarity: "Legendary",
+    rarity: "Ancient",
     type: "Companion",
     equip_group: "companion",
   },

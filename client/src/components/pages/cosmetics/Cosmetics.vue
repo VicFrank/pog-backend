@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout__content">
     <div class="content">
-      <h1 class="page-title">Cosmetics</h1>
+      <h1 class="page-title">Armory</h1>
       <div class="container">
         <div class="row">
           <div class="col-xl-12">
@@ -40,13 +40,13 @@
 
             <b-alert v-model="showError" show variant="danger" dismissible>{{error}}</b-alert>
 
-            <div class="cosmetics mb-3">
+            <div v-if="filteredCosmetics.length > 0" class="cosmetics mb-3">
               <div
-                class="cosmetics__item"
                 v-for="[i, cosmetic] of filteredCosmetics.entries()"
                 :key="
                   cosmetic.cosmetic_id + cosmetic.created + cosmetic.equipped + i
                 "
+                class="cosmetics__item"
               >
                 <div class="cosmetic" @click="$bvModal.show(`modal-${i}`)">
                   <div class="cosmetic__picture">
@@ -125,6 +125,10 @@
                 </b-modal>
               </div>
             </div>
+            <div
+              v-else
+              class="h3 blue row mt-3"
+            >Nothing to see here... Go open some chests, and fill your Armory!</div>
           </div>
         </div>
       </div>
@@ -268,17 +272,24 @@ export default {
     hideModal(i) {
       this.$refs[`modal-${i}`][0].hide();
     },
+    hideAllModals() {
+      for (const modal of Object.values(this.$refs)) {
+        if (modal[0] && modal[0].hide) modal[0].hide();
+      }
+    },
     open() {
       this.needReload = true;
     },
     onHide() {
       if (this.needReload) {
         this.needReload = false;
+        this.hideAllModals();
         this.getPlayerCosmetics();
       }
     },
     claim() {
       this.needReload = false;
+      this.hideAllModals();
       this.getPlayerCosmetics();
     },
     equippable(cosmetic) {

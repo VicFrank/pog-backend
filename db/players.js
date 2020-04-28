@@ -508,6 +508,8 @@ module.exports = {
       const sql_query = `
       SELECT *
       FROM player_companions
+      JOIN cosmetics
+      USING (cosmetic_id)
       WHERE steam_id = $1
       ${filter}
       `;

@@ -264,13 +264,13 @@ export default {
     badgeImage() {
       const level = this.$store.getters.bpLevel;
       let badgeLevel = 1;
-      if (level >= 40) {
+      if (level >= 100) {
         badgeLevel = 5;
-      } else if (level >= 30) {
+      } else if (level >= 75) {
         badgeLevel = 4;
-      } else if (level >= 20) {
+      } else if (level >= 55) {
         badgeLevel = 3;
-      } else if (level >= 10) {
+      } else if (level >= 25) {
         badgeLevel = 2;
       } else {
         badgeLevel = 1;
