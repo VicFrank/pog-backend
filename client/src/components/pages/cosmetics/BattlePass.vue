@@ -86,6 +86,8 @@ export default {
     fetch(`/api/cosmetics/battle_pass`)
       .then(res => res.json())
       .then(rewards => {
+        // remove level 0 from the rewards
+        rewards.shift();
         this.rewards = rewards;
       })
       .catch(err => (this.error = err));

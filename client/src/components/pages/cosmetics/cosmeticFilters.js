@@ -43,6 +43,15 @@ const filterCosmetics = (
           return true;
         }
       }
+      if (currentFilter === "XP") {
+        if (
+          cosmetic_type === "XP" ||
+          cosmetic_type === "Chest XP" ||
+          cosmetic_type == "BP Accelerator"
+        ) {
+          return true;
+        }
+      }
       if (currentFilter === "Equipped") {
         return equipped;
       }

@@ -40,7 +40,7 @@
 
             <b-alert v-model="showError" show variant="danger" dismissible>{{error}}</b-alert>
 
-            <div class="cosmetics">
+            <div class="cosmetics mb-3">
               <div
                 class="cosmetics__item"
                 v-for="[i, cosmetic] of filteredCosmetics.entries()"
@@ -255,7 +255,6 @@ export default {
       );
     },
     isUsable(cosmetic) {
-      console.log("Is Usable");
       if (this.illegalAccelerator(cosmetic)) return false;
       return (
         cosmetic.cosmetic_type === "XP" ||

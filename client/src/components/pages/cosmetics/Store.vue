@@ -17,7 +17,7 @@
             <div class="overlay">
               <h3>Doomling</h3>
               <p>
-                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 100 POGGERS
+                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 150 POGGERS
               </p>
             </div>
           </div>
@@ -32,7 +32,7 @@
             <div class="overlay">
               <h3>Huntling</h3>
               <p>
-                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 100 POGGERS
+                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 150 POGGERS
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@
               </div>
             </div>
 
-            <div class="cosmetics">
+            <div class="cosmetics mb-3">
               <div
                 class="cosmetics__item"
                 v-for="cosmetic in filteredCosmetics"
@@ -213,6 +213,10 @@ export default {
         active: false
       },
       {
+        name: "XP",
+        active: false
+      },
+      {
         name: "All",
         isRight: true,
         active: true
@@ -272,20 +276,25 @@ export default {
             return cosmetic.cost > 0 || cosmetic.cosmetic_type === "XP";
           })
           .sort((c1, c2) => {
-            if (c1.cosmetic_type === "Chest" && c2.cosmetic_type !== "Chest") {
+            if (this.isConsumableOrChest(c1) && !this.isConsumableOrChest(c2)) {
               return -1;
             } else if (
-              c2.cosmetic_type === "Chest" &&
-              c1.cosmetic_type !== "Chest"
+              this.isConsumableOrChest(c2) &&
+              !this.isConsumableOrChest(c1)
             ) {
               return 1;
             } else if (
-              c1.cosmetic_type === "Chest" &&
-              c2.cosmetic_type === "Chest"
+              this.isConsumableOrChest(c1) &&
+              this.isConsumableOrChest(c2)
             ) {
               return c1.cosmetic_id.localeCompare(c2.cosmetic_id);
             }
-            return c1.cosmetic_type.localeCompare(c2.cosmetic_type);
+            const c1type = c1.cosmetic_type || "Companion";
+            const c2type = c2.cosmetic_type || "Companion";
+            if (c1type.localeCompare(c2type) === 0) {
+              return c1.cost - c2.cost;
+            }
+            return c1type.localeCompare(c2type);
           });
 
         this.cosmetics = purchaseableCosmetics;
@@ -306,6 +315,14 @@ export default {
   methods: {
     hideModal(cosmeticID) {
       this.$refs[`bp-modal-${cosmeticID}`][0].hide();
+    },
+    isConsumableOrChest(cosmetic) {
+      return (
+        cosmetic.cosmetic_type === "Chest" ||
+        cosmetic.cosmetic_type === "XP" ||
+        cosmetic.cosmetic_type === "Chest XP" ||
+        cosmetic.cosmetic_type === "BP Accelerator"
+      );
     },
     buyItem(cosmetic) {
       const { cosmetic_id, cost } = cosmetic;
