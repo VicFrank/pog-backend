@@ -216,10 +216,10 @@ async function initializeAdmins() {
 }
 
 (async function () {
-  await loadQuests();
-  await loadCosmetics();
-  await loadChestRewards();
-  await loadBattlePass();
+  // await loadQuests();
+  // await loadCosmetics();
+  // await loadChestRewards();
+  // await loadBattlePass();
   // await initPlayers();
   // await addSampleGames(100);
   await initializeAdmins();
