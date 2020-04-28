@@ -50,6 +50,9 @@ module.exports = {
       await this.createInitialDailyQuests(steamID, 3);
       await this.initializeAchievements(steamID);
 
+      // Give the player the default announcer pack
+      await this.giveCosmetic(steamID, "announcer1");
+
       return rows;
     } catch (error) {
       throw error;
