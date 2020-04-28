@@ -759,7 +759,6 @@ module.exports = {
   },
 
   async removeCosmetic(steamID, cosmeticID) {
-    console.log("Removing", steamID, cosmeticID);
     try {
       const queryText = `
         WITH deleted AS
@@ -1167,6 +1166,33 @@ module.exports = {
 
   // Quests
 
+  // Returns a random sample (either with or without replacement) from an array
+  randomSample(arr, k, withReplacement = false) {
+    let sample;
+    if (withReplacement === true) {
+      // sample with replacement
+      sample = Array.from(
+        { length: k },
+        () => arr[Math.floor(Math.random() * arr.length)]
+      );
+    } else {
+      // sample without replacement
+      if (k > arr.length) {
+        throw new RangeError(
+          "Sample size must be less than or equal to array length when sampling without replacement."
+        );
+      }
+      sample = arr
+        .map((a) => [a, Math.random()])
+        .sort((a, b) => {
+          return a[1] < b[1] ? -1 : 1;
+        })
+        .slice(0, k)
+        .map((a) => a[0]);
+    }
+    return sample;
+  },
+
   /**
    * Creates three random daily quests for the user.   *
    * This function should only be called when a player is
@@ -1218,7 +1244,7 @@ module.exports = {
    */
   async initializeAchievements(steamID) {
     try {
-      const allAchievements = await this.getAllAchievements();
+      const allAchievements = await quests.getAllAchievements();
 
       for (quest of allAchievements) {
         const insert_query = `
