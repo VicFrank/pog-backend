@@ -132,7 +132,7 @@ module.exports = {
         const teamData = teamInfo[team];
 
         // bots can have a null steamid
-        if (!steamid) continue;
+        if (!steamid || steamid == "0") continue;
 
         // update the username and get the player (if it exists)
         let { rows: playerRows } = await query(
