@@ -11,31 +11,42 @@
               <td class="tb-head" scope="col">KDA</td>
               <td class="tb-head" scope="col">Items</td>
             </tr>
-            <router-link
-              v-for="game in games"
-              :key="game.game_id"
-              :to="'/demo/games/' + game.game_id"
-              tag="tr"
-            >
-              <th scope="row">
-                <HeroImage :hero="game.hero"></HeroImage>
-                {{ game.hero | translateDota }}
-              </th>
-              <td>
-                <span v-if="game.won" class="win">Won</span>
-                <span v-else class="loss">Lost</span>
-              </td>
-              <td>{{ game.duration | hhmmss }}</td>
-              <td>{{ game.kills }}/{{ game.deaths }}/{{ game.assists }}</td>
-              <td>
-                <ItemImage v-if="game.item_0" :itemName="game.item_0"></ItemImage>
-                <ItemImage v-if="game.item_1" :itemName="game.item_1"></ItemImage>
-                <ItemImage v-if="game.item_2" :itemName="game.item_2"></ItemImage>
-                <ItemImage v-if="game.item_3" :itemName="game.item_3"></ItemImage>
-                <ItemImage v-if="game.item_4" :itemName="game.item_4"></ItemImage>
-                <ItemImage v-if="game.item_5" :itemName="game.item_5"></ItemImage>
-              </td>
-            </router-link>
+            <template v-if="loading">
+              <tr v-for="i in 3" :key="i">
+                <th scope="row" />
+                <td />
+                <td />
+                <td />
+                <td />
+              </tr>
+            </template>
+            <template v-else>
+              <router-link
+                v-for="game in games"
+                :key="game.game_id"
+                :to="'/games/' + game.game_id"
+                tag="tr"
+              >
+                <th scope="row">
+                  <HeroImage :hero="game.hero"></HeroImage>
+                  {{ game.hero | translateDota }}
+                </th>
+                <td>
+                  <span v-if="game.won" class="win">Won</span>
+                  <span v-else class="loss">Lost</span>
+                </td>
+                <td>{{ game.duration | hhmmss }}</td>
+                <td>{{ game.kills }}/{{ game.deaths }}/{{ game.assists }}</td>
+                <td>
+                  <ItemImage v-if="game.item_0" :itemName="game.item_0"></ItemImage>
+                  <ItemImage v-if="game.item_1" :itemName="game.item_1"></ItemImage>
+                  <ItemImage v-if="game.item_2" :itemName="game.item_2"></ItemImage>
+                  <ItemImage v-if="game.item_3" :itemName="game.item_3"></ItemImage>
+                  <ItemImage v-if="game.item_4" :itemName="game.item_4"></ItemImage>
+                  <ItemImage v-if="game.item_5" :itemName="game.item_5"></ItemImage>
+                </td>
+              </router-link>
+            </template>
           </tbody>
         </table>
       </div>
@@ -60,7 +71,8 @@ export default {
   },
 
   props: {
-    games: Array
+    games: Array,
+    loading: Boolean
   }
 };
 </script>
@@ -68,6 +80,7 @@ export default {
 <style scoped>
 tr {
   cursor: pointer;
+  height: 65px;
 }
 
 tr:hover {

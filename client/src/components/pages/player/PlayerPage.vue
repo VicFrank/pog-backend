@@ -8,14 +8,10 @@
             <div class="match-history position-relative">
               <h3 class="mt-5 mb-5 text-center">Match History</h3>
 
-              <PlayerGamesList v-bind:games="games"></PlayerGamesList>
+              <PlayerGamesList v-bind:games="games" loading="gamesLoading"></PlayerGamesList>
 
               <div class="more">
-                <router-link
-                  :to="`/demo/players/${$route.params.steam_id}/games`"
-                  class="blue"
-                  >View All</router-link
-                >
+                <router-link :to="`/players/${$route.params.steam_id}/games`" class="blue">View All</router-link>
               </div>
             </div>
 
@@ -53,30 +49,32 @@ import PlayerGamesList from "../games/PlayerGamesList.vue";
 
 export default {
   components: {
-    PlayerGamesList,
+    PlayerGamesList
   },
 
   data: () => ({
     error: "",
     games: [],
     playerStats: {},
+    gamesLoading: true
   }),
 
   created() {
     const steamID = this.$route.params.steam_id;
 
     fetch(`/api/players/${steamID}/games?limit=3`)
-      .then((res) => res.json())
-      .then((games) => {
+      .then(res => res.json())
+      .then(games => {
+        this.gamesLoading = false;
         this.games = games;
       });
 
     fetch(`/api/players/${steamID}/`)
-      .then((res) => res.json())
-      .then((playerStats) => {
+      .then(res => res.json())
+      .then(playerStats => {
         this.playerStats = playerStats;
       });
-  },
+  }
 };
 </script>
 

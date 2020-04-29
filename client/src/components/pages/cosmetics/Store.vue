@@ -22,18 +22,14 @@
             </div>
           </div>
           <div class="sale">
-            <img src="./images/huntling.png" alt="huntling" />
-            <img
-              src="./images/discount.png"
-              @click="$bvModal.show(`bp-modal-huntling`)"
-              class="sales-overlay"
-              alt
-            />
+            <router-link to="/poggers">
+              <img src="./images/poggers_shop.png" alt="Poggers Shop" />
+            </router-link>
             <div class="overlay">
-              <h3>Huntling</h3>
-              <p>
+              <h3>Buy Poggers</h3>
+              <!-- <p>
                 <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 150 POGGERS
-              </p>
+              </p>-->
             </div>
           </div>
         </div>
@@ -123,7 +119,7 @@
                   </template>
                   <template v-else>
                     <div>
-                      <img
+                      <b-img-lazy
                         class="preview-image"
                         v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
                         :alt="cosmetic.cosmetic_id"
@@ -165,13 +161,13 @@
                       v-if="poggers < cosmetic.cost"
                       class="mr-2"
                       variant="primary"
-                      to="/demo/poggers"
+                      to="/poggers"
                     >Get more POGGERS</b-button>
                     <b-button
                       v-if="cosmetic.cosmetic_type === 'XP'"
                       class="mr-2"
                       variant="primary"
-                      :to="`/demo/poggers`"
+                      :to="`/poggers`"
                     >Buy</b-button>
                     <b-button
                       v-else

@@ -4,6 +4,16 @@
     <div class="quest container p-0">
       <b-alert v-if="error != ''" show variant="danger" dismissible>{{error}}</b-alert>
       <div class="row">
+        <template v-if="loading">
+          <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <div class="single-quest loading-quest"></div>
+            <div class="quest-xp loading-quest-footer"></div>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <div class="single-quest loading-quest"></div>
+            <div class="quest-xp loading-quest-footer"></div>
+          </div>
+        </template>
         <div
           v-for="(quest, index) in quests"
           :key="quest.quest_id"
@@ -59,7 +69,8 @@ import ProgressBar from "../../utility/ProgressBar";
 export default {
   data: () => ({
     error: "",
-    quests: []
+    quests: [],
+    loading: true
   }),
 
   components: {
@@ -81,6 +92,7 @@ export default {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/daily_quests`)
         .then(res => res.json())
         .then(quests => {
+          this.loading = false;
           this.quests = quests;
         })
         .catch(err => (this.error = err));
@@ -202,5 +214,13 @@ export default {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.loading-quest {
+  height: 117px;
+}
+
+.loading-quest-footer {
+  height: 50px;
 }
 </style>

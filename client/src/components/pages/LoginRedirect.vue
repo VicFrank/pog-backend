@@ -23,13 +23,13 @@ export default {
             poggers
           });
 
-          this.$router.push("/demo/profile");
+          this.$router.push("/profile");
         } else {
           this.$store.commit({
             type: "setNotLoggedIn"
           });
 
-          this.$router.push("/demo");
+          this.$router.push("");
         }
       });
   }

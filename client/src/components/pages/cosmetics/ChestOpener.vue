@@ -78,7 +78,7 @@ export default {
       }
 
       const audio = new Audio(require("./images/inv_ticket.wav"));
-      audio.volume = 0.3;
+      audio.volume = 0.08;
       audio.play();
 
       fetch(`/api/players/${this.steamID}/open_chest/${cosmeticID}`, {

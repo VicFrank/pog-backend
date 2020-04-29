@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <Header v-if="!this.isRoot" />
+    <Header />
     <div class="main-layout" :key="loggedIn">
-      <Sidebar v-if="!this.isRoot" />
+      <Sidebar />
       <div
         @click="onMainContentClicked"
         v-bind:class="{ 'sidebar-open': sidebarOpen, 'neutral-div': true }"
       >
         <router-view class="main-content"></router-view>
-        <Footer v-if="!this.isRoot" />
+        <Footer />
       </div>
     </div>
   </div>
@@ -89,10 +89,6 @@ export default {
 
 .close:hover {
   color: white !important;
-}
-
-.toast-body {
-  /* color: #212529 !important; */
 }
 
 th {

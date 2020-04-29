@@ -4,6 +4,9 @@
       <h1 class="page-title">Achievements</h1>
       <div class="container">
         <b-alert v-if="error != ''" show variant="danger" dismissible>{{error}}</b-alert>
+        <div v-if="loading" class="d-flex justify-content-center mb-3">
+          <b-spinner label="Loading..."></b-spinner>
+        </div>
         <div class="row" v-for="quest in achievements" :key="quest.quest_id">
           <div class="col-xl-12">
             <div class="achievement">
@@ -49,7 +52,8 @@ import ProgressBar from "../utility/ProgressBar";
 export default {
   data: () => ({
     error: "",
-    achievements: []
+    achievements: [],
+    loading: true
   }),
 
   components: {
@@ -72,6 +76,7 @@ export default {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/achievements`)
         .then(res => res.json())
         .then(quests => {
+          this.loading = false;
           this.achievements = quests;
         });
     },

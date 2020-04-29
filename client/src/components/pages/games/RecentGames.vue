@@ -15,41 +15,48 @@
                     <td class="tb-head" scope="col">Radiant</td>
                     <td class="tb-head" scope="col">Dire</td>
                   </tr>
-                  <router-link
-                    v-for="game in games"
-                    :key="game.game_id"
-                    :to="'/demo/games/' + game.game_id"
-                    tag="tr"
-                  >
-                    <td>
-                      <div class="light-text">
-                        {{ game.created_at | dateFromNow }}
-                      </div>
-                    </td>
-                    <td>
-                      <span v-if="game.radiant_win" class="win"
-                        >Radiant Victory</span
-                      >
-                      <span v-else class="loss">Dire Victory</span>
-                    </td>
-                    <td>{{ game.duration | hhmmss }}</td>
-                    <td>
-                      <HeroImage
-                        v-for="(hero, index) in game.radiant"
-                        :key="index"
-                        :hero="hero"
-                        class="hero-image"
-                      ></HeroImage>
-                    </td>
-                    <td>
-                      <HeroImage
-                        v-for="(hero, index) in game.dire"
-                        :key="index"
-                        :hero="hero"
-                        class="hero-image"
-                      ></HeroImage>
-                    </td>
-                  </router-link>
+                  <template v-if="loading">
+                    <tr v-for="i in 100" :key="i">
+                      <td />
+                      <td />
+                      <td />
+                      <td />
+                      <td />
+                    </tr>
+                  </template>
+                  <template v-else>
+                    <router-link
+                      v-for="game in games"
+                      :key="game.game_id"
+                      :to="'/games/' + game.game_id"
+                      tag="tr"
+                    >
+                      <td>
+                        <div class="light-text">{{ game.created_at | dateFromNow }}</div>
+                      </td>
+                      <td>
+                        <span v-if="game.radiant_win" class="win">Radiant Victory</span>
+                        <span v-else class="loss">Dire Victory</span>
+                      </td>
+                      <td>{{ game.duration | hhmmss }}</td>
+                      <td>
+                        <HeroImage
+                          v-for="(hero, index) in game.radiant"
+                          :key="index"
+                          :hero="hero"
+                          class="hero-image"
+                        ></HeroImage>
+                      </td>
+                      <td>
+                        <HeroImage
+                          v-for="(hero, index) in game.dire"
+                          :key="index"
+                          :hero="hero"
+                          class="hero-image"
+                        ></HeroImage>
+                      </td>
+                    </router-link>
+                  </template>
                 </tbody>
               </table>
             </div>
@@ -68,25 +75,29 @@ export default {
     page: 1,
     itemsPerPage: 15,
     games: [],
+    loading: true
   }),
 
   components: {
-    HeroImage,
+    HeroImage
   },
 
   created() {
     fetch(`/api/games`)
       .then(res => res.json())
       .then(games => {
+        this.loading = false;
         this.games = games;
       });
-  },
+  }
 };
 </script>
 
 <style scoped>
 tr {
   cursor: pointer;
+  height: 31px;
+  width: 1109px;
 }
 
 tr:hover {

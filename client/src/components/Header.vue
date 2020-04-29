@@ -3,25 +3,26 @@
     <nav class="navbar navbar-expand-lg">
       <div class="d-flex align-items-center">
         <SidebarToggle class="navbar-nav mr-1"></SidebarToggle>
-        <router-link to="/demo" class="navbar-brand">
+        <router-link to class="navbar-brand">
           <img src="../assets/images/logo_beta.png" alt="POG" />
         </router-link>
       </div>
       <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex">
         <b-nav-item-dropdown text="LEARN" class="mr-5">
-          <b-dropdown-item to="/demo/faq">FAQ</b-dropdown-item>
-          <b-dropdown-item to="/demo/guardians">GUARDIANS</b-dropdown-item>
-          <b-dropdown-item to="/demo/media">MEDIA</b-dropdown-item>
+          <b-dropdown-item to="/faq">FAQ</b-dropdown-item>
+          <b-dropdown-item to="/guardians">GUARDIANS</b-dropdown-item>
+          <b-dropdown-item to="/media">VIDEOS</b-dropdown-item>
+          <b-dropdown-item to="/chest_rates">CHEST DROPS</b-dropdown-item>
         </b-nav-item-dropdown>
         <li class="nav-item mr-5">
-          <router-link class="nav-link" to="/demo/store">STORE</router-link>
+          <router-link class="nav-link" to="/store">STORE</router-link>
         </li>
         <b-nav-item-dropdown text="STATS" class="mr-5">
-          <b-dropdown-item to="/demo/games">GAMES</b-dropdown-item>
-          <b-dropdown-item to="/demo/heroes">HEROES</b-dropdown-item>
+          <b-dropdown-item to="/games">GAMES</b-dropdown-item>
+          <b-dropdown-item to="/heroes">HEROES</b-dropdown-item>
         </b-nav-item-dropdown>
         <li class="nav-item">
-          <router-link class="nav-link" to="/demo/changelog">CHANGE LOG</router-link>
+          <router-link class="nav-link" to="/changelog">CHANGE LOG</router-link>
         </li>
       </ul>
       <div class="d-flex align-items-center">

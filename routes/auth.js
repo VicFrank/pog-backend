@@ -27,12 +27,12 @@ router.get("/steam/success", (req, res) => {
 router.get(
   "/steam",
   passport.authenticate("steam", { failureRedirect: "/" }),
-  function(req, res) {
+  function (req, res) {
     res.redirect("/");
   }
 );
 
-router.get("/logout", function(req, res) {
+router.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/");
 });
@@ -44,16 +44,16 @@ router.get("/logout", function(req, res) {
 router.get(
   "/steam/return",
   // Issue #37 - Workaround for Express router module stripping the full url, causing assertion to fail
-  function(req, res, next) {
+  function (req, res, next) {
     req.url = req.originalUrl;
     next();
   },
   passport.authenticate("steam", { failureRedirect: "/" }),
-  function(req, res) {
+  function (req, res) {
     const baseUrl = process.env.IS_PRODUCTION
       ? "https://www.pathofguardians.com"
       : "http://localhost:8080";
-    res.redirect(`${baseUrl}/demo/redirect`);
+    res.redirect(`${baseUrl}/redirect`);
   }
 );
 

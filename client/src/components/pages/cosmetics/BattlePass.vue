@@ -16,13 +16,13 @@
                 <img src="./images/bp_placeholder.png" alt="placeholder" />
               </template>
               <template v-else>
-                <img
+                <b-img-lazy
                   v-if="getItemImage(i)"
                   :src="getItemImage(i)"
                   :alt="getRewardItem(i)"
                   @click="$bvModal.show(`bp-modal-${i}`)"
                 />
-                <img
+                <b-img-lazy
                   v-for="j in getChestAmount(i)"
                   :key="i + ' ' + j"
                   v-bind:src="getChestImage(i)"

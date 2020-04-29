@@ -3,6 +3,9 @@
     <div class="content">
       <h1 class="page-title">My Stats</h1>
       <div class="container">
+        <div v-if="loading" class="d-flex justify-content-center mb-3">
+          <b-spinner label="Loading..."></b-spinner>
+        </div>
         <div class="row">
           <div class="col-xl-12">
             <div class="my-stats">
@@ -38,13 +41,15 @@
 export default {
   data: () => ({
     error: "",
-    playerStats: {}
+    playerStats: {},
+    loading: true
   }),
 
   created() {
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/`)
       .then(res => res.json())
       .then(playerStats => {
+        this.loading = false;
         this.playerStats = playerStats;
       });
   }

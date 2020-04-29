@@ -3,7 +3,7 @@
     <div class="sidebar-content">
       <template v-if="loggedIn">
         <div class="user-info">
-          <router-link to="/demo/profile">
+          <router-link to="/profile">
             <h3>
               {{ username }}
               <span v-if="isAdmin">(Admin)</span>
@@ -23,18 +23,28 @@
         </div>
 
         <div class="d-flex justify-content-center align-items-center mt-1">
-          <img :src="badgeImage" class="custom-badge-img" alt="Battle Pass Badge" />
           <img
-            v-if="bpTier === 1"
+            :src="badgeImage"
+            class="custom-badge-img"
+            alt="Battle Pass Badge"
+            v-b-tooltip.hover
+            title="Badge"
+          />
+          <img
+            v-if="bpTier === 2"
             src="../assets/images/bp_tier1.png"
             class="custom-badge-img"
             alt="Battle Pass Badge"
+            v-b-tooltip.hover
+            title="Tier 1"
           />
           <img
             v-if="bpTier === 2"
             src="../assets/images/bp_tier2.png"
             class="custom-badge-img"
             alt="Battle Pass Badge"
+            v-b-tooltip.hover
+            title="Tier 2"
           />
         </div>
 
@@ -54,7 +64,7 @@
         <ul class="sidebar-nav">
           <li class="sidebar-nav__item">
             <router-link
-              to="/demo/profile"
+              to="/profile"
               class="sidebar-nav__link sidebar-nav__link_profile"
               exact-active-class="active"
             >Profile</router-link>
@@ -62,7 +72,7 @@
 
           <li class="sidebar-nav__item">
             <router-link
-              to="/demo/profile/battle_pass"
+              to="/profile/battle_pass"
               class="sidebar-nav__link sidebar-nav__link_battlepass"
               exact-active-class="active"
             >Battle Pass</router-link>
@@ -70,7 +80,7 @@
 
           <li class="sidebar-nav__item">
             <router-link
-              to="/demo/profile/armory"
+              to="/profile/armory"
               class="sidebar-nav__link sidebar-nav__link_armory"
               exact-active-class="active"
             >Armory</router-link>
@@ -78,7 +88,7 @@
 
           <li class="sidebar-nav__item">
             <router-link
-              to="/demo/profile/achievements"
+              to="/profile/achievements"
               class="sidebar-nav__link sidebar-nav__link_achievements"
               exact-active-class="active"
             >
@@ -91,20 +101,20 @@
           </li>
           <li class="sidebar-nav__item">
             <router-link
-              to="/demo/profile/stats"
+              to="/profile/stats"
               class="sidebar-nav__link sidebar-nav__link_stats"
               exact-active-class="active"
             >My Stats</router-link>
           </li>
           <li class="sidebar-nav__item">
             <router-link
-              to="/demo/profile/games"
+              to="/profile/games"
               class="sidebar-nav__link sidebar-nav__link_history"
               exact-active-class="active"
             >Match History</router-link>
           </li>
           <li v-if="isAdmin" class="sidebar-nav__item">
-            <router-link to="/demo/admin" class="sidebar-nav__link sidebar-nav__link_settings">Admin</router-link>
+            <router-link to="/admin" class="sidebar-nav__link sidebar-nav__link_settings">Admin</router-link>
           </li>
           <li>
             <b-button
@@ -124,37 +134,40 @@
       <hr class="d-lg-none" />
       <ul class="sidebar-nav">
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/demo/store" class="sidebar-nav__link" exact-active-class="active">Store</router-link>
+          <router-link to="/store" class="sidebar-nav__link" exact-active-class="active">Store</router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/demo/games" class="sidebar-nav__link" exact-active-class="active">Games</router-link>
+          <router-link to="/games" class="sidebar-nav__link" exact-active-class="active">Games</router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link
-            to="/demo/heroes"
-            class="sidebar-nav__link"
-            exact-active-class="active"
-          >Heroes</router-link>
+          <router-link to="/heroes" class="sidebar-nav__link" exact-active-class="active">Heroes</router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
           <router-link
-            to="/demo/changelog"
+            to="/changelog"
             class="sidebar-nav__link"
             exact-active-class="active"
           >Changelog</router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/demo/faq" class="sidebar-nav__link" exact-active-class="active">FAQ</router-link>
+          <router-link to="/faq" class="sidebar-nav__link" exact-active-class="active">FAQ</router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
           <router-link
-            to="/demo/guardians"
+            to="/guardians"
             class="sidebar-nav__link"
             exact-active-class="active"
           >Guardians</router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/demo/media" class="sidebar-nav__link" exact-active-class="active">Media</router-link>
+          <router-link to="/media" class="sidebar-nav__link" exact-active-class="active">Videos</router-link>
+        </li>
+        <li class="sidebar-nav__item d-lg-none">
+          <router-link
+            to="/chest_rates"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+          >Chest Drops</router-link>
         </li>
       </ul>
     </div>

@@ -9,12 +9,10 @@
             <div class="match-history position-relative">
               <h3 class="mt-5 mb-5 text-center">Match History</h3>
 
-              <PlayerGamesList v-bind:games="games"></PlayerGamesList>
+              <PlayerGamesList v-bind:games="games" :loading="gamesLoading"></PlayerGamesList>
 
               <div class="more">
-                <router-link to="/demo/profile/games" class="blue"
-                  >View All</router-link
-                >
+                <router-link to="/profile/games" class="blue">View All</router-link>
               </div>
             </div>
 
@@ -41,9 +39,7 @@
                 </tbody>
               </table>
               <div class="more">
-                <router-link to="/demo/profile/stats" class="blue"
-                  >View All</router-link
-                >
+                <router-link to="/profile/stats" class="blue">View All</router-link>
               </div>
             </div>
           </div>
@@ -60,19 +56,21 @@ import PlayerGamesList from "./games/PlayerGamesList.vue";
 export default {
   components: {
     DailyQuests,
-    PlayerGamesList,
+    PlayerGamesList
   },
 
   data: () => ({
     error: "",
     games: [],
     playerStats: {},
+    gamesLoading: true
   }),
 
   created() {
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/games?limit=3`)
       .then(res => res.json())
       .then(games => {
+        this.gamesLoading = false;
         this.games = games;
       });
 
@@ -81,7 +79,7 @@ export default {
       .then(playerStats => {
         this.playerStats = playerStats;
       });
-  },
+  }
 };
 </script>
 

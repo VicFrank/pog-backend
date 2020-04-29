@@ -10,7 +10,7 @@ import MyStats from "../components/pages/MyStats";
 import Profile from "../components/pages/Profile";
 import Stats from "../components/pages/Stats";
 import BattlePass from "../components/pages/cosmetics/BattlePass";
-import SplashPage from "../components/SplashPage";
+// import SplashPage from "../components/SplashPage";
 import Patrons from "../components/pages/Patrons";
 import Game from "../components/pages/games/Game";
 import RecentGames from "../components/pages/games/RecentGames";
@@ -18,6 +18,7 @@ import HeroStatsList from "../components/pages/games/HeroStatsList";
 import FAQ from "../components/pages/learn/FAQ";
 import Guardians from "../components/pages/learn/Guardians";
 import Media from "../components/pages/learn/Media";
+import ChestRates from "../components/pages/learn/ChestRates";
 import PlayerPage from "../components/pages/player/PlayerPage";
 import PlayerGames from "../components/pages/player/PlayerGames";
 import LoginRedirect from "../components/pages/LoginRedirect";
@@ -35,107 +36,111 @@ Vue.use(VueRouter);
 const routes = [
   { path: "/404", alias: "*", component: NotFound },
   { path: "*", redirect: "/404" },
+  // {
+  //   path: "/",
+  //   component: SplashPage,
+  // },
   {
     path: "/",
-    component: SplashPage,
-  },
-  {
-    path: "/demo/",
     component: Home,
   },
   {
-    path: "/demo/poggers",
+    path: "/poggers",
     component: PoggersStore,
   },
   {
-    path: "/demo/changelog",
+    path: "/changelog",
     component: Changelog,
   },
   {
-    path: "/demo/faq",
+    path: "/faq",
     component: FAQ,
   },
   {
-    path: "/demo/guardians",
+    path: "/guardians",
     component: Guardians,
   },
   {
-    path: "/demo/media",
+    path: "/media",
     component: Media,
   },
   {
-    path: "/demo/games",
+    path: "/chest_rates",
+    component: ChestRates,
+  },
+  {
+    path: "/games",
     component: RecentGames,
   },
   {
-    path: "/demo/patrons",
+    path: "/patrons",
     component: Patrons,
   },
   {
-    path: "/demo/games/:game_id",
+    path: "/games/:game_id",
     component: Game,
   },
   {
-    path: "/demo/players/:steam_id",
+    path: "/players/:steam_id",
     component: PlayerPage,
   },
   {
-    path: "/demo/players/:steam_id/games",
+    path: "/players/:steam_id/games",
     component: PlayerGames,
   },
   {
-    path: "/demo/heroes",
+    path: "/heroes",
     component: HeroStatsList,
   },
   {
-    path: "/demo/store",
+    path: "/store",
     component: Store,
   },
   {
-    path: "/demo/credits",
+    path: "/credits",
     component: Credits,
   },
   {
-    path: "/demo/admin",
+    path: "/admin",
     component: Admin,
     meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
-    path: "/demo/redirect",
+    path: "/redirect",
     component: LoginRedirect,
   },
   {
-    path: "/demo/profile",
+    path: "/profile",
     component: Profile,
     meta: { requiresAuth: true },
   },
   {
-    path: "/demo/profile/battle_pass",
+    path: "/profile/battle_pass",
     component: BattlePass,
     meta: { requiresAuth: true },
   },
   {
-    path: "/demo/profile/achievements",
+    path: "/profile/achievements",
     component: Achievements,
     meta: { requiresAuth: true },
   },
   {
-    path: "/demo/profile/armory",
+    path: "/profile/armory",
     component: Cosmetics,
     meta: { requiresAuth: true },
   },
   {
-    path: "/demo/profile/games",
+    path: "/profile/games",
     component: MatchHistory,
     meta: { requiresAuth: true },
   },
   {
-    path: "/demo/profile/stats",
+    path: "/profile/stats",
     component: MyStats,
     meta: { requiresAuth: true },
   },
   {
-    path: "/demo/profile/heroes",
+    path: "/profile/heroes",
     component: Stats,
     meta: { requiresAuth: true },
   },
@@ -151,7 +156,7 @@ router.beforeEach((to, from, next) => {
     if (store.getters.loggedIn) {
       next();
     } else {
-      next("/demo");
+      next("");
     }
   } else {
     next();
@@ -160,7 +165,7 @@ router.beforeEach((to, from, next) => {
     if (store.getters.isAdmin) {
       next();
     } else {
-      next("/demo");
+      next("");
     }
   } else {
     next();

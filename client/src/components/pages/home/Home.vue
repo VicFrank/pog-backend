@@ -95,7 +95,7 @@
           <li>
             There are two Guardian pits on the map (
             <a
-              href="https://www.pathofguardians.com/demo/guardians"
+              href="https://www.pathofguardians.com/guardians"
               target="_blank"
             >three total Guardians</a>). Killing them provides a buff to your team for 5 minutes.
           </li>
@@ -128,7 +128,7 @@
           <li>
             Level your
             <a
-              href="https://www.pathofguardians.com/demo/profile/battle_pass"
+              href="https://www.pathofguardians.com/profile/battle_pass"
               target="_blank"
             >Battle Pass</a> to upgrade item effects and much more!
           </li>
@@ -138,7 +138,7 @@
         <p>
           Just in case you needed another reason to keep playing POG, we've implemented a progression system that will be ever-evolving. Also be sure to keep an eye on the
           <a
-            href="https://www.pathofguardians.com/demo/store"
+            href="https://www.pathofguardians.com/store"
             target="_blank"
           >Store Page</a> for weekly sales!
         </p>
