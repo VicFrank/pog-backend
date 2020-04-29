@@ -589,8 +589,9 @@ module.exports = {
         UPDATE players
         SET poggers = poggers + $1
         WHERE steam_id = $2
+        RETURNING *
       `;
-      await query(queryText, [amount, steamID]);
+      const { rows } = await query(queryText, [amount, steamID]);
     } catch (error) {
       throw error;
     }

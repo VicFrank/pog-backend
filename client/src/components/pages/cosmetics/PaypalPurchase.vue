@@ -14,6 +14,7 @@
     </b-card-text>
     <b-card-text>Price: ${{item.cost_usd}}</b-card-text>
     <b-alert v-model="showError" variant="danger" dismissible>{{error}}</b-alert>
+    <b-alert v-model="showSuccess" variant="success" dismissible>{{success}}</b-alert>
     <template v-slot:footer>
       <div class="paypal-container" ref="paypal"></div>
     </template>
@@ -35,7 +36,9 @@ export default {
           "ARyCiFJGaPqBv5V0OJNPloAOgwUDp-YOu2cLtrp8fdTLlpBCaIfbXhnFHfVuMylXG9iyPaKCw2SR2D4V"
       },
       error: "",
-      showError: false
+      showError: false,
+      success: "",
+      showSuccess: false
     };
   },
 
@@ -51,6 +54,8 @@ export default {
     setLoaded() {
       const steamID = this.$store.state.auth.userSteamID;
       const itemID = this.item.item_id;
+      const cost_usd = this.item.cost_usd;
+      const _this = this;
       window.paypal
         .Buttons({
           style: {
@@ -66,10 +71,11 @@ export default {
                 {
                   amount: {
                     currency_code: "USD",
-                    value: this.item.cost_usd
+                    value: cost_usd
                   }
                 }
-              ]
+              ],
+              application_context: { shipping_preference: "NO_SHIPPING" }
             });
           },
           onApprove: function(data) {
@@ -84,17 +90,33 @@ export default {
               })
             })
               .then(res => res.json())
-              .then(() => {
-                this.$store.dispatch("refreshPlayer");
+              .then(res => {
+                if (res.message === "Payment Success") {
+                  _this.$store.dispatch("refreshPlayer");
+                  _this.success = res.message;
+                  _this.showSuccess = true;
+                  _this.$bvToast.toast(
+                    `Added ${_this.item.reward} ${_this.item.item_type} to your armory`,
+                    {
+                      title: `Notification`,
+                      toaster: "b-toaster-bottom-left",
+                      solid: true,
+                      appendToast: true
+                    }
+                  );
+                } else {
+                  _this.error = res.message;
+                  _this.showError = true;
+                }
               })
               .catch(err => {
-                this.error = err;
-                this.showError = true;
+                _this.error = err;
+                _this.showError = true;
               });
           },
           onError: err => {
-            this.showError = true;
-            this.error = err;
+            _this.showError = true;
+            _this.error = err;
           }
         })
         .render(this.$refs.paypal);

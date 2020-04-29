@@ -16,6 +16,7 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
 
     let request = new checkoutNodeJssdk.orders.OrdersGetRequest(orderID);
 
+    // send paypal the order ID
     let order;
     try {
       order = await paypalClient.client().execute(request);
@@ -24,28 +25,41 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
       return res.send(500);
     }
 
+    // Make sure this is a valid player
     const playerExists = await players.doesPlayerExist(steamID);
-
     if (!playerExists) {
       return res.status(400).send({ message: "Invalid SteamID" });
     }
 
-    const paidAmount = order.result.purchase_units[0].amount.value;
+    // make sure this is a valid payment
+    // this returns a float, so round
+    const paidAmount = Math.floor(order.result.purchase_units[0].amount.value);
     const itemData = await cosmetics.getItemPrice(itemID);
+    const { cost_usd, reward, item_type } = itemData;
+
     if (!itemData) {
       return res.status(400).send({ message: "Invalid ItemID" });
     }
-    const { cost_usd, reward, item_type } = itemData;
-
     if (paidAmount != cost_usd) {
       return res.status(400).send({ message: "Invalid Payment" });
     }
 
-    // log the transaction in the database
-    await logs.addTransactionLog(steamID, "claim_quest", {
-      steamID,
-      orderID,
-    });
+    // Call PayPal to capture the order
+    request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID);
+    request.requestBody({});
+
+    try {
+      const capture = await paypalClient.client().execute(request);
+      await logs.addTransactionLog(steamID, "paypal", {
+        steamID,
+        orderID,
+        itemID,
+        capture,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.send(500);
+    }
 
     if (item_type === "POGGERS") {
       // add the poggers to the player
@@ -58,7 +72,7 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
         .send({ message: "I don't know what to do with this" });
     }
 
-    res.status(200).send({ message: `Payment approved` });
+    res.status(200).send({ message: `Payment Success` });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.toString() });
