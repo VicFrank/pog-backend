@@ -16,7 +16,7 @@
     <div class="row">
       <b-button
         class="mx-auto"
-        href="https://steamcommunity.com/sharedfiles/filedetails/?id=1146215215"
+        href="https://steamcommunity.com/sharedfiles/filedetails/?id=2077900442"
         target="_blank"
         variant="primary"
       >PLAY NOW</b-button>

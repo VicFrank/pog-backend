@@ -2,34 +2,23 @@
   <div class="main-layout__content">
     <div class="content">
       <h1 class="page-title">Videos</h1>
-      <div class="container">
+      <div class="media-container mx-auto">
         <h3>POG Overview</h3>
         <div class="mb-4">
-          <b-embed
-            type="iframe"
-            aspect="16by9"
-            src="https://www.youtube.com/embed/twkWKkZzBEM"
-            allowfullscreen
-          ></b-embed>
+          <b-embed type="iframe" src="https://www.youtube.com/embed/twkWKkZzBEM" allowfullscreen></b-embed>
         </div>
         <h3>Picking your Hero</h3>
         <div class="mb-4">
-          <b-embed
-            type="iframe"
-            aspect="16by9"
-            src="https://www.youtube.com/embed/XkFGurRfD0A"
-            allowfullscreen
-          ></b-embed>
+          <b-embed type="iframe" src="https://www.youtube.com/embed/XkFGurRfD0A" allowfullscreen></b-embed>
         </div>
         <h3>Battle Pass</h3>
         <div class="mb-4">
-          <b-embed
-            type="iframe"
-            aspect="16by9"
-            src="https://www.youtube.com/embed/2b6lAcxA2AM"
-            allowfullscreen
-          ></b-embed>
+          <b-embed type="iframe" src="https://www.youtube.com/embed/2b6lAcxA2AM" allowfullscreen></b-embed>
         </div>
+        <!-- <h3>Placeholder</h3>
+        <div class="mb-4">
+          <b-embed type="iframe" src="https://www.youtube.com/embed/N57IyqO86dc" allowfullscreen></b-embed>
+        </div>-->
       </div>
     </div>
   </div>
@@ -39,4 +28,8 @@
 export default {};
 </script>
 
-<style></style>
+<style scoped>
+.media-container {
+  width: 600px;
+}
+</style>

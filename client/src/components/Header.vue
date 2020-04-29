@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg">
       <div class="d-flex align-items-center">
         <SidebarToggle class="navbar-nav mr-1"></SidebarToggle>
-        <router-link to class="navbar-brand">
+        <router-link to="/" class="navbar-brand">
           <img src="../assets/images/logo_beta.png" alt="POG" />
         </router-link>
       </div>
@@ -54,7 +54,7 @@
         <div>
           <b-button
             class="d-flex"
-            href="https://steamcommunity.com/sharedfiles/filedetails/?id=1146215215"
+            href="https://steamcommunity.com/sharedfiles/filedetails/?id=2077900442"
             target="_blank"
             variant="primary"
           >PLAY NOW</b-button>
