@@ -398,7 +398,7 @@ module.exports = {
         }
       }
 
-      return;
+      return updatedBP;
     } catch (error) {
       throw error;
     }
@@ -604,6 +604,9 @@ module.exports = {
         throw new Error("No transaction supplied");
       }
 
+      // Log the transaction
+      await logs.addTransactionLog(steamID, "transaction", transactionData);
+
       // Add and remove companions
       if (transactionData.companions) {
         const { companions } = transactionData;
@@ -663,7 +666,7 @@ module.exports = {
 
         const xpToAdd = bonusExp || 0;
 
-        if (xpToAdd > 0) {
+        if (xpToAdd != 0) {
           await this.addBattlePassExp(steamID, xpToAdd);
         }
 
@@ -726,9 +729,6 @@ module.exports = {
         `;
         await query(queryText, [statResetDate, steamID]);
       }
-
-      // Log the transaction
-      await logs.addTransactionLog(steamID, "transaction", transactionData);
 
       await query("COMMIT");
     } catch (error) {
@@ -838,6 +838,12 @@ module.exports = {
           break;
       }
 
+      // Log the transaction
+      await logs.addTransactionLog(steamID, "consume_item", {
+        steamID,
+        cosmeticID,
+      });
+
       // remove the item
       await this.removeCosmetic(steamID, cosmeticID);
       await this.addBattlePassExp(steamID, experience);
@@ -868,6 +874,12 @@ module.exports = {
       if (!hasCosmetic) {
         throw new Error("You don't own this item");
       }
+
+      // Log the transaction
+      await logs.addTransactionLog(steamID, "bpaccel", {
+        steamID,
+        cosmeticID,
+      });
 
       const currentBattlePass = await this.getPlayerBattlePass(steamID);
       const { tier } = currentBattlePass;
@@ -966,15 +978,15 @@ module.exports = {
         }
       }
 
-      // Do the transaction
-      await this.modifyPoggers(steamID, -price);
-      await this.giveCosmetic(steamID, cosmeticID);
-
       // log the transaction
       await logs.addTransactionLog(steamID, "poggers_purchase", {
         price,
         cosmeticID,
       });
+
+      // Do the transaction
+      await this.modifyPoggers(steamID, -price);
+      await this.giveCosmetic(steamID, cosmeticID);
 
       await query("COMMIT");
     } catch (error) {
@@ -1032,6 +1044,11 @@ module.exports = {
       if (existingChests.length === 0) {
         throw new Error("Tried to open non-existent chest");
       }
+
+      await logs.addTransactionLog(steamID, "open_chest", {
+        steamID,
+        chestID,
+      });
 
       // Increment chest opening progress
       this.addQuestProgressByStat(steamID, "chests_opened", 1);
@@ -1094,7 +1111,6 @@ module.exports = {
               }
             }
           }
-
           reward_odds -= 100;
         }
       }
@@ -1191,6 +1207,26 @@ module.exports = {
         .map((a) => a[0]);
     }
     return sample;
+  },
+
+  /**
+   * Gets all active quests and achievements, including
+   * achievements that don't have a player_quests row yet
+   * @param {string} steamID
+   */
+  async getAllQuestsForPlayer(steamID) {
+    try {
+      const sql_query = `
+      SELECT * FROM quests q
+      JOIN player_quests USING (quest_id)
+      WHERE steam_id = $1
+	    ORDER BY quest_id
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
   },
 
   /**
@@ -1294,6 +1330,12 @@ module.exports = {
       if (!createdRows[0].can_reroll)
         throw new Error(`Can't reroll quest younger than 23 hours`);
 
+      await logs.addTransactionLog(steamID, "quest_reroll", {
+        steamID,
+        oldQuest: questID,
+        newQuest: questToAddID,
+      });
+
       // Update the quest
       sql_query = `
         UPDATE player_quests
@@ -1367,6 +1409,12 @@ module.exports = {
       if (!this.playerHasQuest(steamID, questID))
         throw new Error("Player does not have quest");
 
+      // Log the transaction
+      await logs.addTransactionLog(steamID, "claim_quest", {
+        steamID,
+        questID,
+      });
+
       // Set the quest as claimed
       sql_query = `
         UPDATE player_quests
@@ -1385,13 +1433,6 @@ module.exports = {
       await query(sql_query, [steamID, poggers]);
 
       // Add the rewarded xp to the battle pass
-      sql_query = `
-        UPDATE player_battle_pass
-        SET total_experience = total_experience + $2
-        WHERE steam_id = $1
-      `;
-      await query(sql_query, [steamID, xp]);
-
       await this.addBattlePassExp(steamID, xp);
 
       await query("COMMIT");
@@ -1424,6 +1465,105 @@ module.exports = {
       }
     } catch (error) {
       throw error;
+    }
+  },
+
+  async addGameQuestProgress(playerData, teamData) {
+    const {
+      steamid: steamID,
+      username,
+      team,
+      banChoice, // can be null
+      availablePicks,
+      rerolledHeroes, // can be null
+      finalPick,
+      kills,
+      deaths,
+      assists,
+      lastHits,
+      denies,
+      doubleKills,
+      rampages,
+      heroDamage,
+      buildingDamage,
+      heroHealing,
+      tpScrollsUsed,
+      runesUsed,
+      healthDropDuration,
+      currentGold,
+      totalGold,
+      totalExp,
+      level,
+      abilities,
+      itemPurchases,
+      finalInventory,
+      permanentBuffs,
+      disconnectEvents,
+      abandoned,
+      winner,
+      neutralItems,
+      healingGoblets,
+      highFives,
+    } = playerData;
+
+    const { guardianKills, buildingKills } = teamData;
+
+    const activeQuests = await this.getAllQuestsForPlayer(steamID);
+
+    for (let quest of activeQuests) {
+      const questID = quest.quest_id;
+      let progress = 0;
+      switch (quest.stat) {
+        case "runes_picked_up":
+          progress = runesUsed;
+          break;
+        case "neutral_item_purchased":
+          progress = neutralItems;
+          break;
+        case "games_won":
+          progress = winner ? 1 : 0;
+          break;
+        case "damage_dealt":
+          progress = heroDamage;
+          break;
+        case "guardians_killed":
+          progress = guardianKills ? Object.keys(guardianKills).length : 0;
+          break;
+        case "nokrah_purchased":
+          const nokrahPurchased = itemPurchases
+            ? Object.values(itemPurchases).indexOf("item_nokrash_blade") > -1
+            : 0;
+          progress = nokrahPurchased ? 1 : 0;
+          break;
+        case "creeps_killed":
+          progress = lastHits;
+          break;
+        case "gold_earned":
+          progress = totalGold;
+          break;
+        case "rampages":
+          progress = rampages;
+          break;
+        case "healing_goblets":
+          progress = healingGoblets;
+          break;
+        case "total_healed":
+          progress = heroHealing;
+          break;
+        case "guardian_buffs_received":
+          // progress = ;
+          break;
+        case "max_level":
+          progress = level == 30 ? 1 : 0;
+          break;
+        case "building_damage":
+          progress = buildingDamage;
+          break;
+        case "high_fives":
+          progress = highFives;
+          break;
+      }
+      await this.incrementQuestProgress(steamID, questID, progress);
     }
   },
 };

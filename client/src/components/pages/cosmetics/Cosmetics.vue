@@ -40,6 +40,9 @@
 
             <b-alert v-model="showError" show variant="danger" dismissible>{{error}}</b-alert>
 
+            <div v-if="loading" class="d-flex justify-content-center mb-3">
+              <b-spinner label="Loading..."></b-spinner>
+            </div>
             <div v-if="filteredCosmetics.length > 0" class="cosmetics mb-3">
               <div
                 v-for="[i, cosmetic] of filteredCosmetics.entries()"
@@ -85,6 +88,17 @@
                         :alt="cosmetic.cosmetic_id"
                       />
                     </div>
+                    <template v-if="Array.isArray(filteredCosmetics)">
+                      <ul class="mt-1">
+                      <li
+                        v-for="line in chestRewards[cosmetic.cosmetic_id]"
+                        :key="line + cosmetic.cosmetic_id"
+                      >{{line}}</li>
+                    </ul>
+                    </template>
+                    <template v-else>
+                      {{chestRewards[cosmetic.cosmetic_id]}}
+                    </template>
                     <div
                       v-if="illegalAccelerator(cosmetic)"
                       class="text-center"
@@ -126,7 +140,7 @@
               </div>
             </div>
             <div
-              v-else
+              v-else-if="!loading"
               class="h3 blue row mt-3"
             >Nothing to see here... Go open some chests, and fill your Armory!</div>
           </div>
@@ -142,16 +156,19 @@ import webm from "./webmList";
 import CosmeticsFilter from "./CosmeticsFilter.vue";
 import ChestOpener from "./ChestOpener.vue";
 import filterCosmetics from "./cosmeticFilters";
+import chestRewards from "./chests";
 
 export default {
   data: () => ({
     error: "",
     showError: false,
+    loading: true,
     cosmetics: [],
     filteredCosmetics: [],
     currentFilter: "All",
     searchText: "",
     needReload: false,
+    chestRewards: [],
     filters: [
       {
         name: "Companions",
@@ -210,6 +227,7 @@ export default {
   },
 
   created() {
+    this.chestRewards = chestRewards;
     this.getPlayerCosmetics();
   },
 
@@ -244,10 +262,12 @@ export default {
           });
           this.cosmetics = sortedCosmetics;
           this.filteredCosmetics = sortedCosmetics;
+          this.loading = false;
         })
         .catch(err => {
           this.showError = true;
           this.error = err;
+          this.loading = false;
         });
     },
     isConsumableOrChest(cosmetic) {

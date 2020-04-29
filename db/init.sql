@@ -111,6 +111,14 @@ CREATE TABLE IF NOT EXISTS cosmetics (
   rarity TEXT
 );
 
+DROP TABLE IF EXISTS item_prices;
+CREATE TABLE IF NOT EXISTS item_prices (
+  item_id TEXT PRIMARY KEY,
+  cost_usd INTEGER NOT NULL,
+  item_type TEXT,
+  reward INTEGER
+);
+
 CREATE TABLE IF NOT EXISTS player_companions (
   companion_id SERIAL PRIMARY KEY,
   cosmetic_id TEXT NOT NULL REFERENCES cosmetics (cosmetic_id) ON UPDATE CASCADE,

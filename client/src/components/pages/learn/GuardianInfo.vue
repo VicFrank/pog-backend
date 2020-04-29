@@ -4,7 +4,7 @@
       <div class="guardian-name">{{ guardianData.name }}</div>
       <div class="h4">{{ guardianData.title }}</div>
     </div>
-    <b-img :src="guardianData.img" :alt="guardianData.name" class="mb-3" fluid />
+    <img :src="guardianData.img" :alt="guardianData.name" class="guardian-image" fluid />
     <div class="abilities-list">
       <img
         v-for="ability in guardianData.abilities"
@@ -79,6 +79,11 @@ export default {
 .guardian-titles {
   line-height: normal;
   text-align: center;
+}
+
+.guardian-image {
+  width: 600px;
+  height: auto;
 }
 
 .ability-image {

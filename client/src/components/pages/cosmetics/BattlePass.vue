@@ -3,7 +3,7 @@
     <div class="content">
       <h1 class="page-title">Battle Pass</h1>
       <ul class="battlepass-timeline">
-        <li v-for="i in rewards.length" :key="i">
+        <li v-for="i in 100" :key="i">
           <div
             v-bind:class="{
               'direction-r': isEven(i),
@@ -12,24 +12,29 @@
           >
             <span>Level {{ i }}</span>
             <div v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }">
-              <img
-                v-if="getItemImage(i)"
-                :src="getItemImage(i)"
-                :alt="getRewardItem(i)"
-                @click="$bvModal.show(`bp-modal-${i}`)"
-              />
-              <img
-                v-if="getChestAmount(i) > 0"
-                v-bind:src="getChestImage(i)"
-                alt="Chest Image"
-                @click="$bvModal.show(getChestLevel(i))"
-              />
+              <template v-if="loading">
+                <img src="./images/bp_placeholder.png" alt="placeholder" />
+              </template>
+              <template v-else>
+                <img
+                  v-if="getItemImage(i)"
+                  :src="getItemImage(i)"
+                  :alt="getRewardItem(i)"
+                  @click="$bvModal.show(`bp-modal-${i}`)"
+                />
+                <img
+                  v-if="getChestAmount(i) > 0"
+                  v-bind:src="getChestImage(i)"
+                  alt="Chest Image"
+                  @click="$bvModal.show(getChestLevel(i))"
+                />
 
-              <b-modal :id="`bp-modal-${i}`" :title="getItemName(i)" centered hide-footer>
-                <video v-if="getMovie(i)" width="100%" height="360" autoplay muted loop>
-                  <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
-                </video>
-              </b-modal>
+                <b-modal :id="`bp-modal-${i}`" :title="getItemName(i)" centered hide-footer>
+                  <video v-if="getMovie(i)" width="100%" height="360" autoplay muted loop>
+                    <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
+                  </video>
+                </b-modal>
+              </template>
             </div>
           </div>
         </li>
@@ -77,6 +82,7 @@ export default {
   data: () => ({
     error: "",
     rewards: [],
+    loading: true,
     chestRewards
   }),
 
@@ -89,6 +95,7 @@ export default {
         // remove level 0 from the rewards
         rewards.shift();
         this.rewards = rewards;
+        this.loading = false;
       })
       .catch(err => (this.error = err));
   },

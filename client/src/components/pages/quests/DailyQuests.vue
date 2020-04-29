@@ -41,8 +41,8 @@
                 getTimeUntilReroll(quest.created)
                 }}
               </span>
-              <a class="mr-3 reroll-button">
-                <img class="faded" src="./reroll.svg" alt="Reroll" />
+              <a class="mr-3 reroll-button-inactive">
+                <img src="./reroll.svg" alt="Reroll" />
               </a>
             </template>
           </div>
@@ -133,7 +133,12 @@ export default {
   line-height: 43px;
 }
 
-.reroll-button .faded {
+.reroll-button-inactive {
+  cursor: default;
+  line-height: 43px;
+}
+
+.reroll-button-inactive img {
   opacity: 0.4;
   filter: alpha(opacity=40); /* msie */
   background-color: #000;

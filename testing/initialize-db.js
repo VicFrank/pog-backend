@@ -1,8 +1,9 @@
 const games = require("../db/games");
 const quests = require("../db/quests");
 const players = require("../db/players");
-const cosmetics = require("../db/cosmetics");
+const itemPrices = require("./item-prices");
 const questsList = require("./quests-list");
+const cosmetics = require("../db/cosmetics");
 const cosmeticsList = require("./cosmetics-list");
 const battlePassRewards = require("./battle-pass-rewards");
 const { generateRandomSampleData, realSample } = require("./sample-data");
@@ -55,6 +56,29 @@ async function loadCosmetics() {
       promises.push(
         cosmetics.createCosmetic(cost, cosmetic_id, rarity, type, equip_group)
       );
+    }
+
+    await Promise.all(promises);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function loadItemPrices() {
+  try {
+    const loadedItemPrices = await cosmetics.getItemPrices();
+
+    if (loadedItemPrices.length > 0) {
+      console.log("Cosmetics are already loaded");
+      return;
+    }
+
+    console.log("Adding Item Prices...");
+
+    let promises = [];
+    for (let itemPrice of itemPrices) {
+      const { cost_usd, item_id, type, reward } = itemPrice;
+      promises.push(cosmetics.createItemPrice(cost_usd, item_id, type, reward));
     }
 
     await Promise.all(promises);
@@ -216,12 +240,13 @@ async function initializeAdmins() {
 }
 
 (async function () {
-  // await loadQuests();
-  // await loadCosmetics();
-  // await loadChestRewards();
-  // await loadBattlePass();
-  // await initPlayers();
-  // await addSampleGames(100);
+  await loadQuests();
+  await loadCosmetics();
+  await loadChestRewards();
+  await loadBattlePass();
+  await loadItemPrices();
+  await initPlayers();
+  await addSampleGames(100);
   await initializeAdmins();
   // await addRealSample();
 })();

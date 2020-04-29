@@ -108,8 +108,11 @@
                 >
                   <p class="text-center h3">{{cosmeticName(cosmetic.cosmetic_id)}}</p>
                   <p class="text-center">
-                    <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
-                    {{ cosmetic.cost }} POGGERS
+                    <template v-if="cosmetic.cost > 0">
+                      <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+                      {{ cosmetic.cost }} POGGERS
+                    </template>
+                    <template v-else>${{getPrice(cosmetic)}}</template>
                   </p>
                   <template v-if="cosmeticMovie(cosmetic.cosmetic_id)">
                     <video width="100%" height="360" autoplay muted loop>
@@ -135,6 +138,22 @@
                     </ul>
                   </div>
                   <div
+                    v-else-if="chestRewards[cosmetic.cosmetic_id]"
+                  >
+                    <template v-if="Array.isArray(filteredCosmetics)">
+                      {{chestRewards[cosmetic.cosmetic_id][0]}}
+                      <ul class="mt-1">
+                      <li
+                        v-for="line in chestRewards[cosmetic.cosmetic_id]"
+                        :key="line + cosmetic.cosmetic_id"
+                      >{{line}}</li>
+                    </ul>
+                    </template>
+                    <template v-else>
+                      {{chestRewards[cosmetic.cosmetic_id]}}
+                    </template>
+                  </div>
+                  <div
                     v-if="alreadyOwn(cosmetic)"
                     class="text-center mt-3"
                   >You already own this item!</div>
@@ -148,13 +167,13 @@
                       v-if="poggers < cosmetic.cost"
                       class="mr-2"
                       variant="primary"
+                      to="/demo/poggers"
                     >Get more POGGERS</b-button>
                     <b-button
                       v-if="cosmetic.cosmetic_type === 'XP'"
                       class="mr-2"
                       variant="primary"
-                      :to="`/demo/payment?item=${cosmetic.cosmetic_id}`"
-                      @click="currentCosmetic=cosmetic"
+                      :to="`/demo/poggers`"
                     >Buy</b-button>
                     <b-button
                       v-else

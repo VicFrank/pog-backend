@@ -1030,6 +1030,7 @@ module.exports = [
   },
   {
     cost: -2,
+    cost_usd: 5,
     cosmetic_id: "xp_1",
     rarity: "Common",
     type: "XP",
@@ -1037,6 +1038,7 @@ module.exports = [
   },
   {
     cost: -2,
+    cost_usd: 10,
     cosmetic_id: "xp_2",
     rarity: "Uncommon",
     type: "XP",
@@ -1044,6 +1046,7 @@ module.exports = [
   },
   {
     cost: -2,
+    cost_usd: 20,
     cosmetic_id: "xp_3",
     rarity: "Rare",
     type: "XP",
@@ -1051,6 +1054,7 @@ module.exports = [
   },
   {
     cost: -2,
+    cost_usd: 50,
     cosmetic_id: "xp_4",
     rarity: "Mythical",
     type: "XP",
@@ -1058,6 +1062,7 @@ module.exports = [
   },
   {
     cost: -2,
+    cost_usd: 100,
     cosmetic_id: "xp_5",
     rarity: "Legendary",
     type: "XP",

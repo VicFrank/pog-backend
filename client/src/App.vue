@@ -78,6 +78,27 @@ export default {
   vertical-align: top;
 }
 
+.toast-header {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  color: white !important;
+}
+
+.toast {
+  background-color: #373d46 !important;
+}
+
+.close:hover {
+  color: white !important;
+}
+
+.toast-body {
+  /* color: #212529 !important; */
+}
+
+th {
+  color: #fcfcfc;
+}
+
 @font-face {
   font-family: "Radiance-Regular";
   src: url("./assets/fonts/Radiance-Regular.otf");

@@ -142,8 +142,13 @@ const cosmeticsData = {
   xp_coupon_1000: "1000 bonus XP pack",
   xp_coupon_2000: "2000 bonus XP pack",
   xp_coupon_5000: "5000 bonus XP pack",
-  xp_coupon_10000: "10000 bonus XP pack",
-  xp_coupon_25000: "25000 bonus XP pack",
+  xp_coupon_10000: "10,000 bonus XP pack",
+  xp_coupon_25000: "25,000 bonus XP pack",
+  xp_1: "Bonus XP Pack 10,000",
+  xp_2: "Bonus XP Pack 25,000",
+  xp_3: "Bonus XP Pack 60,000",
+  xp_4: "Bonus XP Pack 175,000",
+  xp_5: "Bonus XP Pack 400,000",
 };
 
 export default cosmeticsData;

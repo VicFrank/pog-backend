@@ -50,6 +50,49 @@ module.exports = {
       throw error;
     }
   },
+  async createItemPrice(cost_usd, item_id, type, reward) {
+    try {
+      const sql_query = `
+        INSERT INTO item_prices
+        (cost_usd, item_id, item_type, reward)
+        VALUES
+        ($1, $2, $3, $4)
+        RETURNING *
+      `;
+      const { rows } = await query(sql_query, [
+        cost_usd,
+        item_id,
+        type,
+        reward,
+      ]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getItemPrices() {
+    try {
+      const sql_query = `
+        SELECT * FROM item_prices
+      `;
+      const { rows } = await query(sql_query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getItemPrice(itemID) {
+    try {
+      const sql_query = `
+        SELECT * FROM item_prices
+        WHERE item_id = $1
+      `;
+      const { rows } = await query(sql_query, [itemID]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
   async getBattlePass() {
     try {
       const sql_query = `
@@ -93,7 +136,7 @@ module.exports = {
       lastLevel++;
     }
 
-    const level100TotalXP = battlePass[99].total_exp;
+    const level100TotalXP = battlePass[lastLevel - 1].total_xp;
     const overflowXP = totalXP - level100TotalXP;
 
     return 100 + Math.floor(overflowXP / 8000);
@@ -141,7 +184,7 @@ module.exports = {
         let total_xp = 0;
         let next_level_xp = 0;
         if (level > 100) {
-          total_xp = 372125 + 8000 * level - 100;
+          total_xp = 372125 + 8000 * (level - 100);
           next_level_xp = 8000;
         }
 

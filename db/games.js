@@ -155,7 +155,7 @@ module.exports = {
           }
 
           // Add progress to all achievements/quests
-          await quests.addGameQuestProgress(
+          await players.addGameQuestProgress(
             { ...playerData, winner },
             teamData
           );

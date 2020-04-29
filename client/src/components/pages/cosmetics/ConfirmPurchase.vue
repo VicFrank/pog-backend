@@ -15,18 +15,33 @@
 </template>
 
 <script>
+import cosmeticsData from "./cosmeticNames";
+
 export default {
   props: {
     cosmetic: {}
   },
   methods: {
     buy() {
+      this.$bvToast.toast(
+        `Added ${this.cosmeticName(this.cosmetic)} to your armory`,
+        {
+          title: `Notification`,
+          toaster: "b-toaster-bottom-left",
+          solid: true,
+          appendToast: true
+        }
+      );
+
       this.$refs["modal-confirm-purchase"].hide();
       this.$emit("buy", this.cosmetic);
     },
     cancel() {
       this.$refs["modal-confirm-purchase"].hide();
       this.$emit("cancel", this.cosmetic.cosmetic_id);
+    },
+    cosmeticName(cosmetic) {
+      return cosmeticsData[cosmetic.cosmetic_id];
     }
   }
 };

@@ -28,7 +28,7 @@ const Admin = () => import("../components/pages/admin/Admin");
 const Home = () => import("../components/pages/home/Home");
 const Credits = () => import("../components/pages/credits/Credits");
 
-import Payment from "../components/pages/store/Payment";
+import PoggersStore from "../components/pages/cosmetics/RealMoneyStore";
 
 Vue.use(VueRouter);
 
@@ -44,9 +44,8 @@ const routes = [
     component: Home,
   },
   {
-    path: "/demo/payment",
-    component: Payment,
-    meta: { requiresAdmin: true },
+    path: "/demo/poggers",
+    component: PoggersStore,
   },
   {
     path: "/demo/changelog",

@@ -2,9 +2,10 @@
   <div>
     <img
       v-if="!opened"
-      class="chest-image"
+      class="chest-image clickable"
       v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
       :alt="cosmetic.cosmetic_id"
+      @click="open"
     />
     <img
       v-else
@@ -15,11 +16,15 @@
     <div v-if="items.length > 0" class="mt-2">
       <div class="h2 text-center blue">Items</div>
       <div>
-        <div
-          v-for="item of items"
-          :key="item.cosmetic_id"
-          class="text-center"
-        >{{cosmeticName(item.cosmetic_id)}} - {{item.rarity}}</div>
+        <div v-for="item of items" :key="item.cosmetic_id" class="text-center mb-2">
+          <div class="mb-2">{{cosmeticName(item.cosmetic_id)}}</div>
+          <img
+            class="reward-image mb-1"
+            v-bind:src="cosmeticImageSrc(item.cosmetic_id)"
+            :alt="item.cosmetic_id"
+          />
+          <div class="text-muted">{{item.rarity}}</div>
+        </div>
       </div>
     </div>
 
@@ -72,6 +77,10 @@ export default {
         return;
       }
 
+      const audio = new Audio(require("./images/inv_ticket.wav"));
+      audio.volume = 0.5;
+      audio.play();
+
       fetch(`/api/players/${this.steamID}/open_chest/${cosmeticID}`, {
         method: "post"
       })
@@ -116,5 +125,14 @@ export default {
 
 .chest-image:hover {
   transform: scale(1.1);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.reward-image {
+  width: 150px;
+  height: 150px;
 }
 </style>

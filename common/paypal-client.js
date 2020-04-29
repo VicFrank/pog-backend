@@ -12,10 +12,20 @@ function client() {
 }
 
 function environment() {
-  let clientId = keys.paypal.dev.clientID;
-  let clientSecret = keys.paypal.dev.secret;
+  if (process.env.IS_PRODUCTION) {
+    const clientId = keys.paypal.production.clientID;
+    const clientSecret = keys.paypal.production.secret;
 
-  return new checkoutNodeJssdk.core.SandboxEnvironment(clientId, clientSecret);
+    return new checkoutNodeJssdk.core.LiveEnvironment(clientId, clientSecret);
+  } else {
+    const clientId = keys.paypal.dev.clientID;
+    const clientSecret = keys.paypal.dev.secret;
+
+    return new checkoutNodeJssdk.core.SandboxEnvironment(
+      clientId,
+      clientSecret
+    );
+  }
 }
 
 module.exports = { client: client };

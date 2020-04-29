@@ -22,6 +22,16 @@ router.get("/battle_pass", async (req, res) => {
   }
 });
 
+router.get("/item_prices", async (req, res) => {
+  try {
+    const prices = await cosmetics.getItemPrices();
+    res.status(201).send(prices);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.toString() });
+  }
+});
+
 router.get("/chest_rewards", async (req, res) => {
   try {
     const rows = await cosmetics.getAllChestRewards();

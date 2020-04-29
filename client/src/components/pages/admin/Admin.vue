@@ -34,8 +34,8 @@ export default {
     BattlePassAdmin,
     CosmeticsAdmin,
     PlayersAdmin,
-    QuestsAdmin,
-  },
+    QuestsAdmin
+  }
 };
 </script>
 
