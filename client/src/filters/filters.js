@@ -122,6 +122,7 @@ const translationMap = {
   npc_dota_hero_void_spirit: "Void Spirit",
   npc_dota_hero_mars: "Mars",
   npc_dota_hero_grimstroke: "Grimstroke",
+  npc_dota_hero_snapfire: "Snapfire",
 
   item_abyssal_blade: "Abyssal Blade",
   item_arcane_ring: "Arcane Ring",
