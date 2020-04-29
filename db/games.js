@@ -160,7 +160,6 @@ module.exports = {
             teamData
           );
 
-          // console.log(gameID, steamid);
           await players.givePostGameBP(steamid);
         }
 

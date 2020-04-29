@@ -23,7 +23,8 @@
                   @click="$bvModal.show(`bp-modal-${i}`)"
                 />
                 <img
-                  v-if="getChestAmount(i) > 0"
+                  v-for="j in getChestAmount(i)"
+                  :key="i + ' ' + j"
                   v-bind:src="getChestImage(i)"
                   alt="Chest Image"
                   @click="$bvModal.show(getChestLevel(i))"
