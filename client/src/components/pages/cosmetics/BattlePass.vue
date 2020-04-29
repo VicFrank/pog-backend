@@ -33,6 +33,28 @@
                   <video v-if="getMovie(i)" width="100%" height="360" autoplay muted loop>
                     <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
                   </video>
+
+                  <div class="text-center">
+                    <div>
+                      <img
+                        v-if="getItemImage(i) && !getMovie(i)"
+                        :src="getItemImage(i)"
+                        :alt="getRewardItem(i)"
+                        class="mb-2"
+                      />
+                    </div>
+
+                    <template v-if="Array.isArray(getRewardDescription(i))">
+                      {{getRewardDescription(i)[0]}}
+                      <ul class="mt-1">
+                        <li
+                          v-for="line in getRewardDescription(i).slice(1)"
+                          :key="line + cosmetic.cosmetic_id"
+                        >{{line}}</li>
+                      </ul>
+                    </template>
+                    <template v-else>{{getRewardDescription(i)}}</template>
+                  </div>
                 </b-modal>
               </template>
             </div>
@@ -120,6 +142,11 @@ export default {
     getRewardItem(level) {
       return this.rewards[level - 1].cosmetic_id;
     },
+    getRewardDescription(level) {
+      if (this.getRewardItem(level)) {
+        return chestRewards[this.getRewardItem(level)];
+      }
+    },
     getItemName(level) {
       const cosmetic_id = this.rewards[level - 1].cosmetic_id;
       return names[cosmetic_id];
@@ -141,6 +168,13 @@ export default {
       if (!chest || chest === null) return false;
 
       return require(`./images/chest${chest}.png`);
+    },
+    getChestMultiplierImage(level) {
+      const chest = this.rewards[level - 1].chest;
+      if (!chest || chest === null) return false;
+      const amount = this.getChestAmount(level);
+
+      return require(`./images/x${amount}-1.png`);
     },
     getChestLevel(level) {
       const chest = this.rewards[level - 1].chest;

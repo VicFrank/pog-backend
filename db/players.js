@@ -273,7 +273,46 @@ module.exports = {
     }
   },
 
+  async getBasicGames(steamID, limit = 100, offset = 0, hours) {
+    let whereClause = "";
+    if (hours) {
+      whereClause = "AND created_at >= NOW() - $4 * INTERVAL '1 HOURS'";
+    }
+    try {
+      const sql_query = `
+      SELECT *
+      FROM games
+      JOIN game_players gp
+      USING (game_id)
+      JOIN players
+      USING (steam_id)
+      WHERE steam_id = $1
+      ${whereClause}
+      ORDER BY created_at DESC
+      LIMIT $2 OFFSET $3;
+      `;
+      if (hours) {
+        const { rows } = await query(sql_query, [
+          steamID,
+          limit,
+          offset,
+          hours,
+        ]);
+        return rows;
+      } else {
+        const { rows } = await query(sql_query, [steamID, limit, offset]);
+        return rows;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getGames(steamID, limit = 100, offset = 0, hours) {
+    let whereClause = "";
+    if (hours) {
+      whereClause = "AND created_at >= NOW() - $4 * INTERVAL '1 HOURS'";
+    }
     try {
       const sql_query = `
       SELECT *, g.radiant_win = gp.is_radiant as won
@@ -283,11 +322,22 @@ module.exports = {
       JOIN players p
       USING (steam_id)
       WHERE p.steam_id = $1
+      ${whereClause}
       ORDER BY created_at DESC
       LIMIT $2 OFFSET $3;
       `;
-      const { rows } = await query(sql_query, [steamID, limit, offset]);
-      return rows;
+      if (hours) {
+        const { rows } = await query(sql_query, [
+          steamID,
+          limit,
+          offset,
+          hours,
+        ]);
+        return rows;
+      } else {
+        const { rows } = await query(sql_query, [steamID, limit, offset]);
+        return rows;
+      }
     } catch (error) {
       throw error;
     }
@@ -414,6 +464,52 @@ module.exports = {
       `;
       const { rows } = await query(sql_query, [steamID]);
       return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async givePostGameBP(steamID) {
+    /*
+      BASELINE:
+      50 XP per win (capped at 20 wins)
+      200 XP bonus for the first win of the day (250 total)
+
+      SILVER ACCELERATOR:
+      100 XP per win (capped at 20 wins)
+      300 XP bonus for the first win of the day (400 total)
+
+      GOLD ACCELERATOR:
+      200 XP per win (capped at 20 wins)
+      400 XP bonus for the first win of the day (600 total)
+    */
+    try {
+      const games = await this.getBasicGames(steamID, 100, 0, 24);
+      // the last game they played hasn't been recorded yet, so this is one off
+      const numRecentGames = games.length + 1;
+
+      const { tier } = await this.getPlayerBattlePass(steamID);
+      let reward = 0;
+
+      if (numRecentGames > 20) {
+        return;
+      } else if (numRecentGames === 1) {
+        reward = 250;
+        if (tier === 1) {
+          reward = 400;
+        } else if (tier === 2) {
+          reward = 600;
+        }
+      } else {
+        reward = 50;
+        if (tier === 1) {
+          reward = 100;
+        } else if (tier === 2) {
+          reward = 200;
+        }
+      }
+
+      await this.addBattlePassExp(steamID, reward);
     } catch (error) {
       throw error;
     }

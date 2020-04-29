@@ -94,7 +94,8 @@ const actions = {
           total_xp,
           bp_level,
         } = player.battlePass;
-        const progress = next_level_xp - (total_xp - total_experience);
+        let progress = next_level_xp - (total_xp - total_experience);
+        if (total_xp === 0) progress = total_experience; // level 0 logic
         commit("SAVE_BATTLE_PASS", {
           bpTier: tier,
           bpLevel: bp_level,
@@ -125,7 +126,8 @@ const actions = {
           total_xp,
           bp_level,
         } = battlePass;
-        const progress = next_level_xp - (total_xp - total_experience);
+        let progress = next_level_xp - (total_xp - total_experience);
+        if (total_xp === 0) progress = total_experience; // level 0 logic
         commit("SAVE_BATTLE_PASS", {
           bpTier: tier,
           bpLevel: bp_level,

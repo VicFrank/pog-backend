@@ -87,7 +87,8 @@
                     />
                   </div>
                   <div class="cosmetic__descr">
-                    <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
+                    <div class="cosmetic__name mb-1">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
+                    <div class="text-muted">{{ cosmetic.cosmetic_type }}</div>
                     <div class="cosmetic__price">
                       <span class="cosmetic-price">
                         <template v-if="cosmetic.cost > 0">
@@ -106,7 +107,8 @@
                   hide-header
                   hide-footer
                 >
-                  <p class="text-center h3">{{cosmeticName(cosmetic.cosmetic_id)}}</p>
+                  <p class="text-center h4">{{cosmeticName(cosmetic.cosmetic_id)}}</p>
+                  <div class="text-center text-muted mb-3">{{ cosmetic.cosmetic_type }}</div>
                   <p class="text-center">
                     <template v-if="cosmetic.cost > 0">
                       <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
@@ -137,21 +139,17 @@
                       >{{reward}}</li>
                     </ul>
                   </div>
-                  <div
-                    v-else-if="chestRewards[cosmetic.cosmetic_id]"
-                  >
-                    <template v-if="Array.isArray(filteredCosmetics)">
+                  <div v-else-if="chestRewards[cosmetic.cosmetic_id]">
+                    <template v-if="Array.isArray(chestRewards[cosmetic.cosmetic_id])">
                       {{chestRewards[cosmetic.cosmetic_id][0]}}
                       <ul class="mt-1">
-                      <li
-                        v-for="line in chestRewards[cosmetic.cosmetic_id]"
-                        :key="line + cosmetic.cosmetic_id"
-                      >{{line}}</li>
-                    </ul>
+                        <li
+                          v-for="line in chestRewards[cosmetic.cosmetic_id].slice(1)"
+                          :key="line + cosmetic.cosmetic_id"
+                        >{{line}}</li>
+                      </ul>
                     </template>
-                    <template v-else>
-                      {{chestRewards[cosmetic.cosmetic_id]}}
-                    </template>
+                    <template v-else>{{chestRewards[cosmetic.cosmetic_id]}}</template>
                   </div>
                   <div
                     v-if="alreadyOwn(cosmetic)"

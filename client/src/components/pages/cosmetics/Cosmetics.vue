@@ -66,6 +66,7 @@
                   </div>
                   <div class="cosmetic__descr">
                     <div class="cosmetic__name">{{ cosmeticName(cosmetic.cosmetic_id) }}</div>
+                    <div class="text-muted">{{ cosmetic.cosmetic_type }}</div>
                   </div>
                 </div>
                 <b-modal
@@ -77,28 +78,27 @@
                   @hide="onHide"
                 >
                   <template v-if="cosmetic.cosmetic_type !== 'Chest'">
-                    <div v-if="cosmeticMovie(cosmetic.cosmetic_id)">
+                    <div v-if="cosmeticMovie(cosmetic.cosmetic_id)" class="mb-2">
                       <video width="100%" height="360" autoplay muted loop>
                         <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
                       </video>
                     </div>
-                    <div v-else class="text-center">
+                    <div v-else class="text-center mb-2">
                       <img
                         v-bind:src="cosmeticImageSrc(cosmetic.cosmetic_id)"
                         :alt="cosmetic.cosmetic_id"
                       />
                     </div>
-                    <template v-if="Array.isArray(filteredCosmetics)">
+                    <template v-if="Array.isArray(chestRewards[cosmetic.cosmetic_id])">
+                      {{chestRewards[cosmetic.cosmetic_id][0]}}
                       <ul class="mt-1">
-                      <li
-                        v-for="line in chestRewards[cosmetic.cosmetic_id]"
-                        :key="line + cosmetic.cosmetic_id"
-                      >{{line}}</li>
-                    </ul>
+                        <li
+                          v-for="line in chestRewards[cosmetic.cosmetic_id].slice(1)"
+                          :key="line + cosmetic.cosmetic_id"
+                        >{{line}}</li>
+                      </ul>
                     </template>
-                    <template v-else>
-                      {{chestRewards[cosmetic.cosmetic_id]}}
-                    </template>
+                    <template v-else>{{chestRewards[cosmetic.cosmetic_id]}}</template>
                     <div
                       v-if="illegalAccelerator(cosmetic)"
                       class="text-center"
@@ -627,6 +627,8 @@ export default {
   transition: 0.25s ease-in-out;
   z-index: 1;
 
+  min-height: 292px;
+
   cursor: pointer;
 }
 
@@ -676,6 +678,7 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  min-height: 36px;
   z-index: 3;
 }
 
@@ -693,7 +696,7 @@ export default {
 
 .cosmetic__name {
   width: 100%;
-  min-height: 36px;
+
   padding: 0 1em;
   position: relative;
   text-overflow: ellipsis;

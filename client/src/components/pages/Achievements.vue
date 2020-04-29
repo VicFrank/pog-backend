@@ -25,7 +25,10 @@
                   <p class="quest-xp-text">{{ quest.xp_reward }} XP</p>
                 </div>
               </div>
-              <ProgressBar :progress="quest.quest_progress" :required="quest.required_amount" />
+              <ProgressBar
+                :progress="quest.capped_quest_progress"
+                :required="quest.required_amount"
+              />
             </div>
             <button
               v-on:click="claimQuest(quest)"

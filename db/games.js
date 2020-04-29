@@ -159,6 +159,9 @@ module.exports = {
             { ...playerData, winner },
             teamData
           );
+
+          // console.log(gameID, steamid);
+          await players.givePostGameBP(steamid);
         }
 
         const mmr = parseInt(playerRows[0].mmr);
