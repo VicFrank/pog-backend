@@ -25,7 +25,7 @@
         </li>
       </ul>
       <div class="d-flex align-items-center">
-        <div class="d-none d-md-flex">
+        <!-- <div class="d-none d-md-flex">
           <a
             href="https://www.youtube.com/user/DotaCinema"
             target="_blank"
@@ -40,6 +40,15 @@
             target="_blank"
             class="fa fa-facebook mr-3"
           ></a>
+        </div> -->
+
+        <div>
+        <b-button
+          class="d-flex mr-3"
+          href="https://www.reddit.com/r/DotaCinema/"
+          target="_blank"
+          variant="secondary"
+        >Report A Bug</b-button>
         </div>
         <div>
           <b-button
