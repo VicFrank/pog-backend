@@ -40,15 +40,15 @@
             target="_blank"
             class="fa fa-facebook mr-3"
           ></a>
-        </div> -->
+        </div>-->
 
         <div>
-        <b-button
-          class="d-flex mr-3"
-          href="https://www.reddit.com/r/DotaCinema/"
-          target="_blank"
-          variant="secondary"
-        >Report A Bug</b-button>
+          <b-button
+            class="d-none d-md-flex mr-3"
+            href="https://www.reddit.com/r/DotaCinema/"
+            target="_blank"
+            variant="secondary"
+          >Report A Bug</b-button>
         </div>
         <div>
           <b-button
