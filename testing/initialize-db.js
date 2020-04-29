@@ -245,8 +245,8 @@ async function initializeAdmins() {
   await loadChestRewards();
   await loadBattlePass();
   await loadItemPrices();
-  await initPlayers();
-  await addSampleGames(100);
+  // await initPlayers();
+  // await addSampleGames(100);
   await initializeAdmins();
   // await addRealSample();
 })();
