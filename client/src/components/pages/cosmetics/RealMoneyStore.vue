@@ -79,8 +79,9 @@ export default {
       },
       cheapPaypalCredentials: {
         sandbox:
-          "Aa7RQTHCdlpimUUgjhEBufK_tsQX2mB5URLt5NBfgOfKxYSwYEHWDErbD3Z8XHXENhUhMaEs6--_q60e",
-        production: "",
+          "AYAmQijTIaUAckei3KBH9rJh7Vea0lmIuUZclFx5RWUfhaG6OfcG7w_IOZclheI431gFF0ETdwfhnWbU",
+        production:
+          "ARyCiFJGaPqBv5V0OJNPloAOgwUDp-YOu2cLtrp8fdTLlpBCaIfbXhnFHfVuMylXG9iyPaKCw2SR2D4V",
       },
     };
   },
