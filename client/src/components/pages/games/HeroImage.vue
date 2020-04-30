@@ -1,11 +1,11 @@
 <template>
-  <img v-bind:src="getHeroPath(hero)" v-bind:alt="hero | translateDota" />
+  <b-img-lazy v-bind:src="getHeroPath(hero)" v-bind:alt="hero | translateDota" />
 </template>
 
 <script>
 export default {
   props: {
-    hero: String,
+    hero: String
   },
 
   methods: {
@@ -14,8 +14,8 @@ export default {
         hero = hero.slice(14);
       }
       return require(`../../../assets/images/heroes/${hero}.png`);
-    },
-  },
+    }
+  }
 };
 </script>
 
