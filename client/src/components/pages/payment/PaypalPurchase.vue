@@ -29,7 +29,7 @@ export default {
 
   mounted() {
     const script = document.createElement("script");
-    const clientID = this.credentials.sandbox;
+    const clientID = this.credentials.production;
     script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}`;
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
