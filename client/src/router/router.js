@@ -30,6 +30,7 @@ const Home = () => import("../components/pages/home/Home");
 const Credits = () => import("../components/pages/credits/Credits");
 
 import PoggersStore from "../components/pages/cosmetics/RealMoneyStore";
+// import Payment from "../components/pages/payment/Payment";
 
 Vue.use(VueRouter);
 
@@ -48,6 +49,10 @@ const routes = [
     path: "/poggers",
     component: PoggersStore,
   },
+  // {
+  //   path: "/payment/:item_id",
+  //   component: Payment,
+  // },
   {
     path: "/changelog",
     component: Changelog,

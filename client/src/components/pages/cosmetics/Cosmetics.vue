@@ -113,7 +113,7 @@
                           @click="equipCosmetic(cosmetic, true, i)"
                         >Equip</b-button>
                         <b-button
-                          v-else
+                          v-else-if="!cosmetic.cosmetic_type =='Companion'"
                           class="mr-2"
                           variant="primary"
                           @click="equipCosmetic(cosmetic, false, i)"
@@ -139,10 +139,7 @@
                 </b-modal>
               </div>
             </div>
-            <div
-              v-else-if="!loading"
-              class="h3 blue row mt-3"
-            >Nothing to see here... Go open some chests, and fill your Armory!</div>
+            <!-- <div v-else-if="!loading" class="h3 blue row mt-3">No cosmetics found</div> -->
           </div>
         </div>
       </div>
@@ -258,10 +255,14 @@ export default {
             }
             const c1type = c1.cosmetic_type || "Companion";
             const c2type = c2.cosmetic_type || "Companion";
+            if (c1type == c2type) {
+              return c1.cosmetic_id.localeCompare(c2.cosmetic_id);
+            }
             return c1type.localeCompare(c2type);
           });
           this.cosmetics = sortedCosmetics;
           this.filteredCosmetics = sortedCosmetics;
+          this.updateFilteredCosmetics();
           this.loading = false;
         })
         .catch(err => {

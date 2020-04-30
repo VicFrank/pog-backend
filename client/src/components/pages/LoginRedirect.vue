@@ -5,12 +5,13 @@
 <script>
 export default {
   created() {
+    console.log("created");
     // get the current user and redirect to their profile
     // it's necessary to get this first so that the user is recognized
     // as logged in
     fetch("/api/auth/steam/success", { credentials: "include" })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.success) {
           const { displayName, photos, id, isAdmin, poggers } = res.user;
 
@@ -20,18 +21,24 @@ export default {
             steamID: id,
             picture: photos[2].value,
             isAdmin,
-            poggers
+            poggers,
           });
 
-          this.$router.push("/profile");
+          const returnTo = this.$route.query.return;
+          console.log(returnTo);
+
+          if (returnTo) {
+            this.$router.push(returnTo);
+          } else {
+            this.$router.push("/profile");
+          }
         } else {
           this.$store.commit({
-            type: "setNotLoggedIn"
+            type: "setNotLoggedIn",
           });
-
           this.$router.push("");
         }
       });
-  }
+  },
 };
 </script>

@@ -457,7 +457,8 @@ module.exports = {
   async getPlayerBattlePass(steamID) {
     try {
       const sql_query = `
-      SELECT *
+      SELECT steam_id, bp_version, bp_level, total_experience, upgrade_expiration,
+      (case when upgrade_expiration > NOW() then tier else 0 end) as tier
       FROM player_battle_pass
       WHERE steam_id = $1
       LIMIT 1

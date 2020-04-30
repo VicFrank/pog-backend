@@ -651,7 +651,7 @@ module.exports = [
     equip_group: "companion",
   },
   {
-    cost: 150,
+    cost: 120,
     cosmetic_id: "doomling",
     rarity: "Common",
     type: "Companion",

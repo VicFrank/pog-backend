@@ -50,10 +50,11 @@ router.get(
   },
   passport.authenticate("steam", { failureRedirect: "/" }),
   function (req, res) {
-    const baseUrl = process.env.IS_PRODUCTION
-      ? "https://www.pathofguardians.com"
-      : "http://localhost:8080";
-    res.redirect(`${baseUrl}/redirect`);
+    if (process.env.IS_PRODUCTION) {
+      return res.redirect(`/redirect`);
+    } else {
+      return res.redirect(`http://localhost:8080/redirect`);
+    }
   }
 );
 

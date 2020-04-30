@@ -1,6 +1,11 @@
 <template>
   <div class="container">
     <h1 class="title mt-3 mb-4">Path of Guardians</h1>
+    <div class="row">
+      <div class="trailer">
+        <b-embed type="iframe" src="https://www.youtube.com/embed/N57IyqO86dc" allowfullscreen></b-embed>
+      </div>
+    </div>
     <div class="row ml-1">
       <p>
         Path of Guardians (POG) is a custom game mode created by DotaCinema.
@@ -197,5 +202,10 @@ ul {
 
 li {
   padding-bottom: 3px;
+}
+
+.trailer {
+  width: 400px;
+  margin: auto;
 }
 </style>

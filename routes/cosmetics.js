@@ -32,6 +32,17 @@ router.get("/item_prices", async (req, res) => {
   }
 });
 
+router.get("/item_prices/:itemid", async (req, res) => {
+  try {
+    const itemID = req.params.itemid;
+    const price = await cosmetics.getItemPrice(itemID);
+    res.status(201).send(price);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.toString() });
+  }
+});
+
 router.get("/chest_rewards", async (req, res) => {
   try {
     const rows = await cosmetics.getAllChestRewards();

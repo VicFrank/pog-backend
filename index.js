@@ -103,7 +103,17 @@ app.use(passport.session());
 
 app.use(morgan("short"));
 
-app.use(bodyParser.json());
+app.use(
+  bodyParser.json({
+    // Because Stripe needs the raw body, we compute it but only when hitting the Stripe callback URL.
+    verify: function (req, res, buf) {
+      var url = req.originalUrl;
+      if (url.endsWith("/webhook")) {
+        req.rawBody = buf.toString();
+      }
+    },
+  })
+);
 app.use(
   bodyParser.urlencoded({
     extended: true,

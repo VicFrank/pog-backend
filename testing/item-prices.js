@@ -27,7 +27,7 @@ module.exports = [
     cost_usd: 100,
     item_id: "xp_5",
     type: "XP",
-    reward: 40000,
+    reward: 400000,
   },
   {
     item_id: "poggers_1",

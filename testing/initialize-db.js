@@ -196,12 +196,10 @@ async function initPlayers() {
 
 async function addSampleGames(numGames) {
   try {
-    let promises = [];
     for (let i = 0; i < numGames; i++) {
-      promises.push(games.create(generateRandomSampleData()));
+      console.log(`Adding game ${i}`);
+      await games.create(generateRandomSampleData());
     }
-
-    await Promise.all(promises);
 
     console.log(`Added ${numGames} sample games`);
   } catch (error) {
@@ -222,11 +220,11 @@ async function addRealSample() {
 async function initializeAdmins() {
   console.log("Initializing Admins");
   const adminList = [
-    "76561198015161808",
+    // "76561198015161808",
     "76561197960956468",
     "76561198030851434",
     "76561198007141460",
-    "76561198052211234",
+    // "76561198052211234",
     "76561197983098727",
   ];
 
@@ -246,7 +244,7 @@ async function initializeAdmins() {
   await loadBattlePass();
   await loadItemPrices();
   // await initPlayers();
-  // await addSampleGames(100);
+  await addSampleGames(100);
   await initializeAdmins();
-  // await addRealSample();
+  await addRealSample();
 })();

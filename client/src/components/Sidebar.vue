@@ -31,7 +31,7 @@
             title="Badge"
           />
           <img
-            v-if="bpTier === 2"
+            v-if="bpTier === 1"
             src="../assets/images/bp_tier1.png"
             class="custom-badge-img"
             alt="Battle Pass Badge"

@@ -15,10 +15,6 @@
         <div class="mb-4">
           <b-embed type="iframe" src="https://www.youtube.com/embed/2b6lAcxA2AM" allowfullscreen></b-embed>
         </div>
-        <!-- <h3>Placeholder</h3>
-        <div class="mb-4">
-          <b-embed type="iframe" src="https://www.youtube.com/embed/N57IyqO86dc" allowfullscreen></b-embed>
-        </div>-->
       </div>
     </div>
   </div>

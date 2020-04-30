@@ -1,6 +1,10 @@
 <template>
   <a href="/api/auth/steam">
-    <img src="./steam_login.png" class="steam-button" alt="Steam Login Button" />
+    <img
+      src="./steam_login.png"
+      class="steam-button"
+      alt="Steam Login Button"
+    />
   </a>
 </template>
 
