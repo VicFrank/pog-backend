@@ -43,6 +43,14 @@
             allowfullscreen
           ></b-embed>
         </div>
+        <h3>Gameplay</h3>
+        <div class="mb-4">
+          <b-embed
+            type="iframe"
+            src="https://www.youtube.com/embed/xfGOJqaYtPM"
+            allowfullscreen
+          ></b-embed>
+        </div>
       </div>
     </div>
   </div>

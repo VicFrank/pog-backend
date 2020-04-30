@@ -12,4 +12,18 @@ module.exports = {
       throw error;
     }
   },
+
+  async getLogsOfType(type) {
+    try {
+      const sql_query = `
+      SELECT * FROM player_logs
+      WHERE log_event = $1
+      LIMIT 1000
+      `;
+      const { rows } = await query(sql_query, [type]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
 };

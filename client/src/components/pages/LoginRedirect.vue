@@ -5,7 +5,6 @@
 <script>
 export default {
   created() {
-    console.log("created");
     // get the current user and redirect to their profile
     // it's necessary to get this first so that the user is recognized
     // as logged in
@@ -25,7 +24,6 @@ export default {
           });
 
           const returnTo = this.$route.query.return;
-          console.log(returnTo);
 
           if (returnTo) {
             this.$router.push(returnTo);
