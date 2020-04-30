@@ -28,6 +28,7 @@ module.exports = {
     return checkUserAuth(req);
   },
   adminAuth: function (req, res, next) {
+    console.log(req.get("X-Dota-Server-Key"));
     if (checkServerKey(req)) {
       return next();
     } else if (req.user && req.user.isAdmin) {
