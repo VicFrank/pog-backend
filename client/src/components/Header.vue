@@ -46,10 +46,11 @@
         <div>
           <b-button
             class="d-none d-md-flex mr-3"
-            href="https://www.reddit.com/r/DotaCinema/"
+            href="https://www.reddit.com/r/DotaCinema/comments/gaw4ah/pog_bug_report_megathread/"
             target="_blank"
             variant="secondary"
-          >Report A Bug</b-button>
+            >Report A Bug</b-button
+          >
         </div>
         <div>
           <b-button
@@ -57,7 +58,8 @@
             href="https://steamcommunity.com/sharedfiles/filedetails/?id=2077900442"
             target="_blank"
             variant="primary"
-          >PLAY NOW</b-button>
+            >PLAY NOW</b-button
+          >
         </div>
       </div>
     </nav>
@@ -68,8 +70,8 @@
 import SidebarToggle from "./SidebarToggle.vue";
 export default {
   components: {
-    SidebarToggle
-  }
+    SidebarToggle,
+  },
 };
 </script>
 

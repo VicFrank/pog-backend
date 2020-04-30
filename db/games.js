@@ -266,7 +266,7 @@ module.exports = {
     try {
       let whereClause = "";
       if (hours) {
-        whereClause = "WHERE created_at >= NOW() - $3 * INTERVAL '1 HOURS'";
+        whereClause = "AND created_at >= NOW() - $3 * INTERVAL '1 HOURS'";
       }
       const sql_query = `
       SELECT g.*, 
@@ -275,6 +275,7 @@ module.exports = {
         FROM games g
         JOIN game_players gp
         USING (game_id)
+        WHERE ranked = TRUE
         ${whereClause}
         GROUP BY game_id
         ORDER BY created_at DESC

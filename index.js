@@ -15,6 +15,7 @@ const authRouter = require("./routes/auth");
 const paymentRouter = require("./routes/payments");
 const patreonRouter = require("./routes/patreon");
 const cosmeticsRouter = require("./routes/cosmetics");
+const steamRouter = require("./routes/steam");
 
 const players = require("./db/players");
 
@@ -130,6 +131,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/payments", paymentRouter);
 app.use("/api/patreon", patreonRouter);
 app.use("/api/cosmetics", cosmeticsRouter);
+app.use("/api/steam", steamRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/dist/index.html"));

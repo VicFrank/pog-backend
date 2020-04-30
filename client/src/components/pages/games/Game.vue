@@ -4,9 +4,9 @@
       <div class="row">
         <div class="col-xl-12">
           <div class="match-history">
-            <h2 class="mb-5 radiant-color">The Radiant</h2>
+            <h2 class="mb-5 radiant-color">Lorekeepers</h2>
             <TeamGameStats v-bind:players="radiantPlayers"></TeamGameStats>
-            <h2 class="mt-5 mb-5 dire-color">The Dire</h2>
+            <h2 class="mt-5 mb-5 dire-color">Flameguard</h2>
             <TeamGameStats v-bind:players="direPlayers"></TeamGameStats>
           </div>
         </div>
@@ -34,13 +34,13 @@ export default {
 
   mounted() {
     fetch(`/api/games/${this.$route.params.game_id}`)
-      .then(res => res.json())
-      .then(gameData => {
+      .then((res) => res.json())
+      .then((gameData) => {
         this.radiantPlayers = gameData.playerInfo.filter(
-          player => player.is_radiant
+          (player) => player.is_radiant
         );
         this.direPlayers = gameData.playerInfo.filter(
-          player => !player.is_radiant
+          (player) => !player.is_radiant
         );
         this.duration = gameData.gameInfo.duration;
         this.date = gameData.gameInfo.created_at;

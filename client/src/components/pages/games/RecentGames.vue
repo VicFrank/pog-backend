@@ -12,8 +12,8 @@
                     <td class="tb-head" scope="col">Date</td>
                     <td class="tb-head" scope="col">Result</td>
                     <td class="tb-head" scope="col">Duration</td>
-                    <td class="tb-head" scope="col">Radiant</td>
-                    <td class="tb-head" scope="col">Dire</td>
+                    <td class="tb-head" scope="col">Lorekeepers</td>
+                    <td class="tb-head" scope="col">Flameguard</td>
                   </tr>
                   <template v-if="loading">
                     <tr v-for="i in 100" :key="i">
@@ -32,11 +32,15 @@
                       tag="tr"
                     >
                       <td>
-                        <div class="light-text">{{ game.created_at | dateFromNow }}</div>
+                        <div class="light-text">
+                          {{ game.created_at | dateFromNow }}
+                        </div>
                       </td>
                       <td>
-                        <span v-if="game.radiant_win" class="win">Radiant Victory</span>
-                        <span v-else class="loss">Dire Victory</span>
+                        <span v-if="game.radiant_win" class="win"
+                          >Lorekeepers Victory</span
+                        >
+                        <span v-else class="loss">Flameguard Victory</span>
                       </td>
                       <td>{{ game.duration | hhmmss }}</td>
                       <td>
@@ -75,21 +79,21 @@ export default {
     page: 1,
     itemsPerPage: 15,
     games: [],
-    loading: true
+    loading: true,
   }),
 
   components: {
-    HeroImage
+    HeroImage,
   },
 
   created() {
     fetch(`/api/games`)
-      .then(res => res.json())
-      .then(games => {
+      .then((res) => res.json())
+      .then((games) => {
         this.loading = false;
         this.games = games;
       });
-  }
+  },
 };
 </script>
 
