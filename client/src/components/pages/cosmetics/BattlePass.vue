@@ -11,7 +11,9 @@
             }"
           >
             <span>Level {{ i }}</span>
-            <div v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }">
+            <div
+              v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }"
+            >
               <template v-if="loading">
                 <img src="./images/bp_placeholder.png" alt="placeholder" />
               </template>
@@ -30,9 +32,22 @@
                   @click="$bvModal.show(getChestLevel(i))"
                 />
 
-                <b-modal :id="`bp-modal-${i}`" :title="getItemName(i)" centered hide-footer>
-                  <video v-if="getMovie(i)" width="100%" height="360" autoplay muted loop>
-                    <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
+                <b-modal
+                  :id="`bp-modal-${i}`"
+                  :title="getItemName(i)"
+                  centered
+                  hide-footer
+                >
+                  <video
+                    v-if="getMovie(i)"
+                    width="100%"
+                    height="360"
+                    autoplay
+                    muted
+                    loop
+                  >
+                    <source :src="getMovie(i)" type="video/webm" />
+                    Your browser does not support the video tag.
                   </video>
 
                   <div class="text-center">
@@ -46,15 +61,17 @@
                     </div>
 
                     <template v-if="Array.isArray(getRewardDescription(i))">
-                      {{getRewardDescription(i)[0]}}
+                      {{ getRewardDescription(i)[0] }}
                       <ul class="mt-1">
                         <li
                           v-for="line in getRewardDescription(i).slice(1)"
                           :key="line + cosmetic.cosmetic_id"
-                        >{{line}}</li>
+                        >
+                          {{ line }}
+                        </li>
                       </ul>
                     </template>
-                    <template v-else>{{getRewardDescription(i)}}</template>
+                    <template v-else>{{ getRewardDescription(i) }}</template>
                   </div>
                 </b-modal>
               </template>
@@ -66,31 +83,41 @@
     <b-modal :id="'1'" title="Common Chest" centered hide-footer>
       <h5>Gain a free Common Chest! It contains the following prizes:</h5>
       <ul>
-        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
+        <li v-for="reward in chestRewards['chest1']" :key="reward">
+          {{ reward }}
+        </li>
       </ul>
     </b-modal>
     <b-modal :id="'2'" title="Uncommon Chest" centered hide-footer>
       <h5>Gain a free Uncommon Chest! It contains the following prizes:</h5>
       <ul>
-        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
+        <li v-for="reward in chestRewards['chest2']" :key="reward">
+          {{ reward }}
+        </li>
       </ul>
     </b-modal>
     <b-modal :id="'3'" title="Rare Chest" centered hide-footer>
       <h5>Gain a free Rare Chest! It contains the following prizes:</h5>
       <ul>
-        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
+        <li v-for="reward in chestRewards['chest3']" :key="reward">
+          {{ reward }}
+        </li>
       </ul>
     </b-modal>
     <b-modal :id="'4'" title="Mythical Chest" centered hide-footer>
       <h5>Gain a free Mythical Chest! It contains the following prizes:</h5>
       <ul>
-        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
+        <li v-for="reward in chestRewards['chest4']" :key="reward">
+          {{ reward }}
+        </li>
       </ul>
     </b-modal>
     <b-modal :id="'5'" title="Legendary Chest" centered hide-footer>
       <h5>Gain a free Legendary Chest! It contains the following prizes:</h5>
       <ul>
-        <li v-for="reward in chestRewards['chest5']" :key="reward">{{reward}}</li>
+        <li v-for="reward in chestRewards['chest5']" :key="reward">
+          {{ reward }}
+        </li>
       </ul>
     </b-modal>
   </div>
@@ -106,27 +133,27 @@ export default {
     error: "",
     rewards: [],
     loading: true,
-    chestRewards
+    chestRewards,
   }),
 
   created() {
     this.chestRewards = chestRewards;
 
     fetch(`/api/cosmetics/battle_pass`)
-      .then(res => res.json())
-      .then(rewards => {
+      .then((res) => res.json())
+      .then((rewards) => {
         // remove level 0 from the rewards
         rewards.shift();
         this.rewards = rewards;
         this.loading = false;
       })
-      .catch(err => (this.error = err));
+      .catch((err) => (this.error = err));
   },
 
   computed: {
     bpLevel() {
       return this.$store.getters.bpLevel;
-    }
+    },
   },
 
   methods: {
@@ -151,6 +178,9 @@ export default {
     getItemName(level) {
       const cosmetic_id = this.rewards[level - 1].cosmetic_id;
       return names[cosmetic_id];
+    },
+    getLevelTotalXP(level) {
+      return this.getRewards(level).total_xp;
     },
     hasItemReward(level) {
       return this.rewards[level - 1].cosmetic_id !== null;
@@ -189,8 +219,8 @@ export default {
       if (!webm.has(cosmetic_id)) return false;
 
       return require(`./images/${cosmetic_id}.webm`);
-    }
-  }
+    },
+  },
 };
 </script>
 
