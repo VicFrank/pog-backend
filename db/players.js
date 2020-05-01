@@ -1629,7 +1629,9 @@ module.exports = {
           break;
         case "nokrah_purchased":
           const nokrahPurchased = itemPurchases
-            ? Object.values(itemPurchases).indexOf("item_nokrash_blade") > -1
+            ? Object.values(itemPurchases).indexOf(
+                "item_recipe_nokrash_blade"
+              ) > -1
             : 0;
           progress = nokrahPurchased ? 1 : 0;
           break;
