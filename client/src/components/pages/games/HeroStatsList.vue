@@ -13,7 +13,7 @@
                     {{ data.item.hero | translateDota }}
                   </div>
                 </template>
-                <template v-slot:cell(win_rate)="data">{{data.item.win_rate | round(2) }}</template>
+                <template v-slot:cell(win_rate)="data">{{data.item.win_rate | percentage }}</template>
                 <template v-slot:cell(kdr)="data">{{data.item.kdr | round(2) }}</template>
               </b-table>
             </div>
