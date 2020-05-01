@@ -6,7 +6,7 @@ const apicache = require("apicache");
 
 let cache = apicache.middleware;
 
-router.get("/", cache("5 minutes"), async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
     const offset = parseInt(req.query.offset) || 0;
