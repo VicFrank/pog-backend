@@ -18,9 +18,23 @@ module.exports = {
       const sql_query = `
       SELECT * FROM player_logs
       WHERE log_event = $1
-      LIMIT 1000
+      ORDER BY log_time DESC
       `;
       const { rows } = await query(sql_query, [type]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getLogsForPlayer(steamID) {
+    try {
+      const sql_query = `
+      SELECT * FROM player_logs
+      WHERE steam_id = $1
+      ORDER BY log_time DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
       return rows;
     } catch (error) {
       throw error;

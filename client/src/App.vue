@@ -132,6 +132,16 @@ th {
   width: 100%;
 }
 
+.table-head {
+  font-family: "Radiance-Semibold";
+  font-size: 14px;
+  font-weight: 600;
+  color: #0b86c4;
+  padding: 1.5em !important;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+}
+
 body {
   /* background-color: rgba(14, 19, 23, 0.94); */
   background-color: #13171d;

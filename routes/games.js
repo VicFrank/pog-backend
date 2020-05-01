@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router();
 const games = require("../db/games");
 const auth = require("../auth/auth");
+const apicache = require("apicache");
 
-router.get("/", async (req, res) => {
+let cache = apicache.middleware;
+
+router.get("/", cache("5 minutes"), async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
     const offset = parseInt(req.query.offset) || 0;
@@ -33,7 +36,7 @@ router.post("/", auth.adminAuth, async (req, res) => {
   }
 });
 
-router.get("/:gameid", async (req, res) => {
+router.get("/:gameid", cache("1 hour"), async (req, res) => {
   try {
     const gameid = parseInt(req.params.gameid);
     const gameInfo = await games.getGameByID(gameid);
@@ -52,7 +55,7 @@ router.get("/:gameid", async (req, res) => {
   }
 });
 
-router.get("/stats/heroes", async (req, res) => {
+router.get("/stats/heroes", cache("1 hour"), async (req, res) => {
   try {
     const heroStats = await games.getHeroStats();
 

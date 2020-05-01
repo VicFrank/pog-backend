@@ -160,7 +160,9 @@ module.exports = {
             teamData
           );
 
-          await players.givePostGameBP(steamid);
+          if (!abandoned) {
+            await players.givePostGameBP(steamid, winner);
+          }
         }
 
         const mmr = parseInt(playerRows[0].mmr);

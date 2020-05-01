@@ -42,6 +42,10 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
     let order;
     try {
       order = await paypalClient().execute(request);
+      await logs.addTransactionLog(steamID, "paypal_intent", {
+        itemID,
+        order,
+      });
     } catch (error) {
       console.error(error);
       return res.send(500);
@@ -65,6 +69,10 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
     if (paidAmount != cost_usd) {
       return res.status(400).send({ message: "Invalid Payment" });
     }
+    const validReward = item_type === "POGGERS" || item_type === "XP";
+    if (!validReward) {
+      return res.status(400).send({ message: "Invalid Item Type" });
+    }
 
     // Call PayPal to capture the order
     request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID);
@@ -73,8 +81,6 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
     try {
       const capture = await paypalClient().execute(request);
       await logs.addTransactionLog(steamID, "paypal", {
-        steamID,
-        orderID,
         itemID,
         capture,
       });

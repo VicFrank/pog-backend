@@ -1,11 +1,15 @@
 <template>
   <div>
-    <b-alert v-model="showError" variant="danger" dismissible>{{
+    <b-alert v-model="showError" variant="danger" dismissible>
+      {{
       error
-    }}</b-alert>
-    <b-alert v-model="showSuccess" variant="success" dismissible>{{
+      }}
+    </b-alert>
+    <b-alert v-model="showSuccess" variant="success" dismissible>
+      {{
       success
-    }}</b-alert>
+      }}
+    </b-alert>
     <div class="paypal-container" ref="paypal"></div>
   </div>
 </template>
@@ -15,7 +19,7 @@ export default {
   props: {
     item: {},
     credentials: {},
-    paypalType: String,
+    paypalType: String
   },
 
   data() {
@@ -23,7 +27,7 @@ export default {
       error: "",
       showError: false,
       success: "",
-      showSuccess: false,
+      showSuccess: false
     };
   },
 
@@ -50,7 +54,7 @@ export default {
             color: "gold",
             shape: "pill",
             label: "checkout",
-            layout: "horizontal",
+            layout: "horizontal"
           },
           createOrder: (data, actions) => {
             return actions.order.create({
@@ -58,27 +62,27 @@ export default {
                 {
                   amount: {
                     currency_code: "USD",
-                    value: cost_usd,
-                  },
-                },
+                    value: cost_usd
+                  }
+                }
               ],
-              application_context: { shipping_preference: "NO_SHIPPING" },
+              application_context: { shipping_preference: "NO_SHIPPING" }
             });
           },
           onApprove: function(data) {
             return fetch(`/api/payments/paypal/${steamID}`, {
               method: "post",
               headers: {
-                "content-type": "application/json",
+                "content-type": "application/json"
               },
               body: JSON.stringify({
                 orderID: data.orderID,
                 itemID,
-                paypalType,
-              }),
+                paypalType
+              })
             })
-              .then((res) => res.json())
-              .then((res) => {
+              .then(res => res.json())
+              .then(res => {
                 if (res.message === "Payment Success") {
                   _this.$store.dispatch("refreshPlayer");
                   _this.success = res.message;
@@ -89,7 +93,7 @@ export default {
                       title: `Notification`,
                       toaster: "b-toaster-bottom-left",
                       solid: true,
-                      appendToast: true,
+                      appendToast: true
                     }
                   );
                 } else {
@@ -97,19 +101,19 @@ export default {
                   _this.showError = true;
                 }
               })
-              .catch((err) => {
+              .catch(err => {
                 _this.error = err;
                 _this.showError = true;
               });
           },
-          onError: (err) => {
+          onError: err => {
             _this.showError = true;
             _this.error = err;
-          },
+          }
         })
         .render(this.$refs.paypal);
-    },
-  },
+    }
+  }
 };
 </script>
 

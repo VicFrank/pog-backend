@@ -184,7 +184,7 @@ module.exports = {
         let total_xp = 0;
         let next_level_xp = 0;
         if (level > 100) {
-          total_xp = 372125 + 8000 * (level - 100);
+          total_xp = 372125 + 8000 * (level - 99);
           next_level_xp = 8000;
         }
 

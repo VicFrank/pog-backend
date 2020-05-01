@@ -32,14 +32,10 @@
                       tag="tr"
                     >
                       <td>
-                        <div class="light-text">
-                          {{ game.created_at | dateFromNow }}
-                        </div>
+                        <div class="light-text">{{ game.created_at | dateFromNow }}</div>
                       </td>
                       <td>
-                        <span v-if="game.radiant_win" class="win"
-                          >Lorekeepers Victory</span
-                        >
+                        <span v-if="game.radiant_win" class="win">Lorekeepers Victory</span>
                         <span v-else class="loss">Flameguard Victory</span>
                       </td>
                       <td>{{ game.duration | hhmmss }}</td>
@@ -48,6 +44,7 @@
                           v-for="(hero, index) in game.radiant"
                           :key="index"
                           :hero="hero"
+                          small
                           class="hero-image"
                         ></HeroImage>
                       </td>
@@ -56,6 +53,7 @@
                           v-for="(hero, index) in game.dire"
                           :key="index"
                           :hero="hero"
+                          small
                           class="hero-image"
                         ></HeroImage>
                       </td>
@@ -79,21 +77,21 @@ export default {
     page: 1,
     itemsPerPage: 15,
     games: [],
-    loading: true,
+    loading: true
   }),
 
   components: {
-    HeroImage,
+    HeroImage
   },
 
   created() {
     fetch(`/api/games`)
-      .then((res) => res.json())
-      .then((games) => {
+      .then(res => res.json())
+      .then(games => {
         this.loading = false;
         this.games = games;
       });
-  },
+  }
 };
 </script>
 

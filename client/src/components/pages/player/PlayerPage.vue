@@ -1,14 +1,14 @@
 <template>
   <div class="main-layout__content">
     <div class="content">
-      <div class="container" v-if="playerStats.username">
+      <div class="container" v-if="!playerNotFound">
         <h1>{{ playerStats.username }}</h1>
         <div class="row">
           <div class="col-xl-12">
             <div class="match-history position-relative">
               <h3 class="mt-5 mb-5 text-center">Match History</h3>
 
-              <PlayerGamesList v-bind:games="games" loading="gamesLoading"></PlayerGamesList>
+              <PlayerGamesList v-bind:games="games" :loading="gamesLoading"></PlayerGamesList>
 
               <div class="more">
                 <router-link :to="`/players/${$route.params.steam_id}/games`" class="blue">View All</router-link>
@@ -56,7 +56,8 @@ export default {
     error: "",
     games: [],
     playerStats: {},
-    gamesLoading: true
+    gamesLoading: true,
+    playerNotFound: false
   }),
 
   created() {
@@ -72,6 +73,9 @@ export default {
     fetch(`/api/players/${steamID}/`)
       .then(res => res.json())
       .then(playerStats => {
+        if (!playerStats.steam_id) {
+          this.playerNotFound = true;
+        }
         this.playerStats = playerStats;
       });
   }

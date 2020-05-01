@@ -280,7 +280,7 @@ module.exports = {
     }
     try {
       const sql_query = `
-      SELECT *
+      SELECT *, radiant_win = is_radiant as won
       FROM games
       JOIN game_players gp
       USING (game_id)
@@ -470,7 +470,7 @@ module.exports = {
     }
   },
 
-  async givePostGameBP(steamID) {
+  async givePostGameBP(steamID, winner) {
     /*
       BASELINE:
       50 XP per win (capped at 20 wins)
@@ -486,15 +486,22 @@ module.exports = {
     */
     try {
       const games = await this.getBasicGames(steamID, 100, 0, 24);
-      // the last game they played hasn't been recorded yet, so this is one off
-      const numRecentGames = games.length + 1;
+
+      let numRecentGames = 0;
+      for (let game of games) {
+        if (game.won) {
+          numRecentGames += 1;
+        } else {
+          numRecentGames += 0.5;
+        }
+      }
 
       const { tier } = await this.getPlayerBattlePass(steamID);
       let reward = 0;
 
       if (numRecentGames > 20) {
         return;
-      } else if (numRecentGames === 1) {
+      } else if (numRecentGames === 0) {
         reward = 250;
         if (tier === 1) {
           reward = 400;
@@ -509,6 +516,15 @@ module.exports = {
           reward = 200;
         }
       }
+
+      if (!winner) {
+        reward = reward * 0.5;
+      }
+
+      await logs.addTransactionLog(steamID, "game_xp", {
+        winner,
+        reward,
+      });
 
       await this.addBattlePassExp(steamID, reward);
     } catch (error) {
@@ -1511,6 +1527,8 @@ module.exports = {
       await logs.addTransactionLog(steamID, "claim_quest", {
         steamID,
         questID,
+        poggers,
+        xp,
       });
 
       // Set the quest as claimed

@@ -6,25 +6,16 @@
         <div class="row">
           <div class="col-xl-12">
             <div class="match-history">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td class="tb-head" scope="col">Hero</td>
-                    <td class="tb-head" scope="col">Games</td>
-                    <td class="tb-head" scope="col">Win Rate</td>
-                    <td class="tb-head" scope="col">KDR</td>
-                  </tr>
-                  <tr v-for="hero in heroes" :key="hero.hero">
-                    <th scope="row">
-                      <HeroImage :hero="hero.hero"></HeroImage>
-                      {{ hero.hero | translateDota }}
-                    </th>
-                    <td>{{ hero.games }}</td>
-                    <td>{{ (hero.wins / hero.games) | percentage(2) }}</td>
-                    <td>{{ (hero.avg_kills / hero.avg_deaths) | round(2) }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <b-table hover :fields="fields" :items="heroes" responsive>
+                <template v-slot:cell(hero)="data">
+                  <div class="hero-col">
+                    <HeroImage class="hero-image" :hero="data.item.hero"></HeroImage>
+                    {{ data.item.hero | translateDota }}
+                  </div>
+                </template>
+                <template v-slot:cell(win_rate)="data">{{data.item.win_rate | round(2) }}</template>
+                <template v-slot:cell(kdr)="data">{{data.item.kdr | round(2) }}</template>
+              </b-table>
             </div>
           </div>
         </div>
@@ -38,36 +29,81 @@ import HeroImage from "./HeroImage.vue";
 
 export default {
   data: () => ({
-    page: 1,
-    itemsPerPage: 15,
-    heroes: [],
+    fields: [
+      {
+        key: "hero",
+        sortable: true,
+        thClass: "table-head"
+      },
+      {
+        key: "games",
+        sortable: true,
+        thClass: "table-head"
+      },
+      {
+        key: "win_rate",
+        sortable: true,
+        thClass: "table-head"
+      },
+      {
+        key: "kdr",
+        sortable: true,
+        thClass: "table-head",
+        label: "KDR"
+      }
+    ],
+    heroes: []
   }),
 
   components: {
-    HeroImage,
+    HeroImage
   },
 
   created() {
     fetch(`/api/games/stats/heroes`)
       .then(res => res.json())
       .then(heroes => {
-        this.heroes = heroes;
+        this.heroes = heroes.map(stats => ({
+          hero: stats.hero,
+          games: stats.games,
+          win_rate: stats.wins / stats.games,
+          kdr: stats.avg_kills / stats.avg_deaths
+        }));
       });
-  },
+  }
 };
 </script>
 
 <style scoped>
-tr {
-  cursor: pointer;
+/* tr {
+  cursor: default;
 }
 
 tr:hover {
   background-color: #324250;
-}
+} */
 
 .hero-image {
-  height: 30px;
-  padding: 2px;
+  height: 40px;
+  margin-right: 1em;
+}
+
+.hero-col {
+  text-align: left;
+  padding: 0.75rem;
+}
+
+thead tr {
+  background-color: #5f7286;
+}
+
+.table-head {
+  font-family: "Radiance-Semibold";
+  font-size: 14px;
+  font-weight: 600;
+  color: #0b86c4;
+  padding: 1.5em !important;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
 }
 </style>

@@ -5,7 +5,11 @@
 <script>
 export default {
   props: {
-    hero: String
+    hero: String,
+    small: {
+      type: Boolean,
+      default: false
+    }
   },
 
   methods: {
@@ -13,7 +17,11 @@ export default {
       if (hero && hero.startsWith("npc_dota_hero")) {
         hero = hero.slice(14);
       }
-      return require(`../../../assets/images/heroes/${hero}.png`);
+      if (this.small) {
+        return require(`./small/heroes/${hero}.png`);
+      } else {
+        return require(`../../../assets/images/heroes/${hero}.png`);
+      }
     }
   }
 };

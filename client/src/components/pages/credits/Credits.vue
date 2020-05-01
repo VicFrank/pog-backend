@@ -11,7 +11,7 @@
                 <a href="mailto:sunsfan@sunsfan.gg">(Contact)</a>
               </li>
               <li>Firetoad - Lead Programmer</li>
-              <li>Cookies - Programmer</li>
+              <li>EarthSalamander - Programmer</li>
               <li>Neil - Asset Manager</li>
               <li>Sajedene - 2D Artist & Administration</li>
               <li>Hawf - 3D Artist</li>

@@ -10,11 +10,7 @@
             </template>
             <b-card-text v-if="item.item_type === 'POGGERS'">
               Item:
-              <img
-                class="pogcoin"
-                src="../cosmetics/images/pogcoin_gold.png"
-                alt="Pog Coin"
-              />
+              <img class="pogcoin" src="../cosmetics/images/pogcoin_gold.png" alt="Pog Coin" />
               {{ item.reward }} POGGERS
             </b-card-text>
             <b-card-text v-else-if="item.item_type === 'XP'">
@@ -23,7 +19,7 @@
             </b-card-text>
             <b-card-text>Price: ${{ item.cost_usd }}</b-card-text>
 
-            <template v-slot:footer> </template>
+            <template v-slot:footer></template>
           </b-card>
           <template v-if="loggedIn">
             <div v-if="loading" class="d-flex justify-content-center mb-3">
@@ -34,7 +30,9 @@
               <PaypalPurchase :item="item" />
             </b-card>
           </template>
-          <template v-else><LoginButton></LoginButton> </template>
+          <template v-else>
+            <LoginButton></LoginButton>
+          </template>
         </div>
       </div>
     </div>
@@ -50,7 +48,7 @@ export default {
   components: {
     LoginButton,
     PaypalPurchase,
-    StripePurchase,
+    StripePurchase
   },
 
   data() {
@@ -58,22 +56,21 @@ export default {
       item: {},
       error: "",
       showError: false,
-      loading: true,
+      loading: true
     };
   },
 
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn;
-    },
+    }
   },
 
   created() {
     fetch(`/api/cosmetics/item_prices/${this.$route.params.item_id}`)
-      .then((res) => res.json())
-      .then((item) => {
+      .then(res => res.json())
+      .then(item => {
         if (item) {
-          console.log(item);
           this.item = item;
           this.loading = false;
         } else {
@@ -82,11 +79,11 @@ export default {
           this.$router.push("/store");
         }
       })
-      .catch((err) => {
+      .catch(err => {
         this.showError = true;
         this.error = err;
       });
-  },
+  }
 };
 </script>
 
