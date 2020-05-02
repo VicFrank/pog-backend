@@ -88,6 +88,35 @@ module.exports = {
   },
 
   /**
+   * Gets all 3 daily quests from a player, regardless
+   * of their patreon level
+   * @param {String} steamID
+   */
+  async getAllDailyQuestsForPlayer(steamID) {
+    try {
+      const sql_query = `
+      SELECT pq.*, q.*
+      FROM player_quests pq
+      JOIN quests q
+      USING (quest_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE steam_id = $1 AND q.is_achievement = FALSE
+      ORDER BY quest_index DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+
+      if (rows[0] && rows[0].patreon_level === 0) {
+        return rows.slice(0, 2);
+      } else {
+        return rows.slice(0, 3);
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
    * Gets the active daily quests for a player.
    * Returns two quests for patreon level 0, and three
    * for higher

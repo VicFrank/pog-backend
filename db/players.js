@@ -527,6 +527,8 @@ module.exports = {
       });
 
       await this.addBattlePassExp(steamID, reward);
+
+      return reward;
     } catch (error) {
       throw error;
     }
@@ -1420,7 +1422,7 @@ module.exports = {
 
       // Randomly choose a new quest
       const allQuests = await quests.getAllDailyQuests();
-      const currentQuests = await quests.getDailyQuestsForPlayer(steamID);
+      const currentQuests = await quests.getAllDailyQuestsForPlayer(steamID);
       const currentQuestIDs = currentQuests.map((quest) => quest.quest_id);
 
       const newQuests = allQuests.filter((quest) => {

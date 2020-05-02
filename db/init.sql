@@ -84,6 +84,8 @@ CREATE TABLE IF NOT EXISTS game_players (
   total_exp INTEGER,
   hero_level INTEGER,
 
+  xp_earned INTEGER,
+
   abilities JSON,
   permanent_buffs JSON,
   disconnects JSON,

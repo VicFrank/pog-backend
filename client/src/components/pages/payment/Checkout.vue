@@ -1,8 +1,9 @@
 <template>
   <div class="main-layout__content">
     <div class="content">
-      <h1 class="page-title">Payment</h1>
+      <h1 class="page-title">Checkout</h1>
       <div class="container text-center">
+        <b-button to="/poggers" class="mb-3">Back to Store</b-button>
         <div class="real-money-store">
           <b-card header-tag="header" footer-tag="footer">
             <template v-slot:header>
@@ -10,12 +11,16 @@
             </template>
             <b-card-text v-if="item.item_type === 'POGGERS'">
               Item:
-              <img class="pogcoin" src="../cosmetics/images/pogcoin_gold.png" alt="Pog Coin" />
-              {{ item.reward }} POGGERS
+              <img
+                class="pogcoin"
+                src="../cosmetics/images/pogcoin_gold.png"
+                alt="Pog Coin"
+              />
+              {{ item.reward | localizeNumber }} POGGERS
             </b-card-text>
             <b-card-text v-else-if="item.item_type === 'XP'">
               Item:
-              {{ item.reward }} XP
+              {{ item.reward | localizeNumber }} XP
             </b-card-text>
             <b-card-text>Price: ${{ item.cost_usd }}</b-card-text>
 
@@ -25,9 +30,21 @@
             <div v-if="loading" class="d-flex justify-content-center mb-3">
               <b-spinner label="Loading..."></b-spinner>
             </div>
-            <b-card v-else class="payment-options">
-              <StripePurchase class="my-3" :item="item" />
-              <PaypalPurchase :item="item" />
+            <b-card v-else class="payment-options mt-3">
+              <!-- <StripePurchase
+                class="my-3"
+                :item="item"
+                v-on:purchaseSuccess="onPurchaseSuccess"
+                v-on:error="onError"
+              /> -->
+              <PaypalPurchase
+                :item="item"
+                paypalType="cheap"
+                v-on:purchaseSuccess="onPurchaseSuccess"
+              />
+              <b-alert v-model="showError" variant="danger" dismissible>
+                {{ error }}
+              </b-alert>
             </b-card>
           </template>
           <template v-else>
@@ -41,14 +58,14 @@
 
 <script>
 import PaypalPurchase from "./PaypalPurchase";
-import StripePurchase from "./StripePurchase";
+// import StripePurchase from "./StripePurchase";
 import LoginButton from "../login/LoginButton";
 
 export default {
   components: {
     LoginButton,
     PaypalPurchase,
-    StripePurchase
+    // StripePurchase,
   },
 
   data() {
@@ -56,20 +73,30 @@ export default {
       item: {},
       error: "",
       showError: false,
-      loading: true
+      loading: true,
     };
   },
 
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn;
-    }
+    },
+  },
+
+  methods: {
+    onPurchaseSuccess() {
+      this.$router.push("/payment_success");
+    },
+    onError(error) {
+      this.error = error;
+      this.showError = true;
+    },
   },
 
   created() {
     fetch(`/api/cosmetics/item_prices/${this.$route.params.item_id}`)
-      .then(res => res.json())
-      .then(item => {
+      .then((res) => res.json())
+      .then((item) => {
         if (item) {
           this.item = item;
           this.loading = false;
@@ -79,11 +106,11 @@ export default {
           this.$router.push("/store");
         }
       })
-      .catch(err => {
+      .catch((err) => {
         this.showError = true;
         this.error = err;
       });
-  }
+  },
 };
 </script>
 

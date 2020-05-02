@@ -1,7 +1,6 @@
 const { query } = require("./index");
 const { GetEloRatingChange } = require("../mmr/mmr");
 const players = require("./players");
-const quests = require("./quests");
 
 module.exports = {
   async create(gameData) {
@@ -128,6 +127,7 @@ module.exports = {
         const backpack1 = finalInventory["7"];
         const backpack2 = finalInventory["8"];
         const backpack3 = finalInventory["9"];
+        let xpEarned = 0;
 
         const teamData = teamInfo[team];
 
@@ -161,7 +161,7 @@ module.exports = {
           );
 
           if (!abandoned) {
-            await players.givePostGameBP(steamid, winner);
+            xpEarned = await players.givePostGameBP(steamid, winner);
           }
         }
 
@@ -179,13 +179,13 @@ module.exports = {
         building_damage, hero_healing, kills, deaths, assists, last_hits,
         denies, gold, rampages, double_kills, tp_used, runes_used,
         health_drop_duration, total_gold, total_exp, hero_level, abilities,
-        permanent_buffs, disconnects, item_purchases,
+        permanent_buffs, disconnects, item_purchases, xp_earned,
         item_0, item_1, item_2, item_3, item_4, item_5,
         backpack_0, backpack_1, backpack_2, backpack_3)
 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,
           $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29,
-          $30, $31, $32, $33, $34, $35, $36, $37, $38, $39)
+          $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40)
         `,
           [
             gameID,
@@ -217,6 +217,7 @@ module.exports = {
             JSON.stringify(permanentBuffs),
             JSON.stringify(disconnectEvents),
             JSON.stringify(itemPurchases),
+            xpEarned,
             item0,
             item1,
             item2,
@@ -359,6 +360,26 @@ module.exports = {
         JOIN games g
         USING (game_id)
         GROUP BY gp.hero
+      `;
+      const { rows } = await query(sql_query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getItemSlotStats(slot) {
+    try {
+      const sql_query = `
+      SELECT
+        item_${slot},
+        count(*) as games,
+        COUNT(case when radiant_win = is_radiant then game_id end) as wins,
+        TRUNC(COUNT(case when radiant_win = is_radiant then game_id end)::decimal / count(*), 2) as win_rate
+      FROM game_players
+      JOIN games
+      USING (game_id)
+      GROUP BY item_0
+      ORDER BY win_rate DESC;
       `;
       const { rows } = await query(sql_query);
       return rows;

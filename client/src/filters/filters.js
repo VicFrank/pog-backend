@@ -418,6 +418,11 @@ export default {
         return moment(String(value)).fromNow();
       }
     },
+    localizeNumber: function(value) {
+      if (value) {
+        return value.toLocaleString();
+      }
+    },
     round: function(value, decimals) {
       {
         if (!value) {

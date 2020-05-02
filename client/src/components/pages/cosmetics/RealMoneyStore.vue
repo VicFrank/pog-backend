@@ -15,7 +15,11 @@
                   :key="product.poggers"
                   v-on:click="selectedProduct = product"
                 >
-                  <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+                  <img
+                    class="pogcoin"
+                    src="./images/pogcoin_gold.png"
+                    alt="Pog Coin"
+                  />
                   {{ product.reward }} POGGERS - ${{ product.cost_usd }}
                 </b-button>
               </b-button-group>
@@ -28,7 +32,8 @@
                   v-for="product in xpProducts"
                   :key="product.poggers"
                   v-on:click="selectedProduct = product"
-                >{{ product.reward }} XP - ${{ product.cost_usd }}</b-button>
+                  >{{ product.reward }} XP - ${{ product.cost_usd }}</b-button
+                >
               </b-button-group>
             </b-tab>
           </b-tabs>
@@ -51,15 +56,18 @@
                   Item:
                   {{ selectedProduct.reward }} XP
                 </b-card-text>
-                <b-card-text>Price: ${{ selectedProduct.cost_usd }}</b-card-text>
+                <b-card-text
+                  >Price: ${{ selectedProduct.cost_usd }}</b-card-text
+                >
 
                 <template v-slot:footer></template>
               </b-card>
-              <PaypalPurchase
-                :item="selectedProduct"
-                :credentials="credentials"
-                paypalType="cheap"
-              />
+              <b-button
+                class="mb-3"
+                :to="`/checkout/${selectedProduct.item_id}`"
+                variant="primary"
+                >Proceed to checkout</b-button
+              >
             </template>
             <template v-else>
               <p>Login to complete your purchase</p>
@@ -74,47 +82,39 @@
 
 <script>
 import LoginButton from "../login/LoginButton";
-import PaypalPurchase from "../payment/PaypalPurchase";
 
 export default {
   components: {
     LoginButton,
-    PaypalPurchase
   },
   data() {
     return {
       selectedProduct: {},
       poggersProducts: [],
       xpProducts: [],
-      credentials: {
-        sandbox:
-          "AYAmQijTIaUAckei3KBH9rJh7Vea0lmIuUZclFx5RWUfhaG6OfcG7w_IOZclheI431gFF0ETdwfhnWbU",
-        production:
-          "ARyCiFJGaPqBv5V0OJNPloAOgwUDp-YOu2cLtrp8fdTLlpBCaIfbXhnFHfVuMylXG9iyPaKCw2SR2D4V"
-      }
     };
   },
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn;
-    }
+    },
   },
   created() {
     fetch(`/api/cosmetics/item_prices`)
-      .then(res => res.json())
-      .then(products => {
+      .then((res) => res.json())
+      .then((products) => {
         this.poggersProducts = products
-          .filter(item => item.item_type === "POGGERS")
+          .filter((item) => item.item_type === "POGGERS")
           .sort((a, b) => a.cost_usd - b.cost_usd);
         this.xpProducts = products
-          .filter(item => item.item_type === "XP")
+          .filter((item) => item.item_type === "XP")
           .sort((a, b) => a.cost_usd - b.cost_usd);
       })
-      .catch(err => {
+      .catch((err) => {
         this.showError = true;
         this.error = err;
       });
-  }
+  },
 };
 </script>
 

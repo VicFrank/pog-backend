@@ -10,7 +10,6 @@ import MyStats from "../components/pages/MyStats";
 import Profile from "../components/pages/Profile";
 import Stats from "../components/pages/Stats";
 import BattlePass from "../components/pages/cosmetics/BattlePass";
-// import SplashPage from "../components/SplashPage";
 import Patrons from "../components/pages/Patrons";
 import Game from "../components/pages/games/Game";
 import RecentGames from "../components/pages/games/RecentGames";
@@ -30,17 +29,14 @@ const Home = () => import("../components/pages/home/Home");
 const Credits = () => import("../components/pages/credits/Credits");
 
 import PoggersStore from "../components/pages/cosmetics/RealMoneyStore";
-// import Payment from "../components/pages/payment/Payment";
+import Checkout from "../components/pages/payment/Checkout";
+import PaymentSuccess from "../components/pages/payment/PaymentSuccess";
 
 Vue.use(VueRouter);
 
 const routes = [
   { path: "/404", alias: "*", component: NotFound },
   { path: "*", redirect: "/404" },
-  // {
-  //   path: "/",
-  //   component: SplashPage,
-  // },
   {
     path: "/",
     component: Home,
@@ -49,10 +45,14 @@ const routes = [
     path: "/poggers",
     component: PoggersStore,
   },
-  // {
-  //   path: "/payment/:item_id",
-  //   component: Payment,
-  // },
+  {
+    path: "/checkout/:item_id",
+    component: Checkout,
+  },
+  {
+    path: "/payment_success",
+    component: PaymentSuccess,
+  },
   {
     path: "/changelog",
     component: Changelog,

@@ -203,7 +203,7 @@
                       v-if="cosmetic.cosmetic_type === 'XP'"
                       class="mr-2"
                       variant="primary"
-                      :to="`/poggers`"
+                      :to="getXPShopLink(cosmetic)"
                       >Buy</b-button
                     >
                     <b-button
@@ -387,6 +387,9 @@ export default {
         cosmetic.cosmetic_type === "Chest XP" ||
         cosmetic.cosmetic_type === "BP Accelerator"
       );
+    },
+    getXPShopLink(cosmetic) {
+      return `/checkout/${cosmetic.cosmetic_id}`;
     },
     buyItem(cosmetic) {
       const { cosmetic_id, cost } = cosmetic;

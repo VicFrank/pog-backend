@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const passport = require("passport");
 const session = require("express-session");
 const SteamStrategy = require("passport-steam").Strategy;
+const pgSession = require("connect-pg-simple")(session);
 
 const keys = require("./config/keys");
 
@@ -17,6 +18,7 @@ const patreonRouter = require("./routes/patreon");
 const cosmeticsRouter = require("./routes/cosmetics");
 const steamRouter = require("./routes/steam");
 const logsRouter = require("./routes/logs");
+const { pool } = require("./db/index");
 
 const players = require("./db/players");
 
@@ -84,11 +86,16 @@ passport.use(
 );
 
 let sess = {
+  store: new pgSession({
+    pool: pool,
+  }),
   secret: keys.sessionKey,
   name: "id",
   resave: false,
   saveUninitialized: true,
-  cookie: {},
+  cookie: {
+    maxAge: 8640000,
+  },
 };
 
 if (process.env.IS_PRODUCTION) {

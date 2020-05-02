@@ -20,7 +20,6 @@ export default {
   data: () => ({
     error: "",
     showError: false,
-
     complete: false,
     paymentIntent: false,
     clientSecret: "",
@@ -48,7 +47,15 @@ export default {
           name: this.item.item_id,
         }),
       };
-      return (await fetch(url, params)).json();
+      const intent = await fetch(url, params);
+
+      if (!intent.ok) {
+        const error = await intent.json();
+        this.$emit("error", error.message);
+        return;
+      }
+
+      return intent.json();
     },
 
     createCardForm(elements) {
@@ -67,12 +74,11 @@ export default {
         }
       );
 
-      this.$router.push("/poggers");
-
       if (result.error) {
         console.error(result.error);
-        this.error = result.error;
-        this.showError = true;
+        this.$emit("error", result.error);
+      } else {
+        this.$emit("purchaseSuccess");
       }
     },
   },

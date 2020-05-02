@@ -98,7 +98,6 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
     }
 
     if (item_type === "POGGERS") {
-      // add the poggers to the player
       await players.modifyPoggers(steamID, reward);
     } else if (item_type === "XP") {
       await players.addBattlePassExp(steamID, reward);
@@ -119,15 +118,47 @@ router.post("/stripe/intents", async (req, res) => {
   const { name, amount } = req.body;
   const steamID = req.params.steamid;
 
+  const itemData = await cosmetics.getItemPrice(name);
+  const { cost_usd, item_type } = itemData;
+
+  if (!itemData) {
+    return res.status(400).send({ message: "Invalid ItemID" });
+  }
+  if (amount / 100 != cost_usd) {
+    return res.status(400).send({ message: "Invalid Payment Amount" });
+  }
+  const validReward = item_type === "POGGERS" || item_type === "XP";
+  if (!validReward) {
+    return res.status(400).send({ message: "Invalid Item Type" });
+  }
+
   const paymentIntent = await stripeClient.client.paymentIntents.create({
     amount,
     currency: "usd",
     payment_method_types: ["card"],
-    metadata: { uid: steamID },
+    metadata: { steamID, itemID },
   });
 
   res.send(paymentIntent);
 });
+
+async function handleStripePaymentIntentSucceeded(intent) {
+  const { steamID, itemID } = intent.metadata;
+  const itemData = await cosmetics.getItemPrice(itemID);
+  const { item_type } = itemData;
+
+  await logs.addTransactionLog(steamID, "stripe", {
+    intent,
+  });
+
+  if (item_type === "POGGERS") {
+    await players.modifyPoggers(steamID, reward);
+  } else if (item_type === "XP") {
+    await players.addBattlePassExp(steamID, reward);
+  } else {
+    console.log(`Error adding ${itemID} to ${steamID} from Stripe`);
+  }
+}
 
 router.post("/stripe/webhook", async (req, res) => {
   const sig = req.headers["stripe-signature"];
@@ -154,10 +185,11 @@ router.post("/stripe/webhook", async (req, res) => {
 
   const intent = event.data.object;
 
-  console.log(event.type);
+  console.log(event);
 
   switch (event.type) {
     case "payment_intent.succeeded":
+      handleStripePaymentIntentSucceeded(intent);
       console.log("Succeeded:", intent.id);
       break;
     case "payment_intent.payment_failed":
@@ -167,7 +199,7 @@ router.post("/stripe/webhook", async (req, res) => {
       break;
   }
 
-  res.sendStatus(200);
+  res.json({ received: true });
 });
 
 module.exports = router;
