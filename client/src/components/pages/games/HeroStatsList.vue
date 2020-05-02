@@ -9,12 +9,37 @@
               <b-table hover :fields="fields" :items="heroes" responsive>
                 <template v-slot:cell(hero)="data">
                   <div class="hero-col">
-                    <HeroImage class="hero-image" :hero="data.item.hero"></HeroImage>
+                    <HeroImage
+                      class="hero-image"
+                      :hero="data.item.hero"
+                    ></HeroImage>
                     {{ data.item.hero | translateDota }}
                   </div>
                 </template>
-                <template v-slot:cell(win_rate)="data">{{data.item.win_rate | percentage }}</template>
-                <template v-slot:cell(kdr)="data">{{data.item.kdr | round(2) }}</template>
+                <template v-slot:cell(games)="data">
+                  {{ data.item.games }}
+                  <PercentBar
+                    :max="maxGames"
+                    :value="data.item.games"
+                    class="mt-1 progress-bar"
+                  ></PercentBar>
+                </template>
+                <template v-slot:cell(win_rate)="data">
+                  {{ data.item.win_rate | percentage(1) }}
+                  <PercentBar
+                    :max="1"
+                    :value="data.item.win_rate"
+                    class="mt-1 progress-bar"
+                  ></PercentBar>
+                </template>
+                <template v-slot:cell(kdr)="data">
+                  {{ data.item.kdr | round(2) }}
+                  <PercentBar
+                    :max="maxKDR"
+                    :value="data.item.kdr"
+                    class="mt-1 progress-bar"
+                  ></PercentBar>
+                </template>
               </b-table>
             </div>
           </div>
@@ -26,62 +51,76 @@
 
 <script>
 import HeroImage from "./HeroImage.vue";
+import PercentBar from "../../utility/PercentBar";
 
 export default {
+  components: {
+    HeroImage,
+    PercentBar,
+  },
+
   data: () => ({
     fields: [
       {
         key: "hero",
         sortable: true,
-        thClass: "table-head"
+        thClass: "table-head text-left",
       },
       {
         key: "games",
         sortable: true,
-        thClass: "table-head"
+        thClass: "table-head text-left",
+        tdClass: "text-left",
       },
       {
         key: "win_rate",
         sortable: true,
-        thClass: "table-head"
+        thClass: "table-head text-left",
+        tdClass: "text-left",
       },
       {
         key: "kdr",
         sortable: true,
-        thClass: "table-head",
-        label: "KDR"
-      }
+        thClass: "table-head text-left",
+        tdClass: "text-left",
+        label: "KDR",
+      },
     ],
-    heroes: []
+    heroes: [],
+    maxGames: 0,
+    maxKDR: 0,
   }),
-
-  components: {
-    HeroImage
-  },
 
   created() {
     fetch(`/api/games/stats/heroes`)
-      .then(res => res.json())
-      .then(heroes => {
-        this.heroes = heroes.map(stats => ({
+      .then((res) => res.json())
+      .then((heroes) => {
+        this.heroes = heroes.map((stats) => ({
           hero: stats.hero,
           games: stats.games,
           win_rate: stats.wins / stats.games,
-          kdr: stats.avg_kills / stats.avg_deaths
+          kdr: stats.avg_kills / stats.avg_deaths,
         }));
+        this.maxGames = this.getMaxArray(this.heroes, "games");
+        this.maxKDR = this.getMaxArray(this.heroes, "kdr");
       });
-  }
+  },
+
+  methods: {
+    getMaxArray(arr, property) {
+      return arr.reduce(
+        (max, b) => Math.max(max, b[property]),
+        arr[0][property]
+      );
+    },
+  },
 };
 </script>
 
 <style scoped>
-/* tr {
-  cursor: default;
+.progress-bar {
+  max-width: 80%;
 }
-
-tr:hover {
-  background-color: #324250;
-} */
 
 .hero-image {
   height: 40px;

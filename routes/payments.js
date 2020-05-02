@@ -27,6 +27,8 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
     const itemID = req.body.itemID;
     const paypalType = req.body.paypalType;
 
+    console.log("Start of Post");
+
     let request = new checkoutNodeJssdk.orders.OrdersGetRequest(orderID);
 
     let paypalClient;
@@ -47,9 +49,11 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
         order,
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       return res.send(500);
     }
+
+    console.log("Got Intent");
 
     // Make sure this is a valid player
     const playerExists = await players.doesPlayerExist(steamID);
@@ -74,18 +78,22 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
       return res.status(400).send({ message: "Invalid Item Type" });
     }
 
+    console.log("Capture Order");
     // Call PayPal to capture the order
     request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID);
     request.requestBody({});
+    console.log("After Capture Order");
 
     try {
+      console.log("Await Execute Capture");
       const capture = await paypalClient().execute(request);
+      console.log("After Await Execute Capture");
       await logs.addTransactionLog(steamID, "paypal", {
         itemID,
         capture,
       });
     } catch (err) {
-      console.error(err);
+      console.log(err);
       return res.send(500);
     }
 
@@ -139,7 +147,7 @@ router.post("/stripe/webhook", async (req, res) => {
       secret
     );
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(400).send("Webhook Error");
     return;
   }
