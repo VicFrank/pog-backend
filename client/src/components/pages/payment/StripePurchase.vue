@@ -25,7 +25,7 @@ export default {
   }),
 
   async created() {
-    const stripe = window.Stripe("pk_test_kG4TReBTkO6yDfO9mMwtShME00mx65Yyw2");
+    const stripe = window.Stripe("pk_live_Gsys06Ua6PDnLjGDADoMfuSI002TVIavMr");
     this.stripe = stripe;
     const elements = stripe.elements();
     this.paymentIntent = await this.createIntent();
