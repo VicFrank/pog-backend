@@ -1,4 +1,4 @@
-const { query, getClient } = require("./index");
+const { query } = require("./index");
 const { GetEloRatingChange } = require("../mmr/mmr");
 const players = require("./players");
 
@@ -18,12 +18,10 @@ module.exports = {
     const radiantWin = winnerTeam == "DOTA_TEAM_GOODGUYS";
     const roundedDuration = Math.floor(gameDuration);
 
-    const client = await getClient();
-
     try {
-      await client.query("BEGIN");
+      await query("BEGIN");
 
-      const { rows: gameRows } = await client.query(
+      const { rows: gameRows } = await query(
         `
       INSERT INTO games (radiant_win, ranked, duration, health_drops, cheats_enabled)
       VALUES ($1, $2, $3, $4, $5)
@@ -35,7 +33,7 @@ module.exports = {
       const gameID = gameRows[0].game_id;
 
       for (let bannedHero of bannedHeroes) {
-        await client.query(
+        await query(
           `
           INSERT INTO game_bans (game_id, hero)
           VALUES ($1, $2)
@@ -60,7 +58,7 @@ module.exports = {
           buildingKills = {};
         }
 
-        await client.query(
+        await query(
           `
           INSERT INTO teams (game_id, is_radiant, kills, deaths, assists, guardian_kills, building_kills)
           VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -139,7 +137,7 @@ module.exports = {
         if (!steamid || steamid == "0") continue;
 
         // update the username and get the player (if it exists)
-        let { rows: playerRows } = await client.query(
+        let { rows: playerRows } = await query(
           `UPDATE players
           SET username = $2
           WHERE steam_id = $1
@@ -176,7 +174,7 @@ module.exports = {
 
         mmrData.playerMMR[steamid] = mmr;
 
-        await client.query(
+        await query(
           `
         INSERT INTO game_players(game_id, steam_id, abandoned, is_radiant,
         hero, ban, available_picks, rerolled_heroes, hero_damage,
@@ -253,7 +251,7 @@ module.exports = {
             const mmrChange = team == winnerTeam ? ratingChange : -ratingChange;
 
             if (mmr) {
-              await client.query(
+              await query(
                 `UPDATE players
                 SET mmr = mmr + $1
                 WHERE steam_id = $2`,
@@ -263,13 +261,11 @@ module.exports = {
           }
         }
       }
-      await client.query("COMMIT");
+      await query("COMMIT");
       return gameID;
     } catch (error) {
-      await client.query("ROLLBACK");
+      await query("ROLLBACK");
       throw error;
-    } finally {
-      client.release();
     }
   },
 

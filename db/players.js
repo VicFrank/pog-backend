@@ -713,10 +713,7 @@ module.exports = {
   },
 
   async itemTransaction(steamID, transactionData) {
-    const client = await getClient();
     try {
-      await client.query("BEGIN");
-
       if (!transactionData) {
         throw new Error("No transaction supplied");
       }
@@ -738,12 +735,7 @@ module.exports = {
               VALUES
                 ($1, $2, $3, $4)
               `;
-              await client.query(queryText, [
-                steamID,
-                cosmetic_id,
-                level,
-                effect,
-              ]);
+              await query(queryText, [steamID, cosmetic_id, level, effect]);
             }
           } else if (amount < 0) {
             for (let i = 0; i < amount * -1; i++) {
@@ -760,11 +752,7 @@ module.exports = {
               RETURNING *)
               SELECT count(*) FROM deleted;
             `;
-              const { rows } = await client.query(queryText, [
-                steamID,
-                level,
-                effect,
-              ]);
+              const { rows } = await query(queryText, [steamID, level, effect]);
               const rowsDeleted = rows[0].count;
               if (rowsDeleted === 0) {
                 throw new Error("Tried to remove nonexistent companion");
@@ -782,7 +770,7 @@ module.exports = {
           SET poggers = poggers + $1
           WHERE steam_id = $2
         `;
-        await client.query(queryText, [poggers, steamID]);
+        await query(queryText, [poggers, steamID]);
       }
 
       // Update battle pass
@@ -804,11 +792,7 @@ module.exports = {
               = ($2, to_timestamp($3))
             WHERE steam_id = $1
           `;
-          await client.query(queryText, [
-            steamID,
-            upgradeTier,
-            upgradeExpiration,
-          ]);
+          await query(queryText, [steamID, upgradeTier, upgradeExpiration]);
         }
       }
 
@@ -825,7 +809,7 @@ module.exports = {
               (steam_id, cosmetic_id) VALUES
               ($1, $2)
               `;
-              await client.query(queryText, [steamID, cosmeticID]);
+              await query(queryText, [steamID, cosmeticID]);
             }
           } else if (amount < 0) {
             for (let i = 0; i < amount * -1; i++) {
@@ -840,10 +824,7 @@ module.exports = {
                 RETURNING *)
                 SELECT count(*) FROM deleted;
               `;
-              const { rows } = await client.query(queryText, [
-                steamID,
-                cosmeticID,
-              ]);
+              const { rows } = await query(queryText, [steamID, cosmeticID]);
               const rowsDeleted = rows[0].count;
               if (rowsDeleted == 0) {
                 throw new Error("Tried to remove non-existent cosmetic");
@@ -860,15 +841,13 @@ module.exports = {
           SET last_stat_reset = to_timestamp($1)
           WHERE steam_id = $2
         `;
-        await client.query(queryText, [statResetDate, steamID]);
+        await query(queryText, [statResetDate, steamID]);
       }
 
-      await client.query("COMMIT");
+      await query("COMMIT");
     } catch (error) {
-      await client.query("ROLLBACK");
+      await query("ROLLBACK");
       throw error;
-    } finally {
-      await client.release();
     }
   },
 
@@ -1081,11 +1060,8 @@ module.exports = {
   },
 
   async buyCosmetic(steamID, cosmeticID, client) {
-    if (!client) {
-      client = await getClient();
-    }
     try {
-      await client.query("BEGIN");
+      await query("BEGIN");
       const cosmetic = await cosmetics.getCosmetic(cosmeticID);
 
       if (!cosmetic) {
@@ -1126,12 +1102,10 @@ module.exports = {
       await this.modifyPoggers(steamID, -price);
       await this.giveCosmetic(steamID, cosmeticID);
 
-      await client.query("COMMIT");
+      await query("COMMIT");
     } catch (error) {
-      await client.query("ROLLBACK");
+      await query("ROLLBACK");
       throw error;
-    } finally {
-      client.release();
     }
   },
 
