@@ -200,11 +200,12 @@ async function initPlayers() {
 
 async function addSampleGames(numGames) {
   try {
+    let promises = [];
     for (let i = 0; i < numGames; i++) {
-      console.log(`Adding game ${i}`);
-      await games.create(generateRandomSampleData());
+      promises.push(games.create(generateRandomSampleData()));
     }
 
+    await Promise.all(promises);
     console.log(`Added ${numGames} sample games`);
   } catch (error) {
     throw error;
@@ -248,7 +249,7 @@ async function initializeAdmins() {
   await loadBattlePass();
   await loadItemPrices();
   // await initPlayers();
-  // await addSampleGames(10);
+  await addSampleGames(10);
   await initializeAdmins();
   // await addRealSample();
 })();

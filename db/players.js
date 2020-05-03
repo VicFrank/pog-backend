@@ -1061,7 +1061,6 @@ module.exports = {
 
   async buyCosmetic(steamID, cosmeticID, client) {
     try {
-      await query("BEGIN");
       const cosmetic = await cosmetics.getCosmetic(cosmeticID);
 
       if (!cosmetic) {
@@ -1101,10 +1100,7 @@ module.exports = {
       // Do the transaction
       await this.modifyPoggers(steamID, -price);
       await this.giveCosmetic(steamID, cosmeticID);
-
-      await query("COMMIT");
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },
@@ -1359,8 +1355,6 @@ module.exports = {
    */
   async createInitialDailyQuests(steamID, numQuests) {
     try {
-      await query("BEGIN");
-
       const currentQuests = await quests.getDailyQuestsForPlayer(steamID);
       if (currentQuests.length > 0) {
         throw new Error("Player Daily Quests have already been initialized!");
@@ -1388,10 +1382,8 @@ module.exports = {
         index++;
       }
 
-      await query("COMMIT");
       return newQuests;
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },
@@ -1424,8 +1416,6 @@ module.exports = {
    */
   async rerollDailyQuest(steamID, questID) {
     try {
-      await query("BEGIN");
-
       // Randomly choose a new quest
       const allQuests = await quests.getAllDailyQuests();
       const currentQuests = await quests.getAllDailyQuestsForPlayer(steamID);
@@ -1472,10 +1462,8 @@ module.exports = {
         questToAddID,
       ]);
 
-      await query("COMMIT");
       return { ...newQuestRows[0], success: true };
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },

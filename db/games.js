@@ -1,4 +1,4 @@
-const { query } = require("./index");
+const { query, pool } = require("./index");
 const { GetEloRatingChange } = require("../mmr/mmr");
 const players = require("./players");
 
@@ -19,27 +19,33 @@ module.exports = {
     const roundedDuration = Math.floor(gameDuration);
 
     try {
-      await query("BEGIN");
-
-      const { rows: gameRows } = await query(
-        `
-      INSERT INTO games (radiant_win, ranked, duration, health_drops, cheats_enabled)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING game_id
-      `,
-        [radiantWin, rankedGame, roundedDuration, healthDrops, cheatsEnabled]
-      );
-
-      const gameID = gameRows[0].game_id;
-
-      for (let bannedHero of bannedHeroes) {
-        await query(
+      const client = await pool.connect();
+      let gameID;
+      try {
+        const { rows: gameRows } = await client.query(
           `
-          INSERT INTO game_bans (game_id, hero)
-          VALUES ($1, $2)
-          `,
-          [gameID, bannedHero]
+        INSERT INTO games (radiant_win, ranked, duration, health_drops, cheats_enabled)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING game_id
+        `,
+          [radiantWin, rankedGame, roundedDuration, healthDrops, cheatsEnabled]
         );
+
+        gameID = gameRows[0].game_id;
+
+        for (let bannedHero of bannedHeroes) {
+          await client.query(
+            `
+            INSERT INTO game_bans (game_id, hero)
+            VALUES ($1, $2)
+            `,
+            [gameID, bannedHero]
+          );
+        }
+      } catch (error) {
+        throw error;
+      } finally {
+        client.release();
       }
 
       for (const [team, teamData] of Object.entries(teamInfo)) {
@@ -261,10 +267,9 @@ module.exports = {
           }
         }
       }
-      await query("COMMIT");
+      console.log(`Created game: ${gameID}`);
       return gameID;
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },

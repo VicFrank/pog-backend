@@ -8,7 +8,6 @@ import Cosmetics from "../components/pages/cosmetics/Cosmetics";
 import MatchHistory from "../components/pages/MatchHistory";
 import MyStats from "../components/pages/MyStats";
 import Profile from "../components/pages/Profile";
-import Stats from "../components/pages/Stats";
 import BattlePass from "../components/pages/cosmetics/BattlePass";
 import Patrons from "../components/pages/Patrons";
 import Game from "../components/pages/games/Game";
@@ -142,11 +141,6 @@ const routes = [
   {
     path: "/profile/stats",
     component: MyStats,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/profile/heroes",
-    component: Stats,
     meta: { requiresAuth: true },
   },
 ];
