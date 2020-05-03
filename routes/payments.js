@@ -115,8 +115,7 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
 });
 
 router.post("/stripe/intents", async (req, res) => {
-  const { name, amount } = req.body;
-  const steamID = req.params.steamid;
+  const { name, amount, steamID } = req.body;
 
   const itemData = await cosmetics.getItemPrice(name);
   const { cost_usd, item_type } = itemData;
@@ -136,7 +135,7 @@ router.post("/stripe/intents", async (req, res) => {
     amount,
     currency: "usd",
     payment_method_types: ["card"],
-    metadata: { steamID, itemID },
+    metadata: { steamID, itemID: name },
   });
 
   res.send(paymentIntent);
@@ -145,18 +144,22 @@ router.post("/stripe/intents", async (req, res) => {
 async function handleStripePaymentIntentSucceeded(intent) {
   const { steamID, itemID } = intent.metadata;
   const itemData = await cosmetics.getItemPrice(itemID);
-  const { item_type } = itemData;
+  const { item_type, reward } = itemData;
 
   await logs.addTransactionLog(steamID, "stripe", {
     intent,
   });
 
-  if (item_type === "POGGERS") {
-    await players.modifyPoggers(steamID, reward);
-  } else if (item_type === "XP") {
-    await players.addBattlePassExp(steamID, reward);
-  } else {
-    console.log(`Error adding ${itemID} to ${steamID} from Stripe`);
+  try {
+    if (item_type === "POGGERS") {
+      await players.modifyPoggers(steamID, reward);
+    } else if (item_type === "XP") {
+      await players.addBattlePassExp(steamID, reward);
+    } else {
+      throw new Error("Bad item type");
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -185,12 +188,9 @@ router.post("/stripe/webhook", async (req, res) => {
 
   const intent = event.data.object;
 
-  console.log(event);
-
   switch (event.type) {
     case "payment_intent.succeeded":
       handleStripePaymentIntentSucceeded(intent);
-      console.log("Succeeded:", intent.id);
       break;
     case "payment_intent.payment_failed":
       const message =

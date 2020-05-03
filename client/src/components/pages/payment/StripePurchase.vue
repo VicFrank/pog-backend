@@ -1,12 +1,10 @@
 <template>
   <div>
     <div ref="card"></div>
-    <b-button
-      variant="primary"
-      @click="submitPayment"
-      :disabled="!paymentIntent || !complete"
-      >Pay with Stripe</b-button
-    >
+    <b-button variant="primary" @click="submitPayment" :disabled="!paymentIntent || !complete">
+      Pay with Stripe
+      <b-spinner v-if="awaitingPayment" label="Loading..."></b-spinner>
+    </b-button>
   </div>
 </template>
 
@@ -14,7 +12,7 @@
 let card = undefined;
 export default {
   props: {
-    item: {},
+    item: {}
   },
 
   data: () => ({
@@ -23,6 +21,7 @@ export default {
     complete: false,
     paymentIntent: false,
     clientSecret: "",
+    awaitingPayment: false
   }),
 
   async created() {
@@ -40,12 +39,13 @@ export default {
       const params = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           amount: this.item.cost_usd * 100, // stripe amounts are in cents
           name: this.item.item_id,
-        }),
+          steamID: this.$store.state.auth.userSteamID
+        })
       };
       const intent = await fetch(url, params);
 
@@ -62,15 +62,16 @@ export default {
       card = elements.create("card");
       card.mount(this.$refs.card);
 
-      card.on("change", (e) => (this.complete = e.complete));
+      card.on("change", e => (this.complete = e.complete));
     },
 
     async submitPayment() {
+      this.awaitingPayment = true;
       const result = await this.stripe.handleCardPayment(
         this.clientSecret,
         card,
         {
-          payment_method_data: {},
+          payment_method_data: {}
         }
       );
 
@@ -80,8 +81,8 @@ export default {
       } else {
         this.$emit("purchaseSuccess");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

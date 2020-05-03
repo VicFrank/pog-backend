@@ -5,8 +5,9 @@ function checkServerKey(req) {
   const dedicatedServerKey = process.env.IS_PRODUCTION
     ? keys.dedicatedServerKey
     : keys.toolsKey;
+  const testKey = keys.dedicatedServerKey_Old;
 
-  return server_key === dedicatedServerKey;
+  return server_key === dedicatedServerKey || server_key === testKey;
 }
 
 function checkUserAuth(req) {

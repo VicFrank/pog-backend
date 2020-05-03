@@ -11,11 +11,7 @@
             </template>
             <b-card-text v-if="item.item_type === 'POGGERS'">
               Item:
-              <img
-                class="pogcoin"
-                src="../cosmetics/images/pogcoin_gold.png"
-                alt="Pog Coin"
-              />
+              <img class="pogcoin" src="../cosmetics/images/pogcoin_gold.png" alt="Pog Coin" />
               {{ item.reward | localizeNumber }} POGGERS
             </b-card-text>
             <b-card-text v-else-if="item.item_type === 'XP'">
@@ -31,20 +27,18 @@
               <b-spinner label="Loading..."></b-spinner>
             </div>
             <b-card v-else class="payment-options mt-3">
-              <!-- <StripePurchase
+              <StripePurchase
                 class="my-3"
                 :item="item"
                 v-on:purchaseSuccess="onPurchaseSuccess"
                 v-on:error="onError"
-              /> -->
+              />
               <PaypalPurchase
                 :item="item"
-                paypalType="cheap"
+                :paypalType="paypalType"
                 v-on:purchaseSuccess="onPurchaseSuccess"
               />
-              <b-alert v-model="showError" variant="danger" dismissible>
-                {{ error }}
-              </b-alert>
+              <b-alert v-model="showError" variant="danger" dismissible>{{ error }}</b-alert>
             </b-card>
           </template>
           <template v-else>
@@ -58,14 +52,14 @@
 
 <script>
 import PaypalPurchase from "./PaypalPurchase";
-// import StripePurchase from "./StripePurchase";
+import StripePurchase from "./StripePurchase";
 import LoginButton from "../login/LoginButton";
 
 export default {
   components: {
     LoginButton,
     PaypalPurchase,
-    // StripePurchase,
+    StripePurchase
   },
 
   data() {
@@ -73,7 +67,7 @@ export default {
       item: {},
       error: "",
       showError: false,
-      loading: true,
+      loading: true
     };
   },
 
@@ -81,6 +75,9 @@ export default {
     loggedIn() {
       return this.$store.getters.loggedIn;
     },
+    paypalType() {
+      return this.item.cost_usd < 12 ? "cheap" : "expensive";
+    }
   },
 
   methods: {
@@ -90,13 +87,13 @@ export default {
     onError(error) {
       this.error = error;
       this.showError = true;
-    },
+    }
   },
 
   created() {
     fetch(`/api/cosmetics/item_prices/${this.$route.params.item_id}`)
-      .then((res) => res.json())
-      .then((item) => {
+      .then(res => res.json())
+      .then(item => {
         if (item) {
           this.item = item;
           this.loading = false;
@@ -106,11 +103,11 @@ export default {
           this.$router.push("/store");
         }
       })
-      .catch((err) => {
+      .catch(err => {
         this.showError = true;
         this.error = err;
       });
-  },
+  }
 };
 </script>
 

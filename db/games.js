@@ -372,7 +372,7 @@ module.exports = {
       const sql_query = `
       SELECT
         item_${slot},
-        count(*) as games,
+        count(*) as purchased,
         COUNT(case when radiant_win = is_radiant then game_id end) as wins,
         TRUNC(COUNT(case when radiant_win = is_radiant then game_id end)::decimal / count(*), 2) as win_rate
       FROM game_players
