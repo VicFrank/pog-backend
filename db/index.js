@@ -12,4 +12,7 @@ module.exports = {
     return pool.query(text, params);
   },
   pool,
+  getClient: async () => {
+    return await pool.connect();
+  },
 };

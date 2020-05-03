@@ -27,7 +27,22 @@
         </div>
       </div>
     </div>
-
+    <div
+      v-for="[rarity, bonusPoggers] of Object.entries(pityPoggersRarities)"
+      :key="rarity"
+      class="text-center mt-1"
+      v-b-tooltip.hover
+      title="If you have already received all the items of this rarity, you are instead given bonus POGGERS"
+    >
+      <i class="fas fa-info-circle"></i>
+      {{rarity}} Completion Bonus:
+      <img
+        class="pogcoin"
+        src="./images/pogcoin_gold.png"
+        alt="Pog Coin"
+      />
+      {{bonusPoggers}} POGGERS
+    </div>
     <div v-if="poggers > 0" class="text-center mt-1">
       <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
       {{poggers}} POGGERS
@@ -50,6 +65,7 @@ export default {
     showError: false,
     items: [],
     poggers: 0,
+    pityPoggersRarities: {},
     opened: false
   }),
   props: {
@@ -92,6 +108,7 @@ export default {
         .then(res => {
           this.items = res.items;
           this.poggers = res.poggers;
+          this.pityPoggersRarities = res.pityPoggersRarities;
           this.opened = true;
           this.$store.dispatch("refreshPoggers");
           this.$emit("open");

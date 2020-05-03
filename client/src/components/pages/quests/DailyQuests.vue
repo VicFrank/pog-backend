@@ -15,14 +15,14 @@
           </div>
         </template>
         <div
-          v-for="(quest, index) in quests"
+          v-for="(quest) in quests"
           :key="quest.quest_id"
           class="col-sm-12 col-md-12 col-lg-4 col-xl-4"
         >
           <div class="single-quest">
             <p>{{ quest.quest_name | parseQuestText(quest.required_amount) }}</p>
             <button
-              v-on:click="claimQuest(quest, index)"
+              v-on:click="claimQuest(quest)"
               v-if="quest.quest_completed && !quest.claimed"
               type="button"
               class="btn btn-primary mb-3"
@@ -117,8 +117,11 @@ export default {
         })
         .catch(err => (this.error = err));
     },
-    claimQuest(quest, index) {
+    claimQuest(quest) {
       const { quest_id } = quest;
+      this.quests = this.quests.map(q =>
+        q.quest_id === quest_id ? { ...q, claimed: true } : q
+      );
       fetch(
         `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/claim?questID=${quest_id}`,
         { method: "post" }
@@ -126,8 +129,6 @@ export default {
         .then(res => res.json())
         .then(res => {
           if (res.success) {
-            // remove this quest from the list, and
-            this.quests = this.quests.splice(index);
             // refresh the daily quests
             this.getDailyQuests();
             this.$store.dispatch("refreshPlayer");

@@ -1,4 +1,4 @@
-const { query } = require("./index");
+const { query, getClient } = require("./index");
 const quests = require("./quests");
 const cosmetics = require("./cosmetics");
 const logs = require("./logs");
@@ -713,8 +713,9 @@ module.exports = {
   },
 
   async itemTransaction(steamID, transactionData) {
+    const client = await getClient();
     try {
-      await query("BEGIN");
+      await client.query("BEGIN");
 
       if (!transactionData) {
         throw new Error("No transaction supplied");
@@ -737,7 +738,12 @@ module.exports = {
               VALUES
                 ($1, $2, $3, $4)
               `;
-              await query(queryText, [steamID, cosmetic_id, level, effect]);
+              await client.query(queryText, [
+                steamID,
+                cosmetic_id,
+                level,
+                effect,
+              ]);
             }
           } else if (amount < 0) {
             for (let i = 0; i < amount * -1; i++) {
@@ -754,7 +760,11 @@ module.exports = {
               RETURNING *)
               SELECT count(*) FROM deleted;
             `;
-              const { rows } = await query(queryText, [steamID, level, effect]);
+              const { rows } = await client.query(queryText, [
+                steamID,
+                level,
+                effect,
+              ]);
               const rowsDeleted = rows[0].count;
               if (rowsDeleted === 0) {
                 throw new Error("Tried to remove nonexistent companion");
@@ -772,7 +782,7 @@ module.exports = {
           SET poggers = poggers + $1
           WHERE steam_id = $2
         `;
-        await query(queryText, [poggers, steamID]);
+        await client.query(queryText, [poggers, steamID]);
       }
 
       // Update battle pass
@@ -794,7 +804,11 @@ module.exports = {
               = ($2, to_timestamp($3))
             WHERE steam_id = $1
           `;
-          await query(queryText, [steamID, upgradeTier, upgradeExpiration]);
+          await client.query(queryText, [
+            steamID,
+            upgradeTier,
+            upgradeExpiration,
+          ]);
         }
       }
 
@@ -811,7 +825,7 @@ module.exports = {
               (steam_id, cosmetic_id) VALUES
               ($1, $2)
               `;
-              await query(queryText, [steamID, cosmeticID]);
+              await client.query(queryText, [steamID, cosmeticID]);
             }
           } else if (amount < 0) {
             for (let i = 0; i < amount * -1; i++) {
@@ -826,7 +840,10 @@ module.exports = {
                 RETURNING *)
                 SELECT count(*) FROM deleted;
               `;
-              const { rows } = await query(queryText, [steamID, cosmeticID]);
+              const { rows } = await client.query(queryText, [
+                steamID,
+                cosmeticID,
+              ]);
               const rowsDeleted = rows[0].count;
               if (rowsDeleted == 0) {
                 throw new Error("Tried to remove non-existent cosmetic");
@@ -843,13 +860,15 @@ module.exports = {
           SET last_stat_reset = to_timestamp($1)
           WHERE steam_id = $2
         `;
-        await query(queryText, [statResetDate, steamID]);
+        await client.query(queryText, [statResetDate, steamID]);
       }
 
-      await query("COMMIT");
+      await client.query("COMMIT");
     } catch (error) {
-      await query("ROLLBACK");
+      await client.query("ROLLBACK");
       throw error;
+    } finally {
+      await client.release();
     }
   },
 
@@ -1061,9 +1080,12 @@ module.exports = {
     }
   },
 
-  async buyCosmetic(steamID, cosmeticID) {
+  async buyCosmetic(steamID, cosmeticID, client) {
+    if (!client) {
+      client = await getClient();
+    }
     try {
-      await query("BEGIN");
+      await client.query("BEGIN");
       const cosmetic = await cosmetics.getCosmetic(cosmeticID);
 
       if (!cosmetic) {
@@ -1104,10 +1126,12 @@ module.exports = {
       await this.modifyPoggers(steamID, -price);
       await this.giveCosmetic(steamID, cosmeticID);
 
-      await query("COMMIT");
+      await client.query("COMMIT");
     } catch (error) {
-      await query("ROLLBACK");
+      await client.query("ROLLBACK");
       throw error;
+    } finally {
+      client.release();
     }
   },
 
@@ -1189,6 +1213,7 @@ module.exports = {
 
       let chestItems = [];
       let pityPoggers = 0;
+      let pityPoggersRarities = {};
       for (const itemReward of itemRewards) {
         let { reward_rarity, reward_odds } = itemReward;
 
@@ -1211,18 +1236,23 @@ module.exports = {
               switch (reward_rarity) {
                 case "Common":
                   pityPoggers += 50;
+                  pityPoggersRarities["Common"] = 50;
                   break;
                 case "Uncommon":
                   pityPoggers += 100;
+                  pityPoggersRarities["Uncommon"] = 100;
                   break;
                 case "Rare":
                   pityPoggers += 200;
+                  pityPoggersRarities["Rare"] = 200;
                   break;
                 case "Mythical":
                   pityPoggers += 500;
+                  pityPoggersRarities["Mythical"] = 500;
                   break;
                 case "Legendary":
                   pityPoggers += 1000;
+                  pityPoggersRarities["Legendary"] = 1000;
                   break;
               }
             }
@@ -1232,7 +1262,7 @@ module.exports = {
       }
 
       let chestPoggers = 0;
-      chestPoggers += pityPoggers;
+      chestPoggers;
 
       // generate a random number (1-100) (inclusive)
       let roll = Math.floor(Math.random() * 100) + 1;
@@ -1279,7 +1309,7 @@ module.exports = {
       items[chestID] = "-1";
 
       const transaction = {
-        poggers: chestPoggers,
+        poggers: chestPoggers + pityPoggers,
         items,
         companions,
       };
@@ -1290,6 +1320,8 @@ module.exports = {
       return {
         items: chestItems,
         poggers: chestPoggers,
+        pityPoggers,
+        pityPoggersRarities,
       };
     } catch (error) {
       throw error;

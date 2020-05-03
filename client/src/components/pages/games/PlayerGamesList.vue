@@ -34,37 +34,26 @@
                 <td>
                   <span v-if="game.won" class="win">Won</span>
                   <span v-else class="loss">Lost</span>
-                  <div v-if="game.xp_earned > 0" class="text-muted">
-                    +{{ game.xp_earned }} XP
+                  <div v-if="game.xp_earned > 0" class="text-muted">+{{ game.xp_earned }} XP</div>
+                  <div
+                    v-else
+                    v-b-tooltip.hover.html
+                    title="You've reached your daily limit"
+                    class="text-muted"
+                  >
+                    +0 XP
+                    <i class="fas fa-info-circle info-icon"></i>
                   </div>
                 </td>
                 <td>{{ game.duration | hhmmss }}</td>
                 <td>{{ game.kills }}/{{ game.deaths }}/{{ game.assists }}</td>
                 <td>
-                  <ItemImage
-                    v-if="game.item_0"
-                    :itemName="game.item_0"
-                  ></ItemImage>
-                  <ItemImage
-                    v-if="game.item_1"
-                    :itemName="game.item_1"
-                  ></ItemImage>
-                  <ItemImage
-                    v-if="game.item_2"
-                    :itemName="game.item_2"
-                  ></ItemImage>
-                  <ItemImage
-                    v-if="game.item_3"
-                    :itemName="game.item_3"
-                  ></ItemImage>
-                  <ItemImage
-                    v-if="game.item_4"
-                    :itemName="game.item_4"
-                  ></ItemImage>
-                  <ItemImage
-                    v-if="game.item_5"
-                    :itemName="game.item_5"
-                  ></ItemImage>
+                  <ItemImage v-if="game.item_0" :itemName="game.item_0"></ItemImage>
+                  <ItemImage v-if="game.item_1" :itemName="game.item_1"></ItemImage>
+                  <ItemImage v-if="game.item_2" :itemName="game.item_2"></ItemImage>
+                  <ItemImage v-if="game.item_3" :itemName="game.item_3"></ItemImage>
+                  <ItemImage v-if="game.item_4" :itemName="game.item_4"></ItemImage>
+                  <ItemImage v-if="game.item_5" :itemName="game.item_5"></ItemImage>
                 </td>
               </router-link>
             </template>
@@ -83,18 +72,18 @@ export default {
   data: () => ({
     page: 1,
     itemsPerPage: 15,
-    gamesToShow: [],
+    gamesToShow: []
   }),
 
   components: {
     ItemImage,
-    HeroImage,
+    HeroImage
   },
 
   props: {
     games: Array,
-    loading: Boolean,
-  },
+    loading: Boolean
+  }
 };
 </script>
 

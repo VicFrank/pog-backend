@@ -82,6 +82,12 @@ export default {
     },
     claimQuest(quest) {
       const { quest_id } = quest;
+      // show the quest as claimed in the ui
+      this.achievements = this.achievements.map(achievement =>
+        achievement.quest_id === quest_id
+          ? { ...achievement, claimed: true }
+          : achievement
+      );
       fetch(
         `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/claim?questID=${quest_id}`,
         { method: "post" }
