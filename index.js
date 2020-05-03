@@ -110,7 +110,16 @@ app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(morgan("short"));
+function skipLog(req, res) {
+  var url = req.url;
+  if (url.indexOf("?") > 0) url = url.substr(0, url.indexOf("?"));
+  if (url.match(/(js|jpg|png|ico|css|woff|woff2|eot)$/gi)) {
+    return true;
+  }
+  return false;
+}
+
+app.use(morgan("short", { skip: skipLog }));
 
 app.use(
   bodyParser.json({

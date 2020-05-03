@@ -19,33 +19,25 @@ module.exports = {
     const roundedDuration = Math.floor(gameDuration);
 
     try {
-      const client = await pool.connect();
-      let gameID;
-      try {
-        const { rows: gameRows } = await client.query(
-          `
+      const { rows: gameRows } = await query(
+        `
         INSERT INTO games (radiant_win, ranked, duration, health_drops, cheats_enabled)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING game_id
         `,
-          [radiantWin, rankedGame, roundedDuration, healthDrops, cheatsEnabled]
-        );
+        [radiantWin, rankedGame, roundedDuration, healthDrops, cheatsEnabled]
+      );
 
-        gameID = gameRows[0].game_id;
+      const gameID = gameRows[0].game_id;
 
-        for (let bannedHero of bannedHeroes) {
-          await client.query(
-            `
+      for (let bannedHero of bannedHeroes) {
+        await query(
+          `
             INSERT INTO game_bans (game_id, hero)
             VALUES ($1, $2)
             `,
-            [gameID, bannedHero]
-          );
-        }
-      } catch (error) {
-        throw error;
-      } finally {
-        client.release();
+          [gameID, bannedHero]
+        );
       }
 
       for (const [team, teamData] of Object.entries(teamInfo)) {
@@ -263,11 +255,11 @@ module.exports = {
                 WHERE steam_id = $2`,
                 [mmrChange, steamid]
               );
+              console.log(steamid, mmrChange);
             }
           }
         }
       }
-      console.log(`Created game: ${gameID}`);
       return gameID;
     } catch (error) {
       throw error;
