@@ -27,12 +27,12 @@
               <b-spinner label="Loading..."></b-spinner>
             </div>
             <b-card v-else class="payment-options mt-3">
-              <!-- <StripePurchase
+              <StripePurchase
                 class="my-3"
                 :item="item"
                 v-on:purchaseSuccess="onPurchaseSuccess"
                 v-on:error="onError"
-              />-->
+              />
               <PaypalPurchase
                 :item="item"
                 :paypalType="paypalType"
@@ -52,14 +52,14 @@
 
 <script>
 import PaypalPurchase from "./PaypalPurchase";
-// import StripePurchase from "./StripePurchase";
+import StripePurchase from "./StripePurchase";
 import LoginButton from "../login/LoginButton";
 
 export default {
   components: {
     LoginButton,
-    PaypalPurchase
-    // StripePurchase
+    PaypalPurchase,
+    StripePurchase
   },
 
   data() {
