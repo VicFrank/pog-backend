@@ -94,7 +94,7 @@ let sess = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 8640000,
+    maxAge: 2592000000,
   },
 };
 

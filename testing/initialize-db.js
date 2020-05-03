@@ -6,7 +6,11 @@ const questsList = require("./quests-list");
 const cosmetics = require("../db/cosmetics");
 const cosmeticsList = require("./cosmetics-list");
 const battlePassRewards = require("./battle-pass-rewards");
-const { generateRandomSampleData, realSample } = require("./sample-data");
+const {
+  generateRandomSampleData,
+  realSample,
+  testSample,
+} = require("./sample-data");
 const { dropOdds, poggerOdds, bonusOdds } = require("./chest-rewards");
 
 /*
@@ -244,7 +248,7 @@ async function initializeAdmins() {
   await loadBattlePass();
   await loadItemPrices();
   // await initPlayers();
-  await addSampleGames(10);
+  // await addSampleGames(10);
   await initializeAdmins();
   // await addRealSample();
 })();
