@@ -159,9 +159,11 @@ export default {
       return names[cosmetic_id];
     },
     getLevelTotalXP(level) {
+      if (!this.getRewards(level)) return null;
       return this.getRewards(level).total_xp;
     },
     getNextLevelXP(level) {
+      if (!this.getRewards(level)) return null;
       return this.getRewards(level).next_level_xp;
     },
     hasItemReward(level) {
