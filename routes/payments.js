@@ -13,13 +13,6 @@ const {
 const stripeClient = require("../common/stripe-client");
 const keys = require("../config/keys");
 
-let stripeWebhookSecret;
-if (process.env.IS_PRODUCTION) {
-  stripeWebhookSecret = keys.stripe.production.webhook;
-} else {
-  stripeWebhookSecret = keys.stripe.dev.webhook;
-}
-
 router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
   try {
     const steamID = req.params.steamid;
