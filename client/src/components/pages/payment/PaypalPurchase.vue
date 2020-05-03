@@ -9,7 +9,6 @@
       </div>
     </div>
     <div v-else class="paypal-container" ref="paypal"></div>
-    {{paypalType}}
   </div>
 </template>
 
@@ -48,8 +47,8 @@ export default {
     const script = document.createElement("script");
     const clientID =
       this.paypalType === "cheap"
-        ? this.credentials.cheap.sandbox
-        : this.credentials.expensive.sandbox;
+        ? this.credentials.cheap.production
+        : this.credentials.expensive.production;
     script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}`;
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
