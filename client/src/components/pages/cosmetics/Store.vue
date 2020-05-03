@@ -117,7 +117,8 @@
                   hide-footer
                 >
                   <p class="text-center h4">
-                    {{ cosmeticName(cosmetic.cosmetic_id) }}
+                    {{ cosmeticName(cosmetic.cosmetic_id) }} 
+                    <router-link v-if="cosmetic.cosmetic_type === 'Chest'" to="chest_rates" target="_blank"><i class="fas fa-info-circle info-icon"></i></router-link>
                   </p>
                   <div class="text-center text-muted mb-3">
                     {{ cosmetic.cosmetic_type }}
