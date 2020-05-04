@@ -29,6 +29,9 @@ CREATE TABLE IF NOT EXISTS game_bans (
   hero TEXT 
 );
 
+DROP INDEX IF EXISTS idx_game_bans_game_id;
+CREATE INDEX idx_game_bans_game_id ON game_bans (game_id);
+
 CREATE TABLE IF NOT EXISTS teams (
   game_id INTEGER REFERENCES games (game_id) ON UPDATE CASCADE,
   is_radiant BOOLEAN,

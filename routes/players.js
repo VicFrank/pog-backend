@@ -3,6 +3,9 @@ const router = express.Router();
 const players = require("../db/players");
 const quests = require("../db/quests");
 const auth = require("../auth/auth");
+const apicache = require("apicache");
+
+let cache = apicache.middleware;
 
 router.get("/", async (req, res) => {
   try {
@@ -51,7 +54,7 @@ router.get("/:steamid/games", async (req, res) => {
   }
 });
 
-router.get("/:steamid/heroes", async (req, res) => {
+router.get("/:steamid/heroes", cache("5 minutes"), async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const playerInfo = await players.getHeroStats(steamid);

@@ -255,7 +255,6 @@ module.exports = {
                 WHERE steam_id = $2`,
                 [mmrChange, steamid]
               );
-              console.log(steamid, mmrChange);
             }
           }
         }
@@ -273,17 +272,21 @@ module.exports = {
         whereClause = "AND created_at >= NOW() - $3 * INTERVAL '1 HOURS'";
       }
       const sql_query = `
-      SELECT g.*, 
-        array_agg(gp.hero) FILTER (WHERE gp.is_radiant = TRUE) radiant,
-        array_agg(gp.hero) FILTER (WHERE gp.is_radiant = FALSE) dire
-        FROM games g
-        JOIN game_players gp
-        USING (game_id)
+      WITH recent_games AS (
+        SELECT * FROM games
         WHERE ranked = TRUE
         ${whereClause}
-        GROUP BY game_id
         ORDER BY created_at DESC
-        LIMIT $1 OFFSET $2;
+        LIMIT $1 OFFSET $2
+      )
+      SELECT
+        game_id, ranked, radiant_win, duration, created_at,
+        array_agg(gp.hero) FILTER (WHERE gp.is_radiant = TRUE) radiant,
+        array_agg(gp.hero) FILTER (WHERE gp.is_radiant = FALSE) dire
+        FROM recent_games rg
+        JOIN game_players gp
+        USING (game_id)
+        GROUP BY game_id, ranked, radiant_win, duration, created_at
       `;
       if (hours) {
         const { rows } = await query(sql_query, [limit, offset, hours]);
