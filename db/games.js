@@ -287,6 +287,7 @@ module.exports = {
         JOIN game_players gp
         USING (game_id)
         GROUP BY game_id, ranked, radiant_win, duration, created_at
+        ORDER BY created_at DESC
       `;
       if (hours) {
         const { rows } = await query(sql_query, [limit, offset, hours]);

@@ -273,6 +273,26 @@ module.exports = {
     }
   },
 
+  async getBasicGamesToday(steamID) {
+    try {
+      const sql_query = `
+      SELECT *, radiant_win = is_radiant as won
+      FROM games
+      JOIN game_players gp
+      USING (game_id)
+      JOIN players
+      USING (steam_id)
+      WHERE steam_id = $1
+        AND created_at >= NOW()::date
+      ORDER BY created_at DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getBasicGames(steamID, limit = 100, offset = 0, hours) {
     let whereClause = "";
     if (hours) {
@@ -485,11 +505,13 @@ module.exports = {
       400 XP bonus for the first win of the day (600 total)
     */
     try {
-      const games = await this.getBasicGames(steamID, 100, 0, 24);
+      const games = await this.getBasicGamesToday(steamID);
 
       let numRecentGames = 0;
+      let hasWonToday = false;
       for (let game of games) {
         if (game.won) {
+          hasWonToday = true;
           numRecentGames += 1;
         } else {
           numRecentGames += 0.5;
@@ -501,7 +523,7 @@ module.exports = {
 
       if (numRecentGames > 20) {
         return;
-      } else if (numRecentGames === 0) {
+      } else if (!hasWonToday && winner) {
         reward = 250;
         if (tier === 1) {
           reward = 400;

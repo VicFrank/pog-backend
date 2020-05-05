@@ -251,5 +251,5 @@ async function initializeAdmins() {
   // await initPlayers();
   // await addSampleGames(3);
   await initializeAdmins();
-  // await addRealSample();
+  await addRealSample();
 })();
