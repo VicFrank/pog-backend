@@ -12,6 +12,7 @@
             <div class="achievement">
               <div class="achievement-row">
                 <div class="description">
+                  <i v-for="i in quest.questTier" :key="i" class="fas fa-star mb-2"></i>
                   <h3>{{ quest.quest_name }}</h3>
                   <p class="achievement-description">
                     {{
@@ -21,7 +22,7 @@
                   </p>
                 </div>
                 <div class="rewards">
-                  <p class="pog-text">
+                  <p v-if="quest.poggers_reward > 0" class="pog-text">
                     <img class="pogcoin" src="../../assets/images/pogcoin_gold.png" alt="Pog Coin" />
                     {{ quest.poggers_reward }} POGGERS
                   </p>
@@ -32,13 +33,13 @@
                 :progress="quest.capped_quest_progress"
                 :required="quest.required_amount"
               />
+              <button
+                v-on:click="claimQuest(quest)"
+                v-if="quest.quest_completed && !quest.claimed"
+                type="button"
+                class="btn btn-primary mt-3"
+              >Claim</button>
             </div>
-            <button
-              v-on:click="claimQuest(quest)"
-              v-if="quest.quest_completed && !quest.claimed"
-              type="button"
-              class="btn btn-primary mb-3"
-            >Claim</button>
           </div>
         </div>
       </div>

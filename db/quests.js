@@ -200,15 +200,17 @@ module.exports = {
         statQuests.sort((q1, q2) => q1.required_amount - q2.required_amount);
 
         let questToAdd;
+        let questTier = 1;
         for (let quest of statQuests) {
           if (!quest.claimed) {
             questToAdd = quest;
             break;
           }
+          questTier++;
         }
         if (!questToAdd) questToAdd = statQuests.slice(-1).pop();
 
-        activeAchievements.push(questToAdd);
+        activeAchievements.push({ ...questToAdd, questTier });
       }
 
       return activeAchievements;
