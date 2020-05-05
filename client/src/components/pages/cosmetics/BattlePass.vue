@@ -68,33 +68,64 @@
           </div>
         </li>
       </ul>
+      <div class="container text-center my-3">
+          <h2 class="blue text-center">After Level 100...</h2>
+          <p>A Legendary Chest on levels ending in 00</p>
+          <p>A Mythical Chest on levels ending in 50</p>
+          <p>A Rare Chest on all other levels ending in 0</p>
+      </div>
     </div>
     <b-modal :id="'1'" title="Common Chest" centered hide-footer>
-      <h5>Gain a free Common Chest! It contains the following prizes<router-link to="chest_rates" target="_blank"><i class="fas fa-info-circle info-icon"></i></router-link></h5>
+      <h5>
+        Gain a free Common Chest! It contains the following prizes
+        <router-link to="chest_rates" target="_blank">
+          <i class="fas fa-info-circle info-icon"></i>
+        </router-link>
+      </h5>
       <ul>
         <li v-for="reward in chestRewards['chest1']" :key="reward">{{ reward }}</li>
       </ul>
     </b-modal>
     <b-modal :id="'2'" title="Uncommon Chest" centered hide-footer>
-      <h5>Gain a free Uncommon Chest! It contains the following prizes<router-link to="chest_rates" target="_blank"><i class="fas fa-info-circle info-icon"></i></router-link></h5>
+      <h5>
+        Gain a free Uncommon Chest! It contains the following prizes
+        <router-link to="chest_rates" target="_blank">
+          <i class="fas fa-info-circle info-icon"></i>
+        </router-link>
+      </h5>
       <ul>
         <li v-for="reward in chestRewards['chest2']" :key="reward">{{ reward }}</li>
       </ul>
     </b-modal>
     <b-modal :id="'3'" title="Rare Chest" centered hide-footer>
-      <h5>Gain a free Rare Chest! It contains the following prizes<router-link to="chest_rates" target="_blank"><i class="fas fa-info-circle info-icon"></i></router-link></h5>
+      <h5>
+        Gain a free Rare Chest! It contains the following prizes
+        <router-link to="chest_rates" target="_blank">
+          <i class="fas fa-info-circle info-icon"></i>
+        </router-link>
+      </h5>
       <ul>
         <li v-for="reward in chestRewards['chest3']" :key="reward">{{ reward }}</li>
       </ul>
     </b-modal>
     <b-modal :id="'4'" title="Mythical Chest" centered hide-footer>
-      <h5>Gain a free Mythical Chest! It contains the following prizes<router-link to="chest_rates" target="_blank"><i class="fas fa-info-circle info-icon"></i></router-link></h5>
+      <h5>
+        Gain a free Mythical Chest! It contains the following prizes
+        <router-link to="chest_rates" target="_blank">
+          <i class="fas fa-info-circle info-icon"></i>
+        </router-link>
+      </h5>
       <ul>
         <li v-for="reward in chestRewards['chest4']" :key="reward">{{ reward }}</li>
       </ul>
     </b-modal>
     <b-modal :id="'5'" title="Legendary Chest" centered hide-footer>
-      <h5>Gain a free Legendary Chest! It contains the following prizes<router-link to="chest_rates" target="_blank"><i class="fas fa-info-circle info-icon"></i></router-link></h5>
+      <h5>
+        Gain a free Legendary Chest! It contains the following prizes
+        <router-link to="chest_rates" target="_blank">
+          <i class="fas fa-info-circle info-icon"></i>
+        </router-link>
+      </h5>
       <ul>
         <li v-for="reward in chestRewards['chest5']" :key="reward">{{ reward }}</li>
       </ul>

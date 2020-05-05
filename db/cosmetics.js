@@ -114,6 +114,34 @@ module.exports = {
         bp_level <= $2
       `;
       const { rows } = await query(sql_query, [minLevel, maxLevel]);
+
+      /*
+        - legendary chest on levels ending in 00
+         - mythical chest on levels ending in 50
+         - rare chest otherwise
+        so e.g. rares on levels 110, 120, 130, 140, 160, 170, 180, 190; mythical on level 150;
+        legendary on level 200; repeat ad infinitum
+      */
+      if (maxLevel > 100) {
+        for (let i = minLevel; i <= maxLevel; i++) {
+          if (i % 100 === 0) {
+            rows.push({
+              chest: 5,
+              chest_amount: 1,
+            });
+          } else if (i % 50 === 0) {
+            rows.push({
+              chest: 4,
+              chest_amount: 1,
+            });
+          } else if (i % 10 === 0) {
+            rows.push({
+              chest: 3,
+              chest_amount: 1,
+            });
+          }
+        }
+      }
       return rows;
     } catch (error) {
       throw error;
