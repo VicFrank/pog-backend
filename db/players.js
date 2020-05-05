@@ -1227,24 +1227,24 @@ module.exports = {
               // If you already have the item, convert it to poggers
               switch (reward_rarity) {
                 case "Common":
-                  pityPoggers += 50;
-                  pityPoggersRarities["Common"] = 50;
+                  pityPoggers += 30;
+                  pityPoggersRarities["Common"] = 30;
                   break;
                 case "Uncommon":
-                  pityPoggers += 100;
-                  pityPoggersRarities["Uncommon"] = 100;
+                  pityPoggers += 60;
+                  pityPoggersRarities["Uncommon"] = 60;
                   break;
                 case "Rare":
-                  pityPoggers += 200;
-                  pityPoggersRarities["Rare"] = 200;
+                  pityPoggers += 125;
+                  pityPoggersRarities["Rare"] = 125;
                   break;
                 case "Mythical":
-                  pityPoggers += 500;
-                  pityPoggersRarities["Mythical"] = 500;
+                  pityPoggers += 300;
+                  pityPoggersRarities["Mythical"] = 300;
                   break;
                 case "Legendary":
-                  pityPoggers += 1000;
-                  pityPoggersRarities["Legendary"] = 1000;
+                  pityPoggers += 800;
+                  pityPoggersRarities["Legendary"] = 800;
                   break;
               }
             }

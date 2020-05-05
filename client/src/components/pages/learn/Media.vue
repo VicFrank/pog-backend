@@ -3,6 +3,14 @@
     <div class="content">
       <h1 class="page-title">Videos</h1>
       <div class="media-container mx-auto">
+        <h3>What is POG></h3>
+        <div class="mb-4">
+          <b-embed
+            type="iframe"
+            src="https://www.youtube.com/embed/9pG5Vx9B21Y"
+            allowfullscreen
+          ></b-embed>
+        </div>
         <h3>POG Overview</h3>
         <div class="mb-4">
           <b-embed
@@ -40,14 +48,6 @@
           <b-embed
             type="iframe"
             src="https://www.youtube.com/embed/oQVyjQiJ65s"
-            allowfullscreen
-          ></b-embed>
-        </div>
-        <h3>Gameplay</h3>
-        <div class="mb-4">
-          <b-embed
-            type="iframe"
-            src="https://www.youtube.com/embed/xfGOJqaYtPM"
             allowfullscreen
           ></b-embed>
         </div>
