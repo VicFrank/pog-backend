@@ -9,36 +9,21 @@
               <b-table hover :fields="fields" :items="heroes" responsive>
                 <template v-slot:cell(hero)="data">
                   <div class="hero-col">
-                    <HeroImage
-                      class="hero-image"
-                      :hero="data.item.hero"
-                    ></HeroImage>
-                    {{ data.item.hero | translateDota }}
+                    <HeroImage class="hero-image" :hero="data.item.hero"></HeroImage>
+                    {{ $t(`dota.${data.item.hero}`) }}
                   </div>
                 </template>
                 <template v-slot:cell(games)="data">
                   {{ data.item.games }}
-                  <PercentBar
-                    :max="maxGames"
-                    :value="data.item.games"
-                    class="mt-1 progress-bar"
-                  ></PercentBar>
+                  <PercentBar :max="maxGames" :value="data.item.games" class="mt-1 progress-bar"></PercentBar>
                 </template>
                 <template v-slot:cell(win_rate)="data">
                   {{ data.item.win_rate | percentage(1) }}
-                  <PercentBar
-                    :max="1"
-                    :value="data.item.win_rate"
-                    class="mt-1 progress-bar"
-                  ></PercentBar>
+                  <PercentBar :max="1" :value="data.item.win_rate" class="mt-1 progress-bar"></PercentBar>
                 </template>
                 <template v-slot:cell(kdr)="data">
                   {{ data.item.kdr | round(2) }}
-                  <PercentBar
-                    :max="maxKDR"
-                    :value="data.item.kdr"
-                    class="mt-1 progress-bar"
-                  ></PercentBar>
+                  <PercentBar :max="maxKDR" :value="data.item.kdr" class="mt-1 progress-bar"></PercentBar>
                 </template>
               </b-table>
             </div>
@@ -56,50 +41,54 @@ import PercentBar from "../../utility/PercentBar";
 export default {
   components: {
     HeroImage,
-    PercentBar,
+    PercentBar
   },
 
   data: () => ({
-    fields: [
+    fields: [],
+    heroes: [],
+    maxGames: 0,
+    maxKDR: 0
+  }),
+
+  created() {
+    this.fields = [
       {
         key: "hero",
         sortable: true,
         thClass: "table-head text-left",
+        label: this.$i18n.t("tables.hero")
       },
       {
         key: "games",
         sortable: true,
         thClass: "table-head text-left",
         tdClass: "text-left",
+        label: this.$i18n.t("tables.games")
       },
       {
         key: "win_rate",
         sortable: true,
         thClass: "table-head text-left",
         tdClass: "text-left",
+        label: this.$i18n.t("tables.winrate")
       },
       {
         key: "kdr",
         sortable: true,
         thClass: "table-head text-left",
         tdClass: "text-left",
-        label: "KDR",
-      },
-    ],
-    heroes: [],
-    maxGames: 0,
-    maxKDR: 0,
-  }),
-
-  created() {
+        label: this.$i18n.t("tables.kdr")
+      }
+    ];
     fetch(`/api/games/stats/heroes`)
-      .then((res) => res.json())
-      .then((heroes) => {
-        this.heroes = heroes.map((stats) => ({
+      .then(res => res.json())
+      .then(heroes => {
+        this.heroes = heroes.map(stats => ({
           hero: stats.hero,
           games: stats.games,
           win_rate: stats.wins / stats.games,
-          kdr: stats.avg_kills / stats.avg_deaths,
+          kdr: stats.avg_kills / stats.avg_deaths
         }));
         this.maxGames = this.getMaxArray(this.heroes, "games");
         this.maxKDR = this.getMaxArray(this.heroes, "kdr");
@@ -112,8 +101,8 @@ export default {
         (max, b) => Math.max(max, b[property]),
         arr[0][property]
       );
-    },
-  },
+    }
+  }
 };
 </script>
 

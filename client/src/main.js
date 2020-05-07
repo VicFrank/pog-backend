@@ -10,6 +10,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import store from "./store/index.js";
 import filters from "./filters/filters";
 import router from "./router/router";
+import i18n from './i18n'
 
 Vue.use(
   VueGtag,
@@ -26,5 +27,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  i18n,
+  render: (h) => h(App)
 }).$mount("#app");

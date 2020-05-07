@@ -1,5 +1,3 @@
-import cosmeticNames from "./cosmeticNames";
-
 const filterCosmetics = (
   cosmetics,
   currentFilter,
@@ -60,7 +58,6 @@ const filterCosmetics = (
     .filter((cosmetic) => {
       // Rarity Filter
       if (activeRarityFilters.size > 0) {
-        console.log(activeRarityFilters.has(cosmetic.rarity));
         return activeRarityFilters.has(cosmetic.rarity);
       }
       return true;
@@ -71,7 +68,7 @@ const filterCosmetics = (
         return true;
       }
       const { cosmetic_id } = cosmetic;
-      const name = cosmeticNames[cosmetic_id].toLowerCase();
+      const name = this.$t(cosmetic_id.toLowerCase());
       const search = searchText.toLowerCase();
       if (
         search === "" ||

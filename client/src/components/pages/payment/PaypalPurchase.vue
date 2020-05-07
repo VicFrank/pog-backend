@@ -3,7 +3,7 @@
     <b-alert v-model="showError" variant="danger" dismissible>{{ error }}</b-alert>
     <b-alert v-model="showSuccess" variant="success" dismissible>{{ success }}</b-alert>
     <div v-if="processinPayment">
-      Processing Payment...
+      {{$t('payment.processing')}}
       <div v-if="loading" class="d-flex justify-content-center mb-3">
         <b-spinner label="Loading..."></b-spinner>
       </div>

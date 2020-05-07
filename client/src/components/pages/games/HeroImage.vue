@@ -1,5 +1,5 @@
 <template>
-  <b-img v-bind:src="getHeroPath(hero)" v-bind:alt="hero | translateDota" />
+  <b-img v-bind:src="getHeroPath(hero)" v-bind:alt="hero" />
 </template>
 
 <script>
@@ -8,8 +8,8 @@ export default {
     hero: String,
     small: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
 
   methods: {
@@ -22,8 +22,8 @@ export default {
       } else {
         return require(`../../../assets/images/heroes/${hero}.png`);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

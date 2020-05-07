@@ -6,7 +6,7 @@
         <div class="row">
           <div class="col-xl-12">
             <div class="match-history position-relative">
-              <h3 class="mt-5 mb-5 text-center">Match History</h3>
+              <h3 class="mt-5 mb-5 text-center" v-t="'profile.match_history'"></h3>
 
               <PlayerGamesList v-bind:games="games" :loading="gamesLoading"></PlayerGamesList>
 
@@ -16,14 +16,14 @@
             </div>
 
             <div class="my-stats position-relative">
-              <h3 class="mt-5 mb-5 text-center">Stats</h3>
+              <h3 class="mt-5 mb-5 text-center" v-t="'profile.stats'">Stats</h3>
               <table class="table mb-5">
                 <tbody>
                   <tr>
-                    <td class="tb-head">wins</td>
-                    <td class="tb-head">losses</td>
-                    <td class="tb-head">abandoned</td>
-                    <td class="tb-head">time played</td>
+                    <td class="tb-head">{{$t('profile.wins')}}</td>
+                    <td class="tb-head">{{$t('profile.losses')}}</td>
+                    <td class="tb-head">{{$t('profile.abandoned')}}</td>
+                    <td class="tb-head">{{$t('profile.time_played')}}</td>
                   </tr>
                   <tr>
                     <td>{{ playerStats.wins }}</td>
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="container" v-else>
-        <h2>Player not found</h2>
+        <h2 v-t="'profile.not_found'"></h2>
       </div>
     </div>
   </div>

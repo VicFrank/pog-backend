@@ -1,24 +1,28 @@
 <template>
   <div class="main-layout__content">
     <div class="content">
-      <h1 class="page-title">Checkout</h1>
+      <h1 class="page-title" v-t="'payment.checkout_title'"></h1>
       <div class="container text-center">
-        <b-button to="/poggers" class="mb-3">Back to Store</b-button>
+        <b-button to="/poggers" class="mb-3">{{$t('payment.back_to_store')}}</b-button>
         <div class="real-money-store">
           <b-card header-tag="header" footer-tag="footer">
             <template v-slot:header>
               <h6 class="mb-0">Payment</h6>
             </template>
             <b-card-text v-if="item.item_type === 'POGGERS'">
-              Item:
-              <img class="pogcoin" src="../cosmetics/images/pogcoin_gold.png" alt="Pog Coin" />
+              {{$t('payment.item')}}:
+              <img
+                class="pogcoin"
+                src="../cosmetics/images/pogcoin_gold.png"
+                alt="Pog Coin"
+              />
               {{ item.reward | localizeNumber }} POGGERS
             </b-card-text>
             <b-card-text v-else-if="item.item_type === 'XP'">
-              Item:
+              {{$t('payment.item')}}:
               {{ item.reward | localizeNumber }} XP
             </b-card-text>
-            <b-card-text>Price: ${{ item.cost_usd }}</b-card-text>
+            <b-card-text>{{$t('payment.price')}}: ${{ item.cost_usd }}</b-card-text>
 
             <template v-slot:footer></template>
           </b-card>

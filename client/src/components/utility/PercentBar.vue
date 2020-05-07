@@ -1,5 +1,5 @@
 <template>
-  <div class="segment" v-bind:style="{ width: getWidth }" v-on="on"></div>
+  <div class="segment" v-bind:style="{ width: getWidth }"></div>
 </template>
 <script>
 export default {

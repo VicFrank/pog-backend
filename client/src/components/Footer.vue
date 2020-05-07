@@ -7,8 +7,9 @@
       <a href="https://www.reddit.com/r/DotaCinema/" target="_blank" class="fa fa-reddit mr-3"></a>
       <a href="https://twitter.com/DotaCinema" target="_blank" class="fa fa-twitter mr-3"></a>
       <a href="https://www.facebook.com/DotaCinema/" target="_blank" class="fa fa-facebook mr-3"></a>
-    </div>© 2020 Double Edge Studios LLC
-    <router-link to="/credits" class="float-right ml-3 mr-5">Our Team</router-link>
+    </div>
+    {{$t('credits.copyright')}}
+    <router-link to="/credits" class="float-right ml-3 mr-5">{{$t('credits.our_team')}}</router-link>
   </footer>
 </template>
 

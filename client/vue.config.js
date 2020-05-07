@@ -8,6 +8,7 @@ module.exports = {
       },
     },
   },
+
   configureWebpack: {
     resolve: {
       alias: {
@@ -15,6 +16,7 @@ module.exports = {
       },
     },
   },
+
   chainWebpack: (config) => {
     config.module
       .rule("images")
@@ -22,4 +24,13 @@ module.exports = {
       .loader("url-loader")
       .tap((options) => Object.assign(options, { limit: 1000 }));
   },
+
+  pluginOptions: {
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: true
+    }
+  }
 };

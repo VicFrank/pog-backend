@@ -57,8 +57,12 @@
         </div>
 
         <div class="d-flex justify-content-center align-items-center mt-1">
-          <img src="../assets/images/pogcoin_gold.png" class="poggers-img mr-1" alt="Poggers" />
-          {{poggers}}
+          <img
+            src="../assets/images/pogcoin_gold.png"
+            class="poggers-img mr-1"
+            alt="Poggers"
+          />
+          {{ poggers }}
         </div>
 
         <ul class="sidebar-nav">
@@ -67,7 +71,8 @@
               to="/profile"
               class="sidebar-nav__link sidebar-nav__link_profile"
               exact-active-class="active"
-            >Profile</router-link>
+              v-t="'navigation.profile'"
+            ></router-link>
           </li>
 
           <li class="sidebar-nav__item">
@@ -75,7 +80,8 @@
               to="/profile/battle_pass"
               class="sidebar-nav__link sidebar-nav__link_battlepass"
               exact-active-class="active"
-            >Battle Pass</router-link>
+              v-t="'navigation.battle_pass'"
+            ></router-link>
           </li>
 
           <li class="sidebar-nav__item">
@@ -83,7 +89,8 @@
               to="/profile/armory"
               class="sidebar-nav__link sidebar-nav__link_armory"
               exact-active-class="active"
-            >Armory</router-link>
+              v-t="'navigation.armory'"
+            ></router-link>
           </li>
 
           <li class="sidebar-nav__item">
@@ -91,10 +98,14 @@
               to="/profile/achievements"
               class="sidebar-nav__link sidebar-nav__link_achievements"
               exact-active-class="active"
+              v-t="'navigation.achievements'"
             >
-              Achievements
-              <b-badge v-if="numAchievements > 0" variant="primary" class="ml-1">
-                {{numAchievements}}
+              <b-badge
+                v-if="numAchievements > 0"
+                variant="primary"
+                class="ml-1"
+              >
+                {{ numAchievements }}
                 <span class="sr-only">unclaimed achievements</span>
               </b-badge>
             </router-link>
@@ -104,24 +115,31 @@
               to="/profile/stats"
               class="sidebar-nav__link sidebar-nav__link_stats"
               exact-active-class="active"
-            >My Stats</router-link>
+              v-t="'navigation.my_stats'"
+            ></router-link>
           </li>
           <li class="sidebar-nav__item">
             <router-link
               to="/profile/games"
               class="sidebar-nav__link sidebar-nav__link_history"
               exact-active-class="active"
-            >Match History</router-link>
+              v-t="'navigation.match_history'"
+            ></router-link>
           </li>
           <li v-if="isAdmin" class="sidebar-nav__item">
-            <router-link to="/admin" class="sidebar-nav__link sidebar-nav__link_settings">Admin</router-link>
+            <router-link
+              to="/admin"
+              class="sidebar-nav__link sidebar-nav__link_settings"
+              v-t="'navigation.admin'"
+            ></router-link>
           </li>
           <li>
             <b-button
               href="/api/auth/logout"
               class="sign-out-button mt-3"
               variant="outline-primary"
-            >Sign Out</b-button>
+              v-t="'navigation.sign_out'"
+            ></b-button>
           </li>
         </ul>
       </template>
@@ -134,40 +152,68 @@
       <hr class="d-lg-none" />
       <ul class="sidebar-nav">
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/store" class="sidebar-nav__link" exact-active-class="active">Store</router-link>
+          <router-link
+            to="/store"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            v-t="'navigation.store'"
+          ></router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/games" class="sidebar-nav__link" exact-active-class="active">Games</router-link>
+          <router-link
+            to="/games"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            v-t="'navigation.games'"
+          ></router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/heroes" class="sidebar-nav__link" exact-active-class="active">Heroes</router-link>
+          <router-link
+            to="/heroes"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            v-t="'navigation.heroes'"
+          ></router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
           <router-link
             to="/changelog"
             class="sidebar-nav__link"
             exact-active-class="active"
-          >Changelog</router-link>
+            v-t="'navigation.change_log'"
+          ></router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/faq" class="sidebar-nav__link" exact-active-class="active">FAQ</router-link>
+          <router-link
+            to="/faq"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            v-t="'navigation.faq'"
+          ></router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
           <router-link
             to="/guardians"
             class="sidebar-nav__link"
             exact-active-class="active"
-          >Guardians</router-link>
+            v-t="'navigation.guardians'"
+          ></router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
-          <router-link to="/media" class="sidebar-nav__link" exact-active-class="active">Videos</router-link>
+          <router-link
+            to="/media"
+            class="sidebar-nav__link"
+            exact-active-class="active"
+            v-t="'navigation.videos'"
+          ></router-link>
         </li>
         <li class="sidebar-nav__item d-lg-none">
           <router-link
             to="/chest_rates"
             class="sidebar-nav__link"
             exact-active-class="active"
-          >Chest Drops</router-link>
+            v-t="'navigation.chest_drops'"
+          ></router-link>
         </li>
       </ul>
     </div>
@@ -186,13 +232,13 @@ export default {
 
   components: {
     LoginButton,
-    ProgressBar
+    ProgressBar,
   },
 
   mounted() {
     const open = this.$store.state.ui.sidebarOpen;
     TweenMax.set(this.$el, {
-      x: open ? 0 : -this.$el.offsetWidth
+      x: open ? 0 : -this.$el.offsetWidth,
     });
   },
   computed: {
@@ -202,42 +248,42 @@ export default {
         return {
           borderStyle: "solid",
           borderColor: "white",
-          borderWidth: "1px"
+          borderWidth: "1px",
         };
       } else if (this.bpLevel < 30) {
         // border1
         return {
           borderStyle: "solid",
           borderColor: "#4B69FF",
-          borderWidth: "1px"
+          borderWidth: "1px",
         };
       } else if (this.bpLevel < 50) {
         // border2
         return {
           borderStyle: "solid",
           borderColor: "#8847FF",
-          borderWidth: "1px"
+          borderWidth: "1px",
         };
       } else if (this.bpLevel < 70) {
         // border3
         return {
           borderStyle: "solid",
           borderColor: "#D32CE6",
-          borderWidth: "1px"
+          borderWidth: "1px",
         };
       } else if (this.bpLevel < 90) {
         // border4
         return {
           borderStyle: "solid",
           borderColor: "#EFAA15",
-          borderWidth: "1px"
+          borderWidth: "1px",
         };
       } else {
         // border5
         return {
           borderStyle: "solid",
           borderColor: "#EFAA15",
-          borderWidth: "1px"
+          borderWidth: "1px",
         };
       }
     },
@@ -289,17 +335,17 @@ export default {
         badgeLevel = 1;
       }
       return require(`../assets/images/badges/badge${badgeLevel}.png`);
-    }
+    },
   },
   watch: {
     open: function(open) {
       const dX = open ? 0 : -this.$el.offsetWidth;
       TweenMax.to(this.$el, 0.6, {
         x: dX,
-        ease: Power4.easeOut
+        ease: Power4.easeOut,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

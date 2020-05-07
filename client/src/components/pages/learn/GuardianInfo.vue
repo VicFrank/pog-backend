@@ -1,8 +1,8 @@
 <template>
   <div class="abilities">
     <div class="guardian-titles">
-      <div class="guardian-name">{{ guardianData.name }}</div>
-      <div class="h4">{{ guardianData.title }}</div>
+      <div class="guardian-name">{{ $t(`guardians.${guardianData.name}`) }}</div>
+      <div class="h4">{{ $t(`guardians.${guardianData.name}_title`) }}</div>
     </div>
     <img :src="guardianData.img" :alt="guardianData.name" class="guardian-image" fluid />
     <div class="abilities-list">
@@ -20,10 +20,10 @@
     </div>
 
     <div class="ability-info">
-      <img :src="abilityImage(currentAbility)" alt="Shattered Helm" class="current-ability" />
+      <img :src="abilityImage(currentAbility)" :alt="currentAbility.name" class="current-ability" />
       <div class="ability-text">
-        <h3 class="ability-name">{{ currentAbility.name }}</h3>
-        <div class="ability-description">{{ currentAbility.description }}</div>
+        <h3 class="ability-name">{{ $t(`guardians.${currentAbility.name}`) }}</h3>
+        <div class="ability-description">{{ $t(`guardians.${currentAbility.name}_description`) }}</div>
       </div>
     </div>
   </div>

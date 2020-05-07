@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout__content">
     <div class="content">
-      <h1 class="page-title">Achievements</h1>
+      <h1 class="page-title" v-t="'achievements.page_title'"></h1>
       <div class="container">
         <b-alert v-if="error != ''" show variant="danger" dismissible>{{error}}</b-alert>
         <div v-if="loading" class="d-flex justify-content-center mb-3">

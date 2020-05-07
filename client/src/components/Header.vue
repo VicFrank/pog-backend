@@ -7,22 +7,44 @@
           <img src="../assets/images/logo_beta.png" alt="POG" />
         </router-link>
       </div>
-      <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex">
-        <b-nav-item-dropdown text="LEARN" class="mr-5">
-          <b-dropdown-item to="/faq">FAQ</b-dropdown-item>
-          <b-dropdown-item to="/guardians">GUARDIANS</b-dropdown-item>
-          <b-dropdown-item to="/media">VIDEOS</b-dropdown-item>
-          <b-dropdown-item to="/chest_rates">CHEST DROPS</b-dropdown-item>
+      <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex text-uppercase">
+        <b-nav-item-dropdown class="mr-5">
+          <template slot="button-content">
+            {{ $t("navigation.learn") }}
+          </template>
+          <b-dropdown-item to="/faq">{{
+            $t("navigation.faq")
+          }}</b-dropdown-item>
+          <b-dropdown-item to="/guardians">{{
+            $t("navigation.guardians")
+          }}</b-dropdown-item>
+          <b-dropdown-item to="/media">{{
+            $t("navigation.videos")
+          }}</b-dropdown-item>
+          <b-dropdown-item to="/chest_rates">{{
+            $t("navigation.chest_drops")
+          }}</b-dropdown-item>
         </b-nav-item-dropdown>
         <li class="nav-item mr-5">
-          <router-link class="nav-link" to="/store">STORE</router-link>
+          <router-link class="nav-link" to="/store">{{
+            $t("navigation.store")
+          }}</router-link>
         </li>
         <b-nav-item-dropdown text="STATS" class="mr-5">
-          <b-dropdown-item to="/games">GAMES</b-dropdown-item>
-          <b-dropdown-item to="/heroes">HEROES</b-dropdown-item>
+          <template slot="button-content">
+            {{ $t("navigation.stats") }}
+          </template>
+          <b-dropdown-item to="/games">{{
+            $t("navigation.games")
+          }}</b-dropdown-item>
+          <b-dropdown-item to="/heroes">{{
+            $t("navigation.heroes")
+          }}</b-dropdown-item>
         </b-nav-item-dropdown>
         <li class="nav-item">
-          <router-link class="nav-link" to="/changelog">CHANGE LOG</router-link>
+          <router-link class="nav-link" to="/changelog">{{
+            $t("navigation.change_log")
+          }}</router-link>
         </li>
       </ul>
       <div class="d-flex align-items-center">
@@ -49,8 +71,8 @@
             href="https://www.reddit.com/r/DotaCinema/comments/gaw4ah/pog_bug_report_megathread/"
             target="_blank"
             variant="secondary"
-            >Report A Bug</b-button
-          >
+            v-t="'navigation.report_a_bug'"
+          ></b-button>
         </div>
         <div>
           <b-button
@@ -58,6 +80,7 @@
             href="https://steamcommunity.com/sharedfiles/filedetails/?id=2077900442"
             target="_blank"
             variant="primary"
+            v-t="'navigation.play_now'"
             >PLAY NOW</b-button
           >
         </div>

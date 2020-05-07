@@ -2,8 +2,8 @@
   <div>
     <div ref="card"></div>
     <b-button variant="primary" @click="submitPayment" :disabled="!paymentIntent || !complete">
-      Pay with Stripe
-      <b-spinner v-if="awaitingPayment" label="Loading..."></b-spinner>
+      {{$t('payment.pay_with_stripe')}}
+      <b-spinner v-if="awaitingPayment" :label="$t('payment.loading')"></b-spinner>
     </b-button>
   </div>
 </template>

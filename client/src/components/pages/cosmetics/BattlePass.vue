@@ -12,9 +12,15 @@
           >
             <span
               v-b-tooltip.hover.html
-              :title="`Total Exp: ${getLevelTotalXP(i)}<br> Next Level: +${getNextLevelXP(i)}`"
+              :title="
+                `${$t('battle_pass.level_tooltip', 
+                {
+                  total_xp: getLevelTotalXP(i),
+                  next_level: getNextLevelXP(i)
+                })}`
+              "
             >
-              Level {{ i }}
+              {{ $t("battle_pass.level") }} {{ i }}
               <i class="fas fa-info-circle info-icon"></i>
             </span>
             <div v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }">
@@ -36,7 +42,15 @@
                   @click="$bvModal.show(getChestLevel(i))"
                 />
 
-                <b-modal :id="`bp-modal-${i}`" :title="getItemName(i)" centered hide-footer>
+                <b-modal
+                  v-if="getRewardItem(i)"
+                  :id="`bp-modal-${i}`"
+                  centered
+                  hide-header
+                  hide-footer
+                >
+                  <h2 class="mb-2">{{ $t(`cosmetics.${getRewardItem(i)}`) }}</h2>
+
                   <video v-if="getMovie(i)" width="100%" height="360" autoplay muted loop>
                     <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
                   </video>
@@ -50,17 +64,7 @@
                         class="mb-2"
                       />
                     </div>
-
-                    <template v-if="Array.isArray(getRewardDescription(i))">
-                      {{ getRewardDescription(i)[0] }}
-                      <ul class="mt-1">
-                        <li
-                          v-for="line in getRewardDescription(i).slice(1)"
-                          :key="line + cosmetic.cosmetic_id"
-                        >{{ line }}</li>
-                      </ul>
-                    </template>
-                    <template v-else>{{ getRewardDescription(i) }}</template>
+                    {{$t(`cosmetic_descriptions.${getRewardItem(i)}`)}}
                   </div>
                 </b-modal>
               </template>
@@ -69,86 +73,44 @@
         </li>
       </ul>
       <div class="container text-center my-3">
-          <h2 class="blue text-center">After Level 100...</h2>
-          <p>A Legendary Chest on levels ending in 00</p>
-          <p>A Mythical Chest on levels ending in 50</p>
-          <p>A Rare Chest on all other levels ending in 0</p>
+        <h2 class="blue text-center" v-t="'battle_pass.after_100'"></h2>
+        <p v-t="'battle_pass.bonus_descr_1'"></p>
+        <p v-t="'battle_pass.bonus_descr_2'"></p>
+        <p v-t="'battle_pass.bonus_descr_3'"></p>
       </div>
     </div>
-    <b-modal :id="'1'" title="Common Chest" centered hide-footer>
+    <b-modal
+      v-for="i in 5"
+      :id="i.toString()"
+      :key="i"
+      :title=" $t(`cosmetics.chest${i}`)"
+      centered
+      hide-footer
+    >
       <h5>
-        Gain a free Common Chest! It contains the following prizes
+        {{$t('cosmetic_descriptions.chest_reward', {chest: $t("cosmetics.chest" + (i))})}}
         <router-link to="chest_rates" target="_blank">
           <i class="fas fa-info-circle info-icon"></i>
         </router-link>
       </h5>
       <ul>
-        <li v-for="reward in chestRewards['chest1']" :key="reward">{{ reward }}</li>
-      </ul>
-    </b-modal>
-    <b-modal :id="'2'" title="Uncommon Chest" centered hide-footer>
-      <h5>
-        Gain a free Uncommon Chest! It contains the following prizes
-        <router-link to="chest_rates" target="_blank">
-          <i class="fas fa-info-circle info-icon"></i>
-        </router-link>
-      </h5>
-      <ul>
-        <li v-for="reward in chestRewards['chest2']" :key="reward">{{ reward }}</li>
-      </ul>
-    </b-modal>
-    <b-modal :id="'3'" title="Rare Chest" centered hide-footer>
-      <h5>
-        Gain a free Rare Chest! It contains the following prizes
-        <router-link to="chest_rates" target="_blank">
-          <i class="fas fa-info-circle info-icon"></i>
-        </router-link>
-      </h5>
-      <ul>
-        <li v-for="reward in chestRewards['chest3']" :key="reward">{{ reward }}</li>
-      </ul>
-    </b-modal>
-    <b-modal :id="'4'" title="Mythical Chest" centered hide-footer>
-      <h5>
-        Gain a free Mythical Chest! It contains the following prizes
-        <router-link to="chest_rates" target="_blank">
-          <i class="fas fa-info-circle info-icon"></i>
-        </router-link>
-      </h5>
-      <ul>
-        <li v-for="reward in chestRewards['chest4']" :key="reward">{{ reward }}</li>
-      </ul>
-    </b-modal>
-    <b-modal :id="'5'" title="Legendary Chest" centered hide-footer>
-      <h5>
-        Gain a free Legendary Chest! It contains the following prizes
-        <router-link to="chest_rates" target="_blank">
-          <i class="fas fa-info-circle info-icon"></i>
-        </router-link>
-      </h5>
-      <ul>
-        <li v-for="reward in chestRewards['chest5']" :key="reward">{{ reward }}</li>
+        <li v-for="reward in $t('cosmetic_descriptions.chest' + i)" :key="reward">{{ reward }}</li>
       </ul>
     </b-modal>
   </div>
 </template>
 
 <script>
-import names from "./cosmeticNames";
 import webm from "./webmList";
-import chestRewards from "./chests";
 
 export default {
   data: () => ({
     error: "",
     rewards: [],
-    loading: true,
-    chestRewards
+    loading: true
   }),
 
   created() {
-    this.chestRewards = chestRewards;
-
     fetch(`/api/cosmetics/battle_pass`)
       .then(res => res.json())
       .then(rewards => {
@@ -179,15 +141,6 @@ export default {
     },
     getRewardItem(level) {
       return this.rewards[level - 1].cosmetic_id;
-    },
-    getRewardDescription(level) {
-      if (this.getRewardItem(level)) {
-        return chestRewards[this.getRewardItem(level)];
-      }
-    },
-    getItemName(level) {
-      const cosmetic_id = this.rewards[level - 1].cosmetic_id;
-      return names[cosmetic_id];
     },
     getLevelTotalXP(level) {
       if (!this.getRewards(level)) return null;

@@ -29,16 +29,16 @@
               >
                 <th scope="row">
                   <HeroImage :hero="game.hero"></HeroImage>
-                  {{ game.hero | translateDota }}
+                  {{ $t(`dota.${game.hero}`) }}
                 </th>
                 <td>
-                  <span v-if="game.won" class="win">Won</span>
-                  <span v-else class="loss">Lost</span>
+                  <span v-if="game.won" class="win" v-t="'tables.won'"></span>
+                  <span v-else class="loss" v-t="'tables.lost'"></span>
                   <div v-if="game.xp_earned > 0" class="text-muted">+{{ game.xp_earned }} XP</div>
                   <div
                     v-else
                     v-b-tooltip.hover.html
-                    title="You've reached your daily limit"
+                    :title="$t('tables.daily_limit')"
                     class="text-muted"
                   >
                     +0 XP

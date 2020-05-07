@@ -8,30 +8,28 @@
   >
     Are you sure you want to pay for this item?
     <div class="mt-4 d-flex justify-content-end">
-      <b-button class="mr-2" variant="secondary" @click="cancel">Cancel</b-button>
+      <b-button class="mr-2" variant="secondary" @click="cancel"
+        >Cancel</b-button
+      >
       <b-button class="mr-2" variant="primary" @click="buy">Confirm</b-button>
     </div>
   </b-modal>
 </template>
 
 <script>
-import cosmeticsData from "./cosmeticNames";
-
 export default {
   props: {
-    cosmetic: {}
+    cosmetic: {},
   },
   methods: {
     buy() {
-      this.$bvToast.toast(
-        `Added ${this.cosmeticName(this.cosmetic)} to your armory`,
-        {
-          title: `Notification`,
-          toaster: "b-toaster-bottom-left",
-          solid: true,
-          appendToast: true
-        }
-      );
+      const name = this.$i18n.t(`cosmetics.${this.cosmetic.cosmetic_id}`);
+      this.$bvToast.toast(`Added ${name} to your armory`, {
+        title: `Notification`,
+        toaster: "b-toaster-bottom-left",
+        solid: true,
+        appendToast: true,
+      });
 
       this.$refs["modal-confirm-purchase"].hide();
       this.$emit("buy", this.cosmetic);
@@ -40,12 +38,8 @@ export default {
       this.$refs["modal-confirm-purchase"].hide();
       this.$emit("cancel", this.cosmetic.cosmetic_id);
     },
-    cosmeticName(cosmetic) {
-      return cosmeticsData[cosmetic.cosmetic_id];
-    }
-  }
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

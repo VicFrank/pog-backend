@@ -1,7 +1,7 @@
 <template>
   <div class="match-item">
     <div class="image-container">
-      <img v-if="itemName" v-bind:src="getItemPath(itemName)" v-bind:alt="itemName | translateDota" />
+      <img v-if="itemName" v-bind:src="getItemPath(itemName)" v-bind:alt="itemName" />
     </div>
   </div>
 </template>

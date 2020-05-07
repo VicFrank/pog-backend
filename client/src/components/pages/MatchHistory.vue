@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout__content">
     <div class="container">
-      <h1 class="page-title">My Games</h1>
+      <h1 class="page-title" v-t="'profile.my_games'"></h1>
       <PlayerGamesList v-bind:games="games" :loading="loading"></PlayerGamesList>
     </div>
   </div>
