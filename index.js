@@ -113,7 +113,7 @@ app.use(passport.session());
 function skipLog(req, res) {
   var url = req.url;
   if (url.indexOf("?") > 0) url = url.substr(0, url.indexOf("?"));
-  if (url.match(/(js|jpg|png|ico|css|woff|woff2|eot)$/gi)) {
+  if (url.match(/(js|jpg|png|ico|css|woff|woff2|eot|svg|otf)$/gi)) {
     return true;
   }
   return false;
@@ -155,6 +155,25 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/dist/index.html"));
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App running on port ${port}.`);
+});
+
+process.on("SIGINT", () => {
+  console.info("SIGINT signal received.");
+
+  // Stops the server from accepting new connections and finishes existing connections.
+  server.close(function (err) {
+    // if error, log and exit with error (1 code)
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    // close your database connection and exit with success (0 code)
+    pool.end(() => {
+      console.log("pool has ended");
+      process.exit(0);
+    });
+  });
 });
