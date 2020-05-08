@@ -120,6 +120,7 @@ module.exports = {
       const sql_query = `
       SELECT p.*,
       count(*) as games,
+      EXTRACT(epoch FROM (interval '24 hours' - (now()-now()::date))) as seconds_to_reset,
       COUNT(DISTINCT(case when g.radiant_win = gp.is_radiant then g.game_id end)) as wins,
       COUNT(DISTINCT(case when g.radiant_win != gp.is_radiant then g.game_id end)) as losses,
       SUM(g.duration) as time_played,
@@ -156,6 +157,7 @@ module.exports = {
       const battlePassLevel = await cosmetics.getBattlePassLevel(
         battlePass.bp_level
       );
+      const dailyXP = await this.getDailyXP(steamID);
 
       let buildings_destroyed = teamKillStats.buildingKills.buildings_destroyed;
       let guardian_kills = teamKillStats.guardianKills.guardian_kills;
@@ -202,6 +204,7 @@ module.exports = {
         dailyQuests: dailyQuests,
         battlePass: { ...battlePass, ...battlePassLevel },
         achievementsToClaim,
+        dailyXP,
       };
     } catch (error) {
       throw error;
@@ -293,6 +296,24 @@ module.exports = {
     }
   },
 
+  async getDailyXP(steamID) {
+    try {
+      const sql_query = `
+      SELECT sum(xp_earned) as daily_xp
+      FROM games
+      JOIN game_players gp
+      USING (game_id)
+      JOIN players
+      USING (steam_id)
+      WHERE steam_id = $1
+        AND created_at >= NOW()::date`;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows[0].daily_xp || 0;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getBasicGames(steamID, limit = 100, offset = 0, hours) {
     let whereClause = "";
     if (hours) {
@@ -335,7 +356,7 @@ module.exports = {
     }
     try {
       const sql_query = `
-      SELECT *, g.radiant_win = gp.is_radiant as won
+      SELECT g.*, gp.*, g.radiant_win = gp.is_radiant as won
       FROM game_players gp
       JOIN games g
       USING (game_id)
@@ -710,7 +731,7 @@ module.exports = {
       const query2 = `
         UPDATE player_companions
         SET equipped = TRUE
-        WHERE companion_id  = $1
+        WHERE companion_id = $1
         RETURNING *;
       `;
       const { rows } = await query(query2, [companion_id]);
@@ -1438,11 +1459,27 @@ module.exports = {
    */
   async rerollDailyQuest(steamID, questID) {
     try {
+      // Make sure the player has the quest, and that it's at least 24 hours old
+      let sql_query = `
+      SELECT
+      created < current_timestamp - interval '23 hours' as can_reroll
+      FROM player_quests
+      JOIN quests
+      USING (quest_id)
+      WHERE is_achievement = FALSE AND
+        steam_id = $1 AND quest_id = $2
+      `;
+      const { rows: createdRows } = await query(sql_query, [steamID, questID]);
+      if (createdRows.length === 0)
+        throw new Error(`Player does not have quest with ID ${questID}`);
+      if (!createdRows[0].can_reroll)
+        throw new Error(`Can't reroll quest younger than 23 hours`);
+
       // Randomly choose a new quest
       const allQuests = await quests.getAllDailyQuests();
       const currentQuests = await quests.getAllDailyQuestsForPlayer(steamID);
-      const currentQuestIDs = currentQuests.map((quest) => quest.quest_id);
 
+      const currentQuestIDs = currentQuests.map((quest) => quest.quest_id);
       const newQuests = allQuests.filter((quest) => {
         return !currentQuestIDs.includes(quest.quest_id);
       });
@@ -1451,19 +1488,7 @@ module.exports = {
         newQuests[Math.floor(Math.random() * newQuests.length)];
       const questToAddID = questToAdd.quest_id;
 
-      // Make sure the player has the quest, and that it's at least 24 hours old
-      let sql_query = `
-      SELECT
-      created < current_timestamp - interval '23 hours' as can_reroll
-      FROM player_quests
-      WHERE steam_id = $1 AND quest_id = $2
-      `;
-      const { rows: createdRows } = await query(sql_query, [steamID, questID]);
-      if (createdRows.length === 0)
-        throw new Error(`Player does not have quest with ID ${questID}`);
-      if (!createdRows[0].can_reroll)
-        throw new Error(`Can't reroll quest younger than 23 hours`);
-
+      // Log the reroll
       await logs.addTransactionLog(steamID, "quest_reroll", {
         steamID,
         oldQuest: questID,
@@ -1537,7 +1562,7 @@ module.exports = {
 
       if (questProgress < required)
         throw new Error(`Quest is not completed, ${questProgress}/${required}`);
-      if (claimed) throw new Error(`Quest has already been claimed`);
+      if (claimed) throw new Error(`Quest ${questID} has already been claimed`);
       if (!this.playerHasQuest(steamID, questID))
         throw new Error("Player does not have quest");
 

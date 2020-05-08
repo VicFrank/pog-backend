@@ -2,7 +2,11 @@
   <div class="content">
     <h3 class="mb-5 text-center">Daily Quests</h3>
     <div class="quest container p-0">
-      <b-alert v-if="error != ''" show variant="danger" dismissible>{{error}}</b-alert>
+      <b-alert v-model="showError" show variant="danger" dismissible>
+        {{
+        error
+        }}
+      </b-alert>
       <div class="row">
         <template v-if="loading">
           <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -15,7 +19,7 @@
           </div>
         </template>
         <div
-          v-for="(quest) in quests"
+          v-for="quest in quests"
           :key="quest.quest_id"
           class="col-sm-12 col-md-12 col-lg-4 col-xl-4"
         >
@@ -46,11 +50,7 @@
               <img src="./reroll.svg" alt="Reroll" />
             </a>
             <template v-else>
-              <span class="ml-auto mr-2 next-quest-text">
-                {{
-                getTimeUntilReroll(quest.created)
-                }}
-              </span>
+              <span class="ml-auto mr-2 next-quest-text">{{ getTimeUntilReroll(quest.created) }}</span>
               <a class="mr-3 reroll-button-inactive">
                 <img src="./reroll.svg" alt="Reroll" />
               </a>
@@ -69,6 +69,7 @@ import ProgressBar from "../../utility/ProgressBar";
 export default {
   data: () => ({
     error: "",
+    showError: false,
     quests: [],
     loading: true
   }),
@@ -95,10 +96,16 @@ export default {
           this.loading = false;
           this.quests = quests;
         })
-        .catch(err => (this.error = err));
+        .catch(err => {
+          this.error = err;
+          this.showError = true;
+        });
     },
     rerollQuest(quest, index) {
       const { quest_id } = quest;
+      this.quests = this.quests.map(q =>
+        q.quest_id === quest_id ? { ...q, can_reroll: false } : q
+      );
       fetch(
         `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/reroll?questID=${quest_id}`,
         { method: "post" }
@@ -115,7 +122,10 @@ export default {
             this.getDailyQuests();
           }
         })
-        .catch(err => (this.error = err));
+        .catch(err => {
+          this.error = err;
+          this.showError = true;
+        });
     },
     claimQuest(quest) {
       const { quest_id } = quest;
@@ -134,7 +144,10 @@ export default {
             this.$store.dispatch("refreshPlayer");
           }
         })
-        .catch(err => (this.error = err));
+        .catch(err => {
+          this.error = err;
+          this.showError = true;
+        });
     }
   }
 };

@@ -7,12 +7,12 @@ const apicache = require("apicache");
 
 let cache = apicache.middleware;
 
-router.get("/", async (req, res) => {
+router.get("/", auth.adminAuth, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
     const offset = parseInt(req.query.offset) || 0;
-    const playerInfo = await players.getAllPlayers(limit, offset);
-    res.status(200).json(playerInfo);
+    const playersInfo = await players.getAllPlayers(limit, offset);
+    res.status(200).json(playersInfo);
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server Error" });

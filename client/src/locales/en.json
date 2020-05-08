@@ -911,6 +911,7 @@
     "match_history": "Match History",
     "my_stats": "My Stats",
     "my_games": "My Games",
+    "daily_xp": "Daily XP",
     "stats": "Stats",
     "view_all": "View All",
     "mmr": "mmr",
@@ -918,7 +919,11 @@
     "losses": "Losses",
     "abandoned": "Abandoned",
     "time_played": "Time Played",
-    "not_found": "Player not found"
+    "not_found": "Player not found",
+    "current_booster": "Current Booster: ",
+    "bp_sellout": "Purchase a {link} to increase your Daily XP",
+    "bp_sellout_link": "BP Accelerator",
+    "reset_in": "Resets in"
   },
 
   "battle_pass": {

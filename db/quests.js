@@ -209,6 +209,10 @@ module.exports = {
           questTier++;
         }
         if (!questToAdd) questToAdd = statQuests.slice(-1).pop();
+        // questTier is one too high if it's the final tier
+        if (questTier > statQuests.length) {
+          questTier--;
+        }
 
         activeAchievements.push({ ...questToAdd, questTier });
       }

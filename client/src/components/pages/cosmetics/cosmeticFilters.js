@@ -68,7 +68,7 @@ const filterCosmetics = (
         return true;
       }
       const { cosmetic_id } = cosmetic;
-      const name = this.$t(cosmetic_id.toLowerCase());
+      const name = cosmetic_id;
       const search = searchText.toLowerCase();
       if (
         search === "" ||
