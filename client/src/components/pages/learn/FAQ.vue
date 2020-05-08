@@ -56,12 +56,12 @@
           >{{ $t('faq.answer4-link') }}</a>
         </template>
       </i18n>
-      <div class="question" v-t="'faq.question5'"></div>
-      <div class="answer" v-t="'faq.answer5'"></div>
+      <!-- <div class="question" v-t="'faq.question5'"></div>
+      <div class="answer" v-t="'faq.answer5'"></div>-->
       <div class="question" v-t="'faq.question6'"></div>
       <div class="answer" v-t="'faq.answer6'"></div>
       <div class="question" v-t="'faq.question7'"></div>
-      <div class="answer" v-t="'faq.question7'"></div>
+      <div class="answer" v-t="'faq.answer7'"></div>
       <div class="question" v-t="'faq.question8'"></div>
       <i18n path="faq.answer8" tag="div" class="answer">
         <template v-slot:link>
@@ -69,7 +69,7 @@
         </template>
       </i18n>
       <div class="question" v-t="'faq.question9'"></div>
-      <div class="answer" v-t="'faq.question9'"></div>
+      <div class="answer" v-t="'faq.answer9'"></div>
       <div class="question" v-t="'faq.question10'"></div>
       <i18n path="faq.answer10" tag="div" class="answer">
         <template v-slot:link>
@@ -80,11 +80,11 @@
         </template>
       </i18n>
       <div class="question" v-t="'faq.question11'"></div>
-      <div class="answer" v-t="'faq.question11'"></div>
+      <div class="answer" v-t="'faq.answer11'"></div>
       <div class="question" v-t="'faq.question12'"></div>
-      <div class="answer" v-t="'faq.question12'"></div>
+      <div class="answer" v-t="'faq.answer12'"></div>
       <div class="question" v-t="'faq.question14'"></div>
-      <div class="answer" v-t="'faq.question14'"></div>
+      <div class="answer" v-t="'faq.answer14'"></div>
     </div>
   </div>
 </template>
