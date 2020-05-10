@@ -3,6 +3,7 @@
     <div class="content">
       <h1 class="page-title">Heroes</h1>
       <div class="container">
+        <b-form-select class="date-filter mb-3" v-model="selected" :options="options"></b-form-select>
         <div class="row">
           <div class="col-xl-12">
             <div class="match-history">
@@ -48,7 +49,13 @@ export default {
     fields: [],
     heroes: [],
     maxGames: 0,
-    maxKDR: 0
+    maxKDR: 0,
+    selected: "month",
+    options: [
+      { value: "day", text: "Today" },
+      { value: "week", text: "This Week" },
+      { value: "month", text: "This Month" }
+    ]
   }),
 
   created() {
@@ -81,21 +88,30 @@ export default {
         label: this.$i18n.t("tables.kdr")
       }
     ];
-    fetch(`/api/games/stats/heroes`)
-      .then(res => res.json())
-      .then(heroes => {
-        this.heroes = heroes.map(stats => ({
-          hero: stats.hero,
-          games: stats.games,
-          win_rate: stats.wins / stats.games,
-          kdr: stats.avg_kills / stats.avg_deaths
-        }));
-        this.maxGames = this.getMaxArray(this.heroes, "games");
-        this.maxKDR = this.getMaxArray(this.heroes, "kdr");
-      });
+    this.getStats();
+  },
+
+  watch: {
+    selected() {
+      this.getStats();
+    }
   },
 
   methods: {
+    getStats() {
+      fetch(`/api/games/stats/heroes/${this.selected}`)
+        .then(res => res.json())
+        .then(heroes => {
+          this.heroes = heroes.map(stats => ({
+            hero: stats.hero,
+            games: stats.games,
+            win_rate: stats.wins / stats.games,
+            kdr: stats.avg_kills / stats.avg_deaths
+          }));
+          this.maxGames = this.getMaxArray(this.heroes, "games");
+          this.maxKDR = this.getMaxArray(this.heroes, "kdr");
+        });
+    },
     getMaxArray(arr, property) {
       return arr.reduce(
         (max, b) => Math.max(max, b[property]),
@@ -107,6 +123,13 @@ export default {
 </script>
 
 <style scoped>
+.date-filter {
+  max-width: 200px;
+  background-color: #222e3b;
+  color: #0b86c4;
+  border: solid 1.1px #364552;
+}
+
 .progress-bar {
   max-width: 80%;
 }

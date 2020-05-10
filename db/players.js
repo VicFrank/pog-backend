@@ -1186,6 +1186,7 @@ module.exports = {
       throw error;
     }
   },
+
   async openChest(steamID, chestID) {
     try {
       const { rows: existingChests } = await query(
@@ -1475,13 +1476,22 @@ module.exports = {
       if (!createdRows[0].can_reroll)
         throw new Error(`Can't reroll quest younger than 23 hours`);
 
+      // Make sure we're rerolling a quest the player actually has
+      const currentQuests = await quests.getAllDailyQuestsForPlayer(steamID);
+      if (!currentQuests.some((quest) => (quest.quest_id = questID))) {
+        throw new Error(`Can't reroll quest ${questID} you don't have`);
+      }
+
       // Randomly choose a new quest
       const allQuests = await quests.getAllDailyQuests();
-      const currentQuests = await quests.getAllDailyQuestsForPlayer(steamID);
 
       const currentQuestIDs = currentQuests.map((quest) => quest.quest_id);
+      const currentQuestStats = currentQuests.map((quest) => quest.stat);
       const newQuests = allQuests.filter((quest) => {
-        return !currentQuestIDs.includes(quest.quest_id);
+        return (
+          !currentQuestIDs.includes(quest.quest_id) &&
+          !currentQuestStats.includes(quest.stat)
+        );
       });
 
       const questToAdd =
@@ -1701,6 +1711,15 @@ module.exports = {
           break;
         case "gold_earned":
           progress = totalGold;
+          break;
+        case "assists":
+          progress = assists;
+          break;
+        case "hero_kills":
+          progress = kills;
+          break;
+        case "denies":
+          progress = denies;
           break;
         case "rampages":
           progress = rampages;

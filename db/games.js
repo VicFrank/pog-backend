@@ -352,22 +352,44 @@ module.exports = {
   // Game Stats
   /////////////////////////////////
 
-  async getHeroStats() {
+  async getHeroStats(hours) {
     try {
-      const sql_query = `
-      SELECT gp.hero,
-      count(*) as games,
-      COUNT(case when g.radiant_win = gp.is_radiant then g.game_id end) as wins,
-      TRUNC(SUM(gp.kills)::decimal / count(*), 2) as avg_kills,
-      TRUNC(SUM(gp.deaths)::decimal / count(*), 2) as avg_deaths,
-      TRUNC(SUM(gp.assists)::decimal / count(*), 2) as avg_assists
-      FROM game_players gp
-        JOIN games g
-        USING (game_id)
-        GROUP BY gp.hero
-      `;
-      const { rows } = await query(sql_query);
-      return rows;
+      if (hours) {
+        const sql_query = `
+        WITH recent_games AS (
+          SELECT * FROM games
+          WHERE ranked = TRUE
+            AND created_at >= NOW() - $1 * INTERVAL '1 HOURS'
+        )
+        SELECT gp.hero,
+        count(*) as games,
+        COUNT(case when g.radiant_win = gp.is_radiant then g.game_id end) as wins,
+        TRUNC(SUM(gp.kills)::decimal / count(*), 2) as avg_kills,
+        TRUNC(SUM(gp.deaths)::decimal / count(*), 2) as avg_deaths,
+        TRUNC(SUM(gp.assists)::decimal / count(*), 2) as avg_assists
+        FROM game_players gp
+          JOIN recent_games g
+          USING (game_id)
+          GROUP BY gp.hero`;
+        const { rows } = await query(sql_query, [hours]);
+        return rows;
+      } else {
+        const sql_query = `
+        SELECT gp.hero,
+        count(*) as games,
+        COUNT(case when g.radiant_win = gp.is_radiant then g.game_id end) as wins,
+        TRUNC(SUM(gp.kills)::decimal / count(*), 2) as avg_kills,
+        TRUNC(SUM(gp.deaths)::decimal / count(*), 2) as avg_deaths,
+        TRUNC(SUM(gp.assists)::decimal / count(*), 2) as avg_assists
+        FROM game_players gp
+          JOIN games g
+          USING (game_id)
+          WHERE ranked = TRUE
+          GROUP BY gp.hero
+        `;
+        const { rows } = await query(sql_query);
+        return rows;
+      }
     } catch (error) {
       throw error;
     }

@@ -66,4 +66,37 @@ router.get("/stats/heroes", cache("1 hour"), async (req, res) => {
   }
 });
 
+router.get("/stats/heroes/day", async (req, res) => {
+  try {
+    const heroStats = await games.getHeroStats(24);
+
+    res.status(200).json(heroStats);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+router.get("/stats/heroes/week", async (req, res) => {
+  try {
+    const heroStats = await games.getHeroStats(168);
+
+    res.status(200).json(heroStats);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+router.get("/stats/heroes/month", cache("1 hour"), async (req, res) => {
+  try {
+    const heroStats = await games.getHeroStats(5208);
+
+    res.status(200).json(heroStats);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
 module.exports = router;

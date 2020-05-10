@@ -13,17 +13,18 @@
             <span
               v-b-tooltip.hover.html
               :title="
-                `${$t('battle_pass.level_tooltip', 
-                {
+                `${$t('battle_pass.level_tooltip', {
                   total_xp: getLevelTotalXP(i),
-                  next_level: getNextLevelXP(i)
+                  next_level: getNextLevelXP(i),
                 })}`
               "
             >
               {{ $t("battle_pass.level") }} {{ i }}
               <i class="fas fa-info-circle info-icon"></i>
             </span>
-            <div v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }">
+            <div
+              v-bind:class="{ 'lvl-wrapper': true, 'lvl-locked': i > bpLevel }"
+            >
               <template v-if="loading">
                 <img src="./images/bp_placeholder.png" alt="placeholder" />
               </template>
@@ -49,10 +50,20 @@
                   hide-header
                   hide-footer
                 >
-                  <h2 class="mb-2">{{ $t(`cosmetics.${getRewardItem(i)}`) }}</h2>
+                  <h2 class="mb-2">
+                    {{ $t(`cosmetics.${getRewardItem(i)}`) }}
+                  </h2>
 
-                  <video v-if="getMovie(i)" width="100%" height="360" autoplay muted loop>
-                    <source :src="getMovie(i)" type="video/webm" />Your browser does not support the video tag.
+                  <video
+                    v-if="getMovie(i)"
+                    width="100%"
+                    height="360"
+                    autoplay
+                    muted
+                    loop
+                  >
+                    <source :src="getMovie(i)" type="video/webm" />
+                    Your browser does not support the video tag.
                   </video>
 
                   <div class="text-center">
@@ -64,7 +75,7 @@
                         class="mb-2"
                       />
                     </div>
-                    {{$t(`cosmetic_descriptions.${getRewardItem(i)}`)}}
+                    {{ $t(`cosmetic_descriptions.${getRewardItem(i)}`) }}
                   </div>
                 </b-modal>
               </template>
@@ -83,18 +94,27 @@
       v-for="i in 5"
       :id="i.toString()"
       :key="i"
-      :title=" $t(`cosmetics.chest${i}`)"
+      :title="$t(`cosmetics.chest${i}`)"
       centered
       hide-footer
     >
       <h5>
-        {{$t('cosmetic_descriptions.chest_reward', {chest: $t("cosmetics.chest" + (i))})}}
-        <router-link to="chest_rates" target="_blank">
+        {{
+          $t("cosmetic_descriptions.chest_reward", {
+            chest: $t("cosmetics.chest" + i),
+          })
+        }}
+        <router-link to="/chest_rates" target="_blank">
           <i class="fas fa-info-circle info-icon"></i>
         </router-link>
       </h5>
       <ul>
-        <li v-for="reward in $t('cosmetic_descriptions.chest' + i)" :key="reward">{{ reward }}</li>
+        <li
+          v-for="reward in $t('cosmetic_descriptions.chest' + i)"
+          :key="reward"
+        >
+          {{ reward }}
+        </li>
       </ul>
     </b-modal>
   </div>
@@ -107,25 +127,25 @@ export default {
   data: () => ({
     error: "",
     rewards: [],
-    loading: true
+    loading: true,
   }),
 
   created() {
     fetch(`/api/cosmetics/battle_pass`)
-      .then(res => res.json())
-      .then(rewards => {
+      .then((res) => res.json())
+      .then((rewards) => {
         // remove level 0 from the rewards
         rewards.shift();
         this.rewards = rewards;
         this.loading = false;
       })
-      .catch(err => (this.error = err));
+      .catch((err) => (this.error = err));
   },
 
   computed: {
     bpLevel() {
       return this.$store.getters.bpLevel;
-    }
+    },
   },
 
   methods: {
@@ -187,8 +207,8 @@ export default {
       if (!webm.has(cosmetic_id)) return false;
 
       return require(`./images/${cosmetic_id}.webm`);
-    }
-  }
+    },
+  },
 };
 </script>
 

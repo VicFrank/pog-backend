@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     onMainContentClicked() {
-      if (this.sidebarOpen && window.innerWidth < 1200)
+      if (this.sidebarOpen && window.innerWidth < 1600)
         this.$store.dispatch("toggleSidebar");
     }
   },
@@ -109,7 +109,7 @@ th {
   font-style: normal;
 }
 
-@media all and (max-width: 1199px) {
+@media all and (max-width: 1599px) {
   .sidebar-open:after {
     content: "";
     position: fixed;
@@ -122,7 +122,7 @@ th {
   }
 }
 
-@media all and (min-width: 1200) {
+@media all and (min-width: 1600) {
   .sidebar-open {
     margin-left: 220px;
   }
