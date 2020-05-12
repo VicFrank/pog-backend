@@ -990,6 +990,7 @@
 
   "payment": {
     "page_title": "Payment",
+    "alipay_title": "Alipay Payment",
     "checkout_title": "Checkout",
     "select_product": "Select a product",
     "payment": "Payment",
@@ -999,7 +1000,10 @@
     "login": "Login to complete your purchase",
     "battle_pass_xp": "Battle Pass XP",
     "back_to_store": "Back to Store",
-    "payment_success": "Your Payment was successful!",
+    "payment_success": "Your payment was successful!",
+    "added_to_account": "has been added to your account.",
+    "waiting_for_process": "Waiting for payment to be processed...",
+    "payment_issue": "There may have been an issue processing your payment.",
     "success_1": "It may take a very short period of time to add your items to your account.",
     "success_2": "If you have an issue receiving your XP/POGGERS, please {contact_us}",
     "contact_us": "contact us",

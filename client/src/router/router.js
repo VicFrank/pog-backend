@@ -30,6 +30,7 @@ const Credits = () => import("../components/pages/credits/Credits");
 import PoggersStore from "../components/pages/cosmetics/RealMoneyStore";
 import Checkout from "../components/pages/payment/Checkout";
 import PaymentSuccess from "../components/pages/payment/PaymentSuccess";
+import AlipayPayment from "../components/pages/payment/AlipayPayment";
 
 Vue.use(VueRouter);
 
@@ -51,6 +52,16 @@ const routes = [
   {
     path: "/payment_success",
     component: PaymentSuccess,
+  },
+  {
+    path: "/alipay_payment",
+    component: AlipayPayment,
+    props: (route) => ({
+      source: route.query.source,
+      livemode: route.query.livemode,
+      clientSecret: route.query.client_secret,
+      itemID: route.query.item_id,
+    }),
   },
   {
     path: "/changelog",

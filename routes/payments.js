@@ -46,8 +46,6 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
       return res.send(500);
     }
 
-    console.log("Got Intent");
-
     // Make sure this is a valid player
     const playerExists = await players.doesPlayerExist(steamID);
     if (!playerExists) {
@@ -71,16 +69,12 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
       return res.status(400).send({ message: "Invalid Item Type" });
     }
 
-    console.log("Capture Order");
     // Call PayPal to capture the order
     request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID);
     request.requestBody({});
-    console.log("After Capture Order");
 
     try {
-      console.log("Await Execute Capture");
       const capture = await paypalClient().execute(request);
-      console.log("After Await Execute Capture");
       await logs.addTransactionLog(steamID, "paypal", {
         itemID,
         capture,
@@ -156,6 +150,32 @@ async function handleStripePaymentIntentSucceeded(intent) {
   }
 }
 
+async function handleStripeSourceChargeable(intent) {
+  const { amount, id, currency } = intent;
+  const { itemID } = intent.metadata;
+  const isValid = await isValidStripeTransaction(itemID, amount);
+  if (isValid) {
+    stripeClient.client.charges.create({
+      amount: amount,
+      currency: currency,
+      source: id,
+      metadata: intent.metadata,
+    });
+  }
+}
+
+async function isValidStripeTransaction(itemID, amount) {
+  const itemData = await cosmetics.getItemPrice(itemID);
+  const { cost_usd, item_type } = itemData;
+  const validReward = item_type === "POGGERS" || item_type === "XP";
+
+  if (!itemData || amount / 100 != cost_usd || !validReward) {
+    return false;
+  }
+
+  return true;
+}
+
 router.post("/stripe/webhook", async (req, res) => {
   const sig = req.headers["stripe-signature"];
 
@@ -189,6 +209,14 @@ router.post("/stripe/webhook", async (req, res) => {
       const message =
         intent.last_payment_error && intent.last_payment_error.message;
       console.log("Failed:", intent.id, message);
+      break;
+    case "source.chargeable":
+      // make a charge request
+      handleStripeSourceChargeable(intent);
+      break;
+    case "charge.succeeded":
+      // Alipay charge success, give them their stuff
+      handleStripePaymentIntentSucceeded(intent);
       break;
   }
 
