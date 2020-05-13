@@ -29,7 +29,7 @@
                     <td>{{ playerStats.wins }}</td>
                     <td>{{ playerStats.losses }}</td>
                     <td>{{ playerStats.abandoned }}</td>
-                    <td>{{ playerStats.time_played | hhmmss }}</td>
+                    <td>{{ playerStats.time_played | duration }}</td>
                   </tr>
                 </tbody>
               </table>

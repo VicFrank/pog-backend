@@ -32,7 +32,7 @@
                     <td>{{ playerStats.wins }}</td>
                     <td>{{ playerStats.losses }}</td>
                     <td>{{ playerStats.abandoned }}</td>
-                    <td>{{ playerStats.time_played | hhmmss }}</td>
+                    <td>{{ playerStats.time_played | duration }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -68,7 +68,11 @@
                 </div>
                 <div class="text-muted">{{$t('profile.reset_in')}} {{secondsUntilReset | hhmmss}}</div>
               </div>
-              <ProgressBar class="mt-3" :progress="playerStats.dailyXP" :required="maxDailyXP" />
+              <ProgressBar
+                class="mt-3"
+                :progress="Number(playerStats.dailyXP)"
+                :required="maxDailyXP"
+              />
             </div>
           </div>
         </div>

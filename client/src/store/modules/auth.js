@@ -10,6 +10,7 @@ const state = {
   isAdmin: false,
   poggers: 0,
   achievementsToClaim: 0,
+  dailysToClaim: 0,
 };
 
 // getters
@@ -26,16 +27,15 @@ const getters = {
   bpTier: (state) => state.bpTier,
   poggers: (state) => state.poggers,
   achievementsToClaim: (state) => state.achievementsToClaim,
+  dailysToClaim: (state) => state.dailysToClaim,
 };
 
 const mutations = {
-  setUser(state, { username, steamID, picture, isAdmin, poggers }) {
-    state.username = username;
+  setUser(state, { steamID, picture, isAdmin }) {
     state.userSteamID = steamID;
     state.profilePictureLink = picture;
     state.loggedIn = true;
     state.isAdmin = isAdmin;
-    state.poggers = poggers;
   },
   setNotLoggedIn(state) {
     state.username = "";
@@ -60,7 +60,7 @@ const mutations = {
   },
   SAVE_USER(
     state,
-    { username, steamID, isAdmin, poggers, achievementsToClaim }
+    { username, steamID, isAdmin, poggers, achievementsToClaim, dailysToClaim }
   ) {
     state.username = username;
     state.userSteamID = steamID;
@@ -68,6 +68,7 @@ const mutations = {
     state.isAdmin = isAdmin;
     state.poggers = poggers;
     state.achievementsToClaim = achievementsToClaim;
+    state.dailysToClaim = dailysToClaim;
   },
 };
 
@@ -118,6 +119,7 @@ const actions = {
           is_admin,
           poggers,
           achievementsToClaim,
+          dailyQuestsToClaim,
         } = player;
         const {
           tier,
@@ -135,11 +137,12 @@ const actions = {
           bpLevelRequired: next_level_xp,
         });
         commit("SAVE_USER", {
-          username: username,
+          username,
           steamID: steam_id,
           isAdmin: is_admin,
-          poggers: poggers,
-          achievementsToClaim: achievementsToClaim,
+          poggers,
+          achievementsToClaim,
+          dailysToClaim: dailyQuestsToClaim,
         });
       })
       .catch((err) => {

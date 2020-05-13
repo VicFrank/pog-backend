@@ -165,6 +165,9 @@ module.exports = {
       const achievementsToClaim = achievements.filter((achievement) => {
         return achievement.quest_completed && !achievement.claimed;
       }).length;
+      const dailyQuestsToClaim = dailyQuests.filter(
+        (quest) => quest.quest_completed && !quest.claimed
+      ).length;
 
       let playerStats = rows[0];
       if (!playerStats) {
@@ -204,6 +207,7 @@ module.exports = {
         dailyQuests: dailyQuests,
         battlePass: { ...battlePass, ...battlePassLevel },
         achievementsToClaim,
+        dailyQuestsToClaim,
         dailyXP,
       };
     } catch (error) {

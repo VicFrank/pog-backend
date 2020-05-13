@@ -242,6 +242,10 @@ export default {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
         .then(res => res.json())
         .then(cosmetics => {
+          // Filter out all the reroll items
+          cosmetics = cosmetics.filter(
+            cosmetic => !cosmetic.cosmetic_id.includes("reroll")
+          );
           const sortedCosmetics = cosmetics.sort((c1, c2) => {
             if (this.isConsumableOrChest(c1) && !this.isConsumableOrChest(c2)) {
               return -1;

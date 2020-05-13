@@ -57,11 +57,7 @@
         </div>
 
         <div class="d-flex justify-content-center align-items-center mt-1">
-          <img
-            src="../assets/images/pogcoin_gold.png"
-            class="poggers-img mr-1"
-            alt="Poggers"
-          />
+          <img src="../assets/images/pogcoin_gold.png" class="poggers-img mr-1" alt="Poggers" />
           {{ poggers }}
         </div>
 
@@ -71,8 +67,13 @@
               to="/profile"
               class="sidebar-nav__link sidebar-nav__link_profile"
               exact-active-class="active"
-              v-t="'navigation.profile'"
-            ></router-link>
+            >
+              {{$t('navigation.profile')}}
+              <b-badge v-if="numDailys > 0" variant="primary" class="ml-1">
+                {{ numDailys }}
+                <span class="sr-only">unclaimed achievements</span>
+              </b-badge>
+            </router-link>
           </li>
 
           <li class="sidebar-nav__item">
@@ -98,13 +99,9 @@
               to="/profile/achievements"
               class="sidebar-nav__link sidebar-nav__link_achievements"
               exact-active-class="active"
-              v-t="'navigation.achievements'"
             >
-              <b-badge
-                v-if="numAchievements > 0"
-                variant="primary"
-                class="ml-1"
-              >
+              {{$t('navigation.achievements')}}
+              <b-badge v-if="numAchievements > 0" variant="primary" class="ml-1">
                 {{ numAchievements }}
                 <span class="sr-only">unclaimed achievements</span>
               </b-badge>
@@ -232,13 +229,13 @@ export default {
 
   components: {
     LoginButton,
-    ProgressBar,
+    ProgressBar
   },
 
   mounted() {
     const open = this.$store.state.ui.sidebarOpen;
     TweenMax.set(this.$el, {
-      x: open ? 0 : -this.$el.offsetWidth,
+      x: open ? 0 : -this.$el.offsetWidth
     });
   },
   computed: {
@@ -248,42 +245,42 @@ export default {
         return {
           borderStyle: "solid",
           borderColor: "white",
-          borderWidth: "1px",
+          borderWidth: "1px"
         };
       } else if (this.bpLevel < 30) {
         // border1
         return {
           borderStyle: "solid",
           borderColor: "#4B69FF",
-          borderWidth: "1px",
+          borderWidth: "1px"
         };
       } else if (this.bpLevel < 50) {
         // border2
         return {
           borderStyle: "solid",
           borderColor: "#8847FF",
-          borderWidth: "1px",
+          borderWidth: "1px"
         };
       } else if (this.bpLevel < 70) {
         // border3
         return {
           borderStyle: "solid",
           borderColor: "#D32CE6",
-          borderWidth: "1px",
+          borderWidth: "1px"
         };
       } else if (this.bpLevel < 90) {
         // border4
         return {
           borderStyle: "solid",
           borderColor: "#EFAA15",
-          borderWidth: "1px",
+          borderWidth: "1px"
         };
       } else {
         // border5
         return {
           borderStyle: "solid",
           borderColor: "#EFAA15",
-          borderWidth: "1px",
+          borderWidth: "1px"
         };
       }
     },
@@ -318,7 +315,10 @@ export default {
       return this.$store.getters.poggers;
     },
     numAchievements() {
-      return this.$store.getters.achievementsToClaim;
+      return this.$store.state.auth.achievementsToClaim;
+    },
+    numDailys() {
+      return this.$store.state.auth.dailysToClaim;
     },
     badgeImage() {
       const level = this.$store.getters.bpLevel;
@@ -335,17 +335,17 @@ export default {
         badgeLevel = 1;
       }
       return require(`../assets/images/badges/badge${badgeLevel}.png`);
-    },
+    }
   },
   watch: {
     open: function(open) {
       const dX = open ? 0 : -this.$el.offsetWidth;
       TweenMax.to(this.$el, 0.6, {
         x: dX,
-        ease: Power4.easeOut,
+        ease: Power4.easeOut
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

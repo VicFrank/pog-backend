@@ -43,15 +43,13 @@ export default {
       .then(res => res.json())
       .then(res => {
         if (res.success) {
-          const { displayName, photos, id, isAdmin, poggers } = res.user;
+          const { photos, id, isAdmin } = res.user;
 
           this.$store.commit({
             type: "setUser",
-            username: displayName,
             steamID: id,
             picture: photos[2].value,
-            isAdmin,
-            poggers
+            isAdmin
           });
 
           this.$store.dispatch("refreshPlayer");
