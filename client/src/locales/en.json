@@ -809,6 +809,7 @@
     "Deal a total of %x% building damage": "Deal a total of {x} building damage",
     "Open a total of %x% chests": "Open a total of {x} chests",
     "High Five a total of %x% players": "High Five a total of {x} players",
+    "Money Money Money": "Money Money Money",
     "Visit the website for the first time": "Visit the website for the first time"
   },
 
@@ -911,7 +912,11 @@
     "games": "Games",
     "heroes": "Heroes",
     "report_a_bug": "Report A Bug",
-    "play_now": "Play Now"
+    "play_now": "Play Now",
+    "language": "Language",
+    "en": "English",
+    "cn": "汉语",
+    "ru": "русский"
   },
 
   "profile": {
@@ -1108,8 +1113,9 @@
     "contact": "Contact",
     "credits": [
       "Firetoad - Lead Programmer",
+      "Neil - Community and Asset Manager",
+      "VicFrank - Website Backend",
       "EarthSalamander - Programmer",
-      "Neil - Asset Manager",
       "Sajedene - 2D Artist & Administration",
       "Hawf - 3D Artist",
       "Toyoka - VFX Artist",
@@ -1122,7 +1128,6 @@
       "Arcvein - 2D Artist",
       "invalidnick - Terrain",
       "TravisAcarey - Voice Actor",
-      "VicFrank - Website Backend",
       "JIMMY - Website Frontend",
       "TideS - Panorama",
       "PerkaDirk - Community Leader",

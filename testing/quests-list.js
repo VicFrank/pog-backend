@@ -126,6 +126,16 @@ module.exports = [
   },
   {
     isAchievement: true,
+    name: "Money Money Money",
+    title: "Funny",
+    description: "Earn a total of %x% gold",
+    xp: 2500,
+    poggers: 150,
+    stat: "gold_earned",
+    requiredAmount: 100000000,
+  },
+  {
+    isAchievement: true,
     name: "Butchering in Style",
     title: "The Butcher",
     description: "Get %x% Rampages",

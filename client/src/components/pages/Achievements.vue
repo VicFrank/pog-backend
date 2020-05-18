@@ -13,13 +13,14 @@
               <div class="achievement-row">
                 <div class="description">
                   <i v-for="i in quest.questTier" :key="i" class="fas fa-star mb-2"></i>
-                  <h3>{{ quest.quest_name }}</h3>
-                  <p class="achievement-description">
-                    {{
-                    quest.quest_description
-                    | parseQuestText(quest.required_amount)
-                    }}
-                  </p>
+                  <h3>{{$t(`quests.${quest.quest_name}`)}}</h3>
+                  <i18n
+                    :path="`quests.${quest.quest_description}`"
+                    tag="p"
+                    class="achievement-description"
+                  >
+                    <template v-slot:x>{{quest.required_amount.toLocaleString()}}</template>
+                  </i18n>
                 </div>
                 <div class="rewards">
                   <p v-if="quest.poggers_reward > 0" class="pog-text">

@@ -36,7 +36,7 @@
             class="custom-badge-img"
             alt="Battle Pass Badge"
             v-b-tooltip.hover
-            title="Tier 1"
+            :title="`Tier 1: Expires ${upgradeExpiration}`"
           />
           <img
             v-if="bpTier === 2"
@@ -44,7 +44,7 @@
             class="custom-badge-img"
             alt="Battle Pass Badge"
             v-b-tooltip.hover
-            title="Tier 2"
+            :title="`Tier 2: Expires ${upgradeExpiration}`"
           />
         </div>
 
@@ -221,6 +221,7 @@
 import { TweenMax, Power4 } from "gsap";
 import LoginButton from "./pages/login/LoginButton";
 import ProgressBar from "./utility/ProgressBar";
+import moment from "moment";
 
 export default {
   name: "sidebar",
@@ -319,6 +320,10 @@ export default {
     },
     numDailys() {
       return this.$store.state.auth.dailysToClaim;
+    },
+    upgradeExpiration() {
+      const expiration = this.$store.state.auth.upgradeExpiration;
+      return moment(String(expiration)).fromNow();
     },
     badgeImage() {
       const level = this.$store.getters.bpLevel;

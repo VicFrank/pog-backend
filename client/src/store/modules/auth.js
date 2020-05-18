@@ -11,6 +11,7 @@ const state = {
   poggers: 0,
   achievementsToClaim: 0,
   dailysToClaim: 0,
+  upgradeExpiration: null,
 };
 
 // getters
@@ -28,6 +29,7 @@ const getters = {
   poggers: (state) => state.poggers,
   achievementsToClaim: (state) => state.achievementsToClaim,
   dailysToClaim: (state) => state.dailysToClaim,
+  upgradeExpiration: (state) => state.upgradeExpiration,
 };
 
 const mutations = {
@@ -48,12 +50,13 @@ const mutations = {
   },
   SAVE_BATTLE_PASS(
     state,
-    { bpLevel, bpTier, bpLevelProgress, bpLevelRequired }
+    { bpLevel, bpTier, bpLevelProgress, bpLevelRequired, upgradeExpiration }
   ) {
     state.bpLevel = bpLevel;
     state.bpTier = bpTier;
     state.bpLevelProgress = bpLevelProgress;
     state.bpLevelRequired = bpLevelRequired;
+    state.upgradeExpiration = upgradeExpiration;
   },
   SAVE_POGGERS(state, poggers) {
     state.poggers = poggers;
@@ -94,6 +97,7 @@ const actions = {
           next_level_xp,
           total_xp,
           bp_level,
+          upgrade_expiration,
         } = player.battlePass;
         let progress = next_level_xp - (total_xp - total_experience);
         if (total_xp === 0) progress = total_experience; // level 0 logic
@@ -102,6 +106,7 @@ const actions = {
           bpLevel: bp_level,
           bpLevelProgress: progress,
           bpLevelRequired: next_level_xp,
+          upgradeExpiration: upgrade_expiration,
         });
       })
       .catch((err) => {
@@ -127,6 +132,7 @@ const actions = {
           next_level_xp,
           total_xp,
           bp_level,
+          upgrade_expiration,
         } = battlePass;
         let progress = next_level_xp - (total_xp - total_experience);
         if (total_xp === 0) progress = total_experience; // level 0 logic
@@ -135,6 +141,7 @@ const actions = {
           bpLevel: bp_level,
           bpLevelProgress: progress,
           bpLevelRequired: next_level_xp,
+          upgradeExpiration: upgrade_expiration,
         });
         commit("SAVE_USER", {
           username,

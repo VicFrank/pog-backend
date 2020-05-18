@@ -30,6 +30,16 @@ module.exports = {
 
       const gameID = gameRows[0].game_id;
 
+      /* 
+        Sometimes the next couple queries give an invalid foreign key
+        on gameID. I suspect this has to do with clients being pulled
+        from a different pool. I'd like to fix this by having the same
+        client do all these queries, but the last time I tried that it
+        ended up bringing down the server. So for now, we're just going
+        to wait one second after gameID creation.
+      */
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       for (let bannedHero of bannedHeroes) {
         await query(
           `
@@ -405,7 +415,7 @@ module.exports = {
       FROM game_players
       JOIN games
       USING (game_id)
-      GROUP BY item_0
+      GROUP BY item_${slot}
       ORDER BY win_rate DESC;
       `;
       const { rows } = await query(sql_query);

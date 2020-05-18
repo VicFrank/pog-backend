@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store";
+import i18n from "../i18n";
 
 import Achievements from "../components/pages/Achievements";
 import Changelog from "../components/pages/Changelog";
@@ -184,6 +185,16 @@ router.beforeEach((to, from, next) => {
     } else {
       next("");
     }
+  } else {
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  const lang = store.getters.lang;
+  if (lang && lang !== i18n.locale) {
+    i18n.locale = lang;
+    next();
   } else {
     next();
   }

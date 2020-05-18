@@ -10,11 +10,6 @@ export default {
         return moment.utc(secs * 1000).format("H:mm:ss");
       } else return moment.utc(secs * 1000).format("mm:ss");
     },
-    parseQuestText: function(text, value) {
-      if (text) {
-        return text.replace("%x%", value);
-      }
-    },
     dateFromNow: function(value) {
       if (value) {
         return moment(String(value)).fromNow();
