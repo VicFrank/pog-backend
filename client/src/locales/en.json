@@ -762,7 +762,7 @@
   "quests": {
     "Pick up %x% Runes": "Pick up {x} Runes",
     "Buy %x% Neutral Items": "Buy {x} Neutral Items",
-    "Win %x% Games": "Win {x} Games",
+    "Win %x% games": "Win {x} Games",
     "Deal %x% damage to Heroes": "Deal {x} damage to Heroes",
     "Kill %x% Guardians": "Kill {x} Guardians",
     "Get %x% Assists": "Get {x} Assists",
@@ -1131,7 +1131,9 @@
       "JIMMY - Website Frontend",
       "TideS - Panorama",
       "PerkaDirk - Community Leader",
-      "Poptart - Community Leader"
+      "Poptart - Community Leader",
+      "Mandarin Translator - ProjectOrion",
+      "Russian Translator - Flutteravie",
     ],
     "copyright": "© 2020 Double Edge Studios LLC",
     "our_team": "Our Team"

@@ -762,7 +762,7 @@
   "quests": {
     "Pick up %x% Runes": "取得{x}个符",
     "Buy %x% Neutral Items": "购买{x}个中立物品",
-    "Win %x% Games": "赢{x}局",
+    "Win %x% games": "赢{x}局",
     "Deal %x% damage to Heroes": "对英雄造成{x}点伤害",
     "Kill a Guardian": "击败一个守护者",
     "Buy Nokrah's Blade": "购买诺克拉之刃",
@@ -1109,7 +1109,9 @@
       "JIMMY - Website Frontend",
       "TideS - Panorama",
       "PerkaDirk - Community Leader",
-      "Poptart - Community Leader"
+      "Poptart - Community Leader",
+      "Mandarin Translator - ProjectOrion",
+      "Russian Translator - Flutteravie",
     ],
     "copyright": "© 2020 Double Edge Studios LLC",
     "our_team": "Our Team"
