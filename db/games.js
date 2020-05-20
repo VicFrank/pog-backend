@@ -30,25 +30,15 @@ module.exports = {
 
       const gameID = gameRows[0].game_id;
 
-      /* 
-        Sometimes the next couple queries give an invalid foreign key
-        on gameID. I suspect this has to do with clients being pulled
-        from a different pool. I'd like to fix this by having the same
-        client do all these queries, but the last time I tried that it
-        ended up bringing down the server. So for now, we're just going
-        to wait one second after gameID creation.
-      */
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      for (let bannedHero of bannedHeroes) {
-        await query(
-          `
-            INSERT INTO game_bans (game_id, hero)
-            VALUES ($1, $2)
-            `,
-          [gameID, bannedHero]
-        );
-      }
+      // for (let bannedHero of bannedHeroes) {
+      //   await query(
+      //     `
+      //       INSERT INTO game_bans (game_id, hero)
+      //       VALUES ($1, $2)
+      //       `,
+      //     [gameID, bannedHero]
+      //   );
+      // }
 
       for (const [team, teamData] of Object.entries(teamInfo)) {
         const isTeamRadiant = team == "DOTA_TEAM_GOODGUYS";

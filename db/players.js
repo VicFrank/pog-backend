@@ -1556,7 +1556,8 @@ module.exports = {
       // and make sure the quest is actually complete
       let sql_query = `
         SELECT pq.quest_progress, pq.claimed, q.required_amount,
-          q.poggers_reward, q.xp_reward
+          q.poggers_reward, q.xp_reward, is_achievement,
+          created < current_timestamp - interval '23 hours' as can_reroll
         FROM player_quests pq
         JOIN quests q
         USING (quest_id)
@@ -1568,11 +1569,14 @@ module.exports = {
         throw new Error(`Invalid Quest ID ${questID}`);
       }
 
-      const questProgress = rows[0].quest_progress;
-      const required = rows[0].required_amount;
-      const claimed = rows[0].claimed;
-      const poggers = rows[0].poggers_reward;
-      const xp = rows[0].xp_reward;
+      const quest = rows[0];
+
+      const questProgress = quest.quest_progress;
+      const required = quest.required_amount;
+      const claimed = quest.claimed;
+      const poggers = quest.poggers_reward;
+      const xp = quest.xp_reward;
+      const canReroll = quest.can_reroll && !quest.is_achievement;
 
       if (questProgress < required)
         throw new Error(`Quest is not completed, ${questProgress}/${required}`);
@@ -1596,6 +1600,11 @@ module.exports = {
         RETURNING *
       `;
       await query(sql_query, [steamID, questID]);
+
+      // Reroll if possible
+      if (canReroll) {
+        await this.rerollDailyQuest(steamID, questID);
+      }
 
       // Add the rewarded poggers
       sql_query = `
