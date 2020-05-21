@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{voteID}}
     <div v-if="!hasVoted">
       <h2 class="text-center">{{name}}</h2>
       <div class="container">
