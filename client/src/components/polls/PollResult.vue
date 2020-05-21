@@ -2,7 +2,8 @@
   <div class="vote-option">
     <div class="text-muted">{{text}}</div>
     <img :src="src" />
-    <div>{{votePercent | percentage}}</div>
+    <div v-if="ourVote" class="success">✓</div>
+    <!-- <div>{{votePercent | percentage}}</div> -->
   </div>
 </template>
 
@@ -11,7 +12,7 @@ export default {
   props: {
     src: String,
     text: String,
-    votePercent: Number
+    ourVote: Boolean
   },
   methods: {
     vote() {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{voteID}}
     <div v-if="!hasVoted">
       <h2 class="text-center">{{name}}</h2>
       <div class="container">
@@ -25,7 +26,7 @@
             :key="option.option_id"
             :src="getImage(option)"
             :text="option.option_text"
-            :votePercent="option.votes / totalVotes"
+            :ourVote="option.option_id == voteID"
             class="col-auto"
           />
         </div>
@@ -54,6 +55,7 @@ export default {
     options: [],
     loading: true,
     hasVoted: false,
+    voteID: 0,
     totalVotes: 1
   }),
 
@@ -66,8 +68,11 @@ export default {
   created() {
     fetch(`/api/polls/${this.pollID}/${this.steamID}`)
       .then(res => res.json())
-      .then(hasVoted => {
-        if (hasVoted) this.hasVoted = true;
+      .then(voteData => {
+        if (voteData) {
+          this.hasVoted = true;
+          this.voteID = voteData.vote;
+        }
       })
       .catch(err => {
         this.error = err;
