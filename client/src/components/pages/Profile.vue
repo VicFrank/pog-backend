@@ -2,6 +2,7 @@
   <div class="main-layout__content">
     <div class="content">
       <div class="container">
+        <GuardianPoll :pollID="1" class="mb-3" />
         <div class="row">
           <div class="col-xl-12">
             <DailyQuests></DailyQuests>
@@ -82,15 +83,18 @@
 </template>
 
 <script>
-import DailyQuests from "./quests/DailyQuests.vue";
-import PlayerGamesList from "./games/PlayerGamesList.vue";
+import DailyQuests from "./quests/DailyQuests";
+import PlayerGamesList from "./games/PlayerGamesList";
 import ProgressBar from "../utility/ProgressBar";
+
+import GuardianPoll from "../polls/GuardianPoll";
 
 export default {
   components: {
     DailyQuests,
     PlayerGamesList,
-    ProgressBar
+    ProgressBar,
+    GuardianPoll
   },
 
   data: () => ({

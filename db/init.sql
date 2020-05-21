@@ -244,3 +244,29 @@ CREATE TABLE IF NOT EXISTS player_logs (
 
 DROP INDEX IF EXISTS idx_player_logs_steam_id;
 CREATE INDEX idx_player_logs_steam_id ON player_logs (steam_id);
+
+DROP TABLE IF EXISTS polls;
+CREATE TABLE IF NOT EXISTS polls (
+  poll_id SERIAL PRIMARY KEY,
+  poll_name TEXT,
+  poll_description TEXT
+);
+
+DROP TABLE IF EXISTS poll_options;
+CREATE TABLE IF NOT EXISTS poll_options (
+  option_id SERIAL UNIQUE NOT NULL,
+  poll_id INTEGER REFERENCES polls (poll_id),
+  option_text TEXT NOT NULL,
+  votes INTEGER default 0,
+
+  CONSTRAINT poll_options_pkey PRIMARY KEY (poll_id, option_id)
+);
+
+DROP TABLE IF EXISTS votes;
+CREATE TABLE IF NOT EXISTS votes (
+  poll_id INTEGER REFERENCES polls (poll_id),
+  steam_id TEXT REFERENCES players (steam_id),
+  vote INTEGER REFERENCES poll_options (option_id),
+
+  CONSTRAINT vote_pkey PRIMARY KEY (poll_id, steam_id)
+);
