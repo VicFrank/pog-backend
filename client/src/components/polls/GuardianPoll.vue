@@ -100,7 +100,6 @@ export default {
           if (!res.ok) throw Error(res.statusText);
           return res;
         })
-        .then(res => res.json())
         .then(() => {
           this.hasVoted = true;
         })

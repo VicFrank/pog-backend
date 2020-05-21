@@ -46,7 +46,7 @@ router.post("/:pollid/:steamid", auth.userAuth, async (req, res) => {
 
     await polls.voteInPoll(steamID, pollID, vote);
 
-    res.status(200).send();
+    res.status(200).send("Success");
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
