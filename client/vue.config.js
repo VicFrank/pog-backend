@@ -6,6 +6,11 @@ module.exports = {
         changeOrigin: true,
         ws: true,
       },
+      "/ws/": {
+        target: "ws://localhost:3000",
+        secure: false,
+        ws: true,
+      },
     },
   },
 
@@ -27,10 +32,10 @@ module.exports = {
 
   pluginOptions: {
     i18n: {
-      locale: 'en',
-      fallbackLocale: 'en',
-      localeDir: 'locales',
-      enableInSFC: true
-    }
-  }
+      locale: "en",
+      fallbackLocale: "en",
+      localeDir: "locales",
+      enableInSFC: true,
+    },
+  },
 };
