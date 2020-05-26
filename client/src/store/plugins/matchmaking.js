@@ -1,5 +1,7 @@
 const scheme = window.location.protocol === "https:" ? "wss" : "ws";
-const connection = new WebSocket(`${scheme}://localhost:3000`);
+const connection = new WebSocket(
+  `${scheme}://${window.location.hostname}:3000`
+);
 
 function isOpen() {
   return connection.readyState === connection.OPEN;
