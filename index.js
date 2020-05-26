@@ -74,9 +74,12 @@ passport.deserializeUser(function (obj, next) {
 //   Strategies in passport require a `validate` function, which accept
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
 //   callback with a user object.
-const baseUrl = process.env.IS_PRODUCTION
+let baseUrl = process.env.IS_PRODUCTION
   ? "https://www.pathofguardians.com"
   : "http://localhost:3000";
+if (process.env.IS_STAGING) {
+  baseUrl = "http://159.65.70.235";
+}
 passport.use(
   new SteamStrategy(
     {
