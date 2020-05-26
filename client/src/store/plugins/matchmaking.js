@@ -1,21 +1,7 @@
-const websocketUrl = (url) => {
-  let _url;
-  // Use wss:// if running on https://
-  const scheme = window.location.protocol === "https:" ? "wss" : "ws";
-  const base_url = `${scheme}://${window.location.host}`;
-  if (url === undefined) {
-    _url = base_url;
-  } else {
-    // Support relative URLs
-    if (url[0] == "/") {
-      _url = `${base_url}${url}`;
-    } else {
-      _url = url;
-    }
-  }
-  return _url;
-};
-const connection = new WebSocket(websocketUrl());
+const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+const hostname = window.location.hostname;
+const port = hostname === "localhost" ? ":3000" : "";
+const connection = new WebSocket(`${scheme}://${hostname}${port}`);
 
 function isOpen() {
   return connection.readyState === connection.OPEN;

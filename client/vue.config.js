@@ -6,11 +6,6 @@ module.exports = {
         changeOrigin: true,
         ws: true,
       },
-      "/ws/": {
-        target: "ws://localhost:3000",
-        secure: false,
-        ws: true,
-      },
     },
   },
 
