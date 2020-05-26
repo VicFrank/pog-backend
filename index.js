@@ -162,7 +162,6 @@ app.use("/api/polls", pollsRouter);
 /**
   Websocket Stuff
   Would like to move as much of this as possible to another file
-
 */
 const server = http.createServer(app);
 const wss = new WebSocket.Server({
@@ -210,7 +209,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/dist/index.html"));
 });
 
-const runningServer = app.listen(port, () => {
+const runningServer = server.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });
 
