@@ -6,6 +6,8 @@ const passport = require("passport");
 const session = require("express-session");
 const SteamStrategy = require("passport-steam").Strategy;
 const pgSession = require("connect-pg-simple")(session);
+const http = require("http");
+const WebSocket = require("ws");
 
 const keys = require("./config/keys");
 
@@ -19,8 +21,10 @@ const cosmeticsRouter = require("./routes/cosmetics");
 const steamRouter = require("./routes/steam");
 const logsRouter = require("./routes/logs");
 const pollsRouter = require("./routes/polls");
-const { pool } = require("./db/index");
 
+const websocketHandler = require("./websocket/connection");
+
+const { pool } = require("./db/index");
 const players = require("./db/players");
 
 const port = process.env.PORT || 3000;
@@ -104,7 +108,9 @@ if (process.env.IS_PRODUCTION) {
   sess.cookie.secure = true;
 }
 
-app.use(session(sess));
+const sessionParser = session(sess);
+
+app.use(sessionParser);
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
@@ -153,11 +159,58 @@ app.use("/api/steam", steamRouter);
 app.use("/api/logs", logsRouter);
 app.use("/api/polls", pollsRouter);
 
+/**
+  Websocket Stuff
+  Would like to move as much of this as possible to another file
+
+*/
+const server = http.createServer(app);
+const wss = new WebSocket.Server({
+  clientTracking: false,
+  noServer: true,
+});
+
+server.on("upgrade", (req, socket, head) => {
+  console.log("Parsing session from request...");
+
+  sessionParser(req, {}, () => {
+    if (!req.session.passport) {
+      console.log("Session or Passport not found");
+      socket.destroy();
+      return;
+    }
+
+    const user = req.session.passport.user;
+    if (!user) {
+      console.log("Not logged in");
+      socket.destroy();
+      return;
+    }
+
+    wss.handleUpgrade(req, socket, head, function (ws) {
+      wss.emit("connection", ws, user);
+    });
+  });
+});
+
+wss.on("connection", function (ws, user) {
+  websocketHandler(ws, user);
+});
+
+wss.on("error", function error(error) {
+  console.log("websocket error");
+  console.log(error);
+});
+
+wss.on("close", function close() {
+  console.log("close websocket server");
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/dist/index.html"));
 });
 
-const server = app.listen(port, () => {
+const runningServer = app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });
 
@@ -165,7 +218,7 @@ process.on("SIGINT", () => {
   console.info("SIGINT signal received.");
 
   // Stops the server from accepting new connections and finishes existing connections.
-  server.close(function (err) {
+  runningServer.close(function (err) {
     // if error, log and exit with error (1 code)
     if (err) {
       console.error(err);

@@ -257,7 +257,7 @@ CREATE TABLE IF NOT EXISTS poll_options (
   option_id SERIAL UNIQUE NOT NULL,
   poll_id INTEGER REFERENCES polls (poll_id),
   option_text TEXT NOT NULL,
-  votes INTEGER default 0,
+  votes INTEGER DEFAULT 0,
 
   CONSTRAINT poll_options_pkey PRIMARY KEY (poll_id, option_id)
 );
@@ -269,4 +269,29 @@ CREATE TABLE IF NOT EXISTS votes (
   vote INTEGER REFERENCES poll_options (option_id),
 
   CONSTRAINT vote_pkey PRIMARY KEY (poll_id, steam_id)
+);
+
+------------------------------
+-- Matchmaking
+------------------------------
+
+DROP TABLE IF EXISTS lobbies;
+CREATE TABLE IF NOT EXISTS lobbies (
+  lobby_id SERIAL PRIMARY KEY,
+  region TEXT,
+  min_rank INTEGER,
+  max_rank INTEGER,
+  lobby_password TEXT
+);
+
+DROP TABLE IF EXISTS lobby_players;
+CREATE TABLE IF NOT EXISTS lobby_players (
+  lobby_id INTEGER REFERENCES lobbies (lobby_id),
+  steam_id TEXT REFERENCES players (steam_id) UNIQUE,
+  team INTEGER NOT NULL,
+  is_host BOOLEAN DEFAULT FALSE,
+  ready BOOLEAN DEFAULT FALSE,
+  avatar TEXT,
+
+  CONSTRAINT lobby_players_pkey PRIMARY KEY (lobby_id, steam_id)
 );

@@ -155,6 +155,10 @@ async function handleStripeSourceChargeable(intent) {
   const { itemID } = intent.metadata;
   const isValid = await isValidStripeTransaction(itemID, amount);
   if (isValid) {
+    await logs.addTransactionLog(steamID, "alipay", {
+      intent,
+    });
+
     stripeClient.client.charges.create({
       amount: amount,
       currency: currency,

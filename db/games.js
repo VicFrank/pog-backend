@@ -269,7 +269,7 @@ module.exports = {
     try {
       let whereClause = "";
       if (hours) {
-        whereClause = "AND created_at >= NOW() - $3 * INTERVAL '1 HOURS'";
+        whereClause = "AND created_at >= NOW() - $3 * INTERVAL '1 HOURS'"
       }
       const sql_query = `
       WITH recent_games AS (

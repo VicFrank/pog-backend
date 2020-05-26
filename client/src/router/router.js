@@ -32,6 +32,7 @@ import PoggersStore from "../components/pages/cosmetics/RealMoneyStore";
 import Checkout from "../components/pages/payment/Checkout";
 import PaymentSuccess from "../components/pages/payment/PaymentSuccess";
 import AlipayPayment from "../components/pages/payment/AlipayPayment";
+import Matchmaking from "../components/matchmaking/Matchmaking";
 
 Vue.use(VueRouter);
 
@@ -124,6 +125,10 @@ const routes = [
   {
     path: "/redirect",
     component: LoginRedirect,
+  },
+  {
+    path: "/matchmaking",
+    component: Matchmaking,
   },
   {
     path: "/profile",
