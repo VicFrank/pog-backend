@@ -43,7 +43,6 @@ const app = express();
 //   and deserialized.
 passport.serializeUser(async function (user, next) {
   // create the user if they don't yet exist
-  console.log("serialize");
   const steamid = user.id;
   const username = user.displayName;
 
@@ -95,9 +94,9 @@ passport.use(
 );
 
 let sess = {
-  store: new pgSession({
-    pool: pool,
-  }),
+  // store: new pgSession({
+  //   pool: pool,
+  // }),
   secret: keys.sessionKey,
   name: "id",
   resave: false,

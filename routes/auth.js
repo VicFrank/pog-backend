@@ -4,6 +4,7 @@ var express = require("express"),
 
 // get the current logged in user
 router.get("/steam/success", (req, res) => {
+  console.log(req.user);
   if (req.user) {
     res.json({
       success: true,
