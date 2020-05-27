@@ -78,7 +78,7 @@ let baseUrl = process.env.IS_PRODUCTION
   ? "https://www.pathofguardians.com"
   : "http://localhost:3000";
 if (process.env.IS_STAGING) {
-  baseUrl = "https://www.VicFrank.xyz";
+  baseUrl = "https://www.vicfrank.xyz";
 }
 passport.use(
   new SteamStrategy(

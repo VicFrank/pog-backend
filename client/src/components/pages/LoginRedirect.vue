@@ -9,8 +9,8 @@ export default {
     // it's necessary to get this first so that the user is recognized
     // as logged in
     fetch("/api/auth/steam/success", { credentials: "include" })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.success) {
           const { photos, id, isAdmin } = res.user;
 
@@ -18,23 +18,24 @@ export default {
             type: "setUser",
             steamID: id,
             picture: photos[2].value,
-            isAdmin
+            isAdmin,
           });
 
-          const returnTo = this.$route.query.return;
+          // const returnTo = this.$route.query.return;
 
-          if (returnTo) {
-            this.$router.push(returnTo);
-          } else {
-            this.$router.push("/profile");
-          }
+          // if (returnTo) {
+          //   this.$router.push(returnTo);
+          // } else {
+          //   this.$router.push("/profile");
+          // }
+          this.$router.push("/profile");
         } else {
           this.$store.commit({
-            type: "setNotLoggedIn"
+            type: "setNotLoggedIn",
           });
           this.$router.push("");
         }
       });
-  }
+  },
 };
 </script>
