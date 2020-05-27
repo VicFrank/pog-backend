@@ -8,22 +8,73 @@ const {
 } = require("../common/constants");
 
 (async function () {
-  // const lobbyList = await lobbies.getAllLobbies();
-  // console.log(lobbyList);
+  // runTests();
 })();
+
+async function runTests() {
+  const steamIDs = [
+    "76561197960956468",
+    "76561197964547457",
+    "76561198014254115",
+    "76561197960287930",
+    "76561198052211234",
+    "76561198015161808",
+    "76561198007141460",
+  ];
+
+  const player1 = steamIDs[0];
+  const player2 = steamIDs[1];
+  const player3 = steamIDs[2];
+  const player4 = steamIDs[3];
+  const player5 = steamIDs[4];
+  const player6 = steamIDs[5];
+  const player7 = steamIDs[6];
+
+  // await makeLobby(player1, null, "US West");
+  // await makeLobby(player7, null, "US East");
+
+  sendChatToLobby(player1, "hey");
+  sendChatToLobby(player7, "hey");
+
+  console.log("run tests");
+}
 
 /*
   Handle the different websocket events
 */
+async function sendInitialData(steamID) {
+  const lobby = await lobbyPlayers.getLobby(steamID);
+  const player = await lobbyPlayers.getPlayer(steamID);
+
+  let lobby_players;
+  if (lobby) {
+    lobby_players = await lobbies.getLobbyPlayers(lobby.lobby_id);
+  }
+
+  const data = {
+    event: "connected",
+    data: {
+      player,
+      lobby_players,
+    },
+  };
+
+  connectionManager.sendMessageToPlayer(steamID, data);
+}
+
 async function sendChatToLobby(steamID, message) {
   const lobby = await lobbyPlayers.getLobby(steamID);
   if (!lobby) return;
   const lobbyID = lobby.lobby_id;
 
+  const player = await lobbyPlayers.getPlayer(steamID);
+
   const data = {
     event: "chat",
-    source: player.getPlayerData(),
-    message,
+    data: {
+      username: player.username,
+      message,
+    },
   };
 
   connectionManager.sendMessageFromPlayer(steamID, lobbyID, data);
@@ -32,13 +83,13 @@ async function sendChatToLobby(steamID, message) {
 async function sendLobbyList(steamID) {
   const lobbyList = await lobbies.getAllLobbies();
   const data = {
-    event: "lobbies",
-    lobbyList,
+    event: "lobbies_list",
+    data: lobbyList,
   };
   connectionManager.sendMessageToPlayer(steamID, data);
 }
 
-async function makeLobby(steamID, region) {
+async function makeLobby(steamID, avatar, region) {
   const minRank = 0;
   const maxRank = 0;
 
@@ -46,22 +97,31 @@ async function makeLobby(steamID, region) {
   const player = await lobbyPlayers.getPlayer(steamID);
   if (player && player.lobby_id) return;
 
-  lobbies.makeLobby(steamID, region, minRank, maxRank);
+  lobbies.makeLobby(steamID, avatar, region, minRank, maxRank);
 }
 
 async function joinLobby(steamID, lobbyID, avatar) {
   const lobby = await lobbies.getLobby(lobbyID);
 
   // Check if lobby exists
-  if (!lobby) return;
+  if (!lobby) {
+    console.log("Lobby no longer exists");
+    return;
+  }
 
   // Check if lobby is full
   const isFull = await lobbies.isFull(lobbyID);
-  if (isFull) return;
+  if (isFull) {
+    console.log("Lobby is full");
+    return;
+  }
 
   // TODO: Check if player meets mmr requirements
   const meetsRequirements = true;
-  if (!meetsRequirements) return;
+  if (!meetsRequirements) {
+    console.log("You don't meet the lobby requirements");
+    return;
+  }
 
   // Figure out what team to put us on
   let team = DOTA_TEAM_GOODGUYS;
@@ -70,14 +130,18 @@ async function joinLobby(steamID, lobbyID, avatar) {
     team = DOTA_TEAM_BADGUYS;
   }
 
-  lobbyPlayers.joinLobby(steamID, lobbyID, team, avatar);
+  await lobbyPlayers.joinLobby(steamID, lobbyID, team, avatar);
 
   // If the lobby is now full, send them the password
-  onLobbyFull(lobbyID);
+  if (await lobbies.isFull(lobbyID)) {
+    onLobbyFull(lobbyID);
+  }
+
+  const lobby_players = await lobbies.getLobbyPlayers(lobbyID);
 
   const data = {
     event: "join_lobby",
-    lobbyID,
+    data: lobby_players,
   };
   connectionManager.sendMessageToPlayer(steamID, data);
 }
@@ -90,10 +154,10 @@ async function leaveLobby(steamID) {
 
   const data = {
     event: "left_lobby",
-    steamID,
+    data: steamID,
   };
 
-  await lobbyPlayers.leaveLobby(lobbyID);
+  await lobbyPlayers.leaveLobby(steamID);
 
   // Inform the lobby that a player left
   connectionManager.sendMessageToLobby(lobbyID, data);
@@ -102,6 +166,7 @@ async function leaveLobby(steamID) {
 
   // Destroy the lobby if it is now empty
   const lobbySize = await lobbies.getLobbySize(lobbyID);
+  console.log("Lobby size", lobbySize);
   if (lobbySize == 0) {
     lobbies.deleteLobby(lobbyID);
     return;
@@ -141,8 +206,10 @@ async function changeTeam(steamID) {
 
   const data = {
     event: "team_changed",
-    steamID,
-    enemyTeam,
+    data: {
+      steamID,
+      enemyTeam,
+    },
   };
   connectionManager.sendMessageToPlayer(lobby.lobbyID, data);
 }
@@ -158,15 +225,18 @@ function onLobbyFull(lobbyID) {
   const password = generatePassword();
   const data = {
     event: "password",
-    password,
+    data: password,
   };
   connectionManager.sendMessageToLobby(lobbyID, data);
 }
 
 module.exports = connection = (ws, user) => {
+  ws.isAlive = true;
+
   const username = user.displayName;
   const steamID = user.id;
-  const avatar = user.photos[0].value;
+  let avatar;
+  if (user.photos && user.photos[0]) avatar = user.photos[0].value;
 
   connectionManager.addConnection(steamID, ws);
 
@@ -188,6 +258,12 @@ module.exports = connection = (ws, user) => {
     console.log(`Received event ${event} from user ${username}`);
 
     switch (event) {
+      case "connected":
+        sendInitialData(steamID);
+        break;
+      case "pong":
+        ws.isAlive = true;
+        break;
       case "chat":
         // Send a message to the chat lobby
         const chatMessage = data.message;
@@ -197,7 +273,7 @@ module.exports = connection = (ws, user) => {
         sendLobbyList(steamID);
         break;
       case "join_lobby":
-        const lobbyID = data.lobbyID;
+        const lobbyID = data;
         joinLobby(steamID, lobbyID, avatar);
         break;
       case "leave_lobby":
@@ -211,7 +287,7 @@ module.exports = connection = (ws, user) => {
         break;
       case "make_lobby":
         const region = data.region;
-        makeLobby(steamID, region);
+        makeLobby(steamID, avatar, region);
         break;
     }
   });

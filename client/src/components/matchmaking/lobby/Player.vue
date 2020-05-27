@@ -1,9 +1,9 @@
 <template>
   <td>
     <template v-if="player">
-      <img :src="player.avatar" :alt="player.username" class="mr-2" />
+      <img v-if="player.avatar" :src="player.avatar" :alt="player.username" class="mr-2" />
+      <i v-if="player.is_host" class="fas fa-crown mr-1"></i>
       {{ player.username }}
-      <span v-if="player.isHost" class="ml-1">(Host)</span>
     </template>
     <template v-else>
       <span class="text-muted">Empty Slot</span>

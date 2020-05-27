@@ -30,7 +30,7 @@ module.exports = {
 
   async getLobbyPlayers(lobbyID) {
     const queryText = `
-    SELECT players.steam_id, team, is_host, username
+    SELECT players.steam_id, team, is_host, username, avatar
     FROM lobby_players
     JOIN players
     USING (steam_id)
@@ -53,12 +53,12 @@ module.exports = {
 
   async getLobbySize(lobbyID) {
     const queryText = `
-    SELECT count(*) FROM lobbies JOIN lobby_players USING (lobby_id)
+    SELECT count(*) as size FROM lobbies JOIN lobby_players USING (lobby_id)
     WHERE lobby_id = $1
     `;
     const { rows } = await query(queryText, [lobbyID]);
 
-    return rows[0];
+    return rows[0].size;
   },
 
   async getNumPlayersOnTeam(lobbyID, team) {
@@ -76,7 +76,7 @@ module.exports = {
     return lobbySize >= 6;
   },
 
-  async makeLobby(steamID, region, minRank, maxRank) {
+  async makeLobby(steamID, avatar, region, minRank, maxRank) {
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
@@ -93,13 +93,14 @@ module.exports = {
       // Insert the player as host
       const insertPlayerText = `
       INSERT INTO
-      lobby_players(lobby_id, steam_id, team, is_host)
-      VALUES ($1, $2, $3, $4)`;
+      lobby_players(lobby_id, steam_id, team, is_host, avatar)
+      VALUES ($1, $2, $3, $4, $5)`;
       await client.query(insertPlayerText, [
         lobbyID,
         steamID,
         DOTA_TEAM_GOODGUYS,
         true,
+        avatar,
       ]);
 
       await client.query("COMMIT");
@@ -120,6 +121,7 @@ module.exports = {
 
   async updateHost(lobbyID) {
     const players = await this.getLobbyPlayers(lobbyID);
+
     // Make sure there isn't already a host
     for (const player of players) {
       if (player.is_host) return;

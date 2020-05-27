@@ -1,10 +1,10 @@
 function getLocalPlayer(rootState) {
   return {
     username: rootState.auth.username,
-    steamID: rootState.auth.userSteamID,
+    steam_id: rootState.auth.userSteamID,
     avatar: rootState.auth.profilePictureLink,
     team: state.team,
-    isHost: state.isHost,
+    is_host: state.isHost,
   };
 }
 
@@ -12,11 +12,15 @@ const state = {
   connected: false,
   error: "",
 
+  initialLoading: true,
+  loadingLobbies: true,
+
   lobbies: [],
 
   inLobby: false,
   team: -1,
   isHost: false,
+  ready: false,
 
   chatMessages: [],
   lobbyPlayers: [],
@@ -25,6 +29,8 @@ const state = {
 };
 
 const getters = {
+  initialLoading: (state) => state.initialLoading,
+  loadingLobbies: (state) => state.loadingLobbies,
   lobbies: (state) => state.lobbies,
   chatMessages: (state) => state.chatMessages,
   inLobby: (state) => state.inLobby,
@@ -37,12 +43,7 @@ const getters = {
 };
 
 const actions = {
-  addMessage({ commit, rootState }, message) {
-    const player = getLocalPlayer(rootState);
-    const data = {
-      ...player,
-      message,
-    };
+  addMessage({ commit }, data) {
     commit("ADD_MESSAGE", data);
   },
   clearChat({ commit }) {
@@ -73,8 +74,15 @@ const actions = {
       commit("JOIN_LOBBY", lobbyPlayers);
     }
   },
+  tryJoinLobby({ commit }, lobbyID) {
+    commit("TRY_JOIN_LOBBY", lobbyID);
+  },
+  attemptLeave({ commit }) {
+    commit("ATTEMPT_LEAVE_LOBBY");
+  },
   leaveLobby({ commit }) {
     commit("LEAVE_LOBBY");
+    commit("REFRESH_LOBBIES");
   },
   playerJoinedLobby({ commit }, lobbyPlayer) {
     commit("ADD_LOBBY_PLAYER", lobbyPlayer);
@@ -91,9 +99,32 @@ const actions = {
   setLobbies({ commit }, lobbies) {
     commit("SET_LOBBIES", lobbies);
   },
+  onConnected({ commit }, data) {
+    commit("INIT_DATA", data);
+  },
+  refreshConnection({ commit }) {
+    commit("REFRESH_CONNECTION");
+  },
 };
 
 const mutations = {
+  INIT_DATA(state, data) {
+    // If we were already in a lobby, throw us in there
+    // and initialize the data
+    const { player, lobby_players } = data;
+    if (player) {
+      state.inLobby = true;
+      state.lobbyPlayers = lobby_players;
+      state.team = player.team;
+      state.isHost = player.is_host;
+      state.ready = player.ready;
+    }
+
+    state.initialLoading = false;
+    state.loadingLobbies = false;
+  },
+  // eslint-disable-next-line no-unused-vars
+  REFRESH_CONNECTION(state) {},
   ADD_MESSAGE(state, message) {
     state.chatMessages.push(message);
   },
@@ -110,9 +141,11 @@ const mutations = {
   SEND_MESSAGE(state, message) {},
   // eslint-disable-next-line no-unused-vars
   HOST_LOBBY(state, message) {},
-  // eslint-disable-next-line no-unused-vars
-  REFRESH_LOBBIES(state, message) {},
+  REFRESH_LOBBIES(state) {
+    state.loadingLobbies = true;
+  },
   SET_LOBBIES(state, lobbies) {
+    state.loadingLobbies = false;
     state.lobbies = lobbies;
   },
   HOSTED_LOBBY(state) {
@@ -123,10 +156,14 @@ const mutations = {
     const player = getLocalPlayer(this.state);
     state.lobbyPlayers.push(player);
   },
+  // eslint-disable-next-line no-unused-vars
+  TRY_JOIN_LOBBY(state) {},
   JOIN_LOBBY(state, lobbyPlayers) {
     state.inLobby = true;
     state.lobbyPlayers = lobbyPlayers;
   },
+  // eslint-disable-next-line no-unused-vars
+  ATTEMPT_LEAVE_LOBBY(state) {},
   LEAVE_LOBBY(state) {
     state.inLobby = false;
     state.lobbyPlayers = [];

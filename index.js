@@ -78,7 +78,7 @@ let baseUrl = process.env.IS_PRODUCTION
   ? "https://www.pathofguardians.com"
   : "http://localhost:3000";
 if (process.env.IS_STAGING) {
-  baseUrl = "http://159.65.70.235";
+  baseUrl = "https://www.VicFrank.xyz";
 }
 passport.use(
   new SteamStrategy(
@@ -168,7 +168,7 @@ app.use("/api/polls", pollsRouter);
 */
 const server = http.createServer(app);
 const wss = new WebSocket.Server({
-  clientTracking: false,
+  clientTracking: true,
   noServer: true,
 });
 
@@ -200,12 +200,27 @@ wss.on("connection", function (ws, user) {
 });
 
 wss.on("error", function error(error) {
-  console.log("websocket error");
-  console.log(error);
+  console.log(`websocket error ${error}`);
 });
+
+// Periodically send heartbeats
+const interval = setInterval(function ping() {
+  wss.clients.forEach(function each(ws) {
+    if (ws.isAlive === false) {
+      console.log("hearbeat failed, killing");
+      return ws.terminate();
+    }
+
+    ws.isAlive = false;
+
+    console.log("ping");
+    ws.send(JSON.stringify({ event: "ping" }));
+  });
+}, 30000);
 
 wss.on("close", function close() {
   console.log("close websocket server");
+  clearInterval(interval);
 });
 
 app.get("*", (req, res) => {

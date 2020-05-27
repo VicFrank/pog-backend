@@ -13,13 +13,13 @@ const subClient = redis.createClient();
 subClient.subscribe("ws_broadcast");
 
 subClient.on("message", (channel, message) => {
-  console.log(`Message "${message}" on channel "${channel}" arrived!`);
   const { steamID, payload } = JSON.parse(message);
+  console.log(`Sending payload ${JSON.stringify(payload)} to ${steamID}`);
 
   // Send the message to the player, if they exist on this cluster
   if (connections[steamID]) {
     const ws = connections[steamID];
-    ws.send(payload);
+    ws.send(JSON.stringify(payload));
   }
 });
 

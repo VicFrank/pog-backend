@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="chat-box">
-      <div v-for="(message, index) of messages" :key="index">
+    <div class="chat-box" ref="chatbox">
+      <div v-for="(message, index) of messages" :key="index" class="mt-1">
         <span class="chat-username">{{message.username}}</span>:
         <span class="chat-messsage">{{message.message}}</span>
       </div>
@@ -21,6 +21,9 @@ export default {
   computed: {
     messages() {
       return this.$store.getters.chatMessages;
+    },
+    username() {
+      return this.$store.getters.username;
     }
   },
   methods: {
@@ -31,7 +34,15 @@ export default {
       this.nextMessage = this.nextMessage.substring(0, 500);
 
       // send the message using the websocket
-      this.$store.dispatch("addMessage", this.nextMessage);
+      const data = {
+        username: this.username,
+        message: this.nextMessage
+      };
+      this.$store.dispatch("addMessage", data);
+      this.$store.dispatch("sendMessage", data);
+
+      const chatBox = this.$refs.chatbox;
+      this.$nextTick(() => (chatBox.scrollTop = chatBox.scrollHeight));
 
       // clear the message
       this.nextMessage = "";

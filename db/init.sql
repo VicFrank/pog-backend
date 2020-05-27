@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS votes (
 -- Matchmaking
 ------------------------------
 
-DROP TABLE IF EXISTS lobbies;
+DROP TABLE IF EXISTS lobbies CASCADE;
 CREATE TABLE IF NOT EXISTS lobbies (
   lobby_id SERIAL PRIMARY KEY,
   region TEXT,

@@ -1,51 +1,90 @@
 const scheme = window.location.protocol === "https:" ? "wss" : "ws";
 const hostname = window.location.hostname;
 const port = hostname === "localhost" ? ":3000" : "";
-const connection = new WebSocket(`${scheme}://${hostname}${port}`);
 
-function isOpen() {
-  return connection.readyState === connection.OPEN;
+let connection;
+
+function heartbeat(connection) {
+  console.log("heartbeat");
+  clearTimeout(connection.pingTimeout);
+
+  const msg = JSON.stringify({ event: "pong" });
+  connection.send(msg);
+
+  // Delay should be equal to the interval at which your server
+  // sends out pings plus a conservative assumption of the latency.
+  connection.pingTimeout = setTimeout(() => {
+    console.log("heartbeat failed, killing");
+    connection.terminate();
+  }, 30000 + 1000);
+}
+
+function connect(store) {
+  connection = new WebSocket(`${scheme}://${hostname}${port}`);
+
+  connection.onopen = (e) => {
+    console.log("Successfully connected", e);
+    store.dispatch("connectionOpened");
+
+    const msg = JSON.stringify({ event: "connected" });
+    connection.send(msg);
+
+    heartbeat(connection);
+  };
+
+  connection.onmessage = (e) => {
+    try {
+      const { event, data } = JSON.parse(e.data);
+
+      console.log(e.data);
+      console.log(event, data);
+
+      switch (event) {
+        case "ping":
+          heartbeat(connection);
+          break;
+        case "join_lobby":
+          store.dispatch("joinLobby", data);
+          break;
+        case "left_lobby":
+          store.dispatch("leaveLobby", data);
+          break;
+        case "lobby_changed":
+          store.dispatch("updateLobbyPlayers", data);
+          break;
+        case "connected":
+          store.dispatch("onConnected", data);
+          break;
+        case "chat":
+          store.dispatch("addMessage", data);
+          break;
+        case "lobbies_list":
+          store.dispatch("setLobbies", data);
+          break;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  connection.onclose = (e) => {
+    console.log(`websocket closed ${e}`);
+    clearTimeout(connection.pingTimeout);
+  };
+}
+
+function isClosed() {
+  return connection.readyState === connection.CLOSED;
 }
 
 export default function createWebSocketPlugin() {
   return (store) => {
-    connection.onopen = (e) => {
-      console.log("Successfully connected", e);
-      store.dispatch("connectionOpened");
-    };
-
-    connection.onmessage = (e) => {
-      try {
-        const { event, data } = JSON.parse(e.data);
-
-        console.log("from server:");
-        console.log(event, data);
-
-        switch (event) {
-          case "join_lobby":
-            store.dispatch("joinLobby", data);
-            break;
-          case "left_lobby":
-            store.dispatch("leaveLobby", data);
-            break;
-          case "lobby_changed":
-            store.dispatch("updateLobbyPlayers", data);
-            break;
-          case "chat":
-            store.dispatch("addMessage", data);
-            break;
-          case "lobbies":
-            store.dispatch("setLobbies", data.lobbyList);
-            break;
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    connect(store);
 
     store.subscribe((mutation, state) => {
-      if (!isOpen()) {
+      if (isClosed()) {
         console.log("Websocket is closed");
+        connect(store);
         return;
       }
       if (!state.matchmaking.connected) {
@@ -57,6 +96,11 @@ export default function createWebSocketPlugin() {
       const data = mutation.payload;
 
       console.log(mutation);
+
+      // Refresh the websocket connection
+      if (mutation.type === "REFRESH_CONNECTION") {
+        connect(store);
+      }
 
       // Send a chat message
       if (inLobby && mutation.type === "SEND_MESSAGE") {
@@ -72,12 +116,12 @@ export default function createWebSocketPlugin() {
         store.dispatch("hostedLobby");
       }
 
-      if (!inLobby && mutation.type === "JOIN_LOBBY") {
+      if (!inLobby && mutation.type === "TRY_JOIN_LOBBY") {
         const msg = JSON.stringify({ event: "join_lobby", data });
         connection.send(msg);
       }
 
-      if (inLobby && mutation.type === "LEAVE_LOBBY") {
+      if (inLobby && mutation.type === "ATTEMPT_LEAVE_LOBBY") {
         const msg = JSON.stringify({ event: "leave_lobby", data });
         connection.send(msg);
       }
