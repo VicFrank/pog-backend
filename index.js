@@ -43,6 +43,7 @@ const app = express();
 //   and deserialized.
 passport.serializeUser(async function (user, next) {
   // create the user if they don't yet exist
+  console.log("serialize");
   const steamid = user.id;
   const username = user.displayName;
 
