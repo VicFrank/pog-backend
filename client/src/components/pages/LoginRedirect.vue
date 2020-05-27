@@ -33,7 +33,7 @@ export default {
           this.$store.commit({
             type: "setNotLoggedIn",
           });
-          this.$router.push("");
+          this.$router.push("/");
         }
       });
   },
