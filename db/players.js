@@ -115,59 +115,39 @@ module.exports = {
     }
   },
 
-  async getPlayer(steamID) {
+  async getPlayerStats(steamID) {
     try {
       const sql_query = `
-      SELECT p.*,
-      count(*) as games,
-      EXTRACT(epoch FROM (interval '24 hours' - (now()-now()::date))) as seconds_to_reset,
-      COUNT(DISTINCT(case when g.radiant_win = gp.is_radiant then g.game_id end)) as wins,
-      COUNT(DISTINCT(case when g.radiant_win != gp.is_radiant then g.game_id end)) as losses,
-      SUM(g.duration) as time_played,
-      SUM(gp.kills) as kills,
-      SUM(gp.deaths) as deaths,
-      SUM(gp.assists) as assists,
-      SUM(gp.double_kills) as double_kills,
-      SUM(gp.rampages) as rampages,
-      SUM(gp.last_hits) as last_hits,
-      SUM(gp.denies) as denies,
-      SUM(gp.tp_used) as tp_used,
-      SUM(gp.runes_used) as runes_used,
-      SUM(gp.total_gold) as total_gold,
-      SUM(gp.total_exp) as total_exp,
-      
-      COUNT(case when gp.abandoned then 1 end) as abandoned
-      
-      FROM players as p
-      JOIN game_players as gp
-      USING (steam_id)
-      JOIN games as g
-      USING (game_id)
-      WHERE steam_id = $1 AND
-        ranked = True
-      GROUP BY p.steam_id
-      `;
+        SELECT p.*,
+        count(*) as games,
+        EXTRACT(epoch FROM (interval '24 hours' - (now()-now()::date))) as seconds_to_reset,
+        COUNT(DISTINCT(case when g.radiant_win = gp.is_radiant then g.game_id end)) as wins,
+        COUNT(DISTINCT(case when g.radiant_win != gp.is_radiant then g.game_id end)) as losses,
+        SUM(g.duration) as time_played,
+        SUM(gp.kills) as kills,
+        SUM(gp.deaths) as deaths,
+        SUM(gp.assists) as assists,
+        SUM(gp.double_kills) as double_kills,
+        SUM(gp.rampages) as rampages,
+        SUM(gp.last_hits) as last_hits,
+        SUM(gp.denies) as denies,
+        SUM(gp.tp_used) as tp_used,
+        SUM(gp.runes_used) as runes_used,
+        SUM(gp.total_gold) as total_gold,
+        SUM(gp.total_exp) as total_exp,
+        
+        COUNT(case when gp.abandoned then 1 end) as abandoned
+        
+        FROM players as p
+        JOIN game_players as gp
+        USING (steam_id)
+        JOIN games as g
+        USING (game_id)
+        WHERE steam_id = $1 AND
+          ranked = True
+        GROUP BY p.steam_id
+        `;
       let { rows } = await query(sql_query, [steamID]);
-
-      const equippedCompanion = await this.getEquippedCompanion(steamID);
-      const teamKillStats = await this.getTeamKillStats(steamID);
-      const dailyQuests = await quests.getDailyQuestsForPlayer(steamID);
-      const achievements = await quests.getAchievementsForPlayer(steamID);
-      const battlePass = await this.getPlayerBattlePass(steamID);
-      const battlePassLevel = await cosmetics.getBattlePassLevel(
-        battlePass.bp_level
-      );
-      const dailyXP = await this.getDailyXP(steamID);
-
-      let buildings_destroyed = teamKillStats.buildingKills.buildings_destroyed;
-      let guardian_kills = teamKillStats.guardianKills.guardian_kills;
-
-      const achievementsToClaim = achievements.filter((achievement) => {
-        return achievement.quest_completed && !achievement.claimed;
-      }).length;
-      const dailyQuestsToClaim = dailyQuests.filter(
-        (quest) => quest.quest_completed && !quest.claimed
-      ).length;
 
       let playerStats = rows[0];
       if (!playerStats) {
@@ -199,10 +179,56 @@ module.exports = {
         guardian_kills = 0;
       }
 
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getPlayer(steamID) {
+    try {
+      const sql_query = `
+      SELECT p.*,
+        EXTRACT(epoch FROM (interval '24 hours' - (now()-now()::date))) as seconds_to_reset
+      FROM players as p
+      WHERE steam_id = $1
+      GROUP BY p.steam_id;
+      `;
+      let { rows } = await query(sql_query, [steamID]);
+
+      const equippedCompanion = await this.getEquippedCompanion(steamID);
+      const teamKillStats = await this.getTeamKillStats(steamID);
+      const dailyQuests = await quests.getDailyQuestsForPlayer(steamID);
+      const achievements = await quests.getAchievementsForPlayer(steamID);
+      const battlePass = await this.getPlayerBattlePass(steamID);
+      const battlePassLevel = await cosmetics.getBattlePassLevel(
+        battlePass.bp_level
+      );
+      const dailyXP = await this.getDailyXP(steamID);
+
+      let buildings_destroyed = teamKillStats.buildingKills.buildings_destroyed;
+      let guardian_kills = teamKillStats.guardianKills.guardian_kills;
+
+      const achievementsToClaim = achievements.filter((achievement) => {
+        return achievement.quest_completed && !achievement.claimed;
+      }).length;
+      const dailyQuestsToClaim = dailyQuests.filter(
+        (quest) => quest.quest_completed && !quest.claimed
+      ).length;
+
+      let playerStats = rows[0];
+      if (!playerStats) {
+        let { rows } = await query(
+          `SELECT * FROM players WHERE steam_id = $1`,
+          [steamID]
+        );
+        playerStats = {
+          ...rows[0],
+        };
+      }
+
       return {
         ...playerStats,
-        buildings_destroyed,
-        guardian_kills,
         companion: equippedCompanion,
         dailyQuests: dailyQuests,
         battlePass: { ...battlePass, ...battlePassLevel },
@@ -1551,7 +1577,6 @@ module.exports = {
    * */
   async claimQuestReward(steamID, questID) {
     try {
-      await query("BEGIN");
       // Get the quest rewards and requirements for the DB,
       // and make sure the quest is actually complete
       let sql_query = `
@@ -1617,10 +1642,8 @@ module.exports = {
       // Add the rewarded xp to the battle pass
       await this.addBattlePassExp(steamID, xp);
 
-      await query("COMMIT");
       return { xp, poggers, success: true };
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },

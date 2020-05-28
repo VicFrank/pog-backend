@@ -2,7 +2,6 @@
   <div class="main-layout__content">
     <div class="content">
       <div class="container">
-        <GuardianPoll :pollID="1" class="mb-3" />
         <div class="row">
           <div class="col-xl-12">
             <DailyQuests></DailyQuests>
@@ -46,7 +45,7 @@
             <div class="daily-xp mb-5">
               <div class="text-center">
                 <div v-if="bpTier > 0">
-                  {{$t('profile.current_booster')}}
+                  {{ $t("profile.current_booster") }}
                   <img
                     v-if="bpTier === 1"
                     src="../../assets/images/bp_tier1.png"
@@ -63,11 +62,17 @@
                 <div v-else class="my-1">
                   <i18n path="profile.bp_sellout">
                     <template v-slot:link>
-                      <router-link to="/store">{{ $t('profile.bp_sellout_link') }}</router-link>
+                      <router-link to="/store">
+                        {{
+                        $t("profile.bp_sellout_link")
+                        }}
+                      </router-link>
                     </template>
                   </i18n>
                 </div>
-                <div class="text-muted">{{$t('profile.reset_in')}} {{secondsUntilReset | hhmmss}}</div>
+                <div
+                  class="text-muted"
+                >{{ $t("profile.reset_in") }} {{ secondsUntilReset | hhmmss }}</div>
               </div>
               <ProgressBar
                 class="mt-3"
@@ -87,14 +92,11 @@ import DailyQuests from "./quests/DailyQuests";
 import PlayerGamesList from "./games/PlayerGamesList";
 import ProgressBar from "../utility/ProgressBar";
 
-import GuardianPoll from "../polls/GuardianPoll";
-
 export default {
   components: {
     DailyQuests,
     PlayerGamesList,
-    ProgressBar,
-    GuardianPoll
+    ProgressBar
   },
 
   data: () => ({
@@ -145,7 +147,7 @@ export default {
         this.games = games;
       });
 
-    fetch(`/api/players/${this.$store.state.auth.userSteamID}/`)
+    fetch(`/api/players/${this.$store.state.auth.userSteamID}/stats`)
       .then(res => res.json())
       .then(playerStats => {
         this.playerStats = playerStats;

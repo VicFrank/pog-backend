@@ -42,6 +42,17 @@ router.get("/:steamid", async (req, res) => {
   }
 });
 
+router.get("/:steamid/stats", async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const stats = await players.getPlayerStats(steamid);
+    res.status(200).json(stats);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
 router.get("/:steamid/games", async (req, res) => {
   try {
     const steamid = req.params.steamid;

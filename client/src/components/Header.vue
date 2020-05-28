@@ -103,7 +103,7 @@
           </div>
           <div>
             <b-button
-              class="d-flex"
+              class="d-none d-md-flex"
               href="https://steamcommunity.com/sharedfiles/filedetails/?id=2077900442"
               target="_blank"
               variant="primary"
