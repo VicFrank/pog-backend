@@ -612,7 +612,7 @@
       "[Ultra Rare] May contain 1 bonus Ultra Rare special companion"
     ],
     "announcer1": "Congratulations! Whether you want it or not, you now own the greatest Announcer Pack ever created, voiced by the wise yet sometimes senile Old Man Gilly Winkle.",
-    "announcer2": "",
+    "announcer2": "The voice of Mifune, a custom hero coming soon. Voiced by professional voice-actor Christopher Guerrero.",
     "border1": "Uncommon Avatar Border",
     "border2": "Rare Avatar Border",
     "border3": "Mythical Avatar Border",
@@ -1106,7 +1106,7 @@
     "spell_block": "Spell Block",
     "spell_block_description": "Blocks one targeted spell every 15 seconds. Also adds 25% status reistance.",
     "shattered_helm": "Artifact - Shattered Helm",
-    "shattered_helm_description": "Upon death, the team that slays Monkey receives an Artifact belonging to the Guardian of War for 5 minutes.<br>Effects: +50% damage, health, and attack speed to allied creeps.",
+    "shattered_helm_description": "Upon death, the team that slays Monkey receives an Artifact belonging to the Guardian of War for 5 minutes. Effects: +50% damage, health, and attack speed to allied creeps.",
 
     "pooky": "Pooky",
     "pooky_title": "Guardian of Power",
@@ -1115,13 +1115,22 @@
     "cleavage": "Cleavage",
     "cleavage_description": "Pooky uses extra blubber in her attacks to make sure all her enemies feel her fatness, thus dealing 175% cleave damage to enemies.",
     "sacred_flame": "Artifact - Sacred Flame",
-    "sacred_flame_description": "Upon death, the team that slays Pooky will receive an Artifact belonging to the Guardian of Power for 5 minutes.<br>Effects: +25% damage amplification to allied heroes",
+    "sacred_flame_description": "Upon death, the team that slays Pooky will receive an Artifact belonging to the Guardian of Power for 5 minutes. Effects: +25% damage amplification to allied heroes",
     "bucket": "Bucket",
     "bucket_title": "Guardian of Time",
     "tea_time": "Tea Time",
     "tea_time_description": "When more than one enemy is within reach of Bucket, he will spill his tea in an area around him. The tea deals damage over time and slows enemy movement speed. Each time this is cast, the cooldown will be reduced. Cooldown will be reset to default after 30 seconds of inactivity.",
     "ashes_of_codex": "Artifact - Ashes of the Codex",
-    "ashes_of_codex_description": "Upon death, the team that slays Bucket will receive an Artifact belonging to the Guardian of Time for 5 minutes.<br>Effects: 25% cooldown reduction for all allied heroes."
+    "ashes_of_codex_description": "Upon death, the team that slays Bucket will receive an Artifact belonging to the Guardian of Time for 5 minutes. Effects: 25% cooldown reduction for all allied heroes.",
+
+    "lulu": "Lulu",
+    "lulu_title": "Guardian of Thirst",
+    "weave": "Weave",
+    "weave_description": "Lulu hides deep inside her web. Enemies inside it have their vision range reduced to 500.",
+    "insatiable_thirst": "Insatiable Thirst",
+    "insatiable_thirst_description": "If 2 or more heroes attack Lulu, her thirst manifests, granting her 90 bonus damage and 175% lifesteal for 30 seconds.",
+    "cursed_chalice": "Cursed Chalice",
+    "cursed_chalice_description": "Upon death, the team that slays Bucket will receive an Artifact belonging to the Guardian of Time for 5 minutes. +25% lifesteal and spell lifesteal against enemy heroes. 10% to other sources."
   },
 
   "credits": {

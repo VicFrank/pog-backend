@@ -16,12 +16,8 @@
     <div v-if="items.length > 0" class="mt-2">
       <div class="h2 text-center blue">Items</div>
       <div>
-        <div
-          v-for="item of items"
-          :key="item.cosmetic_id"
-          class="text-center mb-2"
-        >
-          <div class="mb-2">{{ $t(`cosmetics.${cosmetic.cosmetic_id}`) }}</div>
+        <div v-for="item of items" :key="item.cosmetic_id" class="text-center mb-2">
+          <div class="mb-2">{{ $t(`cosmetics.${item.cosmetic_id}`) }}</div>
           <img
             class="reward-image mb-1"
             v-bind:src="cosmeticImageSrc(item.cosmetic_id)"
@@ -40,26 +36,26 @@
     >
       <i class="fas fa-info-circle"></i>
       {{ rarity }} Completion Bonus:
-      <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+      <img
+        class="pogcoin"
+        src="./images/pogcoin_gold.png"
+        alt="Pog Coin"
+      />
       {{ bonusPoggers }} POGGERS
     </div>
     <div v-if="poggers > 0" class="text-center mt-1">
       <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
       {{ poggers }} POGGERS
     </div>
-    <b-alert v-model="showError" variant="danger" dismissible>{{
+    <b-alert v-model="showError" variant="danger" dismissible>
+      {{
       error
-    }}</b-alert>
+      }}
+    </b-alert>
     <div class="mt-4 d-flex justify-content-end">
-      <b-button v-if="!opened" class="mr-2" variant="secondary" @click="cancel"
-        >Close</b-button
-      >
-      <b-button v-if="!opened" class="mr-2" variant="primary" @click="open"
-        >Open</b-button
-      >
-      <b-button v-else class="mr-2" variant="primary" @click="claim"
-        >Claim Items</b-button
-      >
+      <b-button v-if="!opened" class="mr-2" variant="secondary" @click="cancel">Close</b-button>
+      <b-button v-if="!opened" class="mr-2" variant="primary" @click="open">Open</b-button>
+      <b-button v-else class="mr-2" variant="primary" @click="claim">Claim Items</b-button>
     </div>
   </div>
 </template>
@@ -72,16 +68,16 @@ export default {
     items: [],
     poggers: 0,
     pityPoggersRarities: {},
-    opened: false,
+    opened: false
   }),
   props: {
     cosmetic: {},
-    test: -1,
+    test: -1
   },
   computed: {
     steamID() {
       return this.$store.state.auth.userSteamID;
-    },
+    }
   },
   methods: {
     cancel() {
@@ -104,14 +100,14 @@ export default {
       audio.play();
 
       fetch(`/api/players/${this.steamID}/open_chest/${cosmeticID}`, {
-        method: "post",
+        method: "post"
       })
-        .then((res) => {
+        .then(res => {
           if (!res.ok) throw Error(res.statusText);
           return res;
         })
-        .then((res) => res.json())
-        .then((res) => {
+        .then(res => res.json())
+        .then(res => {
           this.items = res.items;
           this.poggers = res.poggers;
           this.pityPoggersRarities = res.pityPoggersRarities;
@@ -119,7 +115,7 @@ export default {
           this.$store.dispatch("refreshPoggers");
           this.$emit("open");
         })
-        .catch((err) => {
+        .catch(err => {
           this.error = err;
           this.showError = true;
         });
@@ -129,8 +125,8 @@ export default {
     },
     openedImage(cosmeticID) {
       return require(`./images/${cosmeticID}_open.png`);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -16,6 +16,28 @@ export default {
   data: () => ({
     guardians: [
       {
+        name: "lulu",
+        img: require("./images/guardian_04.png"),
+        abilities: [
+          {
+            name: "weave",
+            image: "guardian_weave.png"
+          },
+          {
+            name: "insatiable_thirst",
+            image: "guardian_insatiable_thirst.png"
+          },
+          {
+            name: "spell_block",
+            image: "spell_block.png"
+          },
+          {
+            name: "cursed_chalice",
+            image: "guardian_buff_cursedchalice.png"
+          }
+        ]
+      },
+      {
         name: "monkey",
         img: require("./images/guardian_01.png"),
         abilities: [
