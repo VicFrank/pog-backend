@@ -1,6 +1,8 @@
 const checkoutNodeJssdk = require("@paypal/checkout-server-sdk");
 const keys = require("../config/keys");
 
+const paypal = require("paypal-rest-sdk");
+
 /**
  *
  * Returns PayPal HTTP client instance with environment that has access
@@ -69,4 +71,18 @@ function environment() {
   }
 }
 
-module.exports = { client: client, cheapPaypalClient, expensivePaypalClient };
+if (process.env.IS_PRODUCTION) {
+  paypal.configure({
+    mode: "live", //sandbox or live
+    client_id: keys.paypal.production.expensiveClientID,
+    client_secret: keys.paypal.production.expensiveSecret,
+  });
+} else {
+  paypal.configure({
+    mode: "sandbox", //sandbox or live
+    client_id: keys.paypal.dev.clientID,
+    client_secret: keys.paypal.dev.secret,
+  });
+}
+
+module.exports = { client, cheapPaypalClient, expensivePaypalClient, paypal };

@@ -215,7 +215,6 @@ module.exports = {
           total_xp = 372125 + 8000 * (level - 99);
           next_level_xp = 8000;
         }
-
         return {
           bp_version: 1,
           bp_level: level,

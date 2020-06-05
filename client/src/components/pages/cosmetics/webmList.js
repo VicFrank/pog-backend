@@ -98,4 +98,11 @@ export default new Set([
   "ethereal_flame",
   "star_blaze",
   "trail_of_burning_doom",
+  "huskie",
+  "captain_bamboo",
+  "brewling",
+  "steeljaw",
+  "coral",
+  "brightjoy",
+  "i_love_you",
 ]);

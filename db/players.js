@@ -25,10 +25,10 @@ module.exports = {
   async doesPlayerExist(steamID) {
     try {
       const sql_query = `
-      select exists(select 1 from players where steam_id=$1)
+      select * from players where steam_id = $1
       `;
       const { rows } = await query(sql_query, [steamID]);
-      return rows[0].exists;
+      return rows.length > 0;
     } catch (error) {
       throw error;
     }
@@ -195,9 +195,8 @@ module.exports = {
       GROUP BY p.steam_id;
       `;
       let { rows } = await query(sql_query, [steamID]);
-
       const equippedCompanion = await this.getEquippedCompanion(steamID);
-      const teamKillStats = await this.getTeamKillStats(steamID);
+      // const teamKillStats = await this.getTeamKillStats(steamID);
       const dailyQuests = await quests.getDailyQuestsForPlayer(steamID);
       const achievements = await quests.getAchievementsForPlayer(steamID);
       const battlePass = await this.getPlayerBattlePass(steamID);
@@ -206,8 +205,8 @@ module.exports = {
       );
       const dailyXP = await this.getDailyXP(steamID);
 
-      let buildings_destroyed = teamKillStats.buildingKills.buildings_destroyed;
-      let guardian_kills = teamKillStats.guardianKills.guardian_kills;
+      // let buildings_destroyed = teamKillStats.buildingKills.buildings_destroyed;
+      // let guardian_kills = teamKillStats.guardianKills.guardian_kills;
 
       const achievementsToClaim = achievements.filter((achievement) => {
         return achievement.quest_completed && !achievement.claimed;
@@ -529,13 +528,90 @@ module.exports = {
     try {
       const sql_query = `
       SELECT steam_id, bp_version, bp_level, total_experience, upgrade_expiration,
-      (case when upgrade_expiration > NOW() then tier else 0 end) as tier
+      (CASE
+        WHEN tier3_expiration > NOW() then 3
+        WHEN tier2_expiration > NOW() then 2
+        WHEN tier1_expiration > NOW() then 1
+        ELSE 0
+      END) as tier
       FROM player_battle_pass
       WHERE steam_id = $1
       LIMIT 1
       `;
       const { rows } = await query(sql_query, [steamID]);
       return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // this assumes the player only has one battle pass
+  async addBattlePassTier(steamID, tier, days) {
+    try {
+      if (days < 0)
+        throw new error("Days cannot be negative in addBattlePassTier");
+      if (!(tier === 1 || tier === 2 || tier === 3))
+        throw new error(`Bad input ${tier} as tier to addBattlePassTier`);
+      // Extend the duration of lower tiers by the same amount
+      // so that when this tier expires, it continues seemlessly
+      // to the lower tier. If the lower tier is expired,
+      // it will still be expired when this tier expires.
+
+      // If the current tier is not active, it needs to be set to now
+      // before we do the rest. We can safely set all tiers that have
+      // expired to NOW, as they will immediately expire.
+      const currentBattlePass = await this.getPlayerBattlePass(steamID);
+
+      if (currentBattlePass.tier < tier) {
+        console.log("before");
+        await query(
+          `
+          UPDATE player_battle_pass
+          SET (tier1_expiration, tier2_expiration, tier3_expiration) = 
+          (
+            (CASE WHEN tier1_expiration < NOW() THEN NOW() ELSE tier1_expiration END),
+            (CASE WHEN tier2_expiration < NOW() THEN NOW() ELSE tier2_expiration END),
+            (CASE WHEN tier3_expiration < NOW() THEN NOW() ELSE tier3_expiration END)
+          )
+          WHERE steam_id = $1
+        `,
+          [steamID]
+        );
+      }
+
+      let sql_query = "";
+      if (tier === 3) {
+        sql_query = `
+          UPDATE player_battle_pass
+          SET (tier1_expiration, tier2_expiration, tier3_expiration) = 
+          (
+            tier1_expiration + $2 * INTERVAL '1 DAY',
+            tier2_expiration + $2 * INTERVAL '1 DAY',
+            tier3_expiration + $2 * INTERVAL '1 DAY'
+          )
+          WHERE steam_id = $1
+        `;
+      } else if (tier === 2) {
+        sql_query = `
+          UPDATE player_battle_pass
+          SET (tier1_expiration, tier2_expiration) = 
+          (
+            tier1_expiration + $2 * INTERVAL '1 DAY',
+            tier2_expiration + $2 * INTERVAL '1 DAY'
+          )
+          WHERE steam_id = $1
+        `;
+      } else if (tier === 1) {
+        sql_query = `
+          UPDATE player_battle_pass
+          SET (tier1_expiration) = 
+          (
+            tier1_expiration + $2 * INTERVAL '1 DAY'
+          )
+          WHERE steam_id = $1
+        `;
+      }
+      await query(sql_query, [steamID, days]);
     } catch (error) {
       throw error;
     }
@@ -629,6 +705,19 @@ module.exports = {
       `;
       const { rows } = await query(sql_query, [steamID]);
       return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getNumDailyTips(steamID) {
+    try {
+      const sql_query = `
+      SELECT count(*) FROM player_logs
+      WHERE steam_id = $1 AND log_event = 'tip' AND log_time >= NOW()::date
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows[0].count;
     } catch (error) {
       throw error;
     }
@@ -849,7 +938,7 @@ module.exports = {
       // Update battle pass
       if (transactionData.battlePass) {
         const { battlePass } = transactionData;
-        const { upgradeTier, upgradeExpiration, bonusExp } = battlePass;
+        const { upgradeTier, upgradeDays, bonusExp } = battlePass;
 
         const xpToAdd = bonusExp || 0;
 
@@ -857,15 +946,8 @@ module.exports = {
           await this.addBattlePassExp(steamID, xpToAdd);
         }
 
-        if (upgradeTier != undefined && upgradeExpiration) {
-          // set the upgrade tier, if possible
-          const queryText = `
-            UPDATE player_battle_pass
-            SET (tier, upgrade_expiration)
-              = ($2, to_timestamp($3))
-            WHERE steam_id = $1
-          `;
-          await query(queryText, [steamID, upgradeTier, upgradeExpiration]);
+        if (upgradeTier != undefined && upgradeDays) {
+          await this.addBattlePassTier(steamID, upgradeTier, upgradeDays);
         }
       }
 
@@ -916,10 +998,7 @@ module.exports = {
         `;
         await query(queryText, [statResetDate, steamID]);
       }
-
-      await query("COMMIT");
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },
@@ -1051,6 +1130,9 @@ module.exports = {
         case "bpaccel2":
           upgradeTier = 2;
           break;
+        case "bpaccel3":
+          upgradeTier = 3;
+          break;
       }
 
       if (upgradeTier === 0) {
@@ -1068,65 +1150,8 @@ module.exports = {
         cosmeticID,
       });
 
-      const currentBattlePass = await this.getPlayerBattlePass(steamID);
-      const { tier } = currentBattlePass;
-      let result;
-
-      if (tier == 0) {
-        // No problem here, just upgrade the battle pass and have it expire in a month
-        const queryText = `
-          UPDATE player_battle_pass
-          SET (tier, upgrade_expiration)
-            = ($2, NOW() + '1 MONTH')
-          WHERE steam_id = $1
-          RETURNING *
-        `;
-        const { rows } = await query(queryText, [steamID, upgradeTier]);
-        result = rows[0];
-      } else if (tier == 1) {
-        if (upgradeTier == 1) {
-          // Same tier, extend the deadline by a month
-          const queryText = `
-            UPDATE player_battle_pass
-            SET (tier, upgrade_expiration)
-              = ($2, upgrade_expiration + '1 MONTH')
-            WHERE steam_id = $1
-            RETURNING *
-          `;
-          const { rows } = await query(queryText, [steamID, upgradeTier]);
-          result = rows[0];
-        } else if (upgradeTier == 2) {
-          // ignore the old deadline because we're upgrading the battle pass
-          const queryText = `
-            UPDATE player_battle_pass
-            SET (tier, upgrade_expiration)
-              = ($2, NOW() + '1 MONTH')
-            WHERE steam_id = $1
-            RETURNING *
-          `;
-          const { rows } = await query(queryText, [steamID, upgradeTier]);
-          result = rows[0];
-        }
-      } else if (tier == 2) {
-        if (upgradeTier == 1) {
-          throw new Error("You can't downgrade your battlepass");
-        } else {
-          // Same tier, extend the deadline by a month
-          const queryText = `
-            UPDATE player_battle_pass
-            SET (tier, upgrade_expiration)
-              = ($2, upgrade_expiration + '1 MONTH')
-            WHERE steam_id = $1
-            RETURNING *
-          `;
-          const { rows } = await query(queryText, [steamID, upgradeTier]);
-          result = rows[0];
-        }
-      }
-
+      await this.addBattlePassTier(steamID, upgradeTier, 31);
       await this.removeCosmetic(steamID, cosmeticID);
-
-      return result;
     } catch (error) {
       throw error;
     }
@@ -1780,6 +1805,56 @@ module.exports = {
           break;
       }
       await this.incrementQuestProgress(steamID, questID, progress);
+    }
+  },
+
+  async getSubscriptions(steamID) {
+    try {
+      let sql_query = `
+      SELECT * FROM player_subscriptions WHERE steam_id = $1
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getStripeSubscription(steamID) {
+    try {
+      let sql_query = `
+      SELECT customer_id, subscription_status
+      FROM player_subscriptions
+      WHERE steam_id = $1 AND client = 'stripe'
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async addStripeSubscription(steamID, customerID, status) {
+    try {
+      let sql_query = `
+      INSERT INTO player_subscriptions (steam_id, client, customer_id, subscription_status)
+      VALUES ($1, $2, $3, $4)
+      `;
+      await query(sql_query, [steamID, "stripe", customerID, status]);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async updateStripeSubscription(steamID, status) {
+    try {
+      let sql_query = `
+      UPDATE player_subscriptions set (subscription_status) = $2
+      WHERE steam_id = $1
+      `;
+      await query(sql_query, [steamID, status]);
+    } catch (error) {
+      throw error;
     }
   },
 };

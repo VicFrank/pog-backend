@@ -243,13 +243,71 @@ async function initializeAdmins() {
 }
 
 (async function () {
-  await loadQuests();
-  await loadCosmetics();
-  await loadChestRewards();
-  await loadBattlePass();
-  await loadItemPrices();
-  // await initPlayers();
-  await addSampleGames(10);
-  await initializeAdmins();
-  await addRealSample();
+  // await loadQuests();
+  // await loadCosmetics();
+  // await loadChestRewards();
+  // await loadBattlePass();
+  // await loadItemPrices();
+  // // await initPlayers();
+  // await addSampleGames(10);
+  // await initializeAdmins();
+  // await addRealSample();
+  await loadNewCosmetics([
+    {
+      cost: 100,
+      cosmetic_id: "announcer2",
+      rarity: "Common",
+      type: "Announcer",
+      equip_group: "announcer",
+    },
+    {
+      cost: 300,
+      cosmetic_id: "huskie",
+      rarity: "Uncommon",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: 150,
+      cosmetic_id: "captain_bamboo",
+      rarity: "Common",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: 300,
+      cosmetic_id: "brewling",
+      rarity: "Uncommon",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: 150,
+      cosmetic_id: "steeljaw",
+      rarity: "Uncommon",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: 650,
+      cosmetic_id: "coral",
+      rarity: "Rare",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: 1500,
+      cosmetic_id: "brightjoy",
+      rarity: "Mythical",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: 2000,
+      cosmetic_id: "i_love_you",
+      rarity: "Mythical",
+      type: "Companion FX",
+      equip_group: "companion_fx",
+    },
+  ]);
 })();

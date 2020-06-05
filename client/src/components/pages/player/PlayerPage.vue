@@ -70,7 +70,7 @@ export default {
         this.games = games;
       });
 
-    fetch(`/api/players/${steamID}/`)
+    fetch(`/api/players/${steamID}/stats`)
       .then(res => res.json())
       .then(playerStats => {
         if (!playerStats.steam_id) {

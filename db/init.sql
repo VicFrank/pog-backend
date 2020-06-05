@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS game_players CASCADE;
 DROP TABLE IF EXISTS cosmetics CASCADE;
 DROP TABLE IF EXISTS player_cosmetics CASCADE;
 DROP TABLE IF EXISTS player_companions CASCADE;
-DROP TABLE IF EXISTS player_battle_pass CASCADE;
 DROP TABLE IF EXISTS quests CASCADE;
 DROP TABLE IF EXISTS player_quests CASCADE;
 
@@ -157,6 +156,7 @@ CREATE TABLE IF NOT EXISTS battle_pass_levels (
   CONSTRAINT battle_pass_levels_pkey PRIMARY KEY (bp_version, bp_level)
 );
 
+DROP TABLE IF EXISTS player_battle_pass CASCADE;
 CREATE TABLE IF NOT EXISTS player_battle_pass (
   steam_id TEXT REFERENCES players (steam_id) ON UPDATE CASCADE,
   bp_version INTEGER DEFAULT 1,
@@ -177,6 +177,19 @@ RETURN NEW;
 END;
 $$
 LANGUAGE 'plpgsql';
+
+ALTER TABLE player_battle_pass
+ADD COLUMN tier1_expiration TIMESTAMP DEFAULT NOW(),
+ADD COLUMN tier2_expiration TIMESTAMP DEFAULT NOW(),
+ADD COLUMN tier3_expiration TIMESTAMP DEFAULT NOW();
+
+UPDATE player_battle_pass
+SET tier1_expiration = upgrade_expiration
+WHERE tier = 1;
+
+UPDATE player_battle_pass
+SET tier2_expiration = upgrade_expiration
+WHERE tier = 2;
 
 CREATE TRIGGER create_player_trigger
 AFTER INSERT
@@ -269,4 +282,12 @@ CREATE TABLE IF NOT EXISTS votes (
   vote INTEGER REFERENCES poll_options (option_id),
 
   CONSTRAINT vote_pkey PRIMARY KEY (poll_id, steam_id)
+);
+
+DROP TABLE IF EXISTS player_subscriptions;
+CREATE TABLE IF NOT EXISTS player_subscriptions (
+  steam_id TEXT REFERENCES players (steam_id),
+  client TEXT,
+  customer_id TEXT,
+  subscription_status TEXT
 );

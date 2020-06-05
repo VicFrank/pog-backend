@@ -12,6 +12,7 @@ const state = {
   achievementsToClaim: 0,
   dailysToClaim: 0,
   upgradeExpiration: null,
+  dailyXP: 0,
 };
 
 // getters
@@ -30,6 +31,7 @@ const getters = {
   achievementsToClaim: (state) => state.achievementsToClaim,
   dailysToClaim: (state) => state.dailysToClaim,
   upgradeExpiration: (state) => state.upgradeExpiration,
+  dailyXP: (state) => state.dailyXP,
 };
 
 const mutations = {
@@ -63,7 +65,15 @@ const mutations = {
   },
   SAVE_USER(
     state,
-    { username, steamID, isAdmin, poggers, achievementsToClaim, dailysToClaim }
+    {
+      username,
+      steamID,
+      isAdmin,
+      poggers,
+      achievementsToClaim,
+      dailysToClaim,
+      dailyXP,
+    }
   ) {
     state.username = username;
     state.userSteamID = steamID;
@@ -72,6 +82,7 @@ const mutations = {
     state.poggers = poggers;
     state.achievementsToClaim = achievementsToClaim;
     state.dailysToClaim = dailysToClaim;
+    state.dailyXP = dailyXP;
   },
 };
 
@@ -125,6 +136,7 @@ const actions = {
           poggers,
           achievementsToClaim,
           dailyQuestsToClaim,
+          dailyXP,
         } = player;
         const {
           tier,
@@ -150,6 +162,7 @@ const actions = {
           poggers,
           achievementsToClaim,
           dailysToClaim: dailyQuestsToClaim,
+          dailyXP: dailyXP,
         });
       })
       .catch((err) => {

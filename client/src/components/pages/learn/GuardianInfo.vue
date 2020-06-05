@@ -111,6 +111,13 @@ export default {
 .ability-info {
   display: flex;
   min-height: 120px;
+
+  padding: 1em 2em;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #1d2127;
+  box-shadow: 0 4px #ccc;
+  align-items: center;
 }
 
 .current-ability {

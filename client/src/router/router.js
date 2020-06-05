@@ -33,6 +33,15 @@ import Checkout from "../components/pages/payment/Checkout";
 import PaymentSuccess from "../components/pages/payment/PaymentSuccess";
 import AlipayPayment from "../components/pages/payment/AlipayPayment";
 
+const Subscriptions = () =>
+  import("../components/pages/subscriptions/Subscriptions");
+const SubscriptionCheckout = () =>
+  import("../components/pages/subscriptions/SubscriptionCheckout");
+const StripeSuccess = () =>
+  import("../components/pages/subscriptions/StripeSuccess");
+const StripeCancel = () =>
+  import("../components/pages/subscriptions/StripeCancel");
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -45,6 +54,22 @@ const routes = [
   {
     path: "/poggers",
     component: PoggersStore,
+  },
+  {
+    path: "/subscriptions",
+    component: Subscriptions,
+  },
+  {
+    path: "/subscriptions/:tier",
+    component: SubscriptionCheckout,
+  },
+  {
+    path: "/subscriptions/stripe/success",
+    component: StripeSuccess,
+  },
+  {
+    path: "/subscriptions/stripe/cancel",
+    component: StripeCancel,
   },
   {
     path: "/checkout/:item_id",

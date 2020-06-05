@@ -46,6 +46,9 @@ router.get("/:steamid/stats", async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const stats = await players.getPlayerStats(steamid);
+    if (!auth.isAuthenticatedUser(req)) {
+      delete stats.mmr;
+    }
     res.status(200).json(stats);
   } catch (error) {
     console.log(error);
@@ -240,6 +243,33 @@ router.get("/:steamid/rerolls", auth.userAuth, async (req, res) => {
   }
 });
 
+router.get("/:steamid/tips", auth.userAuth, async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const { tier } = await players.getPlayerBattlePass(steamid);
+    if (tier == 0) {
+      return res.status(200).json(0);
+    } else {
+      const numTips = await players.getNumDailyTips(steamid);
+      res.status(200).json(15 - numTips);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
+router.post("/:steamid/tips", auth.userAuth, async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    await players.addPlayerLog(steamid, "tip");
+    res.status(200).json({ message: "completed" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
 router.get("/:steamid/cosmetics", async (req, res) => {
   try {
     const steamid = req.params.steamid;
@@ -335,12 +365,16 @@ router.post("/:steamid/use_item/:itemid", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const itemid = req.params.itemid;
-    if (itemid === "bpaccel1" || itemid === "bpaccel2") {
-      const battlePass = await players.useBPAccelerator(steamid, itemid);
-      res.status(200).json(battlePass);
+    if (
+      itemid === "bpaccel1" ||
+      itemid === "bpaccel2" ||
+      itemid === "bpaccel3"
+    ) {
+      await players.useBPAccelerator(steamid, itemid);
+      res.status(200).send({ message: "used item" });
     } else {
-      const experience = await players.consumeItem(steamid, itemid);
-      res.status(200).json(experience);
+      await players.consumeItem(steamid, itemid);
+      res.status(200).send({ message: "used item" });
     }
   } catch (error) {
     console.log(error);

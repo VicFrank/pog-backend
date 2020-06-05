@@ -74,11 +74,7 @@
                   class="text-muted"
                 >{{ $t("profile.reset_in") }} {{ secondsUntilReset | hhmmss }}</div>
               </div>
-              <ProgressBar
-                class="mt-3"
-                :progress="Number(playerStats.dailyXP)"
-                :required="maxDailyXP"
-              />
+              <ProgressBar class="mt-3" :progress="Number(dailyXP)" :required="maxDailyXP" />
             </div>
           </div>
         </div>
@@ -110,6 +106,9 @@ export default {
   computed: {
     bpTier() {
       return this.$store.getters.bpTier;
+    },
+    dailyXP() {
+      return this.$store.getters.dailyXP;
     },
     maxDailyXP() {
       switch (this.bpTier) {
