@@ -21,8 +21,12 @@
             <div class="overlay">
               <h3>Mifune Announcer Pack</h3>
               <p>
-                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
-                200 POGGERS
+                <img
+                  class="pogcoin"
+                  src="./images/pogcoin_gold.png"
+                  alt="Pog Coin"
+                />
+                100 POGGERS
               </p>
             </div>
           </div>
@@ -41,9 +45,7 @@
       </div>
       <div class="container">
         <b-alert v-model="showError" variant="danger" dismissible>
-          {{
-          error
-          }}
+          {{ error }}
         </b-alert>
         <div class="row">
           <div class="col-xl-12">
@@ -92,12 +94,20 @@
                     />
                   </div>
                   <div class="cosmetic__descr">
-                    <div class="cosmetic__name mb-1">{{ $t(`cosmetics.${cosmetic.cosmetic_id}`) }}</div>
-                    <div class="text-muted">{{ $t(`cosmetics.${cosmetic.cosmetic_type}`) }}</div>
+                    <div class="cosmetic__name mb-1">
+                      {{ $t(`cosmetics.${cosmetic.cosmetic_id}`) }}
+                    </div>
+                    <div class="text-muted">
+                      {{ $t(`cosmetics.${cosmetic.cosmetic_type}`) }}
+                    </div>
                     <div class="cosmetic__price">
                       <span class="cosmetic-price">
                         <template v-if="cosmetic.cost > 0">
-                          <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+                          <img
+                            class="pogcoin"
+                            src="./images/pogcoin_gold.png"
+                            alt="Pog Coin"
+                          />
                           {{ cosmetic.cost }} POGGERS
                         </template>
                         <template v-else>${{ getPrice(cosmetic) }}</template>
@@ -122,17 +132,27 @@
                       <i class="fas fa-info-circle info-icon"></i>
                     </router-link>
                   </p>
-                  <div class="text-center text-muted mb-3">{{ cosmetic.cosmetic_type }}</div>
+                  <div class="text-center text-muted mb-3">
+                    {{ cosmetic.cosmetic_type }}
+                  </div>
                   <p class="text-center">
                     <template v-if="cosmetic.cost > 0">
-                      <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
+                      <img
+                        class="pogcoin"
+                        src="./images/pogcoin_gold.png"
+                        alt="Pog Coin"
+                      />
                       {{ cosmetic.cost }} POGGERS
                     </template>
                     <template v-else>${{ getPrice(cosmetic) }}</template>
                   </p>
                   <template v-if="cosmeticMovie(cosmetic.cosmetic_id)">
                     <video width="100%" height="360" autoplay muted loop>
-                      <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
+                      <source
+                        :src="cosmeticMovie(cosmetic.cosmetic_id)"
+                        type="video/webm"
+                      />
+                      Your browser does not support the video tag.
                     </video>
                   </template>
                   <template v-else>
@@ -145,28 +165,30 @@
                     </div>
                   </template>
                   <CosmeticDescription :cosmetic="cosmetic" />
-                  <div
-                    v-if="alreadyOwn(cosmetic)"
-                    class="text-center mt-3"
-                  >{{ $t("store.already_own") }}</div>
+                  <div v-if="alreadyOwn(cosmetic)" class="text-center mt-3">
+                    {{ $t("store.already_own") }}
+                  </div>
                   <div v-if="loggedIn" class="mt-4 d-flex justify-content-end">
                     <b-button
                       class="mr-2"
                       variant="secondary"
                       @click="hideModal(cosmetic.cosmetic_id)"
-                    >{{ $t("armory.cancel") }}</b-button>
+                      >{{ $t("armory.cancel") }}</b-button
+                    >
                     <b-button
                       v-if="poggers < cosmetic.cost"
                       class="mr-2"
                       variant="primary"
                       to="/poggers"
-                    >{{ $t("store.get_more_poggers") }}</b-button>
+                      >{{ $t("store.get_more_poggers") }}</b-button
+                    >
                     <b-button
                       v-if="cosmetic.cosmetic_type === 'XP'"
                       class="mr-2"
                       variant="primary"
                       :to="getXPShopLink(cosmetic)"
-                    >{{ $t("store.buy") }}</b-button>
+                      >{{ $t("store.buy") }}</b-button
+                    >
                     <b-button
                       v-else
                       :disabled="
@@ -176,7 +198,8 @@
                       variant="primary"
                       v-b-modal.modal-confirm-purchase
                       @click="currentCosmetic = cosmetic"
-                    >{{ $t("store.buy") }}</b-button>
+                      >{{ $t("store.buy") }}</b-button
+                    >
                   </div>
                   <div v-else class="mt-4 d-flex justify-content-center">
                     <LoginButton />
@@ -188,7 +211,11 @@
         </div>
       </div>
     </div>
-    <ConfirmPurchase :cosmetic="currentCosmetic" v-on:buy="buyItem" v-on:cancel="hideModal" />
+    <ConfirmPurchase
+      :cosmetic="currentCosmetic"
+      v-on:buy="buyItem"
+      v-on:cancel="hideModal"
+    />
   </div>
 </template>
 
@@ -213,25 +240,25 @@ export default {
     filters: [
       {
         name: "Companions",
-        active: false
+        active: false,
       },
       {
         name: "Companions FX",
-        active: false
+        active: false,
       },
       {
         name: "Chests",
-        active: false
+        active: false,
       },
       {
         name: "XP",
-        active: false
+        active: false,
       },
       {
         name: "All",
         isRight: true,
-        active: true
-      }
+        active: true,
+      },
     ],
     rarityFilters: [
       { name: "Common", active: false },
@@ -240,17 +267,17 @@ export default {
       { name: "Mythical", active: false },
       { name: "Legendary", active: false },
       // { name: "Ancient", active: false },
-      { name: "All", active: true, isRight: true }
+      { name: "All", active: true, isRight: true },
     ],
     activeRarityFilters: new Set(),
-    ownedCosmetics: []
+    ownedCosmetics: [],
   }),
 
   components: {
     CosmeticsFilter,
     LoginButton,
     ConfirmPurchase,
-    CosmeticDescription
+    CosmeticDescription,
   },
 
   computed: {
@@ -262,27 +289,27 @@ export default {
     },
     poggers() {
       return this.$store.state.auth.poggers;
-    }
+    },
   },
 
   created() {
     if (this.loggedIn && this.steamID) {
       fetch(`/api/players/${this.steamID}/cosmetics`)
-        .then(res => res.json())
-        .then(cosmetics => {
+        .then((res) => res.json())
+        .then((cosmetics) => {
           this.ownedCosmetics = cosmetics;
         })
-        .catch(err => {
+        .catch((err) => {
           this.showError = true;
           this.error = err;
         });
     }
 
     fetch(`/api/cosmetics`)
-      .then(res => res.json())
-      .then(cosmetics => {
+      .then((res) => res.json())
+      .then((cosmetics) => {
         const purchaseableCosmetics = cosmetics
-          .filter(cosmetic => {
+          .filter((cosmetic) => {
             return cosmetic.cost > 0 || cosmetic.cosmetic_type === "XP";
           })
           .sort((c1, c2) => {
@@ -317,7 +344,7 @@ export default {
         this.cosmetics = purchaseableCosmetics;
         this.filteredCosmetics = purchaseableCosmetics;
       })
-      .catch(err => {
+      .catch((err) => {
         this.error = err;
         this.showError = true;
       });
@@ -326,7 +353,7 @@ export default {
   watch: {
     searchText: function() {
       this.updateFilteredCosmetics();
-    }
+    },
   },
 
   methods: {
@@ -357,10 +384,10 @@ export default {
       this.loading = true;
 
       fetch(`/api/players/${this.steamID}/buy_item/${cosmetic_id}`, {
-        method: "post"
+        method: "post",
       })
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           this.loading = false;
           document.documentElement.scrollTop = 0;
           if (res.error) {
@@ -371,7 +398,7 @@ export default {
             this.$store.dispatch("refreshPoggers");
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = err;
           this.loading = false;
           this.showError = true;
@@ -408,13 +435,13 @@ export default {
         cosmetic_type == "XP";
       if (canBuyMultiple) return false;
       return this.ownedCosmetics.some(
-        cosmetic => cosmetic.cosmetic_id === cosmetic_id
+        (cosmetic) => cosmetic.cosmetic_id === cosmetic_id
       );
     },
     toggleFilter(name) {
-      this.filters = this.filters.map(filter => ({
+      this.filters = this.filters.map((filter) => ({
         ...filter,
-        active: filter.name === name
+        active: filter.name === name,
       }));
 
       this.currentFilter = name;
@@ -424,15 +451,15 @@ export default {
     toggleRarityFilter(name, active) {
       if (name === "All") {
         this.activeRarityFilters.clear();
-        this.rarityFilters = this.rarityFilters.map(filter => ({
+        this.rarityFilters = this.rarityFilters.map((filter) => ({
           ...filter,
-          active: false
+          active: false,
         }));
       } else {
         if (active) {
           this.activeRarityFilters.add(name);
           // remove all from the filters if another is active
-          this.rarityFilters = this.rarityFilters.map(filter =>
+          this.rarityFilters = this.rarityFilters.map((filter) =>
             filter.name === "All" ? { ...filter, active: false } : filter
           );
         } else {
@@ -440,13 +467,13 @@ export default {
         }
       }
 
-      this.rarityFilters = this.rarityFilters.map(filter =>
+      this.rarityFilters = this.rarityFilters.map((filter) =>
         filter.name === name ? { ...filter, active: !filter.active } : filter
       );
 
       // if there are no active filters, make "all active"
       if (this.activeRarityFilters.size === 0) {
-        this.rarityFilters = this.rarityFilters.map(filter =>
+        this.rarityFilters = this.rarityFilters.map((filter) =>
           filter.name === "All" ? { ...filter, active: true } : filter
         );
       }
@@ -460,8 +487,8 @@ export default {
         this.activeRarityFilters,
         this.searchText
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
