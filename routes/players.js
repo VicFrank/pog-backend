@@ -246,8 +246,8 @@ router.get("/:steamid/rerolls", auth.userAuth, async (req, res) => {
 router.get("/:steamid/tips", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
-    const { tier } = await players.getPlayerBattlePass(steamid);
-    if (tier == 0) {
+    const battlePass = await players.getPlayerBattlePass(steamid);
+    if (!battlePass || battlePass.tier == 0) {
       return res.status(200).json(0);
     } else {
       const numTips = await players.getNumDailyTips(steamid);

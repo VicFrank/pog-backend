@@ -527,13 +527,19 @@ module.exports = {
   async getPlayerBattlePass(steamID) {
     try {
       const sql_query = `
-      SELECT steam_id, bp_version, bp_level, total_experience, upgrade_expiration,
+      SELECT steam_id, bp_version, bp_level, total_experience,
       (CASE
         WHEN tier3_expiration > NOW() then 3
         WHEN tier2_expiration > NOW() then 2
         WHEN tier1_expiration > NOW() then 1
         ELSE 0
-      END) as tier
+      END) as tier,
+      (CASE
+        WHEN tier3_expiration > NOW() then tier3_expiration
+        WHEN tier2_expiration > NOW() then tier2_expiration
+        WHEN tier1_expiration > NOW() then tier1_expiration
+        ELSE NOW()
+      END) as upgrade_expiration
       FROM player_battle_pass
       WHERE steam_id = $1
       LIMIT 1
@@ -563,7 +569,6 @@ module.exports = {
       const currentBattlePass = await this.getPlayerBattlePass(steamID);
 
       if (currentBattlePass.tier < tier) {
-        console.log("before");
         await query(
           `
           UPDATE player_battle_pass
@@ -604,10 +609,8 @@ module.exports = {
       } else if (tier === 1) {
         sql_query = `
           UPDATE player_battle_pass
-          SET (tier1_expiration) = 
-          (
+          SET tier1_expiration = 
             tier1_expiration + $2 * INTERVAL '1 DAY'
-          )
           WHERE steam_id = $1
         `;
       }

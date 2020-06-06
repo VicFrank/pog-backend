@@ -7,18 +7,22 @@
         <!-- <p class="text-center">1 day 2 hours 43mins</p> -->
         <div class="row">
           <div class="sale">
-            <img src="./images/doomling.png" alt="Doomling" />
             <img
+              src="./images/mifune_ad.png"
+              alt="Mifune"
+              @click="$bvModal.show(`bp-modal-announcer2`)"
+            />
+            <!-- <img
               src="./images/discount.png"
               @click="$bvModal.show(`bp-modal-doomling`)"
               class="sales-overlay"
               alt
-            />
+            />-->
             <div class="overlay">
-              <h3>Doomling</h3>
+              <h3>Mifune Announcer Pack</h3>
               <p>
                 <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" />
-                120 POGGERS
+                200 POGGERS
               </p>
             </div>
           </div>
