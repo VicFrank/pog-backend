@@ -1,4 +1,5 @@
 const { query } = require("./index");
+const players = require("./players");
 
 module.exports = {
   async makeNewPoll(name, description, options) {
@@ -62,8 +63,25 @@ module.exports = {
     }
   },
 
+  getNumVotesForTier(tier) {
+    switch (tier) {
+      case 0:
+        return 1;
+      case 1:
+        return 2;
+      case 2:
+        return 5;
+      case 3:
+        return 10;
+      default:
+        return 1;
+    }
+  },
+
   async voteInPoll(steamID, pollID, optionID) {
     try {
+      const battlePass = await players.getBattlePassTier(steamID);
+
       let sql_query = `
       INSERT INTO votes
       (steam_id, poll_id, vote) VALUES
@@ -71,12 +89,14 @@ module.exports = {
       `;
       await query(sql_query, [steamID, pollID, optionID]);
 
+      const numVotes = getNumVotesForTier(tier);
+
       sql_query = `
       UPDATE poll_options
-      SET votes = votes + 1
+      SET votes = votes + $3
       WHERE poll_id = $1 AND option_id = $2
       `;
-      await query(sql_query, [pollID, optionID]);
+      await query(sql_query, [pollID, optionID, numVotes]);
     } catch (error) {
       throw error;
     }

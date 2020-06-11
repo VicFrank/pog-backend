@@ -551,6 +551,15 @@ module.exports = {
     }
   },
 
+  async getBattlePassTier(steamID) {
+    try {
+      const battlePass = await this.getPlayerBattlePass(steamID);
+      return battlePass.tier || 0;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // this assumes the player only has one battle pass
   async addBattlePassTier(steamID, tier, days) {
     try {
@@ -626,11 +635,15 @@ module.exports = {
       50 XP per win (capped at 20 wins)
       200 XP bonus for the first win of the day (250 total)
 
-      SILVER ACCELERATOR:
+      SILVER TICKET:
       100 XP per win (capped at 20 wins)
       300 XP bonus for the first win of the day (400 total)
 
-      GOLD ACCELERATOR:
+      GOLD TICKET:
+      200 XP per win (capped at 20 wins)
+      400 XP bonus for the first win of the day (600 total)
+
+      PLATINUM TICKET:
       200 XP per win (capped at 20 wins)
       400 XP bonus for the first win of the day (600 total)
     */
@@ -657,14 +670,14 @@ module.exports = {
         reward = 250;
         if (tier === 1) {
           reward = 400;
-        } else if (tier === 2) {
+        } else if (tier === 2 || tier === 3) {
           reward = 600;
         }
       } else {
         reward = 50;
         if (tier === 1) {
           reward = 100;
-        } else if (tier === 2) {
+        } else if (tier === 2 || tier === 3) {
           reward = 200;
         }
       }
@@ -715,12 +728,43 @@ module.exports = {
 
   async getNumDailyTips(steamID) {
     try {
-      const sql_query = `
-      SELECT count(*) FROM player_logs
-      WHERE steam_id = $1 AND log_event = 'tip' AND log_time >= NOW()::date
-      `;
-      const { rows } = await query(sql_query, [steamID]);
-      return rows[0].count;
+      const battlePass = await this.getPlayerBattlePass(steamID);
+      if (!battlePass || battlePass.tier == 0) {
+        return 0;
+      } else {
+        const sql_query = `
+        SELECT count(*) FROM player_logs
+        WHERE steam_id = $1 AND log_event = 'tip' AND log_time >= NOW()::date
+        `;
+        const { rows } = await query(sql_query, [steamID]);
+        return 15 - rows[0].count;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async tipPlayer(steamID, tippedSteamID) {
+    try {
+      // log a tip event
+      await this.addPlayerLog(steamid, "tip");
+
+      // get the player's tier
+      const tier = await this.getBattlePassTier(steamID);
+
+      let tipAmount = 0;
+      switch (tier) {
+        case 0:
+          tipAmount = 0;
+        case 1:
+          tipAmount = 1;
+        case 2:
+          tipAmount = 5;
+        case 3:
+          tipAmount = 10;
+      }
+
+      await this.modifyPoggers(tippedSteamID, tipAmount);
     } catch (error) {
       throw error;
     }
@@ -1831,6 +1875,20 @@ module.exports = {
       WHERE steam_id = $1 AND client = 'stripe'
       `;
       const { rows } = await query(sql_query, [steamID]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getStripeSubscriptionByCustomerID(customerID) {
+    try {
+      let sql_query = `
+      SELECT customer_id, subscription_status
+      FROM player_subscriptions
+      WHERE customer_id = $1 AND client = 'stripe'
+      `;
+      const { rows } = await query(sql_query, [customerID]);
       return rows[0];
     } catch (error) {
       throw error;

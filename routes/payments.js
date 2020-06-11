@@ -196,21 +196,54 @@ router.post("/stripe/intents", async (req, res) => {
     amount,
     currency: "usd",
     payment_method_types: ["card"],
-    metadata: { steamID, itemID: name },
+    metadata: { steamID, itemID: name, isPaymentIntent: true },
   });
 
   res.send(paymentIntent);
 });
 
-async function stripePaymentSucceeded(intent) {
-  // TODO: Filter out subscription payments
-  console.log(intent);
-
+// This is only for payment intents,
+// because apparently in production the charge succeeded webhook
+// was not working
+async function stripePaymentIntentSucceeded(intent) {
   const { steamID, itemID } = intent.metadata;
 
   // Handle payments purchasing a specific item
   if (itemID) {
     const itemData = await cosmetics.getItemPrice(itemID);
+    const { item_type, reward } = itemData;
+
+    await logs.addTransactionLog(steamID, "stripe", {
+      intent,
+    });
+
+    try {
+      if (item_type === "POGGERS") {
+        await players.modifyPoggers(steamID, reward);
+      } else if (item_type === "XP") {
+        await players.addBattlePassExp(steamID, reward);
+      } else {
+        throw new Error("Bad item type");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+async function stripeChargeSucceeded(intent) {
+  const itemID = intent.metadata.itemID;
+  const isPaymentIntent = intent.metadata.isPaymentIntent;
+
+  // Ignore payment intents, those are handled in another webhook
+  if (isPaymentIntent) {
+    return;
+  }
+
+  // Handle payments purchasing a specific item
+  if (itemID) {
+    const itemData = await cosmetics.getItemPrice(itemID);
+    const steamID = intent.metadata.steamID;
     const { item_type, reward } = itemData;
 
     await logs.addTransactionLog(steamID, "stripe", {
@@ -235,16 +268,34 @@ async function stripePaymentSucceeded(intent) {
     // Add 31 days to this tier
     // stripe subscriptions are monthly, and some months have fewer than 31 days
     // because of this, on those months, the user gets a few extra days
+    const player = players.getStripeSubscriptionByCustomerID(customer);
+
+    if (!player) {
+      console.log(
+        `Customer with ID ${customer} not found to give a subscription to`
+      );
+      // send a log to myself (VicFrank)
+      logs.addTransactionLog("76561198030851434", "error", {
+        message:
+          "Customer with ID ${customer} not found to give a subscription to",
+      });
+      return;
+    }
+
+    const steamID = player.steamID;
 
     switch (amount) {
       case 200:
         // Silver battle pass
+        players.addBattlePassTier(steamID, 1, 31);
         break;
       case 500:
         // Gold battle pass
+        players.addBattlePassTier(steamID, 2, 31);
         break;
       case 1500:
         // Plat battle pass
+        players.addBattlePassTier(steamID, 3, 31);
         break;
       default:
         console.log("We got a payment we didn't know how to handle!", intent);
@@ -256,6 +307,7 @@ async function stripePaymentSucceeded(intent) {
 async function handleStripeSourceChargeable(intent) {
   const { amount, id, currency } = intent;
   const { itemID } = intent.metadata;
+  console.log(intent);
   const isValid = await isValidStripeTransaction(itemID, amount);
   if (isValid) {
     stripeClient.client.charges.create({
@@ -310,6 +362,7 @@ router.post("/stripe/create_checkout_session", async (req, res) => {
   let customer;
   try {
     const currentSub = await players.getStripeSubscription(steamID);
+    console.log(currentSub);
     if (currentSub && currentSub.customer_id) {
       customer = currentSub.customer_id;
     }
@@ -373,7 +426,7 @@ router.post("/stripe/webhook", async (req, res) => {
 
   switch (event.type) {
     case "payment_intent.succeeded":
-      // stripePaymentSucceeded(intent);
+      stripePaymentIntentSucceeded(intent);
       break;
     case "payment_intent.payment_failed":
       const message =
@@ -385,8 +438,11 @@ router.post("/stripe/webhook", async (req, res) => {
       handleStripeSourceChargeable(intent);
       break;
     case "charge.succeeded":
+      // This is called whenever a charge succeedes, but apparently
+      // in production, it sometimes is not called for vanilla stripe
+      // payments???
       // Alipay charge success, give them their stuff
-      stripePaymentSucceeded(intent);
+      stripeChargeSucceeded(intent);
       break;
     case "checkout.session.completed":
       // a user successfully subscribed using stripe checkout

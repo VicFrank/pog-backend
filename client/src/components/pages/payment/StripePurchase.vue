@@ -21,11 +21,15 @@ export default {
     complete: false,
     paymentIntent: false,
     clientSecret: "",
-    awaitingPayment: false
+    awaitingPayment: false,
+    keys: {
+      dev: "pk_test_kG4TReBTkO6yDfO9mMwtShME00mx65Yyw2",
+      prod: "pk_live_FlJcVm7zuiGei0k6IDXksnmy003GNNZuiw"
+    }
   }),
 
   async created() {
-    const stripe = window.Stripe("pk_live_FlJcVm7zuiGei0k6IDXksnmy003GNNZuiw");
+    const stripe = window.Stripe(this.keys.prod);
     this.stripe = stripe;
     const elements = stripe.elements();
     this.paymentIntent = await this.createIntent();

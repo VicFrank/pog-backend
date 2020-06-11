@@ -10,7 +10,7 @@
 
             <div class="purchase-options">
               <StripeSubscription :tier="tier" class="mb-3" />
-              <PaypalSubscription :tier="tier" />
+              <!-- <PaypalSubscription :tier="tier" /> -->
               <b-alert v-model="showError" variant="danger" dismissible>{{ error }}</b-alert>
             </div>
           </template>
@@ -26,7 +26,7 @@
 
 <script>
 import LoginButton from "../login/LoginButton";
-import PaypalSubscription from "../payment/PaypalSubscription";
+// import PaypalSubscription from "../payment/PaypalSubscription";
 import StripeSubscription from "../payment/StripeSubscription";
 
 export default {
@@ -40,7 +40,7 @@ export default {
 
   components: {
     LoginButton,
-    PaypalSubscription,
+    // PaypalSubscription,
     StripeSubscription
   },
 

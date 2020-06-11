@@ -246,24 +246,45 @@ router.get("/:steamid/rerolls", auth.userAuth, async (req, res) => {
 router.get("/:steamid/tips", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
-    const battlePass = await players.getPlayerBattlePass(steamid);
-    if (!battlePass || battlePass.tier == 0) {
-      return res.status(200).json(0);
-    } else {
-      const numTips = await players.getNumDailyTips(steamid);
-      res.status(200).json(15 - numTips);
-    }
+    const numTips = await players.getNumDailyTips(steamid);
+    res.status(200).json(numTips);
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server Error" });
   }
 });
 
-router.post("/:steamid/tips", auth.userAuth, async (req, res) => {
+router.post("/:steamid/tips", auth.adminAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
-    await players.addPlayerLog(steamid, "tip");
-    res.status(200).json({ message: "completed" });
+    const tippedSteamID = req.query.player;
+
+    if (steamid == tippedSteamID) {
+      return res.status(403).send({ message: "You can't tip yourself" });
+    }
+
+    const dailyTips = await players.getNumDailyTips(steamid);
+
+    if (dailyTips < 1) {
+      return res.status(403).send({ message: "You are out of daily tips" });
+    }
+
+    if (!tippedSteamID) {
+      // for old system, that didn't give a user tips
+      await players.addPlayerLog(steamid, "tip");
+      return res.status(200).json({ message: "completed" });
+    } else {
+      const playerExists = await players.doesPlayerExist(tippedSteamID);
+      if (playerExists) {
+        await players.tipPlayer(steamID, tippedSteamID);
+        return res.status(200).json({ message: "completed" });
+      } else {
+        return res.status(200).json({
+          message:
+            "Tipped player does not exist yet. Daily tip was still consumed.",
+        });
+      }
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Server Error" });
