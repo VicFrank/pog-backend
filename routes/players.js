@@ -276,7 +276,7 @@ router.post("/:steamid/tips", auth.adminAuth, async (req, res) => {
     } else {
       const playerExists = await players.doesPlayerExist(tippedSteamID);
       if (playerExists) {
-        await players.tipPlayer(steamID, tippedSteamID);
+        await players.tipPlayer(steamid, tippedSteamID);
         return res.status(200).json({ message: "completed" });
       } else {
         return res.status(200).json({
