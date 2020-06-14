@@ -747,7 +747,7 @@ module.exports = {
   async tipPlayer(steamID, tippedSteamID) {
     try {
       // log a tip event
-      await this.addPlayerLog(steamid, "tip");
+      await this.addPlayerLog(steamID, "tip");
 
       // get the player's tier
       const tier = await this.getBattlePassTier(steamID);
