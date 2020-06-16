@@ -41,6 +41,9 @@ const StripeSuccess = () =>
   import("../components/pages/subscriptions/StripeSuccess");
 const StripeCancel = () =>
   import("../components/pages/subscriptions/StripeCancel");
+const Patreon = () => import("../components/pages/patreon/Patreon");
+const RewardSuccess = () => import("../components/pages/patreon/RewardSuccess");
+const RewardFail = () => import("../components/pages/patreon/RewardFail");
 
 Vue.use(VueRouter);
 
@@ -116,6 +119,18 @@ const routes = [
   {
     path: "/patrons",
     component: Patrons,
+  },
+  {
+    path: "/patreon",
+    component: Patreon,
+  },
+  {
+    path: "/patreon/success",
+    component: RewardSuccess,
+  },
+  {
+    path: "/patreon/failure",
+    component: RewardFail,
   },
   {
     path: "/games/:game_id",

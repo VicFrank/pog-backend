@@ -2,6 +2,54 @@ var express = require("express"),
   router = express.Router(),
   passport = require("passport");
 
+const players = require("../db/players");
+const keys = require("../config/keys");
+
+const PatreonOAuth = require("patreon-oauth");
+
+const SCOPE = `identity.memberships`;
+let REDIRECT_URL = "http://localhost:8080/api/auth/patreon/callback";
+if (process.env.IS_PRODUCTION) {
+  REDIRECT_URL = "/api/auth/patreon/callback";
+} else {
+  REDIRECT_URL = "http://localhost:8080/api/auth/patreon/callback";
+}
+const patreon = new PatreonOAuth(
+  keys.patreon.oauth.clientID,
+  keys.patreon.oauth.secret,
+  SCOPE,
+  REDIRECT_URL
+);
+
+router.get("/patreon", (req, res) => {
+  res.redirect(patreon.AUTH_URL);
+});
+
+router.get("/patreon/callback", async (req, res) => {
+  patreon.handle(req, async (data) => {
+    if (data.error) {
+      res.send(data.error.message);
+      return;
+    }
+    // check if the user is pledged to our patreon
+    const POG_PATREON_ID = "43728448";
+    const pledges = data.relationships.pledges.data;
+    const isPledged = pledges.some((data) => data.id == POG_PATREON_ID);
+    if (isPledged) {
+      // Add the patreon items to the user
+      const steamID = req.user.id;
+      const cosmeticID = "carty";
+      const hasCosmetic = await players.hasCosmetic(steamID, cosmeticID);
+      if (!hasCosmetic) {
+        await players.giveCosmetic(steamID, cosmeticID);
+      }
+      return res.redirect("/patreon/success");
+    } else {
+      return res.redirect("/patreon/failure");
+    }
+  });
+});
+
 // get the current logged in user
 router.get("/steam/success", (req, res) => {
   if (req.user) {
