@@ -7,10 +7,10 @@ const keys = require("../config/keys");
 
 const PatreonOAuth = require("patreon-oauth");
 
-const SCOPE = `identity.memberships`;
+const SCOPE = `campaigns`;
 let REDIRECT_URL = "http://localhost:8080/api/auth/patreon/callback";
 if (process.env.IS_PRODUCTION) {
-  REDIRECT_URL = "/api/auth/patreon/callback";
+  REDIRECT_URL = "https://www.pathofguardians.com/api/auth/patreon/callback";
 } else {
   REDIRECT_URL = "http://localhost:8080/api/auth/patreon/callback";
 }
