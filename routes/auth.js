@@ -5,36 +5,50 @@ var express = require("express"),
 const players = require("../db/players");
 const keys = require("../config/keys");
 
-const PatreonOAuth = require("patreon-oauth");
+const { patreon, oauth } = require("patreon");
+const { getPatrons } = require("../common/patreon");
 
-const SCOPE = `campaigns`;
-let REDIRECT_URL = "http://localhost:8080/api/auth/patreon/callback";
-if (process.env.IS_PRODUCTION) {
-  REDIRECT_URL = "https://www.pathofguardians.com/api/auth/patreon/callback";
-} else {
-  REDIRECT_URL = "http://localhost:8080/api/auth/patreon/callback";
-}
-const patreon = new PatreonOAuth(
-  keys.patreon.oauth.clientID,
-  keys.patreon.oauth.secret,
-  SCOPE,
-  REDIRECT_URL
-);
+const CLIENT_ID = keys.patreon.oauth.clientID;
+const SECRET = keys.patreon.oauth.secret;
+const SCOPE = `users`;
+let REDIRECT_URL = process.env.IS_PRODUCTION
+  ? "https://www.pathofguardians.com/api/auth/patreon/callback"
+  : "http://localhost:8080/api/auth/patreon/callback";
+
+const oauthClient = oauth(CLIENT_ID, SECRET);
 
 router.get("/patreon", (req, res) => {
-  res.redirect(patreon.AUTH_URL);
+  const redirect_uri = `&redirect_uri=${REDIRECT_URL}`;
+  const scope = SCOPE ? `&scope=${SCOPE}` : "";
+  const client_id = `&client_id=${CLIENT_ID}`;
+  const redirect = `https://www.patreon.com/oauth2/authorize?response_type=code${redirect_uri}${scope}${client_id}`;
+  res.redirect(redirect);
 });
 
 router.get("/patreon/callback", async (req, res) => {
-  patreon.handle(req, async (data) => {
+  const code = req.query.code;
+
+  if (!code) return res.json({ error: "User denied authentication." });
+
+  const tokens = await oauthClient.getTokens(code, REDIRECT_URL);
+  const { access_token } = tokens;
+
+  try {
+    const patreonAPIClient = patreon(access_token);
+    const rawData = await patreonAPIClient("/current_user");
+    const data = rawData.rawJson.data;
+
     if (data.error) {
-      res.send(data.error.message);
-      return;
+      return res.send(data.error.message);
     }
+
+    const patronID = data.id;
+    const patrons = await getPatrons();
+
+    console.log(patronID);
+
     // check if the user is pledged to our patreon
-    const POG_PATREON_ID = "43728448";
-    const pledges = data.relationships.pledges.data;
-    const isPledged = pledges.some((data) => data.id == POG_PATREON_ID);
+    const isPledged = patrons.some((data) => data.id == patronID);
     if (isPledged) {
       // Add the patreon items to the user
       const steamID = req.user.id;
@@ -47,7 +61,10 @@ router.get("/patreon/callback", async (req, res) => {
     } else {
       return res.redirect("/patreon/failure");
     }
-  });
+  } catch (error) {
+    console.log(error);
+    return res.json(error);
+  }
 });
 
 // get the current logged in user
