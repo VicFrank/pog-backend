@@ -7,12 +7,7 @@
           <div class="col-xl-12">
             <div class="search-bar mb-3">
               <div class="search-input">
-                <input
-                  type="text"
-                  name="search"
-                  placeholder="Search..."
-                  v-model="searchText"
-                />
+                <input type="text" name="search" placeholder="Search..." v-model="searchText" />
               </div>
             </div>
 
@@ -43,9 +38,7 @@
               </div>
             </div>
 
-            <b-alert v-model="showError" show variant="danger" dismissible>
-              {{ error }}
-            </b-alert>
+            <b-alert v-model="showError" show variant="danger" dismissible>{{ error }}</b-alert>
 
             <div v-if="loading" class="d-flex justify-content-center mb-3">
               <b-spinner label="Loading..."></b-spinner>
@@ -75,12 +68,8 @@
                     />
                   </div>
                   <div class="cosmetic__descr">
-                    <div class="cosmetic__name">
-                      {{ $t(`cosmetics.${cosmetic.cosmetic_id}`) }}
-                    </div>
-                    <div class="text-muted">
-                      {{ $t(`cosmetics.${cosmetic.cosmetic_type}`) }}
-                    </div>
+                    <div class="cosmetic__name">{{ $t(`cosmetics.${cosmetic.cosmetic_id}`) }}</div>
+                    <div class="text-muted">{{ $t(`cosmetics.${cosmetic.cosmetic_type}`) }}</div>
                   </div>
                 </div>
                 <b-modal
@@ -92,16 +81,9 @@
                   @hide="onHide"
                 >
                   <template v-if="cosmetic.cosmetic_type !== 'Chest'">
-                    <div
-                      v-if="cosmeticMovie(cosmetic.cosmetic_id)"
-                      class="mb-2"
-                    >
+                    <div v-if="cosmeticMovie(cosmetic.cosmetic_id)" class="mb-2">
                       <video width="100%" height="360" autoplay muted loop>
-                        <source
-                          :src="cosmeticMovie(cosmetic.cosmetic_id)"
-                          type="video/webm"
-                        />
-                        Your browser does not support the video tag.
+                        <source :src="cosmeticMovie(cosmetic.cosmetic_id)" type="video/webm" />Your browser does not support the video tag.
                       </video>
                     </div>
                     <div v-else class="text-center mb-2">
@@ -114,34 +96,26 @@
                     <div
                       v-if="illegalAccelerator(cosmetic)"
                       class="text-center"
-                    >
-                      {{ $t("armory.illegal_accelerator") }}
-                    </div>
+                    >{{ $t("armory.illegal_accelerator") }}</div>
                     <div class="mt-4 d-flex justify-content-end">
                       <template v-if="equippable(cosmetic)">
                         <b-button
                           class="mr-2"
                           variant="secondary"
                           @click="hideModal(i)"
-                          >{{ $t("armory.cancel") }}</b-button
-                        >
+                        >{{ $t("armory.cancel") }}</b-button>
                         <b-button
                           v-if="!cosmetic.equipped"
                           class="mr-2"
                           variant="primary"
                           @click="equipCosmetic(cosmetic, true, i)"
-                          >{{ $t("armory.equip") }}</b-button
-                        >
+                        >{{ $t("armory.equip") }}</b-button>
                         <b-button
-                          v-if="
-                            cosmetic.equipped &&
-                              cosmetic.cosmetic_type !== 'Companion'
-                          "
+                          v-if="cosmetic.equipped"
                           class="mr-2"
                           variant="primary"
                           @click="equipCosmetic(cosmetic, false, i)"
-                          >{{ $t("armory.unequip") }}</b-button
-                        >
+                        >{{ $t("armory.unequip") }}</b-button>
                       </template>
 
                       <b-button
@@ -149,8 +123,7 @@
                         class="mr-2"
                         variant="primary"
                         @click="consumeItem(cosmetic)"
-                        >{{ $t("armory.use") }}</b-button
-                      >
+                      >{{ $t("armory.use") }}</b-button>
                     </div>
                   </template>
                   <template v-else>
@@ -192,33 +165,33 @@ export default {
     filters: [
       {
         name: "Companions",
-        active: false,
+        active: false
       },
       {
         name: "Companions FX",
-        active: false,
+        active: false
       },
       {
         name: "Chests",
-        active: false,
+        active: false
       },
       {
         name: "Battle Pass",
-        active: false,
+        active: false
       },
       {
         name: "Announcer",
-        active: false,
+        active: false
       },
       {
         name: "Equipped",
-        active: false,
+        active: false
       },
       {
         name: "All",
         isRight: true,
-        active: true,
-      },
+        active: true
+      }
     ],
     rarityFilters: [
       { name: "Common", active: false },
@@ -227,15 +200,15 @@ export default {
       { name: "Mythical", active: false },
       { name: "Legendary", active: false },
       { name: "Ancient", active: false },
-      { name: "All", active: true, isRight: true },
+      { name: "All", active: true, isRight: true }
     ],
-    activeRarityFilters: new Set(),
+    activeRarityFilters: new Set()
   }),
 
   components: {
     CosmeticsFilter,
     ChestOpener,
-    CosmeticDescription,
+    CosmeticDescription
   },
 
   computed: {
@@ -244,7 +217,7 @@ export default {
     },
     bpTier() {
       return this.$store.state.auth.bpTier;
-    },
+    }
   },
 
   created() {
@@ -254,17 +227,17 @@ export default {
   watch: {
     searchText: function() {
       this.updateFilteredCosmetics();
-    },
+    }
   },
 
   methods: {
     getPlayerCosmetics() {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/cosmetics`)
-        .then((res) => res.json())
-        .then((cosmetics) => {
+        .then(res => res.json())
+        .then(cosmetics => {
           // Filter out all the reroll items
           cosmetics = cosmetics.filter(
-            (cosmetic) => !cosmetic.cosmetic_id.includes("reroll")
+            cosmetic => !cosmetic.cosmetic_id.includes("reroll")
           );
           const sortedCosmetics = cosmetics.sort((c1, c2) => {
             if (this.isConsumableOrChest(c1) && !this.isConsumableOrChest(c2)) {
@@ -292,7 +265,7 @@ export default {
           this.updateFilteredCosmetics();
           this.loading = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.showError = true;
           this.error = err;
           this.loading = false;
@@ -360,9 +333,9 @@ export default {
       return require(`./images/${cosmeticID}.webm`);
     },
     toggleFilter(name) {
-      this.filters = this.filters.map((filter) => ({
+      this.filters = this.filters.map(filter => ({
         ...filter,
-        active: filter.name === name,
+        active: filter.name === name
       }));
 
       this.currentFilter = name;
@@ -372,15 +345,15 @@ export default {
     toggleRarityFilter(name, active) {
       if (name === "All") {
         this.activeRarityFilters.clear();
-        this.rarityFilters = this.rarityFilters.map((filter) => ({
+        this.rarityFilters = this.rarityFilters.map(filter => ({
           ...filter,
-          active: false,
+          active: false
         }));
       } else {
         if (active) {
           this.activeRarityFilters.add(name);
           // remove all from the filters if another is active
-          this.rarityFilters = this.rarityFilters.map((filter) =>
+          this.rarityFilters = this.rarityFilters.map(filter =>
             filter.name === "All" ? { ...filter, active: false } : filter
           );
         } else {
@@ -388,13 +361,13 @@ export default {
         }
       }
 
-      this.rarityFilters = this.rarityFilters.map((filter) =>
+      this.rarityFilters = this.rarityFilters.map(filter =>
         filter.name === name ? { ...filter, active: !filter.active } : filter
       );
 
       // if there are no active filters, make "all active"
       if (this.activeRarityFilters.size === 0) {
-        this.rarityFilters = this.rarityFilters.map((filter) =>
+        this.rarityFilters = this.rarityFilters.map(filter =>
           filter.name === "All" ? { ...filter, active: true } : filter
         );
       }
@@ -417,22 +390,22 @@ export default {
         fetch(`/api/players/${this.steamID}/equipped_companion`, {
           method: "post",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            companionID: cosmetic.companion_id,
-          }),
+            companionID: cosmetic.companion_id
+          })
         })
-          .then((res) => {
+          .then(res => {
             if (!res.ok) throw Error(res.statusText);
             return res;
           })
-          .then((res) => res.json())
+          .then(res => res.json())
           .then(() => {
             this.getPlayerCosmetics();
             this.hideModal(i);
           })
-          .catch((err) => {
+          .catch(err => {
             this.error = err;
             this.showError = true;
           });
@@ -440,19 +413,19 @@ export default {
         fetch(
           `/api/players/${this.steamID}/cosmetics/${cosmeticID}/equip?equip=${equip}`,
           {
-            method: "post",
+            method: "post"
           }
         )
-          .then((res) => {
+          .then(res => {
             if (!res.ok) throw Error(res.statusText);
             return res;
           })
-          .then((res) => res.json())
+          .then(res => res.json())
           .then(() => {
             this.getPlayerCosmetics();
             this.hideModal(i);
           })
-          .catch((err) => {
+          .catch(err => {
             this.error = err;
             this.showError = true;
           });
@@ -464,11 +437,11 @@ export default {
       fetch(`/api/players/${this.steamID}/use_item/${cosmeticID}`, {
         method: "post",
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       })
-        .then((res) => res.json())
-        .then((res) => {
+        .then(res => res.json())
+        .then(res => {
           if (res.error) {
             this.error = res.error;
             this.showError = true;
@@ -478,12 +451,12 @@ export default {
             this.getPlayerCosmetics();
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.error = err;
           this.showError = true;
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
