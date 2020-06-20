@@ -387,14 +387,13 @@ export default {
       const isCompanion = cosmetic.companion_level != undefined;
 
       if (isCompanion) {
+        const companionID = equip ? cosmetic.companion_id : -1;
         fetch(`/api/players/${this.steamID}/equipped_companion`, {
           method: "post",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            companionID: cosmetic.companion_id
-          })
+          body: JSON.stringify({ companionID })
         })
           .then(res => {
             if (!res.ok) throw Error(res.statusText);
