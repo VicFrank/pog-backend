@@ -224,8 +224,9 @@ router.post("/:steamid/equipped_companion", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
     const { companionID } = JSON.parse(JSON.stringify(req.body));
-    const rows = await players.setCompanion(steamid, companionID);
-    res.status(200).json(rows);
+    const companion = await players.setCompanion(steamid, companionID);
+
+    res.status(200).json(companion);
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });

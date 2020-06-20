@@ -399,7 +399,6 @@ export default {
             if (!res.ok) throw Error(res.statusText);
             return res;
           })
-          .then(res => res.json())
           .then(() => {
             this.getPlayerCosmetics();
             this.hideModal(i);
