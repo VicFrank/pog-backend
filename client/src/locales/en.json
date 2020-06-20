@@ -562,6 +562,7 @@
     "Chest": "Chest",
     "Companion": "Companion",
     "Companion FX": "Companion FX",
+    "Emblem": "Emblem",
     "Other": "Other",
     "Chest XP": "Chest XP",
     "XP": "XP",
@@ -570,7 +571,8 @@
     "Rare": "Rare",
     "Mythical": "Mythical",
     "Legendary": "Legendary",
-    "Ancient": "Ancient"
+    "Ancient": "Ancient",
+    "emblem1": "Golden Sunken Emblem"
   },
 
   "cosmetic_descriptions": {
@@ -772,7 +774,8 @@
     "xp_2": "",
     "xp_3": "",
     "xp_4": "",
-    "xp_5": ""
+    "xp_5": "",
+    "emblem1": ""
   },
 
   "quests": {

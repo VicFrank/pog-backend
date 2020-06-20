@@ -52,10 +52,16 @@ router.get("/patreon/callback", async (req, res) => {
     if (isPledged) {
       // Add the patreon items to the user
       const steamID = req.user.id;
-      const cosmeticID = "carty";
-      const hasCosmetic = await players.hasCosmetic(steamID, cosmeticID);
+      let cosmeticID = "carty";
+      let hasCosmetic = await players.hasCosmetic(steamID, cosmeticID);
       if (!hasCosmetic) {
         await players.giveCosmetic(steamID, cosmeticID);
+      }
+      cosmeticID = "emblem1";
+      hasCosmetic = await players.hasCosmetic(steamID, cosmeticID);
+      if (!hasCosmetic) {
+        await players.giveCosmetic(steamID, cosmeticID);
+        await players.equipCosmetics(steamID, cosmeticID, true);
       }
       return res.redirect("/patreon/success");
     } else {

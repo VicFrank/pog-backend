@@ -248,9 +248,17 @@ async function initializeAdmins() {
   // await loadChestRewards();
   // await loadBattlePass();
   // await loadItemPrices();
-  // // await initPlayers();
+  // await initPlayers();
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
-  // await loadNewCosmetics();
+  await loadNewCosmetics([
+    {
+      cost: -1,
+      cosmetic_id: "emblem1",
+      rarity: "Ancient",
+      type: "Emblem",
+      equip_group: "emblem",
+    },
+  ]);
 })();
