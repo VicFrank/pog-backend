@@ -106,10 +106,10 @@ let sess = {
   },
 };
 
-// if (process.env.IS_PRODUCTION) {
-//   app.set("trust proxy", 1);
-//   sess.cookie.secure = true;
-// }
+if (process.env.IS_PRODUCTION && !process.env.IS_STAGING) {
+  app.set("trust proxy", 1);
+  sess.cookie.secure = true;
+}
 
 const sessionParser = session(sess);
 

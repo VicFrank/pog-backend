@@ -5,10 +5,12 @@ const connectionManager = require("./connectionManager");
 const {
   DOTA_TEAM_GOODGUYS,
   DOTA_TEAM_BADGUYS,
+  LOBBY_LOCK_TIME,
 } = require("../common/constants");
+const { getLobby } = require("../matchmaking/lobby-players");
 
 (async function () {
-  // runTests();
+  runTests();
 })();
 
 async function runTests() {
@@ -30,13 +32,25 @@ async function runTests() {
   const player6 = steamIDs[5];
   const player7 = steamIDs[6];
 
-  // await makeLobby(player1, null, "US West");
-  // await makeLobby(player7, null, "US East");
+  // console.log("running tests");
 
-  sendChatToLobby(player1, "hey");
-  sendChatToLobby(player7, "hey");
+  // await leaveLobby(player1);
+  // await leaveLobby(player2);
+  // await leaveLobby(player3);
+  // await leaveLobby(player4);
+  // await leaveLobby(player5);
+  // await leaveLobby(player6);
 
-  console.log("run tests");
+  // const lobbyID = await makeLobby(player1, null, "US West");
+
+  // await joinLobby(player2, lobbyID, null);
+  // await joinLobby(player3, lobbyID, null);
+  // await joinLobby(player4, lobbyID, null);
+  // await joinLobby(player5, lobbyID, null);
+
+  // sendChatToLobby(player1, "hey");
+
+  // console.log("run tests");
 }
 
 /*
@@ -48,18 +62,31 @@ async function sendInitialData(steamID) {
 
   let lobby_players;
   if (lobby) {
+    // If they're in a lobby, send them the lobby info
     lobby_players = await lobbies.getLobbyPlayers(lobby.lobby_id);
+
+    const data = {
+      event: "connected",
+      data: {
+        player,
+        lobby_players,
+        lobby,
+      },
+    };
+
+    connectionManager.sendMessageToPlayer(steamID, data);
+  } else {
+    // Otherwise, send the list of lobbies
+    const lobbyList = await lobbies.getAllLobbies();
+    const data = {
+      event: "connected",
+      data: {
+        lobbyList,
+      },
+    };
+
+    connectionManager.sendMessageToPlayer(steamID, data);
   }
-
-  const data = {
-    event: "connected",
-    data: {
-      player,
-      lobby_players,
-    },
-  };
-
-  connectionManager.sendMessageToPlayer(steamID, data);
 }
 
 async function sendChatToLobby(steamID, message) {
@@ -89,30 +116,61 @@ async function sendLobbyList(steamID) {
   connectionManager.sendMessageToPlayer(steamID, data);
 }
 
+function sendError(steamID, errorMessage) {
+  const data = {
+    event: "error",
+    data: errorMessage,
+  };
+  connectionManager.sendMessageToPlayer(steamID, data);
+}
+
 async function makeLobby(steamID, avatar, region) {
+  // TODO: MMR ranges
   const minRank = 0;
   const maxRank = 0;
 
   // check to see if the player can make this lobby
-  const player = await lobbyPlayers.getPlayer(steamID);
-  if (player && player.lobby_id) return;
+  const inLobby = await lobbyPlayers.inLobby(steamID);
+  if (inLobby) {
+    console.log("Can't Make a new lobby, Player is already in a lobby");
+    sendError(steamID, "already_in_lobby");
+    return;
+  }
 
-  lobbies.makeLobby(steamID, avatar, region, minRank, maxRank);
+  return await lobbies.makeLobby(steamID, avatar, region, minRank, maxRank);
+}
+
+async function updateLobbyPlayers(lobbyID) {
+  const lobby_players = await lobbies.getLobbyPlayers(lobbyID);
+
+  const data = {
+    event: "lobby_changed",
+    data: lobby_players,
+  };
+  connectionManager.sendMessageToLobby(lobbyID, data);
 }
 
 async function joinLobby(steamID, lobbyID, avatar) {
   const lobby = await lobbies.getLobby(lobbyID);
+  const player = await lobbyPlayers.getPlayer(steamID);
 
-  // Check if lobby exists
-  if (!lobby) {
-    console.log("Lobby no longer exists");
+  const inLobby = await lobbyPlayers.inLobby(steamID);
+  if (inLobby) {
+    console.log("Can't Join lobby, Player is already in a lobby");
+    sendError(steamID, "already_in_lobby");
     return;
   }
 
-  // Check if lobby is full
+  if (!lobby) {
+    console.log("Lobby no longer exists");
+    sendError(steamID, "lobby_doesnt_exist");
+    return;
+  }
+
   const isFull = await lobbies.isFull(lobbyID);
   if (isFull) {
     console.log("Lobby is full");
+    sendError(steamID, "lobby_full");
     return;
   }
 
@@ -120,6 +178,14 @@ async function joinLobby(steamID, lobbyID, avatar) {
   const meetsRequirements = true;
   if (!meetsRequirements) {
     console.log("You don't meet the lobby requirements");
+    sendError(steamID, "failed_lobby_requirements");
+    return;
+  }
+
+  const isLocked = await lobbies.isLobbyLocked(lobbyID);
+  if (isLocked) {
+    console.log("Can't leave, Lobby is locked");
+    sendError(steamID, "lobby_locked");
     return;
   }
 
@@ -144,13 +210,22 @@ async function joinLobby(steamID, lobbyID, avatar) {
     data: lobby_players,
   };
   connectionManager.sendMessageToPlayer(steamID, data);
+  updateLobbyPlayers(lobbyID);
 }
 
 async function leaveLobby(steamID) {
+  // Make sure the player is in the lobby
   const player = await lobbyPlayers.getPlayer(steamID);
   if (!player || !player.lobby_id) return;
 
   const lobbyID = player.lobby_id;
+
+  // You can't leave if the lobby is locked
+  const isLocked = await lobbies.isLobbyLocked(lobbyID);
+  if (isLocked) {
+    sendError(steamID, "lobby_locked");
+    return;
+  }
 
   const data = {
     event: "left_lobby",
@@ -166,9 +241,8 @@ async function leaveLobby(steamID) {
 
   // Destroy the lobby if it is now empty
   const lobbySize = await lobbies.getLobbySize(lobbyID);
-  console.log("Lobby size", lobbySize);
   if (lobbySize == 0) {
-    lobbies.deleteLobby(lobbyID);
+    deleteLobby(lobbyID);
     return;
   }
 
@@ -176,6 +250,19 @@ async function leaveLobby(steamID) {
   if (player.is_host) {
     lobbies.updateHost(lobbyID);
   }
+
+  updateLobbyPlayers(lobbyID);
+}
+
+async function deleteLobby(lobbyID) {
+  const data = {
+    event: "left_lobby",
+  };
+
+  // inform all remaining players that they've left the lobby
+  // await to make sure we get the lobby players before it's destroyed
+  await connectionManager.sendMessageToLobby(lobbyID, data);
+  lobbies.deleteLobby(lobbyID);
 }
 
 function getEnemyTeam(team) {
@@ -204,30 +291,53 @@ async function changeTeam(steamID) {
     return;
   }
 
-  const data = {
-    event: "team_changed",
-    data: {
-      steamID,
-      enemyTeam,
-    },
-  };
-  connectionManager.sendMessageToPlayer(lobby.lobbyID, data);
+  updateLobbyPlayers(lobbyID);
 }
 
-async function generatePassword() {
+function generatePassword() {
   return (Math.random().toString(36) + "00000000000000000").slice(2, 7);
 }
 
-function onLobbyFull(lobbyID) {
-  // TODO: Wait for confirmation? Close the lobby?
+async function onLobbyFull(lobbyID) {
+  // Make sure the lobby is full (this may be redundant)
+  const isFull = await lobbies.isFull(lobbyID);
+  if (!isFull) return;
 
-  // Send the lobby the dota lobby password
+  // Lock the lobby
+  await lobbies.lockLobby(lobbyID);
+
+  connectionManager.sendMessageToLobby(lobbyID, {
+    event: "lobby_locked",
+    data: true,
+  });
+
+  // Send the password
   const password = generatePassword();
   const data = {
     event: "password",
     data: password,
   };
+  lobbies.setLobbyPassword(lobbyID, password);
+
   connectionManager.sendMessageToLobby(lobbyID, data);
+
+  // TODO: After 5 minutes, unlock the lobby
+  setTimeout(() => {
+    unlockLobby(lobbyID);
+  }, LOBBY_LOCK_TIME * 1000);
+}
+
+async function unlockLobby(lobbyID) {
+  // Make sure the lobby still exists
+  const lobby = await lobbies.getLobby(lobbyID);
+  if (!lobby) return;
+
+  await lobbies.unlockLobby(lobbyID);
+
+  connectionManager.sendMessageToLobby(lobbyID, {
+    event: "lobby_locked",
+    data: false,
+  });
 }
 
 module.exports = connection = (ws, user) => {
@@ -297,7 +407,8 @@ module.exports = connection = (ws, user) => {
   });
 
   ws.on("close", function () {
-    // TODO: User has closed the websocket, remove them from their lobby
+    // TODO: Remove player from the lobby if they've been disconnected
+    // long enough
     console.log(`Websocket Closed: ${username} ${steamID}`);
 
     connectionManager.removeConnection(steamID);

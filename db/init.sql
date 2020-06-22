@@ -281,7 +281,8 @@ CREATE TABLE IF NOT EXISTS lobbies (
   region TEXT,
   min_rank INTEGER,
   max_rank INTEGER,
-  lobby_password TEXT
+  lobby_password TEXT,
+  lock_time TIMESTAMPTZ
 );
 
 DROP TABLE IF EXISTS lobby_players;

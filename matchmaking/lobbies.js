@@ -2,6 +2,7 @@ const { query, pool } = require("../db/index");
 const {
   DOTA_TEAM_GOODGUYS,
   DOTA_TEAM_BADGUYS,
+  LOBBY_LOCK_TIME,
 } = require("../common/constants");
 const lobbyPlayers = require("./lobby-players");
 
@@ -13,6 +14,7 @@ module.exports = {
     FROM lobbies
     JOIN lobby_players
     USING (lobby_id)
+    WHERE (lock_time < NOW() - INTERVAL '${LOBBY_LOCK_TIME} SECONDS') IS NOT TRUE
     GROUP BY lobby_id`;
     const { rows } = await query(queryText);
     return rows;
@@ -20,12 +22,47 @@ module.exports = {
 
   async getLobby(lobbyID) {
     const queryText = `
-    SELECT * FROM lobbies
+    SELECT lobby_id, region, min_rank, max_rank, lobby_password,
+      (lock_time < NOW() - INTERVAL '${LOBBY_LOCK_TIME} SECONDS') as locked,
+      EXTRACT(EPOCH FROM NOW()) - EXTRACT(EPOCH FROM lock_time) as time_since_lock
+    FROM lobbies
     WHERE lobby_id = $1
     `;
     const { rows } = await query(queryText, [lobbyID]);
 
-    return rows[0];
+    const lobby = rows[0];
+    if (lobby.locked == null) {
+      lobby.locked = false;
+    }
+
+    return lobby;
+  },
+
+  async isLobbyLocked(lobbyID) {
+    const lobby = await this.getLobby(lobbyID);
+    return false;
+  },
+
+  async lockLobby(lobbyID) {
+    const queryText = `
+      UPDATE lobbies SET lock_time = NOW() WHERE lobby_id = $1
+    `;
+    await query(queryText, [lobbyID]);
+  },
+
+  async unlockLobby(lobbyID) {
+    const queryText = `
+      UPDATE lobbies SET lock_time = NULL WHERE lobby_id = $1
+    `;
+    await query(queryText, [lobbyID]);
+  },
+
+  async setLobbyPassword(lobbyID, password) {
+    const queryText = `
+      UPDATE lobbies SET lobby_password = $2
+      WHERE lobby_id = $1
+    `;
+    await query(queryText, [lobbyID, password]);
   },
 
   async getLobbyPlayers(lobbyID) {
@@ -104,6 +141,8 @@ module.exports = {
       ]);
 
       await client.query("COMMIT");
+
+      return lobbyID;
     } catch (e) {
       await client.query("ROLLBACK");
       throw e;
@@ -113,6 +152,7 @@ module.exports = {
   },
 
   async deleteLobby(lobbyID) {
+    console.log(`Deleting Lobby ${lobbyID}`);
     let queryText = `DELETE FROM lobby_players WHERE lobby_id = $1`;
     await query(queryText, [lobbyID]);
     queryText = `DELETE FROM lobbies WHERE lobby_id = $1`;
@@ -127,7 +167,7 @@ module.exports = {
       if (player.is_host) return;
     }
 
-    const newHostSteamID = players[0].steamID;
+    const newHostSteamID = players[0].steam_id;
     await lobbyPlayers.setIsHost(newHostSteamID, true);
   },
 };

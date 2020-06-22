@@ -2,9 +2,8 @@
   <tr :class="{joinable: joinable}" @click="joinLobby">
     <td>
       <div v-if="lobby">
-        Lobby ID: {{lobby.lobby_id}}
-        <span class="ml-3">Players: {{lobby.lobbysize}}</span>
-        <span class="ml-3">Region: {{lobby.region}}</span>
+        <span>{{lobby.lobbysize}}/6</span>
+        <span class="ml-3">{{lobby.region}}</span>
       </div>
       <div v-else class="text-muted">Empty Lobby</div>
     </td>

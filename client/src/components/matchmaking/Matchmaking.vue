@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-if="initialLoading">Waiting for initial websocket response</div>
-    <b-button @click="testRefresh">Refresh Connection</b-button>
+    <b-button @click="refreshConnection" v-if="disconnected">Refresh Connection</b-button>
     <template v-if="loggedIn">
       <template v-if="!inLobby">
         <Lobbies />
@@ -11,17 +11,23 @@
       </template>
     </template>
     <template v-else>You need to log in, dog</template>
+    <Disconnected />
+    <ErrorMessage />
   </div>
 </template>
 
 <script>
 import Lobbies from "./Lobbies";
 import Lobby from "./lobby/Lobby";
+import Disconnected from "./modals/Disconnected";
+import ErrorMessage from "./modals/ErrorMessage";
 
 export default {
   components: {
     Lobbies,
-    Lobby
+    Lobby,
+    Disconnected,
+    ErrorMessage
   },
 
   computed: {
@@ -33,11 +39,14 @@ export default {
     },
     loggedIn() {
       return this.$store.getters.loggedIn;
+    },
+    disconnected() {
+      return this.$store.getters.disconnected;
     }
   },
 
   methods: {
-    testRefresh() {
+    refreshConnection() {
       this.$store.dispatch("refreshConnection");
     }
   }

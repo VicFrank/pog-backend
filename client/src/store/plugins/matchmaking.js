@@ -52,14 +52,23 @@ function connect(store) {
         case "lobby_changed":
           store.dispatch("updateLobbyPlayers", data);
           break;
+        case "lobby_locked":
+          store.dispatch("setLobbyLocked", data);
+          break;
         case "connected":
           store.dispatch("onConnected", data);
+          break;
+        case "password":
+          store.dispatch("addMessage", data);
           break;
         case "chat":
           store.dispatch("addMessage", data);
           break;
         case "lobbies_list":
           store.dispatch("setLobbies", data);
+          break;
+        case "error":
+          store.dispatch("connectionError", data);
           break;
       }
     } catch (error) {
@@ -70,6 +79,7 @@ function connect(store) {
   connection.onclose = (e) => {
     console.log(`websocket closed ${e}`);
     clearTimeout(connection.pingTimeout);
+    store.dispatch("setDisconnected", true);
   };
 }
 
@@ -85,6 +95,7 @@ export default function createWebSocketPlugin() {
       if (isClosed()) {
         console.log("Websocket is closed");
         connect(store);
+        store.dispatch("setDisconnected", true);
         return;
       }
       if (!state.matchmaking.connected) {

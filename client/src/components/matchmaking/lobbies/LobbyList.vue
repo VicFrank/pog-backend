@@ -24,8 +24,19 @@ export default {
   components: {
     LobbyPreview
   },
+  data: () => ({
+    interval: null
+  }),
   created() {
     this.refreshLobbies();
+
+    // Refresh the lobbies every 30 seconds
+    this.interval = setInterval(() => {
+      this.refreshLobbies();
+    }, 30000);
+  },
+  destroyed() {
+    clearInterval(this.interval);
   },
   computed: {
     lobbies() {

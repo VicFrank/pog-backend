@@ -10,10 +10,14 @@ function getLocalPlayer(rootState) {
 
 const state = {
   connected: false,
+
+  newError: false,
   error: "",
 
   initialLoading: true,
   loadingLobbies: true,
+
+  disconnected: false,
 
   lobbies: [],
 
@@ -24,22 +28,34 @@ const state = {
 
   chatMessages: [],
   lobbyPlayers: [],
-  lobbyPassword: "",
+  lobbyPassword: null,
   lobbyRegion: "",
+  isLobbyLocked: false,
+  timeSinceLock: null,
 };
 
 const getters = {
   initialLoading: (state) => state.initialLoading,
   loadingLobbies: (state) => state.loadingLobbies,
+  disconnected: (state) => state.disconnected,
+  websocketError: (state) => state.error,
+  newError: (state) => state.newError,
+
   lobbies: (state) => state.lobbies,
   chatMessages: (state) => state.chatMessages,
   inLobby: (state) => state.inLobby,
+  isLobbyLocked: (state) => state.isLobbyLocked,
+  lobbyPassword: (state) => state.lobbyPassword,
+  isHost: (state) => state.isHost,
+
   radiantPlayers: (state) => {
     return state.lobbyPlayers.filter((player) => player.team === 2);
   },
   direPlayers: (state) => {
     return state.lobbyPlayers.filter((player) => player.team === 3);
   },
+  lobbyPlayers: (state) => state.lobbyPlayers,
+  lockTimeRemaining: (state) => Math.min(0, state.timeSinceLock - 60 * 5),
 };
 
 const actions = {
@@ -51,12 +67,16 @@ const actions = {
   },
   connectionOpened({ commit }) {
     commit("SET_CONNECTION", true);
+    commit("SET_DISCONNECTED", false);
   },
   connectionClosed({ commit }) {
     commit("SET_CONNECTION", false);
   },
   connectionError({ commit }, error) {
     commit("SET_ERROR", error);
+  },
+  errorRecieved({ commit }) {
+    commit("ERROR_RECIEVED");
   },
   sendMessage({ commit }, message) {
     commit("SEND_MESSAGE", message);
@@ -105,21 +125,36 @@ const actions = {
   refreshConnection({ commit }) {
     commit("REFRESH_CONNECTION");
   },
+  setDisconnected({ commit }, disconnected) {
+    commit("SET_DISCONNECTED", disconnected);
+  },
+  setLobbyLocked({ commit }, isLocked) {
+    commit("SET_LOBBY_LOCKED", isLocked);
+  },
+  setPassword({ commit }, password) {
+    commit("SET_PASSWORD", password);
+  },
 };
 
 const mutations = {
   INIT_DATA(state, data) {
     // If we were already in a lobby, throw us in there
     // and initialize the data
-    const { player, lobby_players } = data;
+    const { player, lobby_players, lobbyList, lobby } = data;
     if (player) {
       state.inLobby = true;
       state.lobbyPlayers = lobby_players;
       state.team = player.team;
       state.isHost = player.is_host;
       state.ready = player.ready;
+      state.lobbyPassword = lobby.lobby_password;
+      state.lobbyRegion = lobby.region;
+      state.isLobbyLocked = lobby.locked;
+      state.timeSinceLock = lobby.time_since_lock;
     }
-
+    if (lobbyList) {
+      state.lobbies = lobbyList;
+    }
     state.initialLoading = false;
     state.loadingLobbies = false;
   },
@@ -135,7 +170,11 @@ const mutations = {
     state.connected = message;
   },
   SET_ERROR(state, error) {
+    state.newError = true;
     state.error = error;
+  },
+  ERROR_RECIEVED(state) {
+    state.newError = false;
   },
   // eslint-disable-next-line no-unused-vars
   SEND_MESSAGE(state, message) {},
@@ -156,6 +195,9 @@ const mutations = {
     const player = getLocalPlayer(this.state);
     state.lobbyPlayers.push(player);
   },
+  SET_PASSWORD(state, password) {
+    state.lobbyPassword = password;
+  },
   // eslint-disable-next-line no-unused-vars
   TRY_JOIN_LOBBY(state) {},
   JOIN_LOBBY(state, lobbyPlayers) {
@@ -168,10 +210,12 @@ const mutations = {
     state.inLobby = false;
     state.lobbyPlayers = [];
     state.chatMessages = [];
-    state.lobbyPassword = "";
+    state.lobbyPassword = null;
     state.lobbyRegion = "";
     state.team = -1;
     state.isHost = false;
+    state.isLobbyLocked = false;
+    state.timeSinceLock = null;
   },
   ADD_LOBBY_PLAYER(state, lobbyPlayer) {
     state.lobbyPlayers.push(lobbyPlayer);
@@ -183,6 +227,14 @@ const mutations = {
   },
   UPDATE_LOBBY_PLAYERS(state, lobbyPlayers) {
     if (state.inLobby) state.lobbyPlayers = lobbyPlayers;
+  },
+  SET_DISCONNECTED(state, disconnected) {
+    state.disconnected = disconnected;
+  },
+  SET_LOBBY_LOCKED(state, locked) {
+    state.isLobbyLocked = locked;
+    if (locked) state.timeSinceLock = 0;
+    else state.timeSinceLock = null;
   },
 };
 

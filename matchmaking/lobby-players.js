@@ -8,13 +8,20 @@ module.exports = {
   async getLobby(steamID) {
     try {
       const sql_query = `
-      SELECT * FROM lobbies JOIN lobby_players USING (lobby_id)
+      SELECT lobby_id, region, min_rank, max_rank, lobby_password,
+        (lock_time < NOW() - INTERVAL '5 MINUTES') as locked,
+        EXTRACT(EPOCH FROM NOW()) - EXTRACT(EPOCH FROM lock_time) as time_since_lock
+      FROM lobbies JOIN lobby_players USING (lobby_id)
       WHERE steam_id = $1
       `;
       const { rows } = await query(sql_query, [steamID]);
-      return rows[0];
+
+      const lobby = rows[0];
+      if (lobby.locked == null) {
+        lobby.locked = false;
+      }
+      return lobby;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   },
@@ -50,5 +57,12 @@ module.exports = {
   async setIsHost(steamID, isHost) {
     const queryText = `UPDATE lobby_players SET is_host = $2 WHERE steam_id = $1`;
     await query(queryText, [steamID, isHost]);
+  },
+
+  async inLobby(steamID) {
+    const player = await this.getPlayer(steamID);
+    if (!player) return false;
+    if (!player.lobby_id) return false;
+    return true;
   },
 };

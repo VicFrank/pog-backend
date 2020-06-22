@@ -916,10 +916,7 @@ module.exports = {
         `;
         await query(queryText, [statResetDate, steamID]);
       }
-
-      await query("COMMIT");
     } catch (error) {
-      await query("ROLLBACK");
       throw error;
     }
   },

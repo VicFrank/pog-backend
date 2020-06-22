@@ -1,6 +1,6 @@
 <template>
   <table class="table">
-    <tbody>
+    <!-- <tbody>
       <tr>
         <td class="team-header radiant-color">Lorekeepers</td>
       </tr>
@@ -13,6 +13,14 @@
       <tr v-for="i in 3" :key="3+i">
         <Player :player="dire[i-1]" />
       </tr>
+    </tbody>-->
+    <tbody>
+      <tr>
+        <td class="team-header">Players</td>
+      </tr>
+      <tr v-for="i in 6" :key="i">
+        <Player :player="players[i-1]" />
+      </tr>
     </tbody>
   </table>
 </template>
@@ -24,11 +32,14 @@ export default {
     Player
   },
   computed: {
-    radiant() {
-      return this.$store.getters.radiantPlayers;
-    },
-    dire() {
-      return this.$store.getters.direPlayers;
+    // radiant() {
+    //   return this.$store.getters.radiantPlayers;
+    // },
+    // dire() {
+    //   return this.$store.getters.direPlayers;
+    // }
+    players() {
+      return this.$store.getters.lobbyPlayers;
     }
   }
 };
