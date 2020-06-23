@@ -231,7 +231,7 @@ async function leaveLobby(steamID) {
   await lobbyPlayers.leaveLobby(steamID);
 
   // Inform the lobby that a player left
-  connectionManager.sendMessageToLobby(lobbyID, data);
+  updateLobbyPlayers(lobbyID);
   // Confirm to the player that they left
   connectionManager.sendMessageToPlayer(steamID, data);
 
