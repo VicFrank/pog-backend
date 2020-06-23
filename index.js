@@ -173,8 +173,6 @@ const wss = new WebSocket.Server({
 });
 
 server.on("upgrade", (req, socket, head) => {
-  console.log("Parsing session from request...");
-
   sessionParser(req, {}, () => {
     if (!req.session.passport) {
       console.log("Session or Passport not found");
@@ -213,7 +211,6 @@ const interval = setInterval(function ping() {
 
     ws.isAlive = false;
 
-    console.log("ping");
     ws.send(JSON.stringify({ event: "ping" }));
   });
 }, 30000);

@@ -55,7 +55,8 @@ const getters = {
     return state.lobbyPlayers.filter((player) => player.team === 3);
   },
   lobbyPlayers: (state) => state.lobbyPlayers,
-  lockTimeRemaining: (state) => Math.min(0, state.timeSinceLock - 60 * 5),
+  lockTimeRemaining: (state) =>
+    Math.floor(Math.max(0, 60 * 5 - state.timeSinceLock)),
 };
 
 const actions = {

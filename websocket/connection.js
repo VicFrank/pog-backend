@@ -117,6 +117,8 @@ async function sendLobbyList(steamID) {
 }
 
 function sendError(steamID, errorMessage) {
+  console.log(`${steamID}: ${errorMessage}`);
+
   const data = {
     event: "error",
     data: errorMessage,
@@ -132,7 +134,6 @@ async function makeLobby(steamID, avatar, region) {
   // check to see if the player can make this lobby
   const inLobby = await lobbyPlayers.inLobby(steamID);
   if (inLobby) {
-    console.log("Can't Make a new lobby, Player is already in a lobby");
     sendError(steamID, "already_in_lobby");
     return;
   }
@@ -156,20 +157,17 @@ async function joinLobby(steamID, lobbyID, avatar) {
 
   const inLobby = await lobbyPlayers.inLobby(steamID);
   if (inLobby) {
-    console.log("Can't Join lobby, Player is already in a lobby");
     sendError(steamID, "already_in_lobby");
     return;
   }
 
   if (!lobby) {
-    console.log("Lobby no longer exists");
     sendError(steamID, "lobby_doesnt_exist");
     return;
   }
 
   const isFull = await lobbies.isFull(lobbyID);
   if (isFull) {
-    console.log("Lobby is full");
     sendError(steamID, "lobby_full");
     return;
   }
@@ -177,14 +175,12 @@ async function joinLobby(steamID, lobbyID, avatar) {
   // TODO: Check if player meets mmr requirements
   const meetsRequirements = true;
   if (!meetsRequirements) {
-    console.log("You don't meet the lobby requirements");
     sendError(steamID, "failed_lobby_requirements");
     return;
   }
 
   const isLocked = await lobbies.isLobbyLocked(lobbyID);
   if (isLocked) {
-    console.log("Can't leave, Lobby is locked");
     sendError(steamID, "lobby_locked");
     return;
   }
@@ -350,7 +346,7 @@ module.exports = connection = (ws, user) => {
 
   connectionManager.addConnection(steamID, ws);
 
-  console.log(`Web Socket Connect: ${username} ${steamID}`);
+  // console.log(`Web Socket Connect: ${username} ${steamID}`);
 
   ws.on("message", (message) => {
     // Send a message to the user's current chat channel
@@ -365,7 +361,9 @@ module.exports = connection = (ws, user) => {
       return;
     }
 
-    console.log(`Received event ${event} from user ${username}`);
+    if (event !== "pong") {
+      console.log(`Received event ${event} from user ${username}`);
+    }
 
     switch (event) {
       case "connected":

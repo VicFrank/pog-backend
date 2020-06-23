@@ -14,7 +14,7 @@ module.exports = {
     FROM lobbies
     JOIN lobby_players
     USING (lobby_id)
-    WHERE (lock_time < NOW() - INTERVAL '${LOBBY_LOCK_TIME} SECONDS') IS NOT TRUE
+    WHERE (lock_time > NOW() - INTERVAL '${LOBBY_LOCK_TIME} SECONDS') IS NOT TRUE
     GROUP BY lobby_id`;
     const { rows } = await query(queryText);
     return rows;
@@ -23,7 +23,7 @@ module.exports = {
   async getLobby(lobbyID) {
     const queryText = `
     SELECT lobby_id, region, min_rank, max_rank, lobby_password,
-      (lock_time < NOW() - INTERVAL '${LOBBY_LOCK_TIME} SECONDS') as locked,
+      (lock_time > NOW() - INTERVAL '${LOBBY_LOCK_TIME} SECONDS') as locked,
       EXTRACT(EPOCH FROM NOW()) - EXTRACT(EPOCH FROM lock_time) as time_since_lock
     FROM lobbies
     WHERE lobby_id = $1
@@ -31,7 +31,7 @@ module.exports = {
     const { rows } = await query(queryText, [lobbyID]);
 
     const lobby = rows[0];
-    if (lobby.locked == null) {
+    if (lobby && lobby.locked == null) {
       lobby.locked = false;
     }
 

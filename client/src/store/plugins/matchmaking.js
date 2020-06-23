@@ -5,7 +5,6 @@ const port = hostname === "localhost" ? ":3000" : "";
 let connection;
 
 function heartbeat(connection) {
-  console.log("heartbeat");
   clearTimeout(connection.pingTimeout);
 
   const msg = JSON.stringify({ event: "pong" });
@@ -59,7 +58,7 @@ function connect(store) {
           store.dispatch("onConnected", data);
           break;
         case "password":
-          store.dispatch("addMessage", data);
+          store.dispatch("setPassword", data);
           break;
         case "chat":
           store.dispatch("addMessage", data);

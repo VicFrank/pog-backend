@@ -2,11 +2,17 @@
   <div>
     <h1 class="blue">
       Lobby
-      <i v-if="locked" class="fas fa-lock ml-1"></i>
+      <template v-if="locked">
+        <i class="fas fa-lock mx-1"></i>
+      </template>
     </h1>
+    <p
+      v-if="locked"
+      class="text-muted"
+    >Lobby is locked for another {{ lockTimeRemaining | hhmmss }} seconds</p>
     <h2 v-if="lobbyPassword">
       <span class="text-muted">Password:</span>
-      {{lobbyPassword}}
+      {{ lobbyPassword }}
     </h2>
     <p
       v-if="lobbyPassword && isHost"
@@ -45,10 +51,12 @@ export default {
     },
     isHost() {
       return this.$store.getters.isHost;
+    },
+    lockTimeRemaining() {
+      return this.$store.getters.lockTimeRemaining;
     }
   }
 };
 </script>
 
-<style>
-</style>
+<style></style>
