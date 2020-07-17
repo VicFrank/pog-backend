@@ -1133,7 +1133,7 @@
     "insatiable_thirst": "Insatiable Thirst",
     "insatiable_thirst_description": "If 2 or more heroes attack Lulu, her thirst manifests, granting her 90 bonus damage and 175% lifesteal for 30 seconds.",
     "cursed_chalice": "Cursed Chalice",
-    "cursed_chalice_description": "Upon death, the team that slays Bucket will receive an Artifact belonging to the Guardian of Time for 5 minutes. +25% lifesteal and spell lifesteal against enemy heroes. 10% to other sources."
+    "cursed_chalice_description": "Upon death, the team that slays Lulu will receive an Artifact belonging to the Guardian of Time for 5 minutes. +25% lifesteal and spell lifesteal against enemy heroes. 10% to other sources."
   },
 
   "credits": {
