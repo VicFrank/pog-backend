@@ -1136,6 +1136,90 @@
     "cursed_chalice_description": "Upon death, the team that slays Lulu will receive an Artifact belonging to the Guardian of Time for 5 minutes. +25% lifesteal and spell lifesteal against enemy heroes. 10% to other sources."
   },
 
+  "custom_heroes": {
+    "page_title": "Custom Heroes",
+    "mifune": {
+      "name": "Mifune",
+      "talents": [
+        "+50 Ephemeral Slash Damage",
+        "+500 Ephemeral Slash Range",
+        "+125 Zanmato Damage",
+        "+30% Echo Strike Evasion",
+        "Hides Shattered Souls colors",
+        "Echo Strike grants 40 movement speed",
+        "+0.4s Zanmato slow duration",
+        "-4s Echo Strike cooldown"
+      ],
+      "abilities": [
+        {
+          "ability": "raigeki",
+          "name": "Ephemeral Slash",
+          "description": "Mifune projects his essence, quickly traveling to a target point, and dealing damage to any enemies along the way. He arrives with a devastating flourish, dealing bonus magical damage to enemies at the end of the path and blinding them."
+        },
+        {
+          "ability": "bushido",
+          "name": "Echo Strike",
+          "description": "Passively retaliates with an attack against any enemy which misses Mifune. Can be activated to grant bonus evasion."
+        },
+        {
+          "ability": "zanmato",
+          "name": "Zanmato",
+          "description": "On his next attack, Mifune deals bonus magic damage, and slows the target. Mifune's illusions benefit from Zanmato."
+        },
+        {
+          "ability": "genso",
+          "name": "Shattered Souls",
+          "description": "Mifune summons three stationary ancestral souls, each of which curses nearby enemies with a different affliction. The curses' radius grows over time, and is reduced whenever one of the souls is killed. The souls are magic immune and can be killed by attacking them 3 times, but every time one of them is destroyed, the remaining souls' curses level up, increasing in power.Soul of Despair (red): reduces armor. Reduction is doubled when the curse levels up. Soul of Regret (blue): Periodically stuns a random enemy hero in range. Stun interval reduced when the curse levels up.Soul of Suffering (green): deals damage. Damage doubles when the curse levels up."
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": "Summons an additional Soul of Regret"
+        }
+      ]
+    },
+    "brax": {
+      "name": "Thunder Boar",
+      "talents": [
+        "+15s Thunder Pup duration",
+        "+5 Armor",
+        "Thunder Pups grant 2% move speed",
+        "+15% Evasion",
+        "+400 Thunder Rush cast range",
+        "+75 Thunder Stomp damage",
+        "+8 maximum Thunder Pups",
+        "Thunder Stomp deals pure damage and pierces spell immunity"
+      ],
+      "abilities": [
+        {
+          "ability": "stomp",
+          "name": "Thunder Rush",
+          "description": "Thunder Boar stomps the ground in sexual frustration, creating 3 rings of shockwaves which slow and deal damage."
+        },
+        {
+          "ability": "rush",
+          "name": "Thunder Pups",
+          "description": "Rushes towards a target point. On arrival, drags all units in a cone in front of you towards your position, mini-stunning and dealing damage in the process."
+        },
+        {
+          "ability": "tornado",
+          "name": "Thunder Dome",
+          "description": "Killing enemy units summons a Thunder Pup. They scurry around their master randomly, dealing damage per second to nearby enemies. Activating this ability sacrifices the oldest Thunder Pup, healing Thunder Boar."
+        },
+        {
+          "ability": "kinetic_energy",
+          "name": "Static Electricity",
+          "description": "Grants Thunder Boar maximum Thunder Pups, and creates a huge area where enemies are slowed. The slow is stronger closer to the center of the effect. The Thunder Dome ends if Thunder Boar leaves its area."
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": "Thunder Rush now pulls enemies in a full circle around the target point."
+        }
+      ]
+    }
+  },
+
   "credits": {
     "page_title": "Our Team",
     "sunsfan_credit": "SUNSfan - Project Lead {contact}",

@@ -45,6 +45,9 @@ const Patreon = () => import("../components/pages/patreon/Patreon");
 const RewardSuccess = () => import("../components/pages/patreon/RewardSuccess");
 const RewardFail = () => import("../components/pages/patreon/RewardFail");
 
+const CustomHeroPage = () => import("../components/pages/learn/HeroPage");
+const CustomHeroes = () => import("../components/pages/learn/CustomHeroes");
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -103,6 +106,14 @@ const routes = [
   {
     path: "/guardians",
     component: Guardians,
+  },
+  {
+    path: "/custom_heroes",
+    component: CustomHeroes,
+  },
+  {
+    path: "/custom_heroes/:hero",
+    component: CustomHeroPage,
   },
   {
     path: "/media",
