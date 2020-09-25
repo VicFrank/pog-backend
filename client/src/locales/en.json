@@ -1193,22 +1193,22 @@
       "abilities": [
         {
           "ability": "stomp",
-          "name": "Thunder Rush",
+          "name": "Thunder STomp",
           "description": "Thunder Boar stomps the ground in sexual frustration, creating 3 rings of shockwaves which slow and deal damage."
         },
         {
           "ability": "rush",
-          "name": "Thunder Pups",
+          "name": "Thunder Rush",
           "description": "Rushes towards a target point. On arrival, drags all units in a cone in front of you towards your position, mini-stunning and dealing damage in the process."
         },
         {
           "ability": "tornado",
-          "name": "Thunder Dome",
+          "name": "Thunder Pups",
           "description": "Killing enemy units summons a Thunder Pup. They scurry around their master randomly, dealing damage per second to nearby enemies. Activating this ability sacrifices the oldest Thunder Pup, healing Thunder Boar."
         },
         {
           "ability": "kinetic_energy",
-          "name": "Static Electricity",
+          "name": "Thunder Dome",
           "description": "Grants Thunder Boar maximum Thunder Pups, and creates a huge area where enemies are slowed. The slow is stronger closer to the center of the effect. The Thunder Dome ends if Thunder Boar leaves its area."
         },
         {
