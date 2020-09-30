@@ -65,11 +65,6 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
     if (paidAmount != cost_usd) {
       return res.status(400).send({ message: "Invalid Payment" });
     }
-    const validReward = item_type === "POGGERS" || item_type === "XP";
-    if (!validReward) {
-      return res.status(400).send({ message: "Invalid Item Type" });
-    }
-
     // Call PayPal to capture the order
     request = new checkoutNodeJssdk.orders.OrdersCaptureRequest(orderID);
     request.requestBody({});
@@ -179,17 +174,13 @@ router.post("/stripe/intents", async (req, res) => {
   const { name, amount, steamID } = req.body;
 
   const itemData = await cosmetics.getItemPrice(name);
-  const { cost_usd, item_type } = itemData;
+  const { cost_usd } = itemData;
 
   if (!itemData) {
     return res.status(400).send({ message: "Invalid ItemID" });
   }
   if (amount / 100 != cost_usd) {
     return res.status(400).send({ message: "Invalid Payment Amount" });
-  }
-  const validReward = item_type === "POGGERS" || item_type === "XP";
-  if (!validReward) {
-    return res.status(400).send({ message: "Invalid Item Type" });
   }
 
   const paymentIntent = await stripeClient.client.paymentIntents.create({
@@ -222,6 +213,12 @@ async function stripePaymentIntentSucceeded(intent) {
         await players.modifyPoggers(steamID, reward);
       } else if (item_type === "XP") {
         await players.addBattlePassExp(steamID, reward);
+      } else if (item_type === "BP1") {
+        await players.addBattlePassTier(steamID, 1, 31 * reward);
+      } else if (item_type === "BP2") {
+        await players.addBattlePassTier(steamID, 2, 31 * reward);
+      } else if (item_type === "BP3") {
+        await players.addBattlePassTier(steamID, 3, 31 * reward);
       } else {
         throw new Error("Bad item type");
       }
@@ -255,6 +252,12 @@ async function stripeChargeSucceeded(intent) {
         await players.modifyPoggers(steamID, reward);
       } else if (item_type === "XP") {
         await players.addBattlePassExp(steamID, reward);
+      } else if (item_type === "BP1") {
+        await players.addBattlePassTier(steamID, 1, 31 * reward);
+      } else if (item_type === "BP2") {
+        await players.addBattlePassTier(steamID, 1, 31 * reward);
+      } else if (item_type === "BP3") {
+        await players.addBattlePassTier(steamID, 1, 31 * reward);
       } else {
         throw new Error("Bad item type");
       }
@@ -282,7 +285,7 @@ async function stripeChargeSucceeded(intent) {
       return;
     }
 
-    const steamID = player.steamID;
+    const steamID = player.steam_id;
 
     switch (amount) {
       case 200:
@@ -328,9 +331,8 @@ async function handleStripeSubscription(session) {
 async function isValidStripeTransaction(itemID, amount) {
   const itemData = await cosmetics.getItemPrice(itemID);
   const { cost_usd, item_type } = itemData;
-  const validReward = item_type === "POGGERS" || item_type === "XP";
 
-  if (!itemData || amount / 100 != cost_usd || !validReward) {
+  if (!itemData || amount / 100 != cost_usd) {
     return false;
   }
 
@@ -352,6 +354,28 @@ router.post("/stripe/cancel_subscription", async (req, res) => {
   res.send(deletedSubscription);
 });
 
+router.get(
+  "/stripe/subscriptions/:steamid",
+  auth.userAuth,
+  async (req, res) => {
+    try {
+      const steamid = req.params.steamid;
+      const subscription = await players.getStripeSubscription(steamid);
+
+      const { customer_id } = subscription;
+
+      const subscriptionData = await stripeClient.client.subscriptions.retrieve(
+        customer_id
+      );
+      console.log(subscriptionData);
+      res.status(200).json(subscriptionData);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ error });
+    }
+  }
+);
+
 router.post("/stripe/create_checkout_session", async (req, res) => {
   const { priceID, steamID } = req.body;
   const baseUrl = process.env.IS_PRODUCTION
@@ -362,7 +386,6 @@ router.post("/stripe/create_checkout_session", async (req, res) => {
   let customer;
   try {
     const currentSub = await players.getStripeSubscription(steamID);
-    console.log(currentSub);
     if (currentSub && currentSub.customer_id) {
       customer = currentSub.customer_id;
     }

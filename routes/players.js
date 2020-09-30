@@ -367,6 +367,21 @@ router.get("/:steamid/battle_pass", auth.userAuth, async (req, res) => {
   }
 });
 
+router.get(
+  "/:steamid/battle_pass/subscriptions",
+  auth.userAuth,
+  async (req, res) => {
+    try {
+      const steamid = req.params.steamid;
+      const playerInfo = await players.getBattlePassSubscriptions(steamid);
+      res.status(200).json(playerInfo);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ message: "Server Error" });
+    }
+  }
+);
+
 router.post(
   "/:steamid/open_chest/:chestid",
   auth.userAuth,
@@ -401,6 +416,22 @@ router.post("/:steamid/use_item/:itemid", auth.userAuth, async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
+  }
+});
+
+router.get("/:steamid/stripe_subscription", auth.userAuth, async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const subscription = await players.getStripeSubscription(steamid);
+
+    const { customer_id } = subscription;
+
+    const subscriptionData = await stripe.subscriptions.retrieve(customer_id);
+
+    res.status(200).json(subscriptionData);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
   }
 });
 

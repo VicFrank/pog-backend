@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="page-title">{{heroData.name}}</h1>
+    <h1 class="page-title">{{ heroData.name }}</h1>
     <div class="video my-5">
       <b-embed type="iframe" :src="videos[hero]" allowfullscreen></b-embed>
     </div>
@@ -20,9 +20,13 @@
     </div>
 
     <div class="ability-info">
-      <img :src="abilityImage(currentAbility)" :alt="currentAbility.name" class="current-ability" />
+      <img
+        :src="abilityImage(currentAbility)"
+        :alt="currentAbility.name"
+        class="current-ability"
+      />
       <div class="ability-text">
-        <h3 class="ability-name">{{currentAbility.name}}</h3>
+        <h3 class="ability-name">{{ currentAbility.name }}</h3>
         <div class="ability-description">{{ currentAbility.description }}</div>
       </div>
     </div>
@@ -31,24 +35,24 @@
 
     <div class="talent-box">
       <div class="talent-row">
-        <div class="talent">{{talents[6]}}</div>
+        <div class="talent">{{ talents[6] }}</div>
         <div class="talent-level">25</div>
-        <div class="talent">{{talents[7]}}</div>
+        <div class="talent">{{ talents[7] }}</div>
       </div>
       <div class="talent-row">
-        <div class="talent">{{talents[4]}}</div>
+        <div class="talent">{{ talents[4] }}</div>
         <div class="talent-level">20</div>
-        <div class="talent">{{talents[5]}}</div>
+        <div class="talent">{{ talents[5] }}</div>
       </div>
       <div class="talent-row">
-        <div class="talent">{{talents[2]}}</div>
+        <div class="talent">{{ talents[2] }}</div>
         <div class="talent-level">15</div>
-        <div class="talent">{{talents[3]}}</div>
+        <div class="talent">{{ talents[3] }}</div>
       </div>
       <div class="talent-row">
-        <div class="talent">{{talents[0]}}</div>
+        <div class="talent">{{ talents[0] }}</div>
         <div class="talent-level">10</div>
-        <div class="talent">{{talents[1]}}</div>
+        <div class="talent">{{ talents[1] }}</div>
       </div>
     </div>
   </div>

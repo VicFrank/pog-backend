@@ -9,53 +9,46 @@
       </div>
       <ul class="navbar-nav mx-auto flex-row d-none d-lg-flex text-uppercase">
         <b-nav-item-dropdown class="mr-5">
-          <template slot="button-content">{{ $t("navigation.learn") }}</template>
+          <template slot="button-content">{{
+            $t("navigation.learn")
+          }}</template>
           <b-dropdown-item to="/faq">
-            {{
-            $t("navigation.faq")
-            }}
+            {{ $t("navigation.faq") }}
           </b-dropdown-item>
           <b-dropdown-item to="/guardians">
-            {{
-            $t("navigation.guardians")
-            }}
+            {{ $t("navigation.guardians") }}
           </b-dropdown-item>
           <b-dropdown-item to="/media">
-            {{
-            $t("navigation.videos")
-            }}
+            {{ $t("navigation.videos") }}
           </b-dropdown-item>
           <b-dropdown-item to="/chest_rates">
-            {{
-            $t("navigation.chest_drops")
-            }}
+            {{ $t("navigation.chest_drops") }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <li class="nav-item mr-5">
           <router-link class="nav-link" to="/store">
-            {{
-            $t("navigation.store")
-            }}
+            {{ $t("navigation.store") }}
           </router-link>
         </li>
         <b-nav-item-dropdown text="STATS" class="mr-5">
-          <template slot="button-content">{{ $t("navigation.stats") }}</template>
+          <template slot="button-content">{{
+            $t("navigation.stats")
+          }}</template>
           <b-dropdown-item to="/games">
-            {{
-            $t("navigation.games")
-            }}
+            {{ $t("navigation.games") }}
           </b-dropdown-item>
           <b-dropdown-item to="/heroes">
-            {{
-            $t("navigation.heroes")
-            }}
+            {{ $t("navigation.heroes") }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link class="nav-link" to="/changelog">
-            {{
-            $t("navigation.change_log")
-            }}
+            {{ $t("navigation.change_log") }}
+          </router-link>
+        </li> -->
+        <li class="nav-item">
+          <router-link class="nav-link" to="/tournament">
+            Tournament
           </router-link>
         </li>
       </ul>
@@ -88,8 +81,12 @@
               v-for="(lang, i) in langs"
               :key="`Lang${i}`"
               :value="lang"
-              @click="$i18n.locale = lang; $store.dispatch('setLanguage', lang);"
-            >{{ $t(`navigation.${lang}`) }}</b-dropdown-item>
+              @click="
+                $i18n.locale = lang;
+                $store.dispatch('setLanguage', lang);
+              "
+              >{{ $t(`navigation.${lang}`) }}</b-dropdown-item
+            >
           </b-dropdown>
 
           <div>
@@ -108,7 +105,8 @@
               target="_blank"
               variant="primary"
               v-t="'navigation.play_now'"
-            >PLAY NOW</b-button>
+              >PLAY NOW</b-button
+            >
           </div>
         </div>
       </div>
@@ -120,7 +118,7 @@
 import SidebarToggle from "./SidebarToggle.vue";
 export default {
   components: {
-    SidebarToggle
+    SidebarToggle,
   },
 
   data: () => ({ langs: ["en", "ru", "cn"], selected: null }),
@@ -130,7 +128,7 @@ export default {
     if (this.langs.includes(lang)) {
       this.$root._i18n._vm.locale = lang.toLowerCase();
     }
-  }
+  },
 };
 </script>
 

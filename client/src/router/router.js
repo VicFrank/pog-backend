@@ -37,6 +37,8 @@ const Subscriptions = () =>
   import("../components/pages/subscriptions/Subscriptions");
 const SubscriptionCheckout = () =>
   import("../components/pages/subscriptions/SubscriptionCheckout");
+const SubscriptionStatus = () =>
+  import("../components/pages/subscriptions/SubscriptionStatus");
 const StripeSuccess = () =>
   import("../components/pages/subscriptions/StripeSuccess");
 const StripeCancel = () =>
@@ -48,6 +50,8 @@ const RewardFail = () => import("../components/pages/patreon/RewardFail");
 const CustomHeroPage = () => import("../components/pages/learn/HeroPage");
 const CustomHeroes = () => import("../components/pages/learn/CustomHeroes");
 
+const Bracket = () => import("../components/pages/tournaments/Bracket");
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -56,6 +60,10 @@ const routes = [
   {
     path: "/",
     component: Home,
+  },
+  {
+    path: "/tournament",
+    component: Bracket,
   },
   {
     path: "/poggers",
@@ -68,6 +76,11 @@ const routes = [
   {
     path: "/subscriptions/:tier",
     component: SubscriptionCheckout,
+  },
+  {
+    path: "/profile/subscriptions",
+    component: SubscriptionStatus,
+    meta: { requiresAuth: true },
   },
   {
     path: "/subscriptions/stripe/success",

@@ -524,6 +524,26 @@ module.exports = {
     }
   },
 
+  async getBattlePassSubscriptions(steamID) {
+    try {
+      const sql_query = `
+      SELECT
+        tier1_expiration > NOW() as has_tier1,
+        tier1_expiration,
+        tier2_expiration > NOW() as has_tier2,
+        tier2_expiration,
+        tier3_expiration > NOW() as has_tier3,
+        tier3_expiration
+      FROM player_battle_pass
+      WHERE steam_id = $1
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getPlayerBattlePass(steamID) {
     try {
       const sql_query = `
@@ -571,6 +591,12 @@ module.exports = {
       // so that when this tier expires, it continues seemlessly
       // to the lower tier. If the lower tier is expired,
       // it will still be expired when this tier expires.
+
+      // example:
+      // tier 1 expires in 1 month
+      // we buy a tier 2 for 1 month
+      // tier 1 now expires in 2 months, tier 2 expires in 1 month
+      // after 1 month, we now have only tier 1, that expires in 1 month
 
       // If the current tier is not active, it needs to be set to now
       // before we do the rest. We can safely set all tiers that have
@@ -1884,7 +1910,7 @@ module.exports = {
   async getStripeSubscriptionByCustomerID(customerID) {
     try {
       let sql_query = `
-      SELECT customer_id, subscription_status
+      SELECT *
       FROM player_subscriptions
       WHERE customer_id = $1 AND client = 'stripe'
       `;

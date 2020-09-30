@@ -65,4 +65,59 @@ module.exports = [
     cost_usd: 100,
     reward: 15000,
   },
+
+  {
+    cost_usd: 2,
+    item_id: "bp_1_1",
+    type: "BP1",
+    reward: 1,
+  },
+  {
+    cost_usd: 2 * 6,
+    item_id: "bp_1_6",
+    type: "BP1",
+    reward: 6,
+  },
+  {
+    cost_usd: 2 * 12,
+    item_id: "bp_1_12",
+    type: "BP1",
+    reward: 12,
+  },
+  {
+    cost_usd: 5,
+    item_id: "bp_2_1",
+    type: "BP2",
+    reward: 1,
+  },
+  {
+    cost_usd: 5 * 6,
+    item_id: "bp_2_6",
+    type: "BP2",
+    reward: 6,
+  },
+  {
+    cost_usd: 5 * 12,
+    item_id: "bp_2_12",
+    type: "BP2",
+    reward: 12,
+  },
+  {
+    cost_usd: 15,
+    item_id: "bp_3_1",
+    type: "BP3",
+    reward: 1,
+  },
+  {
+    cost_usd: 15 * 6,
+    item_id: "bp_3_6",
+    type: "BP3",
+    reward: 6,
+  },
+  {
+    cost_usd: 15 * 12,
+    item_id: "bp_3_12",
+    type: "BP3",
+    reward: 12,
+  },
 ];

@@ -1220,6 +1220,18 @@
     }
   },
 
+  "subscriptions": {
+    "subscriptions": "Subscriptions",
+    "manage_page_title": "Manage your Subscriptions",
+    "expiration": "Expires",
+    "current_tier": "Current Tier",
+    "tier1": "Silver Ticket",
+    "tier2": "Gold Ticket",
+    "tier3": "Platinum Ticket",
+    "subscribe": "Subscribe",
+    "purchase": "Purchase Subscription"
+  },
+
   "credits": {
     "page_title": "Our Team",
     "sunsfan_credit": "SUNSfan - Project Lead {contact}",
