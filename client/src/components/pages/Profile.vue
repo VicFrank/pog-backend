@@ -7,12 +7,23 @@
             <DailyQuests></DailyQuests>
 
             <div class="match-history position-relative">
-              <h3 class="mt-5 mb-5 text-center" v-t="'profile.match_history'"></h3>
+              <h3
+                class="mt-5 mb-5 text-center"
+                v-t="'profile.match_history'"
+              ></h3>
 
-              <PlayerGamesList v-bind:games="games" :loading="gamesLoading"></PlayerGamesList>
+              <PlayerGamesList
+                v-bind:games="games"
+                :loading="gamesLoading"
+                :showMMR="bpTier > 1"
+              ></PlayerGamesList>
 
               <div class="more">
-                <router-link to="/profile/games" class="blue" v-t="'profile.view_all'"></router-link>
+                <router-link
+                  to="/profile/games"
+                  class="blue"
+                  v-t="'profile.view_all'"
+                ></router-link>
               </div>
             </div>
 
@@ -37,7 +48,11 @@
                 </tbody>
               </table>
               <div class="more">
-                <router-link to="/profile/stats" class="blue" v-t="'profile.view_all'"></router-link>
+                <router-link
+                  to="/profile/stats"
+                  class="blue"
+                  v-t="'profile.view_all'"
+                ></router-link>
               </div>
             </div>
 
@@ -63,18 +78,20 @@
                   <i18n path="profile.bp_sellout">
                     <template v-slot:link>
                       <router-link to="/store">
-                        {{
-                        $t("profile.bp_sellout_link")
-                        }}
+                        {{ $t("profile.bp_sellout_link") }}
                       </router-link>
                     </template>
                   </i18n>
                 </div>
-                <div
-                  class="text-muted"
-                >{{ $t("profile.reset_in") }} {{ secondsUntilReset | hhmmss }}</div>
+                <div class="text-muted">
+                  {{ $t("profile.reset_in") }} {{ secondsUntilReset | hhmmss }}
+                </div>
               </div>
-              <ProgressBar class="mt-3" :progress="Number(dailyXP)" :required="maxDailyXP" />
+              <ProgressBar
+                class="mt-3"
+                :progress="Number(dailyXP)"
+                :required="maxDailyXP"
+              />
             </div>
           </div>
         </div>
@@ -92,7 +109,7 @@ export default {
   components: {
     DailyQuests,
     PlayerGamesList,
-    ProgressBar
+    ProgressBar,
   },
 
   data: () => ({
@@ -100,7 +117,7 @@ export default {
     games: [],
     playerStats: {},
     gamesLoading: true,
-    secondsUntilReset: 0
+    secondsUntilReset: 0,
   }),
 
   computed: {
@@ -120,7 +137,7 @@ export default {
           return 4400;
       }
       return 0;
-    }
+    },
   },
 
   methods: {
@@ -135,24 +152,24 @@ export default {
           this.countDownTimer();
         }, 1000);
       }
-    }
+    },
   },
 
   created() {
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/games?limit=3`)
-      .then(res => res.json())
-      .then(games => {
+      .then((res) => res.json())
+      .then((games) => {
         this.gamesLoading = false;
         this.games = games;
       });
 
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/stats`)
-      .then(res => res.json())
-      .then(playerStats => {
+      .then((res) => res.json())
+      .then((playerStats) => {
         this.playerStats = playerStats;
         this.startCountdown(playerStats.seconds_to_reset);
       });
-  }
+  },
 };
 </script>
 

@@ -197,7 +197,7 @@ module.exports = {
       let { rows } = await query(sql_query, [steamID]);
       const equippedCompanion = await this.getEquippedCompanion(steamID);
       // const teamKillStats = await this.getTeamKillStats(steamID);
-      const dailyQuests = await quests.getDailyQuestsForPlayer(steamID);
+      const dailyQuests = await this.getDailyQuests(steamID);
       const achievements = await quests.getAchievementsForPlayer(steamID);
       const battlePass = await this.getPlayerBattlePass(steamID);
       const battlePassLevel = await cosmetics.getBattlePassLevel(
@@ -526,18 +526,28 @@ module.exports = {
 
   async getBattlePassSubscriptions(steamID) {
     try {
+      const tier = await this.getBattlePassTier(steamID);
       const sql_query = `
       SELECT
-        tier1_expiration > NOW() as has_tier1,
-        tier1_expiration,
-        tier2_expiration > NOW() as has_tier2,
-        tier2_expiration,
-        tier3_expiration > NOW() as has_tier3,
-        tier3_expiration
+      (CASE
+        WHEN $2 = 1 THEN EXTRACT(epoch FROM tier1_expiration - NOW())
+        WHEN $2 = 2 THEN EXTRACT(epoch FROM tier1_expiration - tier2_expiration)
+        WHEN $2 = 3 THEN EXTRACT(epoch FROM tier1_expiration - tier3_expiration)
+        ELSE 0
+      END) as tier1_duration,
+      (CASE
+        WHEN $2 = 2 THEN EXTRACT(epoch FROM tier2_expiration - NOW())
+        WHEN $2 = 3 THEN EXTRACT(epoch FROM tier2_expiration - tier3_expiration)
+        ELSE 0
+      END) as tier2_duration,
+      (CASE
+        WHEN $2 = 3 THEN EXTRACT(epoch FROM tier3_expiration - NOW())
+        ELSE 0
+      END) as tier3_duration
       FROM player_battle_pass
       WHERE steam_id = $1
       `;
-      const { rows } = await query(sql_query, [steamID]);
+      const { rows } = await query(sql_query, [steamID, tier]);
       return rows[0];
     } catch (error) {
       throw error;
@@ -655,7 +665,7 @@ module.exports = {
     }
   },
 
-  async givePostGameBP(steamID, winner) {
+  async givePostGameBP(steamID, winner, bonusMultiplier = 1) {
     /*
       BASELINE:
       50 XP per win (capped at 20 wins)
@@ -672,6 +682,8 @@ module.exports = {
       PLATINUM TICKET:
       200 XP per win (capped at 20 wins)
       400 XP bonus for the first win of the day (600 total)
+
+      If you have an ally with a Plat ticket, give +25% XP
     */
     try {
       const games = await this.getBasicGamesToday(steamID);
@@ -711,6 +723,8 @@ module.exports = {
       if (!winner) {
         reward = reward * 0.5;
       }
+
+      reward = Math.floor(reward * bonusMultiplier);
 
       await logs.addTransactionLog(steamID, "game_xp", {
         winner,
@@ -752,6 +766,24 @@ module.exports = {
     }
   },
 
+  async getBaseNumTips(steamID) {
+    try {
+      const tier = await this.getBattlePassTier(steamID);
+      switch (tier) {
+        case 0:
+          return 15;
+        case 1:
+          return 15;
+        case 2:
+          return 15;
+        case 3:
+          return 15;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getNumDailyTips(steamID) {
     try {
       const battlePass = await this.getPlayerBattlePass(steamID);
@@ -763,7 +795,9 @@ module.exports = {
         WHERE steam_id = $1 AND log_event = 'tip' AND log_time >= NOW()::date
         `;
         const { rows } = await query(sql_query, [steamID]);
-        return 15 - rows[0].count;
+        const baseNumTips = await this.getBaseNumTips(steamID);
+
+        return baseNumTips - rows[0].count;
       }
     } catch (error) {
       throw error;
@@ -1527,7 +1561,7 @@ module.exports = {
    */
   async createInitialDailyQuests(steamID, numQuests) {
     try {
-      const currentQuests = await quests.getDailyQuestsForPlayer(steamID);
+      const currentQuests = await this.getDailyQuests(steamID);
       if (currentQuests.length > 0) {
         throw new Error("Player Daily Quests have already been initialized!");
       }
@@ -1661,7 +1695,7 @@ module.exports = {
    * @param {number} questID
    */
   async playerHasQuest(steamID, questID) {
-    const currentQuests = await quests.getDailyQuestsForPlayer(steamID);
+    const currentQuests = await this.getDailyQuests(steamID);
     for (let quest of currentQuests) {
       if (quest.quest_id === questID) return true;
     }
@@ -1741,6 +1775,58 @@ module.exports = {
       await this.addBattlePassExp(steamID, xp);
 
       return { xp, poggers, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getNumDailyQuests(steamID) {
+    try {
+      const tier = await this.getBattlePassTier(steamID);
+
+      switch (tier) {
+        case 0:
+          return 2;
+        case 1:
+          return 2;
+        case 2:
+          return 3;
+        case 3:
+          return 3;
+
+        default:
+          return 2;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Gets the active daily quests for a player.
+   * Returns 2 quests for bp tier 1,2 and 3 for higher
+   * @param {String} steamID
+   */
+  async getDailyQuests(steamID) {
+    try {
+      const sql_query = `
+      SELECT pq.*, q.*, p.patreon_level,
+        LEAST(quest_progress, required_amount) as capped_quest_progress,
+        quest_progress >= required_amount as quest_completed,
+        created < current_timestamp - interval '23 hours' as can_reroll
+      FROM player_quests pq
+      JOIN quests q
+      USING (quest_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE steam_id = $1 AND q.is_achievement = FALSE
+      ORDER BY quest_index DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+
+      const numQuests = await this.getNumDailyQuests(steamID);
+
+      return rows.slice(0, numQuests);
     } catch (error) {
       throw error;
     }

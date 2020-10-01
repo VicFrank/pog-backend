@@ -79,6 +79,9 @@ module.exports = {
         playerMMR: {},
       };
 
+      let radiantPlatBonus = 1;
+      let direPlatBonus = 1;
+
       for (let playerData of Object.values(playerInfo)) {
         const {
           steamid,
@@ -127,7 +130,6 @@ module.exports = {
         const backpack1 = finalInventory["7"];
         const backpack2 = finalInventory["8"];
         const backpack3 = finalInventory["9"];
-        let xpEarned = 0;
 
         const teamData = teamInfo[team];
 
@@ -161,10 +163,12 @@ module.exports = {
           );
 
           if (!abandoned) {
-            xpEarned = await players.givePostGameBP(steamid, winner);
+            if (isRadiant) radiantPlatBonus = radiantPlatBonus + 0.25;
+            else direPlatBonus = direPlatBonus + 0.25;
           }
         }
 
+        // Store the mmr so we can calculate it later
         const mmr = parseInt(playerRows[0].mmr);
 
         if (isRadiant) mmrData.radiant.push(mmr);
@@ -172,6 +176,7 @@ module.exports = {
 
         mmrData.playerMMR[steamid] = mmr;
 
+        // Add the game data for this player
         await query(
           `
         INSERT INTO game_players(game_id, steam_id, abandoned, is_radiant,
@@ -217,7 +222,7 @@ module.exports = {
             JSON.stringify(permanentBuffs),
             JSON.stringify(disconnectEvents),
             JSON.stringify(itemPurchases),
-            xpEarned,
+            0,
             item0,
             item1,
             item2,
@@ -244,9 +249,12 @@ module.exports = {
 
         if (ratingChange) {
           for (let playerData of Object.values(playerInfo)) {
-            const { steamid, team } = playerData;
+            const { steamid, team, abandoned } = playerData;
             const mmr = mmrData.playerMMR[steamid];
-            const mmrChange = team == winnerTeam ? ratingChange : -ratingChange;
+            const winner = team == winnerTeam;
+            const isRadiant = team == "DOTA_TEAM_GOODGUYS";
+
+            const mmrChange = winner ? ratingChange : -ratingChange;
 
             if (mmr) {
               await query(
@@ -256,6 +264,34 @@ module.exports = {
                 [mmrChange, steamid]
               );
             }
+
+            // also calculate XP while we're here
+            let xpEarned = 0;
+            if (!abandoned) {
+              if (isRadiant && radiantPlatBonus) {
+                xpEarned = await players.givePostGameBP(
+                  steamid,
+                  winner,
+                  radiantPlatBonus
+                );
+              } else {
+                xpEarned = await players.givePostGameBP(
+                  steamid,
+                  winner,
+                  direPlatBonus
+                );
+              }
+            }
+
+            // update game_players again, since we had to loop twice
+            await query(
+              `
+                UPDATE game_players
+                SET (mmr_change, xp_earned) = ($3, $4)
+                WHERE steam_id = $1 AND game_id = $2
+              `,
+              [steamid, gameID, mmrChange, xpEarned]
+            );
           }
         }
       }

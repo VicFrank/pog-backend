@@ -7,6 +7,7 @@
             <tr>
               <td class="tb-head" scope="col">Hero</td>
               <td class="tb-head" scope="col">Result</td>
+              <td v-if="showMMR" class="tb-head" scope="col">MMR</td>
               <td class="tb-head" scope="col">Duration</td>
               <td class="tb-head" scope="col">KDA</td>
               <td class="tb-head" scope="col">Items</td>
@@ -17,6 +18,7 @@
                 <td />
                 <td />
                 <td />
+                <td v-if="showMMR" />
                 <td />
               </tr>
             </template>
@@ -34,7 +36,9 @@
                 <td>
                   <span v-if="game.won" class="win" v-t="'tables.won'"></span>
                   <span v-else class="loss" v-t="'tables.lost'"></span>
-                  <div v-if="game.xp_earned > 0" class="text-muted">+{{ game.xp_earned }} XP</div>
+                  <div v-if="game.xp_earned > 0" class="text-muted">
+                    +{{ game.xp_earned }} XP
+                  </div>
                   <div
                     v-else
                     v-b-tooltip.hover.html
@@ -45,15 +49,39 @@
                     <i class="fas fa-info-circle info-icon"></i>
                   </div>
                 </td>
-                <td>{{ game.duration | hhmmss }}</td>
+                <td v-if="showMMR">
+                  <div v-if="game.mmr_change >= 0" class="win">
+                    +{{ game.mmr_change }}
+                  </div>
+                  <div v-else class="loss">{{ game.mmr_change }}</div>
+                </td>
+                <td><div>{{ game.duration | hhmmss }}</div> <div class="text-muted">{{game.created_at | dateFromNow}}</div> </td>
                 <td>{{ game.kills }}/{{ game.deaths }}/{{ game.assists }}</td>
                 <td>
-                  <ItemImage v-if="game.item_0" :itemName="game.item_0"></ItemImage>
-                  <ItemImage v-if="game.item_1" :itemName="game.item_1"></ItemImage>
-                  <ItemImage v-if="game.item_2" :itemName="game.item_2"></ItemImage>
-                  <ItemImage v-if="game.item_3" :itemName="game.item_3"></ItemImage>
-                  <ItemImage v-if="game.item_4" :itemName="game.item_4"></ItemImage>
-                  <ItemImage v-if="game.item_5" :itemName="game.item_5"></ItemImage>
+                  <ItemImage
+                    v-if="game.item_0"
+                    :itemName="game.item_0"
+                  ></ItemImage>
+                  <ItemImage
+                    v-if="game.item_1"
+                    :itemName="game.item_1"
+                  ></ItemImage>
+                  <ItemImage
+                    v-if="game.item_2"
+                    :itemName="game.item_2"
+                  ></ItemImage>
+                  <ItemImage
+                    v-if="game.item_3"
+                    :itemName="game.item_3"
+                  ></ItemImage>
+                  <ItemImage
+                    v-if="game.item_4"
+                    :itemName="game.item_4"
+                  ></ItemImage>
+                  <ItemImage
+                    v-if="game.item_5"
+                    :itemName="game.item_5"
+                  ></ItemImage>
                 </td>
               </router-link>
             </template>
@@ -72,18 +100,22 @@ export default {
   data: () => ({
     page: 1,
     itemsPerPage: 15,
-    gamesToShow: []
+    gamesToShow: [],
   }),
 
   components: {
     ItemImage,
-    HeroImage
+    HeroImage,
   },
 
   props: {
     games: Array,
-    loading: Boolean
-  }
+    loading: Boolean,
+    showMMR: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
 

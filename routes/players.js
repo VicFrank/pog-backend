@@ -86,7 +86,7 @@ router.get("/:steamid/heroes", cache("5 minutes"), async (req, res) => {
 router.get("/:steamid/daily_quests", auth.userAuth, async (req, res) => {
   try {
     const steamid = req.params.steamid;
-    const dailyQuests = await quests.getDailyQuestsForPlayer(steamid);
+    const dailyQuests = await players.getDailyQuests(steamid);
     res.status(200).json(dailyQuests);
   } catch (error) {
     console.log(error);

@@ -312,4 +312,14 @@ async function initializeAdmins() {
     const { cost_usd, item_id, type, reward } = itemPrice;
     await cosmetics.createItemPrice(cost_usd, item_id, type, reward);
   }
+  const items = [
+    {
+      cost: -1,
+      cosmetic_id: "bpaccel3",
+      rarity: "",
+      type: "BP Accelerator",
+      equip_group: "bpaccel",
+    },
+  ];
+  await loadNewCosmetics(items);
 })();

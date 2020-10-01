@@ -602,6 +602,13 @@ module.exports = [
     equip_group: "bpaccel",
   },
   {
+    cost: -1,
+    cosmetic_id: "bpaccel3",
+    rarity: "",
+    type: "BP Accelerator",
+    equip_group: "bpaccel",
+  },
+  {
     cost: 100,
     cosmetic_id: "chest1",
     rarity: "Common",

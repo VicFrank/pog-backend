@@ -8,7 +8,7 @@
             <div class="checkout-form">
               <h2>{{ $t(`subscriptions.tier${tier}`) }}</h2>
               <div>
-                <span class="cost">${{ price }}</span>
+                <span class="cost">${{ basePrice }}</span>
                 <span class="duration text-muted">/Mo</span>
               </div>
               <div>
@@ -20,17 +20,19 @@
                 class="purchase-options"
               ></b-form-select>
               <b-card v-if="months !== null" class="stripe-card mt-3">
-                <div class="purchase-options">
-                  <StripePurchase
-                    :item="item"
-                    v-on:purchaseSuccess="onPurchaseSuccess"
-                    v-on:error="onError"
-                  />
-                  <!-- <PaypalSubscription :tier="tier" /> -->
-                  <b-alert v-model="showError" variant="danger" dismissible>{{
-                    error
-                  }}</b-alert>
-                </div>
+                <b-card-text>
+                  {{ $t(`subscriptions.tier${tier}`) }}</b-card-text
+                >
+                <b-card-text>Price: ${{ price }}</b-card-text>
+                <StripePurchase
+                  :item="item"
+                  v-on:purchaseSuccess="onPurchaseSuccess"
+                  v-on:error="onError"
+                />
+                <!-- <PaypalSubscription :tier="tier" /> -->
+                <b-alert v-model="showError" variant="danger" dismissible>{{
+                  error
+                }}</b-alert>
               </b-card>
             </div>
           </template>
@@ -94,10 +96,10 @@ export default {
     item() {
       return {
         item_id: `bp_${this.tier}_${this.months}`,
-        cost_usd: this.price * this.months,
+        cost_usd: this.price,
       };
     },
-    price() {
+    basePrice() {
       switch (this.tier) {
         case 1:
           return 2;
@@ -108,6 +110,9 @@ export default {
         default:
           return 0;
       }
+    },
+    price() {
+      return this.basePrice * this.months;
     },
     ticketImage() {
       const tier = this.tier;
@@ -128,6 +133,10 @@ export default {
 </script>
 
 <style scoped>
+.card-body {
+  color: black;
+}
+
 .purchase-options {
   max-width: 200px;
   margin: auto;

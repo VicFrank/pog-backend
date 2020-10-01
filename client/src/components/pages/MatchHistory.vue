@@ -2,7 +2,11 @@
   <div class="main-layout__content">
     <div class="container">
       <h1 class="page-title" v-t="'profile.my_games'"></h1>
-      <PlayerGamesList v-bind:games="games" :loading="loading"></PlayerGamesList>
+      <PlayerGamesList
+        v-bind:games="games"
+        :loading="loading"
+        :showMMR="bpTier > 1"
+      ></PlayerGamesList>
     </div>
   </div>
 </template>
@@ -12,23 +16,29 @@ import PlayerGamesList from "./games/PlayerGamesList.vue";
 
 export default {
   components: {
-    PlayerGamesList
+    PlayerGamesList,
   },
 
   data: () => ({
     error: "",
     games: [],
-    loading: true
+    loading: true,
   }),
 
   created() {
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/games`)
-      .then(res => res.json())
-      .then(games => {
+      .then((res) => res.json())
+      .then((games) => {
         this.loading = false;
         this.games = games;
       });
-  }
+  },
+
+  computed: {
+    bpTier() {
+      return this.$store.getters.bpTier;
+    },
+  },
 };
 </script>
 

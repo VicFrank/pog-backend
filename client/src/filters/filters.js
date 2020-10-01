@@ -15,6 +15,13 @@ export default {
         return moment(String(value)).fromNow();
       }
     },
+    getExpiration: function(seconds) {
+      if (seconds) {
+        return moment()
+          .add(seconds, "seconds")
+          .fromNow();
+      }
+    },
     localizeNumber: function(value) {
       if (value) {
         return value.toLocaleString();

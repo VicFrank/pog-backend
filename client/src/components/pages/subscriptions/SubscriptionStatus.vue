@@ -6,16 +6,21 @@
         <b-card-group deck class="mb-3">
           <b-card v-for="i in 3" :key="i">
             <template v-slot:header>
-              <div class="ticket-name" v-t="`subscriptions.tier${i}`"></div>
+              <h4 class="ticket-name" v-t="`subscriptions.tier${i}`"></h4>
+              <div v-if="bpTier === i" class="text-muted">
+                ({{ $t("subscriptions.current_tier") }})
+              </div>
               <img
                 :src="ticketImage(i)"
                 alt="Silver Ticket"
                 v-bind:class="{ faded: !hasTier(i) }"
               />
-              <div v-if="bpTier === i" v-t="'subscriptions.current_tier'"></div>
             </template>
-            <b-card-text v-if="hasTier(i)"
-              >Expires {{ getExpiration(i) | dateFromNow }}</b-card-text
+            <b-card-text v-if="hasTier(i) && tier == bpTier"
+              >Expires {{ getExpiration(i) | getExpiration }}</b-card-text
+            >
+            <b-card-text v-else-if="hasTier(i)"
+              >Lasts {{ getExpiration(i) | getExpiration }}</b-card-text
             >
           </b-card>
         </b-card-group>
@@ -64,10 +69,10 @@ export default {
       return require(`./images/ticketicon_${tier}.png`);
     },
     hasTier(tier) {
-      return this.subscriptions[`has_tier${tier}`];
+      return this.subscriptions[`tier${tier}_duration`] > 0;
     },
     getExpiration(tier) {
-      return this.subscriptions[`tier${tier}_expiration`];
+      return this.subscriptions[`tier${tier}_duration`];
     },
   },
 };

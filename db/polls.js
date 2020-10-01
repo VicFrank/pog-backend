@@ -80,7 +80,7 @@ module.exports = {
 
   async voteInPoll(steamID, pollID, optionID) {
     try {
-      const battlePass = await players.getBattlePassTier(steamID);
+      const tier = await players.getBattlePassTier(steamID);
 
       let sql_query = `
       INSERT INTO votes

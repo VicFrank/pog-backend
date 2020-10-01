@@ -86,7 +86,8 @@ CREATE TABLE IF NOT EXISTS game_players (
   total_exp INTEGER,
   hero_level INTEGER,
 
-  xp_earned INTEGER,
+  xp_earned INTEGER DEFAULT 0,
+  mmr_change INTEGER DEFAULT 0,
 
   abilities JSON,
   permanent_buffs JSON,

@@ -6,12 +6,22 @@
         <div class="row">
           <div class="col-xl-12">
             <div class="match-history position-relative">
-              <h3 class="mt-5 mb-5 text-center" v-t="'profile.match_history'"></h3>
+              <h3
+                class="mt-5 mb-5 text-center"
+                v-t="'profile.match_history'"
+              ></h3>
 
-              <PlayerGamesList v-bind:games="games" :loading="gamesLoading"></PlayerGamesList>
+              <PlayerGamesList
+                v-bind:games="games"
+                :loading="gamesLoading"
+              ></PlayerGamesList>
 
               <div class="more">
-                <router-link :to="`/players/${$route.params.steam_id}/games`" class="blue">View All</router-link>
+                <router-link
+                  :to="`/players/${$route.params.steam_id}/games`"
+                  class="blue"
+                  >View All</router-link
+                >
               </div>
             </div>
 
@@ -20,10 +30,10 @@
               <table class="table mb-5">
                 <tbody>
                   <tr>
-                    <td class="tb-head">{{$t('profile.wins')}}</td>
-                    <td class="tb-head">{{$t('profile.losses')}}</td>
-                    <td class="tb-head">{{$t('profile.abandoned')}}</td>
-                    <td class="tb-head">{{$t('profile.time_played')}}</td>
+                    <td class="tb-head">{{ $t("profile.wins") }}</td>
+                    <td class="tb-head">{{ $t("profile.losses") }}</td>
+                    <td class="tb-head">{{ $t("profile.abandoned") }}</td>
+                    <td class="tb-head">{{ $t("profile.time_played") }}</td>
                   </tr>
                   <tr>
                     <td>{{ playerStats.wins }}</td>
@@ -49,7 +59,7 @@ import PlayerGamesList from "../games/PlayerGamesList.vue";
 
 export default {
   components: {
-    PlayerGamesList
+    PlayerGamesList,
   },
 
   data: () => ({
@@ -57,28 +67,28 @@ export default {
     games: [],
     playerStats: {},
     gamesLoading: true,
-    playerNotFound: false
+    playerNotFound: false,
   }),
 
   created() {
     const steamID = this.$route.params.steam_id;
 
     fetch(`/api/players/${steamID}/games?limit=3`)
-      .then(res => res.json())
-      .then(games => {
+      .then((res) => res.json())
+      .then((games) => {
         this.gamesLoading = false;
         this.games = games;
       });
 
     fetch(`/api/players/${steamID}/stats`)
-      .then(res => res.json())
-      .then(playerStats => {
+      .then((res) => res.json())
+      .then((playerStats) => {
         if (!playerStats.steam_id) {
           this.playerNotFound = true;
         }
         this.playerStats = playerStats;
       });
-  }
+  },
 };
 </script>
 

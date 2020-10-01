@@ -1,9 +1,16 @@
 <template>
   <div>
     <div ref="card"></div>
-    <b-button variant="primary" @click="submitPayment" :disabled="!paymentIntent || !complete">
+    <b-button
+      variant="primary"
+      @click="submitPayment"
+      :disabled="!paymentIntent || !complete"
+    >
       {{ $t("payment.pay_with_stripe") }}
-      <b-spinner v-if="awaitingPayment" :label="$t('payment.loading')"></b-spinner>
+      <b-spinner
+        v-if="awaitingPayment"
+        :label="$t('payment.loading')"
+      ></b-spinner>
     </b-button>
   </div>
 </template>
@@ -12,7 +19,7 @@
 let card = undefined;
 export default {
   props: {
-    item: {}
+    item: {},
   },
 
   data: () => ({
@@ -24,8 +31,8 @@ export default {
     awaitingPayment: false,
     keys: {
       dev: "pk_test_kG4TReBTkO6yDfO9mMwtShME00mx65Yyw2",
-      prod: "pk_live_FlJcVm7zuiGei0k6IDXksnmy003GNNZuiw"
-    }
+      prod: "pk_live_FlJcVm7zuiGei0k6IDXksnmy003GNNZuiw",
+    },
   }),
 
   async created() {
@@ -43,13 +50,13 @@ export default {
       const params = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           amount: this.item.cost_usd * 100, // stripe amounts are in cents
           name: this.item.item_id,
-          steamID: this.$store.state.auth.userSteamID
-        })
+          steamID: this.$store.state.auth.userSteamID,
+        }),
       };
       const intent = await fetch(url, params);
 
@@ -66,7 +73,7 @@ export default {
       card = elements.create("card");
       card.mount(this.$refs.card);
 
-      card.on("change", e => (this.complete = e.complete));
+      card.on("change", (e) => (this.complete = e.complete));
     },
 
     async submitPayment() {
@@ -75,7 +82,7 @@ export default {
         this.clientSecret,
         card,
         {
-          payment_method_data: {}
+          payment_method_data: {},
         }
       );
 
@@ -85,8 +92,8 @@ export default {
       } else {
         this.$emit("purchaseSuccess");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
