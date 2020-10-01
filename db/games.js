@@ -163,8 +163,11 @@ module.exports = {
           );
 
           if (!abandoned) {
-            if (isRadiant) radiantPlatBonus = radiantPlatBonus + 0.25;
-            else direPlatBonus = direPlatBonus + 0.25;
+            const tier = await players.getBattlePassTier(steamid);
+            if (tier === 3) {
+              if (isRadiant) radiantPlatBonus = radiantPlatBonus + 0.25;
+              else direPlatBonus = direPlatBonus + 0.25;
+            }
           }
         }
 

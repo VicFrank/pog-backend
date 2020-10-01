@@ -41,11 +41,11 @@
             {{ $t("navigation.heroes") }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
-        <!-- <li class="nav-item">
+        <li class="nav-item">
           <router-link class="nav-link" to="/changelog">
             {{ $t("navigation.change_log") }}
           </router-link>
-        </li> -->
+        </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/tournament">
             Tournament
