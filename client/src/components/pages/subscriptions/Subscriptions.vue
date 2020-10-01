@@ -96,8 +96,8 @@
             </b-card>
             <b-card>
               <template v-slot:header>
-                <div class="ticket-name">Platinum Ticket</div>
-                <b-img :src="ticketImage(3)" alt="Platinum Ticket"></b-img>
+                <div class="ticket-name">Diamond Ticket</div>
+                <b-img :src="ticketImage(3)" alt="Diamond Ticket"></b-img>
                 <div class="price">
                   <span class="cost">$15</span>
                   <span class="duration text-muted">/Mo</span>

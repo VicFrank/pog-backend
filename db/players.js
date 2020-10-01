@@ -679,7 +679,7 @@ module.exports = {
       200 XP per win (capped at 20 wins)
       400 XP bonus for the first win of the day (600 total)
 
-      PLATINUM TICKET:
+      DIAMOND TICKET:
       200 XP per win (capped at 20 wins)
       400 XP bonus for the first win of the day (600 total)
 
