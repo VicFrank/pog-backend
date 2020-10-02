@@ -16,11 +16,11 @@
                 v-bind:class="{ faded: !hasTier(i) }"
               />
             </template>
-            <b-card-text v-if="hasTier(i) && tier == bpTier"
+            <b-card-text v-if="hasTier(i) && i == bpTier"
               >Expires {{ getExpiration(i) | getExpiration }}</b-card-text
             >
             <b-card-text v-else-if="hasTier(i)"
-              >Lasts {{ getExpiration(i) | getExpiration }}</b-card-text
+              >Lasts {{ getExpiration(i) | duration }}</b-card-text
             >
           </b-card>
         </b-card-group>
@@ -31,6 +31,11 @@
         <template v-else-if="bpTier < 3">
           <b-button variant="primary" to="/subscriptions"
             >Upgrade your subscription</b-button
+          >
+        </template>
+        <template v-else-if="bpTier == 3">
+          <b-button variant="primary" to="/subscriptions/tier3"
+            >Extend your subscription</b-button
           >
         </template>
       </div>

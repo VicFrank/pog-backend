@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS players (
   poggers INTEGER DEFAULT 0 CHECK (poggers >= 0),
   patreon_level INTEGER DEFAULT 0,
   is_admin BOOLEAN DEFAULT FALSE,
+  in_tournament BOOLEAN DEFAULT FALSE,
 
   last_stat_reset TIMESTAMP DEFAULT Now()
 );

@@ -252,4 +252,37 @@ async function initializeAdmins() {
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
+
+  const cosmetics = [
+    {
+      cost: -1,
+      cosmetic_id: "guardian_monkey",
+      rarity: "Ancient",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: -1,
+      cosmetic_id: "guardian_pooky",
+      rarity: "Ancient",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: -1,
+      cosmetic_id: "guardian_bucket",
+      rarity: "Ancient",
+      type: "Companion",
+      equip_group: "companion",
+    },
+    {
+      cost: -1,
+      cosmetic_id: "guardian_lulu",
+      rarity: "Ancient",
+      type: "Companion",
+      equip_group: "companion",
+    },
+  ];
+
+  await loadNewCosmetics(cosmetics);
 })();

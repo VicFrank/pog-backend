@@ -18,6 +18,9 @@
           <b-dropdown-item to="/guardians">
             {{ $t("navigation.guardians") }}
           </b-dropdown-item>
+          <b-dropdown-item to="/custom_heroes">
+            {{ $t("navigation.custom_heroes") }}
+          </b-dropdown-item>
           <b-dropdown-item to="/media">
             {{ $t("navigation.videos") }}
           </b-dropdown-item>
@@ -41,14 +44,14 @@
             {{ $t("navigation.heroes") }}
           </b-dropdown-item>
         </b-nav-item-dropdown>
-        <li class="nav-item">
+        <li class="nav-item mr-5">
           <router-link class="nav-link" to="/changelog">
             {{ $t("navigation.change_log") }}
           </router-link>
         </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/tournament">
-            Tournament
+            {{ $t("navigation.tournament") }}
           </router-link>
         </li>
       </ul>
