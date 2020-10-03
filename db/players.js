@@ -532,7 +532,7 @@ module.exports = {
       (CASE
         WHEN $2 = 1 THEN EXTRACT(epoch FROM tier1_expiration - NOW())
         WHEN $2 = 2 THEN EXTRACT(epoch FROM tier1_expiration - tier2_expiration)
-        WHEN $2 = 3 THEN EXTRACT(epoch FROM tier1_expiration - tier3_expiration)
+        WHEN $2 = 3 THEN EXTRACT(epoch FROM tier1_expiration - tier2_expiration)
         ELSE 0
       END) as tier1_duration,
       (CASE
@@ -584,6 +584,7 @@ module.exports = {
   async getBattlePassTier(steamID) {
     try {
       const battlePass = await this.getPlayerBattlePass(steamID);
+      if (!battlePass) return 0;
       return battlePass.tier || 0;
     } catch (error) {
       throw error;
@@ -660,6 +661,12 @@ module.exports = {
         `;
       }
       await query(sql_query, [steamID, days]);
+
+      // if tier 3, also give the player the tier 3 cosmetics
+      // FLYING HONEY HEIST BABY ROSHLING, HONEY HEIST BABY ROSHLING FX
+      // also, they lose these items when their tier 3 subscription expires
+      await this.giveUniqueCosmetic(steamID, "honey_roshan");
+      await this.giveUniqueCosmetic(steamID, "honey_heist");
     } catch (error) {
       throw error;
     }
@@ -771,7 +778,7 @@ module.exports = {
       const tier = await this.getBattlePassTier(steamID);
       switch (tier) {
         case 0:
-          return 15;
+          return 0;
         case 1:
           return 15;
         case 2:
@@ -832,16 +839,17 @@ module.exports = {
 
   async getPlayerCosmetics(steamID, onlyEquipped = false) {
     try {
+      const tier = await this.getBattlePassTier(steamID);
       const filter = onlyEquipped ? "AND equipped = TRUE" : "";
       const sql_query = `
       SELECT *
       FROM player_cosmetics
       JOIN cosmetics
       USING (cosmetic_id)
-      WHERE steam_id = $1
+      WHERE steam_id = $1 AND $2 >= min_bp_tier
       ${filter}
       `;
-      const { rows } = await query(sql_query, [steamID]);
+      const { rows } = await query(sql_query, [steamID, tier]);
       return rows;
     } catch (error) {
       throw error;
@@ -891,16 +899,17 @@ module.exports = {
 
   async getCompanions(steamID, onlyEquipped = false) {
     try {
+      const tier = await this.getBattlePassTier(steamID);
       const filter = onlyEquipped ? "AND equipped = TRUE" : "";
       const sql_query = `
       SELECT *
       FROM player_companions
       JOIN cosmetics
       USING (cosmetic_id)
-      WHERE steam_id = $1
+      WHERE steam_id = $1 AND $2 >= min_bp_tier
       ${filter}
       `;
-      const { rows } = await query(sql_query, [steamID]);
+      const { rows } = await query(sql_query, [steamID, tier]);
       return rows;
     } catch (error) {
       throw error;
@@ -909,14 +918,15 @@ module.exports = {
 
   async getEquippedCompanion(steamID) {
     try {
+      const tier = await this.getBattlePassTier(steamID);
       const sql_query = `
       SELECT *
       FROM player_companions
       JOIN cosmetics
       USING (cosmetic_id)
-      WHERE steam_id = $1 AND equipped = TRUE
+      WHERE steam_id = $1 AND equipped = TRUE  AND $2 >= min_bp_tier
       `;
-      const { rows } = await query(sql_query, [steamID]);
+      const { rows } = await query(sql_query, [steamID, tier]);
       return rows[0];
     } catch (error) {
       throw error;
@@ -1126,6 +1136,16 @@ module.exports = {
         `;
         await query(queryText, [steamID, cosmeticID]);
       }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async giveUniqueCosmetic(steamID, cosmeticID) {
+    try {
+      const hasCosmetic = await this.hasCosmetic(steamID, cosmeticID);
+      if (hasCosmetic) return false;
+      await this.giveCosmetic(steamID, cosmeticID);
     } catch (error) {
       throw error;
     }

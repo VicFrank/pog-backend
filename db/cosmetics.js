@@ -3,7 +3,9 @@ const { query } = require("./index");
 module.exports = {
   async getAllCosmetics() {
     try {
-      const sql_query = `SELECT * FROM cosmetics`;
+      const sql_query = `
+      SELECT * FROM cosmetics
+      ORDER BY cosmetic_type, cosmetic_id`;
       const { rows } = await query(sql_query);
       return rows;
     } catch (error) {
@@ -29,13 +31,14 @@ module.exports = {
       throw error;
     }
   },
-  async createCosmetic(cost, cosmetic_id, rarity, type, equip_group) {
+  async createCosmetic(cost, cosmetic_id, rarity, type, equip_group, bp_tier) {
     try {
+      bp_tier = bp_tier || 0;
       const sql_query = `
         INSERT INTO cosmetics
-        (cosmetic_type, cost, rarity, equip_group, cosmetic_id)
+        (cosmetic_type, cost, rarity, equip_group, cosmetic_id, min_bp_tier)
         VALUES
-        ($1, $2, $3, $4, $5)
+        ($1, $2, $3, $4, $5, $6)
         RETURNING *
       `;
       const { rows } = await query(sql_query, [
@@ -44,6 +47,7 @@ module.exports = {
         rarity,
         equip_group,
         cosmetic_id,
+        bp_tier,
       ]);
       return rows;
     } catch (error) {

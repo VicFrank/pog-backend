@@ -1153,6 +1153,22 @@ module.exports = [
     equip_group: "companion",
   },
   {
+    cost: -1,
+    cosmetic_id: "honey_roshan",
+    rarity: "Ancient",
+    type: "Companion",
+    equip_group: "companion",
+    bp_tier: 3,
+  },
+  {
+    cost: -1,
+    cosmetic_id: "honey_heist",
+    rarity: "Ancient",
+    type: "Companion FX",
+    equip_group: "companion_fx",
+    bp_tier: 3,
+  },
+  {
     cost: 2000,
     cosmetic_id: "i_love_you",
     rarity: "Mythical",

@@ -56,9 +56,23 @@ async function loadCosmetics() {
 
     let promises = [];
     for (let cosmeticData of cosmeticsList) {
-      const { cost, cosmetic_id, rarity, type, equip_group } = cosmeticData;
+      const {
+        cost,
+        cosmetic_id,
+        rarity,
+        type,
+        equip_group,
+        bp_tier,
+      } = cosmeticData;
       promises.push(
-        cosmetics.createCosmetic(cost, cosmetic_id, rarity, type, equip_group)
+        cosmetics.createCosmetic(
+          cost,
+          cosmetic_id,
+          rarity,
+          type,
+          equip_group,
+          bp_tier
+        )
       );
     }
 
@@ -97,9 +111,23 @@ async function loadNewCosmetics(newCosmetics) {
 
     let promises = [];
     for (let cosmeticData of newCosmetics) {
-      const { cost, cosmetic_id, rarity, type, equip_group } = cosmeticData;
+      const {
+        cost,
+        cosmetic_id,
+        rarity,
+        type,
+        equip_group,
+        bp_tier,
+      } = cosmeticData;
       promises.push(
-        cosmetics.createCosmetic(cost, cosmetic_id, rarity, type, equip_group)
+        cosmetics.createCosmetic(
+          cost,
+          cosmetic_id,
+          rarity,
+          type,
+          equip_group,
+          bp_tier
+        )
       );
     }
 
@@ -256,32 +284,27 @@ async function initializeAdmins() {
   const cosmetics = [
     {
       cost: -1,
-      cosmetic_id: "guardian_monkey",
+      cosmetic_id: "honey_roshan",
       rarity: "Ancient",
       type: "Companion",
       equip_group: "companion",
+      bp_tier: 3,
     },
     {
       cost: -1,
-      cosmetic_id: "guardian_pooky",
+      cosmetic_id: "honey_heist",
       rarity: "Ancient",
-      type: "Companion",
-      equip_group: "companion",
+      type: "Companion FX",
+      equip_group: "companion_fx",
+      bp_tier: 3,
     },
     {
       cost: -1,
-      cosmetic_id: "guardian_bucket",
+      cosmetic_id: "golden_skin",
       rarity: "Ancient",
-      type: "Companion",
-      equip_group: "companion",
-    },
-    {
-      cost: -1,
-      cosmetic_id: "guardian_lulu",
-      rarity: "Ancient",
-      type: "Companion",
-      equip_group: "companion",
-    },
+      equip_group: "hero_skin",
+      type: "Hero Skin",
+    }
   ];
 
   await loadNewCosmetics(cosmetics);

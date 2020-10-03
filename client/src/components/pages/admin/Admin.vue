@@ -17,6 +17,9 @@
             <b-tab title-link-class="tab" title="Quests / Achievements">
               <QuestsAdmin />
             </b-tab>
+            <b-tab title-link-class="tab" title="Tournament">
+              <Tournament />
+            </b-tab>
           </b-tabs>
         </b-card>
       </div>
@@ -29,13 +32,15 @@ import BattlePassAdmin from "./BattlePassAdmin";
 import CosmeticsAdmin from "./CosmeticsAdmin";
 import PlayersAdmin from "./PlayersAdmin";
 import QuestsAdmin from "./QuestsAdmin";
+import Tournament from "./Tournament";
 export default {
   components: {
     BattlePassAdmin,
     CosmeticsAdmin,
     PlayersAdmin,
-    QuestsAdmin
-  }
+    Tournament,
+    QuestsAdmin,
+  },
 };
 </script>
 

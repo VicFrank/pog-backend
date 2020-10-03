@@ -539,11 +539,13 @@
     "steeljaw": "Steeljaw the Terrible",
     "coral": "Coral the Fabulous",
     "brightjoy": "Brightjoy",
-    "guardian_monkey": "Guardian Monkey",
-    "guardian_pooky": "Guardian Pooky",
-    "guardian_bucket": "Guardian Bucket",
-    "guardian_lulu": "Guardian Lulu",
+    "guardian_monkey": "Pocket Monkey",
+    "guardian_pooky": "Pocket Pooky",
+    "guardian_bucket": "Pocket Bucket",
+    "guardian_lulu": "Pocket Lulu",
+    "honey_roshan": "Honey Roshan",
     "i_love_you": "I LOVE YOU",
+    "honey_heist": "Honey Heist",
     "reroll": "Reroll",
     "reroll1": "Plus 1 Daily Re-Roll Token",
     "reroll2": "Plus 1 Daily Re-Roll Token",
@@ -779,7 +781,9 @@
     "guardian_pooky": "",
     "guardian_bucket": "",
     "guardian_lulu": "",
+    "honey_roshan": "",
     "i_love_you": "",
+    "honey_heist": "",
     "xp_1": "",
     "xp_2": "",
     "xp_3": "",
@@ -1168,22 +1172,22 @@
         {
           "ability": "raigeki",
           "name": "Ephemeral Slash",
-          "description": "Mifune projects his essence, quickly traveling to a target point, and dealing damage to any enemies along the way. He arrives with a devastating flourish, dealing bonus magical damage to enemies at the end of the path and blinding them."
+          "description": "Mifune moves to a specific location, dealing damage along the way. At the end of the trajectory, he will appear via an explosion that will deal bonus damage and blind enemies in the area."
         },
         {
           "ability": "bushido",
           "name": "Echo Strike",
-          "description": "Passively retaliates with an attack against any enemy which misses Mifune. Can be activated to grant bonus evasion."
+          "description": "Passively counter-attacks when enemies miss their attacks on Mifune. Upon activation, grants bonus evasion."
         },
         {
           "ability": "zanmato",
           "name": "Zanmato",
-          "description": "On his next attack, Mifune deals bonus magic damage, and slows the target. Mifune's illusions benefit from Zanmato."
+          "description": "Mifune's next attack deals bonus magical damage, and slows its target by 100% for 0.6s."
         },
         {
           "ability": "genso",
           "name": "Shattered Souls",
-          "description": "Mifune summons three stationary ancestral souls, each of which curses nearby enemies with a different affliction. The curses' radius grows over time, and is reduced whenever one of the souls is killed. The souls are magic immune and can be killed by attacking them 3 times, but every time one of them is destroyed, the remaining souls' curses level up, increasing in power.Soul of Despair (red): reduces armor. Reduction is doubled when the curse levels up. Soul of Regret (blue): Periodically stuns a random enemy hero in range. Stun interval reduced when the curse levels up.Soul of Suffering (green): deals damage. Damage doubles when the curse levels up."
+          "description": "Spawns 3 shattered souls at the target location, each of which can be destroyed in 2 hits. Each soul afflicts enemies in the area with a different curse. The area affected will will grow every second. Whenever one of the souls is destroyed, the remaining souls progress to their next level, but the area affected is reduced temporarily. Level 4 can only be achieved with Aghanim's Scepter."
         },
         {
           "ability": "scepter",
@@ -1207,28 +1211,28 @@
       "abilities": [
         {
           "ability": "stomp",
-          "name": "Thunder STomp",
-          "description": "Thunder Boar stomps the ground in sexual frustration, creating 3 rings of shockwaves which slow and deal damage."
+          "name": "Thunder Stomp",
+          "description": "Thunderboar releases pure energy upon the ground, starting at Thunderboar's location and extending outward in 3 rings over a 1 second period. Units are able to be hit multiple times. Each wave deals damage and slows."
         },
         {
           "ability": "rush",
           "name": "Thunder Rush",
-          "description": "Rushes towards a target point. On arrival, drags all units in a cone in front of you towards your position, mini-stunning and dealing damage in the process."
+          "description": "Thunderboar dashes in the given direction, forcing units ahead of that point to be relocated towards him. Enemy units will be mini-stunned and take damage."
         },
         {
           "ability": "tornado",
           "name": "Thunder Pups",
-          "description": "Killing enemy units summons a Thunder Pup. They scurry around their master randomly, dealing damage per second to nearby enemies. Activating this ability sacrifices the oldest Thunder Pup, healing Thunder Boar."
+          "description": "Every creep killed by Thunderboar will create a thunderpup, which deal damage over time in an area around him. When activated, Thunderboar will consume his oldest pup in order to gain a burst of health. Can be used repeatedly."
         },
         {
           "ability": "kinetic_energy",
           "name": "Thunder Dome",
-          "description": "Grants Thunder Boar maximum Thunder Pups, and creates a huge area where enemies are slowed. The slow is stronger closer to the center of the effect. The Thunder Dome ends if Thunder Boar leaves its area."
+          "description": "Creates a large circular storm on the targeted location, which instantly provides Thunderboar with max Thunderpups. Enemies are slowed within the storm, with the slow itself increasing the closer they are to the center. If Thunderboar leaves the area of the storm, it will end prematurely."
         },
         {
           "ability": "scepter",
           "name": "Scepter",
-          "description": "Thunder Rush now pulls enemies in a full circle around the target point."
+          "description": "Thunderous Rush's effects upgrade from a cone area to a 360 degree AoE"
         }
       ]
     }

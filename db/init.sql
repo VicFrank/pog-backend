@@ -114,7 +114,8 @@ CREATE TABLE IF NOT EXISTS cosmetics (
   cosmetic_type TEXT,
   equip_group TEXT,
   cost INTEGER,
-  rarity TEXT
+  rarity TEXT,
+  min_bp_tier INTEGER DEFAULT 0
 );
 
 DROP TABLE IF EXISTS item_prices;
