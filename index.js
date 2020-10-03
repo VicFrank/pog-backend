@@ -19,6 +19,8 @@ const cosmeticsRouter = require("./routes/cosmetics");
 const steamRouter = require("./routes/steam");
 const logsRouter = require("./routes/logs");
 const pollsRouter = require("./routes/polls");
+const tournamentsRouter = require("./routes/tournaments");
+
 const { pool } = require("./db/index");
 
 const players = require("./db/players");
@@ -152,6 +154,7 @@ app.use("/api/cosmetics", cosmeticsRouter);
 app.use("/api/steam", steamRouter);
 app.use("/api/logs", logsRouter);
 app.use("/api/polls", pollsRouter);
+app.use("/api/tournaments", tournamentsRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/dist/index.html"));

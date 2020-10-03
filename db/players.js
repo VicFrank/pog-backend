@@ -1987,6 +1987,25 @@ module.exports = {
     }
   },
 
+  async enterTournament(players) {
+    for (steamID of players) {
+      try {
+        let sql_query = `
+        UPDATE players SET in_tournament = TRUE WHERE steam_id = $1 RETURNING *
+        `;
+        const { rows } = await query(sql_query, [steamID]);
+
+        // If the player did not exist, insert them and run it back
+        if (rows.length === 0) {
+          await this.createNewPlayer(steamID, "placeholder");
+          await query(sql_query, [steamID]);
+        }
+      } catch (error) {
+        throw error;
+      }
+    }
+  },
+
   async getSubscriptions(steamID) {
     try {
       let sql_query = `
