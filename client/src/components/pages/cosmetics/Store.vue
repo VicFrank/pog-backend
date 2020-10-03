@@ -36,9 +36,17 @@
             </router-link>
             <div class="overlay">
               <h3 v-t="'store.buy_poggers'"></h3>
-              <!-- <p>
-                <img class="pogcoin" src="./images/pogcoin_gold.png" alt="Pog Coin" /> 150 POGGERS
-              </p>-->
+            </div>
+          </div>
+          <div class="sale">
+            <router-link to="/subscriptions">
+              <img
+                src="./images/Battle_Pass_Icons_tickets.jpg"
+                alt="Battle Pass Shop"
+              />
+            </router-link>
+            <div class="overlay">
+              <h3 v-t="'store.buy_bp'"></h3>
             </div>
           </div>
         </div>
@@ -351,7 +359,7 @@ export default {
   },
 
   watch: {
-    searchText: function() {
+    searchText: function () {
       this.updateFilteredCosmetics();
     },
   },

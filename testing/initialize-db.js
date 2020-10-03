@@ -280,32 +280,4 @@ async function initializeAdmins() {
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
-
-  const cosmetics = [
-    {
-      cost: -1,
-      cosmetic_id: "honey_roshan",
-      rarity: "Ancient",
-      type: "Companion",
-      equip_group: "companion",
-      bp_tier: 3,
-    },
-    {
-      cost: -1,
-      cosmetic_id: "honey_heist",
-      rarity: "Ancient",
-      type: "Companion FX",
-      equip_group: "companion_fx",
-      bp_tier: 3,
-    },
-    {
-      cost: -1,
-      cosmetic_id: "golden_skin",
-      rarity: "Ancient",
-      equip_group: "hero_skin",
-      type: "Hero Skin",
-    }
-  ];
-
-  await loadNewCosmetics(cosmetics);
 })();
