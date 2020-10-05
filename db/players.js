@@ -667,6 +667,7 @@ module.exports = {
       // also, they lose these items when their tier 3 subscription expires
       await this.giveUniqueCosmetic(steamID, "honey_roshan");
       await this.giveUniqueCosmetic(steamID, "honey_heist");
+      await this.giveUniqueCosmetic(steamID, "golden_skin");
     } catch (error) {
       throw error;
     }

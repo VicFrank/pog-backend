@@ -46,6 +46,14 @@
             v-b-tooltip.hover
             :title="`Tier 2: Expires ${upgradeExpiration}`"
           />
+          <img
+            v-if="bpTier === 3"
+            src="../assets/images/bp_tier2.png"
+            class="custom-badge-img"
+            alt="Battle Pass Badge"
+            v-b-tooltip.hover
+            :title="`Tier 3: Expires ${upgradeExpiration}`"
+          />
         </div>
 
         <div class="row">
