@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout__content">
     <div class="content">
-      <h1 class="page-title" v-t="'profile.my_stats'">My Stats</h1>
+      <h1 class="page-title" v-t="'profile.my_stats'"></h1>
       <div class="container">
         <div v-if="loading" class="d-flex justify-content-center mb-3">
           <b-spinner label="Loading..."></b-spinner>
@@ -30,27 +30,35 @@
             </div>
           </div>
         </div>
+        <h2 class="page-title" v-t="'profile.hero_stats'"></h2>
+        <PlayerHeroStatsList />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import PlayerHeroStatsList from "./games/PlayerHeroStatsList";
+
 export default {
+  components: {
+    PlayerHeroStatsList,
+  },
+
   data: () => ({
     error: "",
     playerStats: {},
-    loading: true
+    loading: true,
   }),
 
   created() {
     fetch(`/api/players/${this.$store.state.auth.userSteamID}/stats`)
-      .then(res => res.json())
-      .then(playerStats => {
+      .then((res) => res.json())
+      .then((playerStats) => {
         this.loading = false;
         this.playerStats = playerStats;
       });
-  }
+  },
 };
 </script>
 

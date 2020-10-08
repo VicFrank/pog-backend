@@ -105,4 +105,7 @@ export default new Set([
   "coral",
   "brightjoy",
   "i_love_you",
+  "golden_skin",
+  "honey_heist",
+  "honey_roshan",
 ]);

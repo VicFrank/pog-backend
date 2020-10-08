@@ -48,6 +48,7 @@ module.exports = {
       );
       // Create three random daily quests
       await this.createInitialDailyQuests(steamID, 3);
+      await this.createInitialWeeklyQuests(steamID, 3);
       await this.initializeAchievements(steamID);
 
       // Give the player the default announcer pack
@@ -198,6 +199,7 @@ module.exports = {
       const equippedCompanion = await this.getEquippedCompanion(steamID);
       // const teamKillStats = await this.getTeamKillStats(steamID);
       const dailyQuests = await this.getDailyQuests(steamID);
+      const weeklyQuests = await this.getWeeklyQuests(steamID);
       const achievements = await quests.getAchievementsForPlayer(steamID);
       const battlePass = await this.getPlayerBattlePass(steamID);
       const battlePassLevel = await cosmetics.getBattlePassLevel(
@@ -230,6 +232,7 @@ module.exports = {
         ...playerStats,
         companion: equippedCompanion,
         dailyQuests: dailyQuests,
+        weeklyQuests: weeklyQuests,
         battlePass: { ...battlePass, ...battlePassLevel },
         achievementsToClaim,
         dailyQuestsToClaim,
@@ -668,6 +671,9 @@ module.exports = {
       await this.giveUniqueCosmetic(steamID, "honey_roshan");
       await this.giveUniqueCosmetic(steamID, "honey_heist");
       await this.giveUniqueCosmetic(steamID, "golden_skin");
+
+      // initialize their weekly quests if they haven't yet
+      await this.createInitialWeeklyQuests(steamID, 3);
     } catch (error) {
       throw error;
     }
@@ -1615,6 +1621,42 @@ module.exports = {
     }
   },
 
+  async createInitialWeeklyQuests(steamID, numQuests) {
+    try {
+      const currentQuests = await this.getWeeklyQuestsIncludeHidden(steamID);
+      if (currentQuests.length > 0) {
+        throw new Error("Player Weekly Quests have already been initialized!");
+      }
+
+      // Randomly choose three weekly quests
+      const allQuests = await quests.getAllWeeklyQuests();
+      console.log(allQuests);
+      const questsToInsert = this.randomSample(allQuests, numQuests);
+
+      // Add the new quests
+      let newQuests = [];
+      let index = 1;
+      for (quest of questsToInsert) {
+        const insert_query = `
+          INSERT INTO player_quests (steam_id, quest_id, quest_index) VALUES($1, $2, $3)
+          RETURNING *;
+        `;
+        const { rows } = await query(insert_query, [
+          steamID,
+          quest.quest_id,
+          index,
+        ]);
+        newQuests.push(rows[0]);
+
+        index++;
+      }
+
+      return newQuests;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   /**
    * Initializes all achievements for the player
    * @param {string} steamID
@@ -1635,50 +1677,88 @@ module.exports = {
     }
   },
 
+  async getAllRerollableQuests(steamID) {
+    try {
+      const sql_query = `
+      SELECT pq.*, q.*
+      FROM player_quests pq
+      JOIN quests q
+      USING (quest_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE steam_id = $1 AND q.is_achievement = FALSE
+      ORDER BY quest_index DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Randomly choose a new quest
+  async chooseNewQuest(currentQuests, allQuests) {
+    const currentQuestIDs = currentQuests.map((quest) => quest.quest_id);
+    const currentQuestStats = currentQuests.map((quest) => quest.stat);
+    const newQuests = allQuests.filter((quest) => {
+      return (
+        !currentQuestIDs.includes(quest.quest_id) &&
+        !currentQuestStats.includes(quest.stat)
+      );
+    });
+
+    const questToAdd = newQuests[Math.floor(Math.random() * newQuests.length)];
+
+    return questToAdd;
+  },
+
   /**
    * Removes the given quest, and generates a new one that the player
    * does not already have, and is not the given quest
    * @param {string} steamID
    * @param {number} questID
    */
-  async rerollDailyQuest(steamID, questID) {
+  async rerollQuest(steamID, questID) {
     try {
+      const quest = await quests.getQuest(questID);
+
+      if (!quest) throw new Error(`Quest with ID ${questID} does not exist`);
+
+      const isWeekly = quest.is_weekly;
+      const interval = isWeekly ? 24 * 7 : 23;
+
       // Make sure the player has the quest, and that it's at least 24 hours old
       let sql_query = `
       SELECT
-      created < current_timestamp - interval '23 hours' as can_reroll
+      created < current_timestamp - $3 * INTERVAL '1 HOURS' as can_reroll
       FROM player_quests
       JOIN quests
       USING (quest_id)
-      WHERE is_achievement = FALSE AND
-        steam_id = $1 AND quest_id = $2
+      WHERE is_achievement = FALSE AND steam_id = $1 AND quest_id = $2
       `;
-      const { rows: createdRows } = await query(sql_query, [steamID, questID]);
+      const { rows: createdRows } = await query(sql_query, [
+        steamID,
+        questID,
+        interval,
+      ]);
+
       if (createdRows.length === 0)
         throw new Error(`Player does not have quest with ID ${questID}`);
       if (!createdRows[0].can_reroll)
-        throw new Error(`Can't reroll quest younger than 23 hours`);
+        throw new Error(`Can't reroll this quest yet`);
 
       // Make sure we're rerolling a quest the player actually has
-      const currentQuests = await quests.getAllDailyQuestsForPlayer(steamID);
+      const currentQuests = await this.getAllRerollableQuests(steamID);
       if (!currentQuests.some((quest) => (quest.quest_id = questID))) {
         throw new Error(`Can't reroll quest ${questID} you don't have`);
       }
 
-      // Randomly choose a new quest
-      const allQuests = await quests.getAllDailyQuests();
+      const allQuests = isWeekly
+        ? await quests.getAllWeeklyQuests()
+        : await quests.getAllDailyQuests();
 
-      const currentQuestIDs = currentQuests.map((quest) => quest.quest_id);
-      const currentQuestStats = currentQuests.map((quest) => quest.stat);
-      const newQuests = allQuests.filter((quest) => {
-        return (
-          !currentQuestIDs.includes(quest.quest_id) &&
-          !currentQuestStats.includes(quest.stat)
-        );
-      });
-
-      const questToAdd =
-        newQuests[Math.floor(Math.random() * newQuests.length)];
+      const questToAdd = await this.chooseNewQuest(currentQuests, allQuests);
       const questToAddID = questToAdd.quest_id;
 
       // Log the reroll
@@ -1716,8 +1796,12 @@ module.exports = {
    * @param {number} questID
    */
   async playerHasQuest(steamID, questID) {
-    const currentQuests = await this.getDailyQuests(steamID);
-    for (let quest of currentQuests) {
+    const dailyQuests = await this.getDailyQuests(steamID);
+    for (let quest of dailyQuests) {
+      if (quest.quest_id === questID) return true;
+    }
+    const weeklyQuests = await this.getWeeklyQuests(steamID);
+    for (let quest of weeklyQuests) {
       if (quest.quest_id === questID) return true;
     }
     return false;
@@ -1730,24 +1814,31 @@ module.exports = {
    * */
   async claimQuestReward(steamID, questID) {
     try {
+      let quest = await quests.getQuest(questID);
+
+      if (!quest) throw new Error(`Quest with ID ${questID} does not exist`);
+
+      const isWeekly = quest.is_weekly;
+      const interval = isWeekly ? 24 * 7 : 23;
+
       // Get the quest rewards and requirements for the DB,
       // and make sure the quest is actually complete
       let sql_query = `
         SELECT pq.quest_progress, pq.claimed, q.required_amount,
           q.poggers_reward, q.xp_reward, is_achievement,
-          created < current_timestamp - interval '23 hours' as can_reroll
+          created < current_timestamp - $3 * INTERVAL '1 HOURS' as can_reroll
         FROM player_quests pq
         JOIN quests q
         USING (quest_id)
         WHERE steam_id = $1 AND quest_id = $2
       `;
-      const { rows } = await query(sql_query, [steamID, questID]);
+      const { rows } = await query(sql_query, [steamID, questID, interval]);
 
       if (rows.length === 0) {
-        throw new Error(`Invalid Quest ID ${questID}`);
+        throw new Error(`Player does not have quest with ID ${questID}`);
       }
 
-      const quest = rows[0];
+      quest = rows[0];
 
       const questProgress = quest.quest_progress;
       const required = quest.required_amount;
@@ -1781,7 +1872,7 @@ module.exports = {
 
       // Reroll if possible
       if (canReroll) {
-        await this.rerollDailyQuest(steamID, questID);
+        await this.rerollQuest(steamID, questID);
       }
 
       // Add the rewarded poggers
@@ -1840,7 +1931,7 @@ module.exports = {
       USING (quest_id)
       JOIN players p
       USING (steam_id)
-      WHERE steam_id = $1 AND q.is_achievement = FALSE
+      WHERE steam_id = $1 AND q.is_achievement = FALSE AND is_weekly = FALSE
       ORDER BY quest_index DESC
       `;
       const { rows } = await query(sql_query, [steamID]);
@@ -1848,6 +1939,81 @@ module.exports = {
       const numQuests = await this.getNumDailyQuests(steamID);
 
       return rows.slice(0, numQuests);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getDailyQuestsIncludeHidden(steamID) {
+    try {
+      const sql_query = `
+      SELECT pq.*, q.*, p.patreon_level,
+        LEAST(quest_progress, required_amount) as capped_quest_progress,
+        quest_progress >= required_amount as quest_completed,
+        created < current_timestamp - interval '23 hours' as can_reroll
+      FROM player_quests pq
+      JOIN quests q
+      USING (quest_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE steam_id = $1 AND q.is_achievement = FALSE AND is_weekly = FALSE
+      ORDER BY quest_index DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getWeeklyQuests(steamID) {
+    try {
+      const tier = await this.getBattlePassTier(steamID);
+
+      if (tier < 2) return null;
+
+      const sql_query = `
+      SELECT pq.*, q.*, p.patreon_level,
+        LEAST(quest_progress, required_amount) as capped_quest_progress,
+        quest_progress >= required_amount as quest_completed,
+        created < current_timestamp - interval '168 hours' as can_reroll
+      FROM player_quests pq
+      JOIN quests q
+      USING (quest_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE steam_id = $1 AND q.is_achievement = FALSE AND is_weekly = TRUE
+      ORDER BY quest_index DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getWeeklyQuestsIncludeHidden(steamID) {
+    try {
+      const tier = await this.getBattlePassTier(steamID);
+
+      const sql_query = `
+      SELECT pq.*, q.*, p.patreon_level,
+        LEAST(quest_progress, required_amount) as capped_quest_progress,
+        quest_progress >= required_amount as quest_completed,
+        created < current_timestamp - interval '168 hours' as can_reroll
+      FROM player_quests pq
+      JOIN quests q
+      USING (quest_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE steam_id = $1 AND q.is_achievement = FALSE AND is_weekly = TRUE
+      ORDER BY quest_index DESC
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+
+      return rows;
     } catch (error) {
       throw error;
     }

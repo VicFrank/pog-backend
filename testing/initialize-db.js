@@ -38,6 +38,41 @@ async function loadQuests() {
   }
 }
 
+async function loadNewQuests(newQuests) {
+  try {
+    console.log("Adding New Quests...");
+
+    let promises = [];
+    for (let questData of newQuests) {
+      promises.push(quests.addNewQuest(questData));
+    }
+
+    await Promise.all(promises);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function addQuest(quest) {
+  console.log("Adding Quest");
+  quests.addNewQuest(quest);
+}
+
+async function deleteQuests(questsList) {
+  try {
+    console.log("Deleting Quests...");
+
+    let promises = [];
+    for (let questData of questsList) {
+      promises.push(quests.removeQuest(questData));
+    }
+
+    await Promise.all(promises);
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function addQuest(quest) {
   console.log("Adding Quest");
   quests.addNewQuest(quest);
@@ -280,4 +315,59 @@ async function initializeAdmins() {
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
+
+  const quests = [
+    {
+      isAchievement: false,
+      isWeekly: true,
+      name: "Win %x% Games",
+      description: "",
+      poggers: 0,
+      xp: 1000,
+      stat: "games_won",
+      requiredAmount: 5,
+    },
+    {
+      isAchievement: false,
+      isWeekly: true,
+      name: "Kill %x% creeps",
+      description: "",
+      poggers: 0,
+      xp: 1000,
+      stat: "creeps_killed",
+      requiredAmount: 1000,
+    },
+    {
+      isAchievement: false,
+      isWeekly: true,
+      name: "Earn a total of %x% gold",
+      description: "",
+      poggers: 0,
+      xp: 1000,
+      stat: "gold_earned",
+      requiredAmount: 500000,
+    },
+    {
+      isAchievement: false,
+      isWeekly: true,
+      name: "Kill %x% Guardians",
+      description: "",
+      poggers: 0,
+      xp: 1000,
+      stat: "guardians_killed",
+      requiredAmount: 20,
+    },
+    {
+      isAchievement: false,
+      isWeekly: true,
+      name: "Deal %x% damage to Heroes",
+      description: "",
+      poggers: 0,
+      xp: 1000,
+      stat: "damage_dealt",
+      requiredAmount: 200000,
+    },
+  ];
+
+  await loadNewQuests(quests);
 })();

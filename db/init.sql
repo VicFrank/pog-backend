@@ -204,6 +204,7 @@ CREATE TABLE IF NOT EXISTS quests (
   quest_id SERIAL PRIMARY KEY,
   quest_name TEXT NOT NULL,
   is_achievement BOOLEAN NOT NULL,
+  is_weekly BOOLEAN DEFAULT FALSE,
   quest_description TEXT,
   title_reward TEXT,
   poggers_reward INTEGER DEFAULT 0,

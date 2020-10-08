@@ -1,6 +1,16 @@
 const { query } = require("./index");
 
 module.exports = {
+  async getQuest(questID) {
+    try {
+      const sql_query = `SELECT * FROM quests WHERE quest_id = $1`;
+      const { rows } = await query(sql_query, [questID]);
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getAllQuests() {
     try {
       const sql_query = `SELECT * FROM quests`;
@@ -15,7 +25,20 @@ module.exports = {
     try {
       const sql_query = `
       SELECT * FROM quests
-      WHERE is_achievement = FALSE
+      WHERE is_achievement = FALSE AND is_weekly = FALSE
+      `;
+      const { rows } = await query(sql_query);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getAllWeeklyQuests() {
+    try {
+      const sql_query = `
+      SELECT * FROM quests
+      WHERE is_achievement = FALSE AND is_weekly = TRUE
       `;
       const { rows } = await query(sql_query);
       return rows;
@@ -63,12 +86,14 @@ module.exports = {
     stat,
     requiredAmount,
     title,
+    isWeekly,
   }) {
+    if (!isWeekly) isWeekly = false;
     try {
       const sql_query = `
       INSERT INTO quests (quest_name, is_achievement, quest_description,
-        poggers_reward, xp_reward, stat, required_amount, title_reward)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        poggers_reward, xp_reward, stat, required_amount, title_reward, is_weekly)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *
       `;
       const { rows } = await query(sql_query, [
@@ -80,8 +105,44 @@ module.exports = {
         stat,
         requiredAmount,
         title,
+        isWeekly,
       ]);
       return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async removeQuest({
+    name,
+    isAchievement,
+    description,
+    poggers,
+    xp,
+    stat,
+    requiredAmount,
+    title,
+    isWeekly,
+  }) {
+    if (!isWeekly) isWeekly = false;
+    try {
+      const sql_query = `
+      DELETE FROM quests WHERE 
+      quest_name = $1 AND is_achievement = $2 AND quest_description = $3 AND
+      poggers_reward = $4 AND xp_reward = $5 AND stat = $6 AND
+      required_amount = $7 AND title_reward = $8 AND is_weekly = $9
+      `;
+      const { rows } = await query(sql_query, [
+        name,
+        isAchievement,
+        description,
+        poggers,
+        xp,
+        stat,
+        requiredAmount,
+        title,
+        isWeekly,
+      ]);
     } catch (error) {
       throw error;
     }
@@ -101,7 +162,7 @@ module.exports = {
       USING (quest_id)
       JOIN players p
       USING (steam_id)
-      WHERE steam_id = $1 AND q.is_achievement = FALSE
+      WHERE steam_id = $1 AND q.is_achievement = FALSE AND is_weekly = FALSE
       ORDER BY quest_index DESC
       `;
       const { rows } = await query(sql_query, [steamID]);

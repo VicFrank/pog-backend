@@ -94,6 +94,17 @@ router.get("/:steamid/daily_quests", auth.userAuth, async (req, res) => {
   }
 });
 
+router.get("/:steamid/weekly_quests", auth.userAuth, async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const dailyQuests = await players.getWeeklyQuests(steamid);
+    res.status(200).json(dailyQuests);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
 // /api/players/:steamid/daily_quests/reroll?questID=:questid
 router.post(
   "/:steamid/daily_quests/reroll",
@@ -102,7 +113,7 @@ router.post(
     try {
       const steamid = req.params.steamid;
       const questID = req.query.questID;
-      const dailyQuests = await players.rerollDailyQuest(steamid, questID);
+      const dailyQuests = await players.rerollQuest(steamid, questID);
       res.status(200).json(dailyQuests);
     } catch (error) {
       console.log(error);

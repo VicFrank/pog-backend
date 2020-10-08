@@ -1,11 +1,9 @@
 <template>
   <div class="content">
-    <h3 class="mb-5 text-center">Daily Quests</h3>
+    <h3 class="mb-5 text-center" v-t="'profile.daily_quests'"></h3>
     <div class="quest container p-0">
       <b-alert v-model="showError" show variant="danger" dismissible>
-        {{
-        error
-        }}
+        {{ error }}
       </b-alert>
       <div class="row">
         <template v-if="loading">
@@ -25,23 +23,36 @@
         >
           <div class="single-quest">
             <i18n :path="`quests.${quest.quest_name}`" tag="p">
-              <template v-slot:x>{{quest.required_amount.toLocaleString()}}</template>
+              <template v-slot:x>{{
+                quest.required_amount.toLocaleString()
+              }}</template>
             </i18n>
             <button
               v-on:click="claimQuest(quest)"
               v-if="quest.quest_completed && !quest.claimed"
               type="button"
               class="btn btn-primary mb-3"
-            >Claim</button>
-            <ProgressBar :progress="quest.capped_quest_progress" :required="quest.required_amount" />
+            >
+              Claim
+            </button>
+            <ProgressBar
+              :progress="quest.capped_quest_progress"
+              :required="quest.required_amount"
+            />
           </div>
           <div class="d-flex flex-row quest-xp">
             <div v-if="!quest.claimed" class="quest-rewards">
               <span v-if="quest.poggers_reward > 0" class="pog-text mr-3">
-                <img class="pogcoin" src="../../../assets/images/pogcoin_gold.png" alt="Pog Coin" />
+                <img
+                  class="pogcoin"
+                  src="../../../assets/images/pogcoin_gold.png"
+                  alt="Pog Coin"
+                />
                 {{ quest.poggers_reward }} POGGERS
               </span>
-              <span v-if="quest.xp_reward > 0" class="quest-xp-text">{{ quest.xp_reward }} XP</span>
+              <span v-if="quest.xp_reward > 0" class="quest-xp-text"
+                >{{ quest.xp_reward }} XP</span
+              >
             </div>
             <div v-else class="quest-rewards">Completed</div>
             <a
@@ -52,7 +63,9 @@
               <img src="./reroll.svg" alt="Reroll" />
             </a>
             <template v-else>
-              <span class="ml-auto mr-2 next-quest-text">{{ getTimeUntilReroll(quest.created) }}</span>
+              <span class="ml-auto mr-2 next-quest-text">{{
+                getTimeUntilReroll(quest.created)
+              }}</span>
               <a class="mr-3 reroll-button-inactive">
                 <img src="./reroll.svg" alt="Reroll" />
               </a>
@@ -73,11 +86,11 @@ export default {
     error: "",
     showError: false,
     quests: [],
-    loading: true
+    loading: true,
   }),
 
   components: {
-    ProgressBar
+    ProgressBar,
   },
 
   created() {
@@ -86,72 +99,70 @@ export default {
 
   methods: {
     getTimeUntilReroll(created) {
-      const time = moment(created)
-        .add(24, "hours")
-        .fromNow();
+      const time = moment(created).add(24, "hours").fromNow();
       return `Can refresh ${time}`;
     },
     getDailyQuests() {
       fetch(`/api/players/${this.$store.state.auth.userSteamID}/daily_quests`)
-        .then(res => res.json())
-        .then(quests => {
+        .then((res) => res.json())
+        .then((quests) => {
           this.loading = false;
           this.quests = quests;
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = err;
           this.showError = true;
         });
     },
     rerollQuest(quest, index) {
       const { quest_id } = quest;
-      this.quests = this.quests.map(q =>
+      this.quests = this.quests.map((q) =>
         q.quest_id === quest_id ? { ...q, can_reroll: false } : q
       );
       fetch(
         `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/reroll?questID=${quest_id}`,
         { method: "post" }
       )
-        .then(res => {
+        .then((res) => {
           if (!res.ok) throw Error(res.statusText);
           return res;
         })
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res.success) {
             this.quests = this.quests.splice(index);
             // refresh the daily quests
             this.getDailyQuests();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = err;
           this.showError = true;
         });
     },
     claimQuest(quest) {
       const { quest_id } = quest;
-      this.quests = this.quests.map(q =>
+      this.quests = this.quests.map((q) =>
         q.quest_id === quest_id ? { ...q, claimed: true } : q
       );
       fetch(
         `/api/players/${this.$store.state.auth.userSteamID}/daily_quests/claim?questID=${quest_id}`,
         { method: "post" }
       )
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res.success) {
             // refresh the daily quests
             this.getDailyQuests();
             this.$store.dispatch("refreshPlayer");
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = err;
           this.showError = true;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

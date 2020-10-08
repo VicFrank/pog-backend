@@ -961,9 +961,11 @@
 
   "profile": {
     "daily_quests": "Daily Quests",
+    "weekly_quests": "Weekly Quests",
     "match_history": "Match History",
     "my_subscriptions": "My Subscriptions",
     "my_stats": "My Stats",
+    "hero_stats": "Heroes",
     "my_games": "My Games",
     "daily_xp": "Daily XP",
     "stats": "Stats",

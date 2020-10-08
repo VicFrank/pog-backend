@@ -5,6 +5,7 @@
         <div class="row">
           <div class="col-xl-12">
             <DailyQuests></DailyQuests>
+            <WeeklyQuests v-if="bpTier > 1" class="mt-5"></WeeklyQuests>
 
             <div class="match-history position-relative">
               <h3
@@ -47,6 +48,18 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="more">
+                <router-link
+                  to="/profile/stats"
+                  class="blue"
+                  v-t="'profile.view_all'"
+                ></router-link>
+              </div>
+            </div>
+
+            <div class="position-relative">
+              <h3 class="mt-5 mb-5 text-center" v-t="'profile.hero_stats'"></h3>
+              <PlayerHeroStatsList :numItems="3" />
               <div class="more">
                 <router-link
                   to="/profile/stats"
@@ -102,13 +115,17 @@
 
 <script>
 import DailyQuests from "./quests/DailyQuests";
+import WeeklyQuests from "./quests/WeeklyQuests";
 import PlayerGamesList from "./games/PlayerGamesList";
+import PlayerHeroStatsList from "./games/PlayerHeroStatsList";
 import ProgressBar from "../utility/ProgressBar";
 
 export default {
   components: {
     DailyQuests,
+    WeeklyQuests,
     PlayerGamesList,
+    PlayerHeroStatsList,
     ProgressBar,
   },
 
