@@ -316,58 +316,16 @@ async function initializeAdmins() {
   // await initializeAdmins();
   // await addRealSample();
 
-  const quests = [
-    {
-      isAchievement: false,
-      isWeekly: true,
-      name: "Win %x% Games",
-      description: "",
-      poggers: 0,
-      xp: 1000,
-      stat: "games_won",
-      requiredAmount: 5,
-    },
-    {
-      isAchievement: false,
-      isWeekly: true,
-      name: "Kill %x% creeps",
-      description: "",
-      poggers: 0,
-      xp: 1000,
-      stat: "creeps_killed",
-      requiredAmount: 1000,
-    },
-    {
-      isAchievement: false,
-      isWeekly: true,
-      name: "Earn a total of %x% gold",
-      description: "",
-      poggers: 0,
-      xp: 1000,
-      stat: "gold_earned",
-      requiredAmount: 500000,
-    },
-    {
-      isAchievement: false,
-      isWeekly: true,
-      name: "Kill %x% Guardians",
-      description: "",
-      poggers: 0,
-      xp: 1000,
-      stat: "guardians_killed",
-      requiredAmount: 20,
-    },
-    {
-      isAchievement: false,
-      isWeekly: true,
-      name: "Deal %x% damage to Heroes",
-      description: "",
-      poggers: 0,
-      xp: 1000,
-      stat: "damage_dealt",
-      requiredAmount: 200000,
-    },
+  const vips = [
+    "76561198054705495",
+    "76561198010267417",
+    "76561198030851434",
+    "76561197983098727",
+    "76561197997664905",
+    "76561197960956468",
   ];
 
-  await loadNewQuests(quests);
+  for (let steamID of vips) {
+    await players.createInitialWeeklyQuests(steamID);
+  }
 })();
