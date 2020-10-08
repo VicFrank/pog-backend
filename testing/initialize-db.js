@@ -326,6 +326,6 @@ async function initializeAdmins() {
   ];
 
   for (let steamID of vips) {
-    await players.createInitialWeeklyQuests(steamID);
+    await players.createInitialWeeklyQuests(steamID, 3);
   }
 })();

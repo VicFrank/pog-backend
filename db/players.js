@@ -432,6 +432,7 @@ module.exports = {
       USING (steam_id)
       WHERE p.steam_id = $1
       GROUP BY gp.hero
+      ORDER BY games DESC;
       `;
       const { rows } = await query(sql_query, [steamID]);
       return rows;
@@ -1630,7 +1631,6 @@ module.exports = {
 
       // Randomly choose three weekly quests
       const allQuests = await quests.getAllWeeklyQuests();
-      console.log(allQuests);
       const questsToInsert = this.randomSample(allQuests, numQuests);
 
       // Add the new quests
