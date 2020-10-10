@@ -26,7 +26,7 @@
             </div>
 
             <div class="my-stats position-relative">
-              <h3 class="mt-5 mb-5 text-center" v-t="'profile.stats'">Stats</h3>
+              <h3 class="mt-5 mb-5 text-center" v-t="'profile.stats'"></h3>
               <table class="table mb-5">
                 <tbody>
                   <tr>
@@ -44,6 +44,11 @@
                 </tbody>
               </table>
             </div>
+
+            <div class="position-relative" v-if="bpTier === 3">
+              <h3 class="mt-5 mb-5 text-center" v-t="'profile.hero_stats'"></h3>
+              <PlayerHeroStatsList :steamID="steamID" />
+            </div>
           </div>
         </div>
       </div>
@@ -55,11 +60,13 @@
 </template>
 
 <script>
-import PlayerGamesList from "../games/PlayerGamesList.vue";
+import PlayerGamesList from "../games/PlayerGamesList";
+import PlayerHeroStatsList from "../games/PlayerHeroStatsList";
 
 export default {
   components: {
     PlayerGamesList,
+    PlayerHeroStatsList,
   },
 
   data: () => ({
@@ -70,17 +77,24 @@ export default {
     playerNotFound: false,
   }),
 
-  created() {
-    const steamID = this.$route.params.steam_id;
+  computed: {
+    steamID() {
+      return this.$route.params.steam_id;
+    },
+    bpTier() {
+      return this.$store.getters.bpTier;
+    },
+  },
 
-    fetch(`/api/players/${steamID}/games?limit=3`)
+  created() {
+    fetch(`/api/players/${this.steamID}/games?limit=3`)
       .then((res) => res.json())
       .then((games) => {
         this.gamesLoading = false;
         this.games = games;
       });
 
-    fetch(`/api/players/${steamID}/stats`)
+    fetch(`/api/players/${this.steamID}/stats`)
       .then((res) => res.json())
       .then((playerStats) => {
         if (!playerStats.steam_id) {

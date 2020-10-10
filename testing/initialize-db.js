@@ -315,17 +315,4 @@ async function initializeAdmins() {
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
-
-  const vips = [
-    "76561198054705495",
-    "76561198010267417",
-    "76561198030851434",
-    "76561197983098727",
-    "76561197997664905",
-    "76561197960956468",
-  ];
-
-  for (let steamID of vips) {
-    await players.createInitialWeeklyQuests(steamID, 3);
-  }
 })();

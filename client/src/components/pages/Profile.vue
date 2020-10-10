@@ -57,9 +57,9 @@
               </div>
             </div>
 
-            <div class="position-relative">
+            <div class="position-relative" v-if="bpTier === 3">
               <h3 class="mt-5 mb-5 text-center" v-t="'profile.hero_stats'"></h3>
-              <PlayerHeroStatsList :numItems="3" />
+              <PlayerHeroStatsList :numItems="3" :steamID="steamID" />
               <div class="more">
                 <router-link
                   to="/profile/stats"
@@ -144,6 +144,9 @@ export default {
     dailyXP() {
       return this.$store.getters.dailyXP;
     },
+    steamID() {
+      return this.$store.state.auth.userSteamID;
+    },
     maxDailyXP() {
       switch (this.bpTier) {
         case 0:
@@ -173,14 +176,14 @@ export default {
   },
 
   created() {
-    fetch(`/api/players/${this.$store.state.auth.userSteamID}/games?limit=3`)
+    fetch(`/api/players/${this.steamID}/games?limit=3`)
       .then((res) => res.json())
       .then((games) => {
         this.gamesLoading = false;
         this.games = games;
       });
 
-    fetch(`/api/players/${this.$store.state.auth.userSteamID}/stats`)
+    fetch(`/api/players/${this.steamID}/stats`)
       .then((res) => res.json())
       .then((playerStats) => {
         this.playerStats = playerStats;

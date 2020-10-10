@@ -48,7 +48,7 @@
           />
           <img
             v-if="bpTier === 3"
-            src="../assets/images/bp_tier2.png"
+            src="../assets/images/bp_tier3.png"
             class="custom-badge-img"
             alt="Battle Pass Badge"
             v-b-tooltip.hover

@@ -45,13 +45,13 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <li class="nav-item mr-5">
-          <router-link class="nav-link" to="/changelog">
-            {{ $t("navigation.change_log") }}
+          <router-link class="nav-link" to="/tournament">
+            {{ $t("navigation.tournament") }}
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/tournament">
-            {{ $t("navigation.tournament") }}
+          <router-link class="nav-link" to="/changelog">
+            {{ $t("navigation.change_log") }}
           </router-link>
         </li>
       </ul>

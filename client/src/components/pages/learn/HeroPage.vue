@@ -28,6 +28,9 @@
       <div class="ability-text">
         <h3 class="ability-name">{{ currentAbility.name }}</h3>
         <div class="ability-description">{{ currentAbility.description }}</div>
+        <div class="mt-1" v-for="stat in currentAbility.stats" :key="stat.stat">
+          <span class="text-muted mt-1">{{stat.stat}}:</span> {{stat.values}}
+      </div>
       </div>
     </div>
 
@@ -55,6 +58,13 @@
         <div class="talent">{{ talents[1] }}</div>
       </div>
     </div>
+
+    <div class="text-center my-3">
+      <h3>Credits</h3>
+      <div class="mt-1" v-for="credit in credits" :key="credit">
+        {{ credit }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -66,6 +76,7 @@ export default {
     abilitiesList: [],
     abilities: [],
     talents: [],
+    credits: [],
     currentAbility: {},
 
     videos: {
@@ -80,6 +91,7 @@ export default {
 
     this.abilities = this.heroData.abilities;
     this.talents = this.heroData.talents;
+    this.credits = this.heroData.credits;
 
     if (!this.hero) {
       // bad route

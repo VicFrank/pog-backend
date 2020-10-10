@@ -30,8 +30,12 @@
             </div>
           </div>
         </div>
-        <h2 class="page-title" v-t="'profile.hero_stats'"></h2>
-        <PlayerHeroStatsList />
+        <h2
+          v-if="bpTier === 3"
+          class="page-title"
+          v-t="'profile.hero_stats'"
+        ></h2>
+        <PlayerHeroStatsList :steamID="steamID" />
       </div>
     </div>
   </div>
@@ -51,8 +55,17 @@ export default {
     loading: true,
   }),
 
+  computed: {
+    steamID() {
+      return this.$store.state.auth.userSteamID;
+    },
+    bpTier() {
+      return this.$store.getters.bpTier;
+    },
+  },
+
   created() {
-    fetch(`/api/players/${this.$store.state.auth.userSteamID}/stats`)
+    fetch(`/api/players/${this.steamID}/stats`)
       .then((res) => res.json())
       .then((playerStats) => {
         this.loading = false;

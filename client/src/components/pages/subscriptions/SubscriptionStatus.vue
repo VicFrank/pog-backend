@@ -34,7 +34,7 @@
           >
         </template>
         <template v-else-if="bpTier == 3">
-          <b-button variant="primary" to="/subscriptions/tier3"
+          <b-button variant="primary" to="/subscriptions"
             >Extend your subscription</b-button
           >
         </template>

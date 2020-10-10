@@ -7,6 +7,17 @@
         <!-- <p class="text-center">1 day 2 hours 43mins</p> -->
         <div class="row">
           <div class="sale">
+            <router-link to="/subscriptions">
+              <img
+                src="./images/Battle_Pass_Icons_tickets.png"
+                alt="Battle Pass Shop"
+              />
+            </router-link>
+            <div class="overlay">
+              <h3 v-t="'store.buy_bp'"></h3>
+            </div>
+          </div>
+          <div class="sale">
             <img
               src="./images/mifune_ad.png"
               alt="Mifune"
@@ -36,17 +47,6 @@
             </router-link>
             <div class="overlay">
               <h3 v-t="'store.buy_poggers'"></h3>
-            </div>
-          </div>
-          <div class="sale">
-            <router-link to="/subscriptions">
-              <img
-                src="./images/Battle_Pass_Icons_tickets.jpg"
-                alt="Battle Pass Shop"
-              />
-            </router-link>
-            <div class="overlay">
-              <h3 v-t="'store.buy_bp'"></h3>
             </div>
           </div>
         </div>

@@ -17,19 +17,48 @@
               <b-card-text>
                 <div class="mb-4">
                   <div class="reward-value">+100%</div>
-                  <div class="reward-description">BP EXP</div>
+                  <div class="reward-description">
+                    BP EXP
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Earn more experience towards your Battle Pass"
+                    >
+                      <i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">+50%</div>
-                  <div class="reward-description">First Win EXP</div>
+                  <div class="reward-description">
+                    First Win EXP
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Earn more experience for your first win of the day"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">x2</div>
-                  <div class="reward-description">Content Vote Weight</div>
+                  <div class="reward-description">
+                    Content Vote Weight
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Your vote on content to be added to the game counts more"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">x15</div>
-                  <div class="reward-description">Daily Tips</div>
+                  <div class="reward-description">
+                    Daily Tips
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Tip other players to give them POGGERS. Tips do not reduce your POGGERS."
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">1 POGGERS</div>
@@ -45,7 +74,9 @@
                 </div>
               </b-card-text>
               <template v-slot:footer>
-                <b-button variant="primary" to="/subscriptions/tier1">Subscribe</b-button>
+                <b-button variant="primary" to="/subscriptions/tier1"
+                  >Subscribe</b-button
+                >
               </template>
             </b-card>
             <b-card>
@@ -60,19 +91,47 @@
               <b-card-text>
                 <div class="mb-4">
                   <div class="reward-value">+300%</div>
-                  <div class="reward-description">BP EXP</div>
+                  <div class="reward-description">
+                    BP EXP
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Earn more experience towards your Battle Pass"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">+100%</div>
-                  <div class="reward-description">First Win EXP</div>
+                  <div class="reward-description">
+                    First Win EXP
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Earn more experience towards your Battle Pass"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">x5</div>
-                  <div class="reward-description">Content Vote Weight</div>
+                  <div class="reward-description">
+                    Content Vote Weight
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Your vote on content to be added to the game counts more"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">x15</div>
-                  <div class="reward-description">Daily Tips</div>
+                  <div class="reward-description">
+                    Daily Tips
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Tip other players to give them POGGERS. Tips do not reduce your POGGERS."
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">5 POGGERS</div>
@@ -91,7 +150,9 @@
                 </div>
               </b-card-text>
               <template v-slot:footer>
-                <b-button variant="primary" to="/subscriptions/tier2">Subscribe</b-button>
+                <b-button variant="primary" to="/subscriptions/tier2"
+                  >Subscribe</b-button
+                >
               </template>
             </b-card>
             <b-card>
@@ -106,7 +167,14 @@
               <b-card-text>
                 <div class="mb-4">
                   <div class="reward-value">+300%</div>
-                  <div class="reward-description">BP EXP</div>
+                  <div class="reward-description">
+                    BP EXP
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Earn more experience towards your Battle Pass"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">+100%</div>
@@ -114,11 +182,25 @@
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">x10</div>
-                  <div class="reward-description">Content Vote Weight</div>
+                  <div class="reward-description">
+                    Content Vote Weight
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Your vote on content to be added to the game counts more"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">x15</div>
-                  <div class="reward-description">Daily Tips</div>
+                  <div class="reward-description">
+                    Daily Tips
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Tip other players to give them POGGERS. Tips do not reduce your POGGERS."
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">10 POGGERS</div>
@@ -134,23 +216,48 @@
                 </div>
                 <div class="mb-4">
                   <div class="reward-value">+25%</div>
-                  <div class="reward-description">Ally BP Bonus</div>
+                  <div class="reward-description">
+                    Ally BP Bonus
+                    <span
+                      v-b-tooltip.hover.html
+                      title="All allies (including yourself) earn 25% more BP after every game"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
-                  <div class="reward-description">Detailed Website Stats</div>
+                  <div class="reward-description">
+                    Detailed Website Stats
+                    <span
+                      v-b-tooltip.hover.html
+                      title="Per Game MMR Change<br>Your hero stats<br>Records"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
-                  <div class="reward-description">Hero Glow FX</div>
+                  <div class="reward-description">
+                    Hero Glow FX
+                    <span v-b-tooltip.hover.html title="Turn your hero golden"
+                      ><i class="fas fa-info-circle info-icon"></i>
+                    </span>
+                  </div>
                 </div>
                 <div class="mb-4">
-                  <div class="reward-description">Flying Honey Heist Baby Roshling</div>
+                  <div class="reward-description">
+                    Flying Honey Heist Baby Roshling
+                  </div>
                 </div>
                 <div class="mb-4">
-                  <div class="reward-description">Honey Heist Baby Roshling FX</div>
+                  <div class="reward-description">
+                    Honey Heist Baby Roshling FX
+                  </div>
                 </div>
               </b-card-text>
               <template v-slot:footer>
-                <b-button variant="primary" to="/subscriptions/tier3">Subscribe</b-button>
+                <b-button variant="primary" to="/subscriptions/tier3"
+                  >Subscribe</b-button
+                >
               </template>
             </b-card>
           </b-card-group>
@@ -165,8 +272,8 @@ export default {
   methods: {
     ticketImage(tier) {
       return require(`./images/ticketicon_${tier}.png`);
-    }
-  }
+    },
+  },
 };
 </script>
 

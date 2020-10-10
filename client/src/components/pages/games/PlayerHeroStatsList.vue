@@ -50,6 +50,7 @@ export default {
       type: Number,
       default: -1,
     },
+    steamID: String,
   },
 
   data: () => ({
@@ -94,7 +95,7 @@ export default {
 
   methods: {
     getStats() {
-      fetch(`/api/players/${this.$store.state.auth.userSteamID}/heroes`)
+      fetch(`/api/players/${this.steamID}/heroes`)
         .then((res) => res.json())
         .then((heroes) => {
           this.heroes = heroes.map((stats) => ({
