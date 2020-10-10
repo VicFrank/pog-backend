@@ -21,7 +21,7 @@
                     <td class="tb-head">Results</td>
                   </tr>
                   <tr>
-                    <td>10/4/2020</td>
+                    <td>POG Championship Cup 1</td>
                     <td>
                       <b-button
                         href="https://battlefy.com/dotacinema/pog-championship-cup-1-classic/5f718e3d83c8b203bad73d5f/stage/5f718e85cc3d233e4492d8ae/bracket/"

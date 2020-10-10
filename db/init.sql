@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS cosmetics (
 DROP TABLE IF EXISTS item_prices;
 CREATE TABLE IF NOT EXISTS item_prices (
   item_id TEXT PRIMARY KEY,
-  cost_usd INTEGER NOT NULL,
+  cost_usd DECIMAL NOT NULL,
   item_type TEXT,
   reward INTEGER
 );

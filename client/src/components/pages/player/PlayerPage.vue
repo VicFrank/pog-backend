@@ -46,6 +46,7 @@
             </div>
 
             <div class="position-relative" v-if="bpTier === 3">
+              <Records :steamID="steamID" />
               <h3 class="mt-5 mb-5 text-center" v-t="'profile.hero_stats'"></h3>
               <PlayerHeroStatsList :steamID="steamID" />
             </div>
@@ -62,11 +63,13 @@
 <script>
 import PlayerGamesList from "../games/PlayerGamesList";
 import PlayerHeroStatsList from "../games/PlayerHeroStatsList";
+import Records from "../games/Records";
 
 export default {
   components: {
     PlayerGamesList,
     PlayerHeroStatsList,
+    Records,
   },
 
   data: () => ({

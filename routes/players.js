@@ -79,6 +79,17 @@ router.get("/:steamid/heroes", cache("5 minutes"), async (req, res) => {
   }
 });
 
+router.get("/:steamid/records", cache("5 minutes"), async (req, res) => {
+  try {
+    const steamid = req.params.steamid;
+    const playerInfo = await players.getRecords(steamid);
+    res.status(200).json(playerInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server Error" });
+  }
+});
+
 //////////////////////////////////////////////
 // Quests / Achievements
 //////////////////////////////////////////////

@@ -74,6 +74,24 @@ module.exports = {
       throw error;
     }
   },
+  async updateItemPrice(cost_usd, item_id, type, reward) {
+    try {
+      const sql_query = `
+      UPDATE item_prices SET
+      (cost_usd, item_id, item_type, reward) = ($1, $2, $3, $4)
+      WHERE item_id = $2
+      `;
+      const { rows } = await query(sql_query, [
+        cost_usd,
+        item_id,
+        type,
+        reward,
+      ]);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  },
   async getItemPrices() {
     try {
       const sql_query = `

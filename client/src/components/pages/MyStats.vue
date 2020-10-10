@@ -30,11 +30,12 @@
             </div>
           </div>
         </div>
-        <h2
+        <Records :steamID="steamID" />
+        <h3
           v-if="bpTier === 3"
           class="page-title"
           v-t="'profile.hero_stats'"
-        ></h2>
+        ></h3>
         <PlayerHeroStatsList :steamID="steamID" />
       </div>
     </div>
@@ -43,10 +44,12 @@
 
 <script>
 import PlayerHeroStatsList from "./games/PlayerHeroStatsList";
+import Records from "./games/Records";
 
 export default {
   components: {
     PlayerHeroStatsList,
+    Records,
   },
 
   data: () => ({

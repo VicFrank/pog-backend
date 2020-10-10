@@ -140,6 +140,22 @@ async function loadItemPrices() {
   }
 }
 
+async function updateItemPrices(items) {
+  try {
+    console.log("Updating Item Prices...");
+
+    let promises = [];
+    for (let itemPrice of items) {
+      const { cost_usd, item_id, type, reward } = itemPrice;
+      promises.push(cosmetics.updateItemPrice(cost_usd, item_id, type, reward));
+    }
+
+    await Promise.all(promises);
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function loadNewCosmetics(newCosmetics) {
   try {
     console.log("Adding New cosmetics...");
@@ -315,4 +331,63 @@ async function initializeAdmins() {
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
+
+  const items = [
+    {
+      cost_usd: 2,
+      item_id: "bp_1_1",
+      type: "BP1",
+      reward: 1,
+    },
+    {
+      cost_usd: 10.8,
+      item_id: "bp_1_6",
+      type: "BP1",
+      reward: 6,
+    },
+    {
+      cost_usd: 19.2,
+      item_id: "bp_1_12",
+      type: "BP1",
+      reward: 12,
+    },
+    {
+      cost_usd: 5,
+      item_id: "bp_2_1",
+      type: "BP2",
+      reward: 1,
+    },
+    {
+      cost_usd: 27,
+      item_id: "bp_2_6",
+      type: "BP2",
+      reward: 6,
+    },
+    {
+      cost_usd: 48,
+      item_id: "bp_2_12",
+      type: "BP2",
+      reward: 12,
+    },
+    {
+      cost_usd: 15,
+      item_id: "bp_3_1",
+      type: "BP3",
+      reward: 1,
+    },
+    {
+      cost_usd: 81,
+      item_id: "bp_3_6",
+      type: "BP3",
+      reward: 6,
+    },
+    {
+      cost_usd: 144,
+      item_id: "bp_3_12",
+      type: "BP3",
+      reward: 12,
+    },
+  ];
+
+  await updateItemPrices(items);
 })();

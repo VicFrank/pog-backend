@@ -969,6 +969,12 @@
     "my_games": "My Games",
     "daily_xp": "Daily XP",
     "stats": "Stats",
+    "records": "Records",
+    "longest_game": "Longest Game",
+    "most_kills": "Most Kills",
+    "most_lh": "Most LH",
+    "most_damage": "Most Damage",
+    "biggest_upset": "Biggest Upset",
     "view_all": "View All",
     "mmr": "mmr",
     "wins": "Wins",
@@ -1255,7 +1261,7 @@
         {
           "ability": "genso",
           "name": "Shattered Souls",
-          "description": "Spawns 3 shattered souls at the target location, each of which can be destroyed in 2 hits. Each soul afflicts enemies in the area with a different curse. The area affected will will grow every second. Whenever one of the souls is destroyed, the remaining souls progress to their next level, but the area affected is reduced temporarily. Level 4 can only be achieved with Aghanim's Scepter.",
+          "description": "Spawns 4 shattered souls at the target location, each of which can be destroyed in 2 hits. Each soul afflicts enemies in the area with a different curse. The area affected will will grow every second until it reaches maximum radius. Whenever one of the souls is destroyed, the remaining souls progress to their next level.",
           "stats": [
             {
               "stat": "Duration",
@@ -1278,15 +1284,105 @@
               "values": "90"
             },
             {
-              "stat": "Manacost",
+              "stat": "Mana Cost",
               "values": "100/125/150"
+            },
+            {
+              "stat": "Soul of Despair (Red)",
+              "values": "Reduces nearby enemies' armor"
+            },
+            {
+              "stat": "Level 1",
+              "values": "-3/4/5 armor"
+            },
+            {
+              "stat": "Level 2",
+              "values": "-6/8/10 armor"
+            },
+            {
+              "stat": "Level 3",
+              "values": "-12/16/20 armor"
+            },
+            {
+              "stat": "Level 4",
+              "values": "-24/32/40 armor"
+            },
+            {
+              "stat": "Soul of Doom (Black)",
+              "values": "Mini Stuns a random enemy hero (0.25 seconds)"
+            },
+            {
+              "stat": "Level 1",
+              "values": "Every 1 second"
+            },
+            {
+              "stat": "Level 2",
+              "values": "Every 0.75 seconds"
+            },
+            {
+              "stat": "Level 3",
+              "values": "Every 0.50 seconds"
+            },
+            {
+              "stat": "Level 4",
+              "values": "Every 0.25 seconds"
+            },
+            {
+              "stat": "Soul of Suffering (Green)",
+              "values": "Deals physical damage per second to nearby enemies"
+            },
+            {
+              "stat": "Level 1",
+              "values": "60/90/120 DPS"
+            },
+            {
+              "stat": "Level 2",
+              "values": "120/180/240 DPS"
+            },
+            {
+              "stat": "Level 3",
+              "values": "240/360/480 DPS"
+            },
+            {
+              "stat": "Level 4",
+              "values": "480/720/960 DPS"
+            },
+            {
+              "stat": "Soul of Regret (Blue)",
+              "values": "Slows enemies in the affected area"
+            },
+            {
+              "stat": "Level 1",
+              "values": "Slows movement speed 6/8/10%"
+            },
+            {
+              "stat": "Level 2",
+              "values": "Slows movement speed 12/16/20%"
+            },
+            {
+              "stat": "Level 3",
+              "values": "Slows movement speed 24/32/40%"
+            },
+            {
+              "stat": "Level 4",
+              "values": "Slows movement speed 48/64/80%"
             }
           ]
         },
         {
           "ability": "scepter",
           "name": "Scepter",
-          "description": "Summons an additional Soul of Regret"
+          "description": "Provides a new sub ability for the Ultimate. Destroy a sword of choice, and then distribute 3 HP evenly to the remaining swords",
+          "stats": [
+            {
+              "stat": "Cooldown",
+              "values": "40"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "50"
+            }
+          ]
         }
       ],
       "credits": [

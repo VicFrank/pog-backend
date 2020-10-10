@@ -441,6 +441,36 @@ module.exports = {
     }
   },
 
+  async getRecords(steamID) {
+    try {
+      const sql_query = `
+      SELECT
+      max(duration) as longest_game,
+      (array_agg(game_id ORDER BY duration DESC))[1] as duration_id,
+      max(kills) as most_kills,
+      (array_agg(game_id ORDER BY kills DESC))[1] as kills_game_id,
+      max(last_hits) as most_lh,
+      (array_agg(game_id ORDER BY last_hits DESC))[1] as lh_game_id,
+      max(hero_damage) as most_hero_damage,
+      (array_agg(game_id ORDER BY hero_damage DESC))[1] as damage_game_id,
+      max(mmr_change) as biggest_upset,
+      (array_agg(game_id ORDER BY mmr_change DESC))[1] as upset_game_id
+
+      FROM game_players gp
+      JOIN games g
+      USING (game_id)
+      JOIN players p
+      USING (steam_id)
+      WHERE p.steam_id = $1
+      `;
+      const { rows } = await query(sql_query, [steamID]);
+
+      return rows[0];
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async createBattlePass(steamID, bpName) {
     try {
       const { rows } = await query(

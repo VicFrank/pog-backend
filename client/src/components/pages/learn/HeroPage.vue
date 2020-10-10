@@ -29,8 +29,9 @@
         <h3 class="ability-name">{{ currentAbility.name }}</h3>
         <div class="ability-description">{{ currentAbility.description }}</div>
         <div class="mt-1" v-for="stat in currentAbility.stats" :key="stat.stat">
-          <span class="text-muted mt-1">{{stat.stat}}:</span> {{stat.values}}
-      </div>
+          <span class="text-muted mt-1">{{ stat.stat }}:</span>
+          {{ stat.values }}
+        </div>
       </div>
     </div>
 
@@ -211,11 +212,14 @@ export default {
 }
 
 .current-ability {
+  align-self: flex-start;
+
   width: 100px;
-  height: 100px;
+  height: auto;
   border: 1px solid black;
 
   margin-right: 20px;
+  margin-top: 50px;
 }
 
 .ability-text {

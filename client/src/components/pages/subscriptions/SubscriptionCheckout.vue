@@ -26,6 +26,7 @@
                 <b-card-text>Price: ${{ price }}</b-card-text>
                 <StripePurchase
                   :item="item"
+                  :key="item.item_id"
                   v-on:purchaseSuccess="onPurchaseSuccess"
                   v-on:error="onError"
                 />
@@ -62,8 +63,8 @@ export default {
       options: [
         { value: null, text: "Months" },
         { value: 1, text: "1 Month" },
-        { value: 6, text: "6 Months" },
-        { value: 12, text: "12 Months" },
+        { value: 6, text: "6 Months (Save 10%)" },
+        { value: 12, text: "12 Months (Save 20%)" },
       ],
     };
   },
@@ -111,8 +112,22 @@ export default {
           return 0;
       }
     },
+    discount() {
+      switch (this.months) {
+        case 1:
+          return 0;
+        case 6:
+          return 10;
+        case 12:
+          return 20;
+        default:
+          return 0;
+      }
+    },
     price() {
-      return this.basePrice * this.months;
+      const price = this.basePrice * this.months;
+      const discount = this.discount;
+      return (price - (price * discount) / 100).toFixed(2);
     },
     ticketImage() {
       const tier = this.tier;
