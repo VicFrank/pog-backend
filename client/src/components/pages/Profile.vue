@@ -57,7 +57,7 @@
               </div>
             </div>
 
-            <div class="position-relative" v-if="bpTier === 3">
+            <div class="position-relative" v-if="bpTier >= 2">
               <h3 class="mt-5 mb-5 text-center" v-t="'profile.hero_stats'"></h3>
               <PlayerHeroStatsList :numItems="3" :steamID="steamID" />
               <div class="more">

@@ -699,12 +699,14 @@ module.exports = {
       // if tier 3, also give the player the tier 3 cosmetics
       // FLYING HONEY HEIST BABY ROSHLING, HONEY HEIST BABY ROSHLING FX
       // also, they lose these items when their tier 3 subscription expires
-      await this.giveUniqueCosmetic(steamID, "honey_roshan");
-      await this.giveUniqueCosmetic(steamID, "honey_heist");
-      await this.giveUniqueCosmetic(steamID, "golden_skin");
+      if (tier === 3) {
+        await this.giveUniqueCosmetic(steamID, "honey_roshan");
+        await this.giveUniqueCosmetic(steamID, "honey_heist");
+        await this.giveUniqueCosmetic(steamID, "golden_skin");
 
-      // initialize their weekly quests if they haven't yet
-      await this.createInitialWeeklyQuests(steamID, 3);
+        // initialize their weekly quests if they haven't yet
+        await this.createInitialWeeklyQuests(steamID, 3);
+      }
     } catch (error) {
       throw error;
     }
@@ -1656,7 +1658,8 @@ module.exports = {
     try {
       const currentQuests = await this.getWeeklyQuestsIncludeHidden(steamID);
       if (currentQuests.length > 0) {
-        throw new Error("Player Weekly Quests have already been initialized!");
+        // initial quests have already been initialized
+        return;
       }
 
       // Randomly choose three weekly quests

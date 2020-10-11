@@ -642,14 +642,33 @@
     "bpaccel1": [
       "1 month of the following XP perks:",
       "+100% Battlepass experience gain from matches",
-      "+50% experience on your first win of the day"
+      "+50% experience on your first win of the day",
+      "2x content vote weight",
+      "x15 daily tips (1 POGGERS)"
     ],
     "bpaccel2": [
       "1 month of the following XP perks:",
       "+300% Battlepass experience gain from matches",
-      "+100% experience on your first win of the day"
+      "+100% experience on your first win of the day",
+      "5x content vote weight",
+      "x15 daily tips (5 POGGERS)",
+      "3 daily quests",
+      "Detailed Website Stats"
     ],
-    "bpaccel3": ["Grants your Battlepass one month of Diamond tier"],
+    "bpaccel3": [
+      "Grants your Battlepass one month of Diamond tier",
+      "1 month of the following XP perks:",
+      "+300% Battlepass experience gain from matches",
+      "+100% experience on your first win of the day",
+      "10x content vote weight",
+      "x15 daily tips (10 POGGERS)",
+      "3 daily quests",
+      "Detailed Website Stats",
+      "+25% ally BP bonus",
+      "Hero Glow FX",
+      "Flying Honey Heist Baby Roshling",
+      "Honey Heist Baby Roshling FX"
+    ],
     "xp_coupon_500": "500 XP",
     "xp_coupon_1000": "1000 XP",
     "xp_coupon_2000": "2000 XP",
@@ -1388,6 +1407,7 @@
       "credits": [
         "Concept: Hawf, SUNSfan, Firetoad",
         "3D Art: Hawf",
+        "Animations: Hawf",
         "Visual FX: Nibuja",
         "Code: Firetoad",
         "2D Art: Hawf",

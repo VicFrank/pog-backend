@@ -45,7 +45,7 @@
               </table>
             </div>
 
-            <div class="position-relative" v-if="bpTier === 3">
+            <div class="position-relative" v-if="bpTier >= 2">
               <Records :steamID="steamID" />
               <h3 class="mt-5 mb-5 text-center" v-t="'profile.hero_stats'"></h3>
               <PlayerHeroStatsList :steamID="steamID" />

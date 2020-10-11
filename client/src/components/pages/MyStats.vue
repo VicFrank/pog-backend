@@ -32,7 +32,7 @@
         </div>
         <Records :steamID="steamID" />
         <h3
-          v-if="bpTier === 3"
+          v-if="bpTier >= 2"
           class="page-title"
           v-t="'profile.hero_stats'"
         ></h3>

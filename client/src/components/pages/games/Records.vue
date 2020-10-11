@@ -37,7 +37,7 @@
               </td>
               <td>
                 <router-link :to="`/games/${playerStats.upset_game_id}`"
-                  >{{ playerStats.biggest_upset }} MMR</router-link
+                  >+{{ playerStats.biggest_upset }} mmr</router-link
                 >
               </td>
             </tr>
