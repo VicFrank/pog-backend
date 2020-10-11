@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS games (
   duration INTEGER,
   health_drops INTEGER,
   cheats_enabled BOOLEAN,
+  map TEXT DEFAULT '3v3_classic',
 
   created_at TIMESTAMPTZ DEFAULT Now()
 );

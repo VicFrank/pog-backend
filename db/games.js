@@ -13,6 +13,7 @@ module.exports = {
       bannedHeroes,
       teamInfo,
       playerInfo,
+      mapName,
     } = gameData;
 
     const radiantWin = winnerTeam == "DOTA_TEAM_GOODGUYS";
@@ -21,11 +22,18 @@ module.exports = {
     try {
       const { rows: gameRows } = await query(
         `
-        INSERT INTO games (radiant_win, ranked, duration, health_drops, cheats_enabled)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO games (radiant_win, ranked, duration, health_drops, cheats_enabled, map)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING game_id
         `,
-        [radiantWin, rankedGame, roundedDuration, healthDrops, cheatsEnabled]
+        [
+          radiantWin,
+          rankedGame,
+          roundedDuration,
+          healthDrops,
+          cheatsEnabled,
+          mapName,
+        ]
       );
 
       const gameID = gameRows[0].game_id;
