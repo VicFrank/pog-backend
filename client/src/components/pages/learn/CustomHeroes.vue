@@ -17,7 +17,7 @@
 <script>
 export default {
   data: () => ({
-    heroes: ["brax", "mifune"],
+    heroes: ["thunderboar", "mifune"],
   }),
 
   methods: {

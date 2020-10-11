@@ -82,7 +82,7 @@ export default {
 
     videos: {
       mifune: "https://www.youtube.com/embed/yQUN7QAnMp0",
-      brax: "https://www.youtube.com/embed/yQUN7QAnMp0",
+      thunderboar: "https://www.youtube.com/embed/yQUN7QAnMp0",
     },
   }),
 
