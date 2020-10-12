@@ -81,8 +81,8 @@ export default {
     currentAbility: {},
 
     videos: {
-      mifune: "https://www.youtube.com/embed/yQUN7QAnMp0",
-      thunderboar: "https://www.youtube.com/embed/yQUN7QAnMp0",
+      mifune: "https://www.youtube.com/embed/oEMqCa5TZls",
+      thunderboar: "https://www.youtube.com/embed/ihnveJGYqgM",
     },
   }),
 
