@@ -5,6 +5,7 @@
       variant="primary"
       @click="submitPayment"
       :disabled="!paymentIntent || !complete"
+      class="mt-3"
     >
       {{ $t("payment.pay_with_stripe") }}
       <b-spinner

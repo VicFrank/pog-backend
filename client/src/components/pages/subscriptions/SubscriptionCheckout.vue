@@ -167,7 +167,7 @@ export default {
 }
 
 .stripe-card {
-  max-width: 280px;
+  width: 500px;
   margin: auto;
 }
 </style>
