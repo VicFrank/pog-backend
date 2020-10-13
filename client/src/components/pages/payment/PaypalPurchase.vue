@@ -1,9 +1,13 @@
 <template>
   <div>
-    <b-alert v-model="showError" variant="danger" dismissible>{{ error }}</b-alert>
-    <b-alert v-model="showSuccess" variant="success" dismissible>{{ success }}</b-alert>
+    <b-alert v-model="showError" variant="danger" dismissible>{{
+      error
+    }}</b-alert>
+    <b-alert v-model="showSuccess" variant="success" dismissible>{{
+      success
+    }}</b-alert>
     <div v-if="processinPayment">
-      {{$t('payment.processing')}}
+      {{ $t("payment.processing") }}
       <div v-if="loading" class="d-flex justify-content-center mb-3">
         <b-spinner label="Loading..."></b-spinner>
       </div>
@@ -16,7 +20,7 @@
 export default {
   props: {
     item: {},
-    paypalType: String
+    paypalType: String,
   },
 
   data() {
@@ -31,15 +35,15 @@ export default {
           sandbox:
             "AYAmQijTIaUAckei3KBH9rJh7Vea0lmIuUZclFx5RWUfhaG6OfcG7w_IOZclheI431gFF0ETdwfhnWbU",
           production:
-            "ARyCiFJGaPqBv5V0OJNPloAOgwUDp-YOu2cLtrp8fdTLlpBCaIfbXhnFHfVuMylXG9iyPaKCw2SR2D4V"
+            "ARyCiFJGaPqBv5V0OJNPloAOgwUDp-YOu2cLtrp8fdTLlpBCaIfbXhnFHfVuMylXG9iyPaKCw2SR2D4V",
         },
         cheap: {
           sandbox:
             "AYAmQijTIaUAckei3KBH9rJh7Vea0lmIuUZclFx5RWUfhaG6OfcG7w_IOZclheI431gFF0ETdwfhnWbU",
           production:
-            "AZJSuJyzSWP6mBtWjYUohMjjdj7NaMFacv7MAIhCG5Bjm12tmkoeYkJwwPxPh1ZPqXROCJAxpFM7M3wY"
-        }
-      }
+            "AZJSuJyzSWP6mBtWjYUohMjjdj7NaMFacv7MAIhCG5Bjm12tmkoeYkJwwPxPh1ZPqXROCJAxpFM7M3wY",
+        },
+      },
     };
   },
 
@@ -69,7 +73,7 @@ export default {
             color: "gold",
             shape: "pill",
             label: "checkout",
-            layout: "horizontal"
+            layout: "horizontal",
           },
           createOrder: (data, actions) => {
             return actions.order.create({
@@ -77,28 +81,28 @@ export default {
                 {
                   amount: {
                     currency_code: "USD",
-                    value: cost_usd
-                  }
-                }
+                    value: cost_usd,
+                  },
+                },
               ],
-              application_context: { shipping_preference: "NO_SHIPPING" }
+              application_context: { shipping_preference: "NO_SHIPPING" },
             });
           },
-          onApprove: function(data) {
+          onApprove: function (data) {
             _this.processinPayment = true;
             return fetch(`/api/payments/paypal/${steamID}`, {
               method: "post",
               headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
               },
               body: JSON.stringify({
                 orderID: data.orderID,
                 itemID,
-                paypalType
-              })
+                paypalType,
+              }),
             })
-              .then(res => res.json())
-              .then(res => {
+              .then((res) => res.json())
+              .then((res) => {
                 _this.processinPayment = false;
                 if (res.message === "Payment Success") {
                   _this.$store.dispatch("refreshPlayer");
@@ -108,20 +112,20 @@ export default {
                   _this.showError = true;
                 }
               })
-              .catch(err => {
+              .catch((err) => {
                 _this.processinPayment = false;
                 _this.error = err;
                 _this.showError = true;
               });
           },
-          onError: err => {
+          onError: (err) => {
             _this.showError = true;
             _this.error = err;
-          }
+          },
         })
         .render(this.$refs.paypal);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -35,6 +35,13 @@
                   error
                 }}</b-alert>
               </b-card>
+              <PaypalPurchase
+                class="mt-3"
+                :item="item"
+                :key="item.item_id"
+                :paypalType="paypalType"
+                v-on:purchaseSuccess="onPurchaseSuccess"
+              />
             </div>
           </template>
           <template v-else>
@@ -52,6 +59,7 @@ import LoginButton from "../login/LoginButton";
 // import PaypalSubscription from "../payment/PaypalSubscription";
 // import StripeSubscription from "../payment/StripeSubscription";
 import StripePurchase from "../payment/StripePurchase";
+import PaypalPurchase from "../payment/PaypalPurchase";
 
 export default {
   data() {
@@ -74,6 +82,7 @@ export default {
     // PaypalSubscription,
     // StripeSubscription,
     StripePurchase,
+    PaypalPurchase,
   },
 
   created() {
@@ -128,6 +137,9 @@ export default {
       const price = this.basePrice * this.months;
       const discount = this.discount;
       return (price - (price * discount) / 100).toFixed(2);
+    },
+    paypalType() {
+      return this.price < 12 ? "cheap" : "expensive";
     },
     ticketImage() {
       const tier = this.tier;

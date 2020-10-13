@@ -84,10 +84,14 @@ router.post("/paypal/:steamid", auth.userAuth, async (req, res) => {
       await players.modifyPoggers(steamID, reward);
     } else if (item_type === "XP") {
       await players.addBattlePassExp(steamID, reward);
+    } else if (item_type === "BP1") {
+      await players.addBattlePassTier(steamID, 1, 31 * reward);
+    } else if (item_type === "BP2") {
+      await players.addBattlePassTier(steamID, 2, 31 * reward);
+    } else if (item_type === "BP3") {
+      await players.addBattlePassTier(steamID, 3, 31 * reward);
     } else {
-      return res
-        .status(400)
-        .send({ message: "I don't know what to do with this" });
+      throw new Error("Bad item type");
     }
 
     res.status(200).send({ message: `Payment Success` });
