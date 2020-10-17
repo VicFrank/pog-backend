@@ -340,14 +340,4 @@ async function addPoll(poll) {
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
-
-  await addPoll({
-    name: "Vote for the next Guardian",
-    description: "",
-    options: [
-      "Guardian of Death",
-      "Guardian of Defense",
-      "Guardian of Sorcery",
-    ],
-  });
 })();

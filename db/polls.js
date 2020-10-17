@@ -89,7 +89,7 @@ module.exports = {
       `;
       await query(sql_query, [steamID, pollID, optionID]);
 
-      const numVotes = getNumVotesForTier(tier);
+      const numVotes = this.getNumVotesForTier(tier);
 
       sql_query = `
       UPDATE poll_options
