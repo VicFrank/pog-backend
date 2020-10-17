@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!hasVoted">
-      <h2 class="text-center">{{name}}</h2>
+      <h2 class="text-center">{{ name }}</h2>
       <div class="container">
         <div class="row justify-content-md-center">
           <PollOption
@@ -40,11 +40,11 @@ import PollResult from "./PollResult";
 export default {
   components: {
     PollResult,
-    PollOption
+    PollOption,
   },
 
   props: {
-    pollID: Number
+    pollID: Number,
   },
 
   data: () => ({
@@ -55,32 +55,32 @@ export default {
     loading: true,
     hasVoted: false,
     voteID: 0,
-    totalVotes: 1
+    totalVotes: 1,
   }),
 
   computed: {
     steamID() {
       return this.$store.state.auth.userSteamID;
-    }
+    },
   },
 
   created() {
     fetch(`/api/polls/${this.pollID}/${this.steamID}`)
-      .then(res => res.json())
-      .then(voteData => {
+      .then((res) => res.json())
+      .then((voteData) => {
         if (voteData) {
           this.hasVoted = true;
           this.voteID = voteData.vote;
         }
       })
-      .catch(err => {
+      .catch((err) => {
         this.error = err;
         this.showError = true;
       });
 
     fetch(`/api/polls/${this.pollID}`)
-      .then(res => res.json())
-      .then(poll => {
+      .then((res) => res.json())
+      .then((poll) => {
         this.name = poll.poll_name;
         this.options = poll.results;
         this.loading = false;
@@ -89,7 +89,7 @@ export default {
           return acc + cur.votes;
         }, 0);
       })
-      .catch(err => {
+      .catch((err) => {
         this.error = err;
         this.showError = true;
       });
@@ -98,16 +98,16 @@ export default {
   methods: {
     vote(optionID) {
       fetch(`/api/polls/${this.pollID}/${this.steamID}?vote=${optionID}`, {
-        method: "post"
+        method: "post",
       })
-        .then(res => {
+        .then((res) => {
           if (!res.ok) throw Error(res.statusText);
           return res;
         })
         .then(() => {
           this.hasVoted = true;
         })
-        .catch(err => {
+        .catch((err) => {
           this.error = err;
           this.showError = true;
         });
@@ -121,9 +121,11 @@ export default {
           return require("./images/poll-images-lifesteal.jpg");
         case "Guardian of Sorcery":
           return require("./images/poll-images.jpg");
+        case "Guardian of Death":
+          return require("./images/poll-images-death.webp");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

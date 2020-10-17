@@ -12,6 +12,7 @@ const {
   testSample,
 } = require("./sample-data");
 const { dropOdds, poggerOdds, bonusOdds } = require("./chest-rewards");
+const polls = require("../db/polls");
 
 /*
   Initializes the database with the daily quests/achievements
@@ -321,6 +322,14 @@ async function initializeAdmins() {
   }
 }
 
+async function addPoll(poll) {
+  try {
+    await polls.makeNewPoll(poll.name, poll.description, poll.options);
+  } catch (error) {
+    throw error;
+  }
+}
+
 (async function () {
   // await loadQuests();
   // await loadCosmetics();
@@ -331,4 +340,14 @@ async function initializeAdmins() {
   // await addSampleGames(10);
   // await initializeAdmins();
   // await addRealSample();
+
+  await addPoll({
+    name: "Vote for the next Guardian",
+    description: "",
+    options: [
+      "Guardian of Death",
+      "Guardian of Defense",
+      "Guardian of Sorcery",
+    ],
+  });
 })();
