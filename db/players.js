@@ -703,10 +703,10 @@ module.exports = {
         await this.giveUniqueCosmetic(steamID, "honey_roshan");
         await this.giveUniqueCosmetic(steamID, "honey_heist");
         await this.giveUniqueCosmetic(steamID, "golden_skin");
-
-        // initialize their weekly quests if they haven't yet
-        await this.createInitialWeeklyQuests(steamID, 3);
       }
+
+      // initialize their weekly quests if they haven't yet
+      await this.createInitialWeeklyQuests(steamID, 3);
     } catch (error) {
       throw error;
     }

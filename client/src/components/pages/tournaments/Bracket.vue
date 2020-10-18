@@ -11,6 +11,12 @@
           scrolling="no"
           frameborder="0"
         ></iframe> -->
+        <b-button
+              href="https://battlefy.com/dotacinema/pog-championship-cup-2/5f8c36b974e0b353b5ae1da2/info?infoTab=details"
+              target="_blank"
+              variant="primary"
+              >JOIN</b-button
+            >
         <div class="row">
           <div class="col-xl-12">
             <div class="my-stats">
