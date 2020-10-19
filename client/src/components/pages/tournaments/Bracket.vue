@@ -23,7 +23,7 @@
                   </tr>
                   <tr>
                     <td>POG Championship Cup 2</td>
-                    <td>October 24th 2020</td>
+                    <td>October 25th 2020</td>
                     <td>
                       <b-button
                         href="https://battlefy.com/dotacinema/pog-championship-cup-2/5f8c36b974e0b353b5ae1da2/info?infoTab=details"
