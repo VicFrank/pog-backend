@@ -11,12 +11,6 @@
           scrolling="no"
           frameborder="0"
         ></iframe> -->
-        <b-button
-              href="https://battlefy.com/dotacinema/pog-championship-cup-2/5f8c36b974e0b353b5ae1da2/info?infoTab=details"
-              target="_blank"
-              variant="primary"
-              >JOIN</b-button
-            >
         <div class="row">
           <div class="col-xl-12">
             <div class="my-stats">
@@ -24,10 +18,24 @@
                 <tbody>
                   <tr>
                     <td class="tb-head">Tournament</td>
+                    <td class="tb-head">Date</td>
                     <td class="tb-head">Results</td>
                   </tr>
                   <tr>
+                    <td>POG Championship Cup 2</td>
+                    <td>October 24th 2020</td>
+                    <td>
+                      <b-button
+                        href="https://battlefy.com/dotacinema/pog-championship-cup-2/5f8c36b974e0b353b5ae1da2/info?infoTab=details"
+                        target="_blank"
+                        variant="primary"
+                        >JOIN</b-button
+                      >
+                    </td>
+                  </tr>
+                  <tr>
                     <td>POG Championship Cup 1</td>
+                    <td>October 3rd 2020</td>
                     <td>
                       <b-button
                         href="https://battlefy.com/dotacinema/pog-championship-cup-1-classic/5f718e3d83c8b203bad73d5f/stage/5f718e85cc3d233e4492d8ae/bracket/"
