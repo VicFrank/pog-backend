@@ -253,7 +253,10 @@
 import { TweenMax, Power4 } from "gsap";
 import LoginButton from "./pages/login/LoginButton";
 import ProgressBar from "./utility/ProgressBar";
-import moment from "moment";
+
+import dayjs from "dayjs";
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
 
 export default {
   name: "sidebar",
@@ -355,7 +358,7 @@ export default {
     },
     upgradeExpiration() {
       const expiration = this.$store.state.auth.upgradeExpiration;
-      return moment(String(expiration)).fromNow();
+      return dayjs(String(expiration)).fromNow();
     },
     badgeImage() {
       const level = this.$store.getters.bpLevel;

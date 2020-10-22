@@ -9,14 +9,6 @@ module.exports = {
     },
   },
 
-  configureWebpack: {
-    resolve: {
-      alias: {
-        moment: "moment/src/moment",
-      },
-    },
-  },
-
   chainWebpack: (config) => {
     config.module
       .rule("images")
@@ -27,10 +19,10 @@ module.exports = {
 
   pluginOptions: {
     i18n: {
-      locale: 'en',
-      fallbackLocale: 'en',
-      localeDir: 'locales',
-      enableInSFC: true
-    }
-  }
+      locale: "en",
+      fallbackLocale: "en",
+      localeDir: "locales",
+      enableInSFC: true,
+    },
+  },
 };
