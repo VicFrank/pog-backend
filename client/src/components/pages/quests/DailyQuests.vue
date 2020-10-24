@@ -78,8 +78,10 @@
 </template>
 
 <script>
-import moment from "moment";
 import ProgressBar from "../../utility/ProgressBar";
+import dayjs from "dayjs";
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
 
 export default {
   data: () => ({
@@ -99,7 +101,7 @@ export default {
 
   methods: {
     getTimeUntilReroll(created) {
-      const time = moment(created).add(24, "hours").fromNow();
+      const time = dayjs(created).add(24, "hours").fromNow();
       return `Can refresh ${time}`;
     },
     getDailyQuests() {

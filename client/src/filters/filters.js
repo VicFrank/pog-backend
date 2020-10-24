@@ -1,23 +1,29 @@
-import moment from "moment";
+import dayjs from "dayjs";
+const duration = require("dayjs/plugin/duration");
+const relativeTime = require("dayjs/plugin/relativeTime");
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 export default {
   filters: {
     duration: function(secs) {
-      return moment.duration(secs * 1000).humanize();
+      return dayjs.duration(secs * 1000).humanize();
     },
     hhmmss: function(secs) {
       if (secs > 3600) {
-        return moment.utc(secs * 1000).format("H:mm:ss");
-      } else return moment.utc(secs * 1000).format("mm:ss");
+        return dayjs.utc(secs * 1000).format("H:mm:ss");
+      } else return dayjs.utc(secs * 1000).format("mm:ss");
     },
     dateFromNow: function(value) {
       if (value) {
-        return moment(String(value)).fromNow();
+        return dayjs(String(value)).fromNow();
       }
     },
     getExpiration: function(seconds) {
       if (seconds) {
-        return moment()
+        return dayjs()
           .add(seconds, "seconds")
           .fromNow();
       }
