@@ -155,6 +155,8 @@ export default {
           return 2300;
         case 2:
           return 4400;
+        case 3:
+          return 4400;
       }
       return 0;
     },

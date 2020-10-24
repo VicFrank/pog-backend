@@ -730,7 +730,7 @@ module.exports = {
       200 XP per win (capped at 20 wins)
       400 XP bonus for the first win of the day (600 total)
 
-      If you have an ally with a Plat ticket, give +25% XP
+      If you have an ally with a diamond ticket, give +25% XP
     */
     try {
       const games = await this.getBasicGamesToday(steamID);
