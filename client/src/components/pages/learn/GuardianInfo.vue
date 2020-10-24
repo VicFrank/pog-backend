@@ -1,11 +1,20 @@
 <template>
   <div class="abilities">
     <div class="guardian-titles">
-      <div class="guardian-name">{{ $t(`guardians.${guardianData.name}`) }}</div>
+      <div class="guardian-name">
+        {{ $t(`guardians.${guardianData.name}`) }}
+      </div>
       <div class="h4">{{ $t(`guardians.${guardianData.name}_title`) }}</div>
     </div>
-    <img :src="guardianData.img" :alt="guardianData.name" class="guardian-image" fluid />
-    <div class="abilities-list">
+    <img
+      v-if="guardianData.img"
+      :src="guardianData.img"
+      :alt="guardianData.name"
+      class="guardian-image"
+      fluid
+    />
+    <b-embed type="iframe" :src="guardianData.video" allowfullscreen></b-embed>
+    <div class="abilities-list mt-3">
       <img
         v-for="ability in guardianData.abilities"
         :key="ability.name"
@@ -20,10 +29,18 @@
     </div>
 
     <div class="ability-info">
-      <img :src="abilityImage(currentAbility)" :alt="currentAbility.name" class="current-ability" />
+      <img
+        :src="abilityImage(currentAbility)"
+        :alt="currentAbility.name"
+        class="current-ability"
+      />
       <div class="ability-text">
-        <h3 class="ability-name">{{ $t(`guardians.${currentAbility.name}`) }}</h3>
-        <div class="ability-description">{{ $t(`guardians.${currentAbility.name}_description`) }}</div>
+        <h3 class="ability-name">
+          {{ $t(`guardians.${currentAbility.name}`) }}
+        </h3>
+        <div class="ability-description">
+          {{ $t(`guardians.${currentAbility.name}_description`) }}
+        </div>
       </div>
     </div>
   </div>
@@ -34,7 +51,7 @@ export default {
   props: ["guardianData"],
 
   data: () => ({
-    currentAbility: {}
+    currentAbility: {},
   }),
 
   mounted() {
@@ -49,8 +66,8 @@ export default {
     },
     setCurrentAbility(ability) {
       this.currentAbility = ability;
-    }
-  }
+    },
+  },
 };
 </script>
 
