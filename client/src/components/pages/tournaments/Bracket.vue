@@ -21,7 +21,7 @@
                     <td class="tb-head">Date</td>
                     <td class="tb-head">Results</td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <td>POG Championship Cup 2</td>
                     <td>October 25th 2020</td>
                     <td>
@@ -32,7 +32,7 @@
                         >JOIN</b-button
                       >
                     </td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <td>POG Championship Cup 1</td>
                     <td>October 3rd 2020</td>

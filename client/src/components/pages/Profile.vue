@@ -4,7 +4,6 @@
       <div class="container">
         <div class="row">
           <div class="col-xl-12">
-            <GuardianPoll :pollID="2" class="mb-5" />
             <DailyQuests></DailyQuests>
             <WeeklyQuests v-if="bpTier > 1" class="mt-5"></WeeklyQuests>
 
@@ -120,7 +119,6 @@ import WeeklyQuests from "./quests/WeeklyQuests";
 import PlayerGamesList from "./games/PlayerGamesList";
 import PlayerHeroStatsList from "./games/PlayerHeroStatsList";
 import ProgressBar from "../utility/ProgressBar";
-import GuardianPoll from "../polls/GuardianPoll";
 
 export default {
   components: {
@@ -129,7 +127,6 @@ export default {
     PlayerGamesList,
     PlayerHeroStatsList,
     ProgressBar,
-    GuardianPoll,
   },
 
   data: () => ({

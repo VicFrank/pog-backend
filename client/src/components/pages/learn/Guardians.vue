@@ -98,7 +98,29 @@ export default {
             image: "guardian_buff_codex.png"
           }
         ]
-      }
+      },
+      {
+        name: "fig",
+        img: require("./images/guardian_03.png"),
+        abilities: [
+          {
+            name: "bad_touch",
+            image: "guardian_bad_touch.png"
+          },
+          {
+            name: "taking_you_with_me",
+            image: "guardian_taking_you_with_me.png"
+          },
+          {
+            name: "spell_block",
+            image: "spell_block.png"
+          },
+          {
+            name: "fig_buff",
+            image: "guardian_buff_cross.png"
+          }
+        ]
+      },
     ]
   })
 };
