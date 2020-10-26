@@ -109,6 +109,7 @@ export default {
       },
       {
         name: "fig",
+        img: require("./images/guardian_05.png"),
         video: "https://www.youtube.com/embed/qBUvP-6PU2o",
         abilities: [
           {
