@@ -1198,6 +1198,136 @@
 
   "custom_heroes": {
     "page_title": "Custom Heroes",
+    "pc": {
+      "name": "Penguin Commandos",
+      "talents": [
+        "Penguin Launcher +30 Damage",
+        "+25 attack speed",
+        "+50 Happy Feet Radius",
+        "-4s Snowball Effect cooldown",
+        "Happy Feet provides haste to allies for 5 seconds",
+        "Snowball effect +100 damage",
+        "Add 3 Penguins to March of the Penguins",
+        "+200 Attack Range"
+      ],
+      "abilities": [
+        {
+          "ability": "penguin_launcher",
+          "name": "Penguin Launcher",
+          "description": "Sends a penguin in a specified direction, exploding on the first enemy target it reaches, dealing damage and mini-stunning. Additional penguins from this ability that hit an enemy within 3 seconds will deal bonus damage.",
+          "stats": [
+            {
+              "stat": "Charges",
+              "values": "1/2/3/4"
+            },
+            {
+              "stat": "Base Damage",
+              "values": "90/110/130/150"
+            },
+            {
+              "stat": "Bonus Damage",
+              "values": "25"
+            },
+            {
+              "stat": "Charge Restore Time",
+              "values": "10"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "50"
+            }
+          ]
+        },
+        {
+          "ability": "happy_feet",
+          "name": "Happy Feet",
+          "description": "Penguin Commandos create an icy surface on the ground, causing unstable footing and lowering magic resistance. Enemy heroes will uncontrollably skate within the patch of ice for its full duration, Although they are confined within this area, they can still attack and cast spells.",
+          "stats": [
+            {
+              "stat": "Radius",
+              "values": "300"
+            },
+            {
+              "stat": "Cast Time",
+              "values": "0.8"
+            },
+            {
+              "stat": "Magic Resist Reduction",
+              "values": "-6/-14/-22/-30%"
+            },
+            {
+              "stat": "Duration",
+              "values": "2/2.5/3/3.5"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "20"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "120"
+            }
+          ]
+        },
+        {
+          "ability": "snowball_effect",
+          "name": "Snowball Effect",
+          "description": "Penguin Commando's regular attack will occasionally send out a snowball instead, which will explode on contact. Each attack will lower the cooldown by 1.",
+          "stats": [
+            {
+              "stat": "Damage Radius",
+              "values": "300"
+            },
+            {
+              "stat": "Damage",
+              "values": "150"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "13/11/9/7"
+            }
+          ]
+        },
+        {
+          "ability": "march_of_the_penguins",
+          "name": "March of the Penguins",
+          "description": "After a short delay, drop 6 King Penguins from the sky in a line.",
+          "stats": [
+            {
+              "stat": "Range",
+              "values": "Global"
+            },
+            {
+              "stat": "Damage",
+              "values": "250 325 400"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "90"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "150/200/250"
+            }
+          ]
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": " Adds a 30% slow and 100 magical damage per second over 5 seconds to March of the Penguins.",
+          "stats": [
+          ]
+        }
+      ],
+      "credits": [
+        "Concept: SUNSfan, Firetoad",
+        "Visual FX: Nibuja",
+        "Code: VicFrank",
+        "2D Art: Hawf",
+        "Sound: Hawf",
+        "Voice Actors: SUNSfan, SirActionSlacks, Synderen"
+      ]
+    },
     "mifune": {
       "name": "Mifune",
       "talents": [
@@ -1450,7 +1580,7 @@
             },
             {
               "stat": "Damage per wave",
-              "values": "50/75/100/125"
+              "values": "25/50/75/100"
             },
             {
               "stat": "Slow Percent",
