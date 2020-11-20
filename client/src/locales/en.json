@@ -1201,14 +1201,14 @@
     "pc": {
       "name": "Penguin Commandos",
       "talents": [
-        "Penguin Launcher +30 Damage",
         "+25 attack speed",
-        "+50 Happy Feet Radius",
+        "Penguin Launcher +30 Damage",
         "-4s Snowball Effect cooldown",
-        "Happy Feet provides haste to allies for 5 seconds",
+        "+50 Happy Feet Radius",
         "Snowball effect +100 damage",
-        "Add 3 Penguins to March of the Penguins",
-        "+200 Attack Range"
+        "Happy Feet provides haste to allies for 5 seconds",
+        "+200 Attack Range",
+        "Add 3 Penguins to March of the Penguins"
       ],
       "abilities": [
         {
