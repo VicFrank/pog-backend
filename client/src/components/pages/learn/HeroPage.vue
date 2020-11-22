@@ -83,6 +83,7 @@ export default {
     videos: {
       mifune: "https://www.youtube.com/embed/oEMqCa5TZls",
       thunderboar: "https://www.youtube.com/embed/ihnveJGYqgM",
+      pc: "https://www.youtube.com/embed/mgJdGaneTUo",
     },
   }),
 
