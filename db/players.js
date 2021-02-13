@@ -1834,8 +1834,10 @@ module.exports = {
       if (quest.quest_id === questID) return true;
     }
     const weeklyQuests = await this.getWeeklyQuests(steamID);
-    for (let quest of weeklyQuests) {
-      if (quest.quest_id === questID) return true;
+    if (weeklyQuests) {
+      for (let quest of weeklyQuests) {
+        if (quest.quest_id === questID) return true;
+      }
     }
     return false;
   },

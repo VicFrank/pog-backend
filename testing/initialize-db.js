@@ -20,7 +20,6 @@ const polls = require("../db/polls");
 async function loadQuests() {
   try {
     const loadedQuests = await quests.getAllAchievements();
-
     if (loadedQuests.length > 0) {
       console.log("Quests are already loaded");
       return;
@@ -35,6 +34,7 @@ async function loadQuests() {
 
     await Promise.all(promises);
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
@@ -331,13 +331,13 @@ async function addPoll(poll) {
 }
 
 (async function () {
-  // await loadQuests();
-  // await loadCosmetics();
-  // await loadChestRewards();
-  // await loadBattlePass();
-  // await loadItemPrices();
-  // await initPlayers();
-  // await addSampleGames(10);
-  // await initializeAdmins();
-  // await addRealSample();
+  //   await loadQuests();
+  //   await loadCosmetics();
+  //   await loadChestRewards();
+  //   await loadBattlePass();
+  //   await loadItemPrices();
+  //   await initPlayers();
+  //   await addSampleGames(10);
+  //   await initializeAdmins();
+  //   await addRealSample();
 })();
