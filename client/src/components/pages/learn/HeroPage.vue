@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1 class="page-title">{{ heroData.name }}</h1>
-    <div class="video my-5">
+    <div class="video my-5" v-if="videos[hero]">
       <b-embed type="iframe" :src="videos[hero]" allowfullscreen></b-embed>
     </div>
 
@@ -105,6 +105,8 @@ export default {
   methods: {
     abilityImage(ability) {
       if (ability.ability == "scepter") return require("./images/scepter.png");
+      if (ability.ability == "shard")
+        return require("./images/aghanims_shard.png");
       if (ability.ability)
         return require(`./images/${this.hero}_${ability.ability}.png`);
       // have a default image incase ability.image is undefined

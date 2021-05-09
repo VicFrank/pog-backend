@@ -128,7 +128,6 @@
     "npc_dota_hero_alexandria": "Alexandria",
     "npc_dota_hero_troy": "Troy",
     "npc_dota_hero_hoodwink": "Hoodwink",
-
     "item_abyssal_blade": "Abyssal Blade",
     "item_arcane_ring": "Arcane Ring",
     "item_armlet": "Armlet of Mordiggian",
@@ -348,49 +347,47 @@
     "item_river_painter7": "River Vial: Blood",
     "item_mutation_tombstone": "Tombstone",
     "item_pocket_tower": "Pocket Tower",
-
-    "item_orb_of_pestilence":			"Orb of Pestilence",
-    "item_fluffy_hat":			"Fluffy Hat",
-    "item_falcon_blade":			"Falcon Blade",
-    "item_mage_slayer":			"Mage Slayer",
-    "item_overwhelming_blink":			"Overwhelming Blink",
-    "item_swift_blink":			"Swift Blink",
-    "item_arcane_blink":			"Arcane Blink",
-    "item_recipe_orb_of_pestilence":			"Orb of Pestilence Recipe",
-    "item_recipe_falcon_blade":			"Falcon Blade Recipe",
-    "item_recipe_mage_slayer":			"Mage Slayer Recipe",
-    "item_recipe_overwhelming_blink":			"Overwhelming Blink Recipe",
-    "item_recipe_swift_blink":			"Swift Blink Recipe",
-    "item_recipe_arcane_blink":			"Arcane Blink Recipe",
-    "item_wizard_glass":		"Wizard Glass",
-    "item_gloves_of_travel":		"Gloves of Travel",
-    "item_sorcerers_staff":		"Sorcerer's Staff",
-    "item_elven_tunic":		"Elven Tunic",
-    "item_cloak_of_flames":		"Cloak of Flames",
-    "item_venom_gland":		"Venom Gland",
-    "item_trickster_cloak":		"Trickster Cloak",
-    "item_gladiator_helm":		"Gladiator Helm",
-    "item_possessed_mask":		"Possessed Mask",
-    "item_ancient_perseverance":		"Ancient Perseverance",
-    "item_oakheart":		"Oakheart",
-    "item_stormcrafter":		"Stormcrafter",
-    "item_overflowing_elixir":		"Overflowing Elixir",
-    "item_mysterious_hat":		"Fairy's Trinket",
-    "item_star_mace":		"Star Mace",
-    "item_penta_edged_sword":		"Penta-Edged Sword",
-    "item_satchel":		"Satchel",
-    "item_orb_of_revelations":		"Orb of Revelations",
-    "item_gungir":		"Gleipnir",
-    "item_warhammer":		"Warhammer",
-    "item_psychic_headband":		"Psychic Headband",
-    "item_ceremonial_robe":		"Ceremonial Robe",
-    "item_book_of_shadows":		"Book of Shadows",
-    "item_giants_ring":		"Giant's Ring",
-    "item_vengeances_shadow":		"Shadow of Vengeance",
-    "item_bullwhip":		"Bullwhip",
-    "item_quicksilver_amulet":		"Quicksilver Amulet",
-    "item_blitz_knuckles":		"Blitz Knuckles",
-
+    "item_orb_of_pestilence": "Orb of Pestilence",
+    "item_fluffy_hat": "Fluffy Hat",
+    "item_falcon_blade": "Falcon Blade",
+    "item_mage_slayer": "Mage Slayer",
+    "item_overwhelming_blink": "Overwhelming Blink",
+    "item_swift_blink": "Swift Blink",
+    "item_arcane_blink": "Arcane Blink",
+    "item_recipe_orb_of_pestilence": "Orb of Pestilence Recipe",
+    "item_recipe_falcon_blade": "Falcon Blade Recipe",
+    "item_recipe_mage_slayer": "Mage Slayer Recipe",
+    "item_recipe_overwhelming_blink": "Overwhelming Blink Recipe",
+    "item_recipe_swift_blink": "Swift Blink Recipe",
+    "item_recipe_arcane_blink": "Arcane Blink Recipe",
+    "item_wizard_glass": "Wizard Glass",
+    "item_gloves_of_travel": "Gloves of Travel",
+    "item_sorcerers_staff": "Sorcerer's Staff",
+    "item_elven_tunic": "Elven Tunic",
+    "item_cloak_of_flames": "Cloak of Flames",
+    "item_venom_gland": "Venom Gland",
+    "item_trickster_cloak": "Trickster Cloak",
+    "item_gladiator_helm": "Gladiator Helm",
+    "item_possessed_mask": "Possessed Mask",
+    "item_ancient_perseverance": "Ancient Perseverance",
+    "item_oakheart": "Oakheart",
+    "item_stormcrafter": "Stormcrafter",
+    "item_overflowing_elixir": "Overflowing Elixir",
+    "item_mysterious_hat": "Fairy's Trinket",
+    "item_star_mace": "Star Mace",
+    "item_penta_edged_sword": "Penta-Edged Sword",
+    "item_satchel": "Satchel",
+    "item_orb_of_revelations": "Orb of Revelations",
+    "item_gungir": "Gleipnir",
+    "item_warhammer": "Warhammer",
+    "item_psychic_headband": "Psychic Headband",
+    "item_ceremonial_robe": "Ceremonial Robe",
+    "item_book_of_shadows": "Book of Shadows",
+    "item_giants_ring": "Giant's Ring",
+    "item_vengeances_shadow": "Shadow of Vengeance",
+    "item_bullwhip": "Bullwhip",
+    "item_quicksilver_amulet": "Quicksilver Amulet",
+    "item_blitz_knuckles": "Blitz Knuckles",
     "item_recipe_aeon_disk": "Aeon Disk Recipe",
     "item_recipe_bracer": "Bracer Recipe",
     "item_recipe_cyclone": "Eul's Scepter Recipe",
@@ -440,7 +437,6 @@
     "item_recipe_nullifier": "Nullifier Recipe",
     "item_recipe_bfury": "Battle Fury Recipe"
   },
-
   "cosmetics": {
     "announcer1": "Old Man Gilly Winkle Announcer Pack",
     "announcer2": "Mifune Announcer Pack",
@@ -631,7 +627,6 @@
     "Ancient": "Ancient",
     "emblem1": "Golden Sunken Emblem"
   },
-
   "cosmetic_descriptions": {
     "chest_reward": "Gain a free {chest}! It contains the following prizes",
     "chest1": [
@@ -861,7 +856,6 @@
     "xp_5": "",
     "emblem1": ""
   },
-
   "quests": {
     "Pick up %x% Runes": "Pick up {x} Runes",
     "Buy %x% Neutral Items": "Buy {x} Neutral Items",
@@ -916,7 +910,6 @@
     "Money Money Money": "Money Money Money",
     "Visit the website for the first time": "Visit the website for the first time"
   },
-
   "home": {
     "page_title": "Path of Guardians",
     "play_now": "Play Now",
@@ -970,7 +963,6 @@
     "row9-2": "Custom heroes are available to play in our 4v4 Chaos mode. Stay tuned for more heroes to be released in the future!",
     "row9-3": "Piggybacking off the work we did in our original CHIP mod, we plan to release custom heroes on a regular basis."
   },
-
   "tables": {
     "hero": "Hero",
     "games": "Games",
@@ -995,7 +987,6 @@
     "dmg": "DMG",
     "daily_limit": "You've reached your daily limit"
   },
-
   "navigation": {
     "profile": "Profile",
     "battle_pass": "Battle Pass",
@@ -1025,7 +1016,6 @@
     "cn": "汉语",
     "ru": "русский"
   },
-
   "profile": {
     "daily_quests": "Daily Quests",
     "weekly_quests": "Weekly Quests",
@@ -1054,7 +1044,6 @@
     "bp_sellout_link": "BP Accelerator",
     "reset_in": "Resets in"
   },
-
   "battle_pass": {
     "page_title": "Battle Pass",
     "level": "Level",
@@ -1064,7 +1053,6 @@
     "bonus_descr_2": "A Mythical Chest on levels ending in 50",
     "bonus_descr_3": "A Rare Chest on all other levels ending in 0"
   },
-
   "filters": {
     "Companions": "Companions",
     "Companions FX": "Companions FX",
@@ -1081,7 +1069,6 @@
     "Ancient": "Ancient",
     "XP": "XP"
   },
-
   "armory": {
     "page_title": "Armory",
     "cancel": "Cancel",
@@ -1090,16 +1077,13 @@
     "use": "Use",
     "illegal_accelerator": "You can't use an accelerator lower than your current level."
   },
-
   "achievements": {
     "page_title": "Achievements"
   },
-
   "changelog": {
     "page_title": "Change Log",
     "update": "Update"
   },
-
   "store": {
     "page_title": "Store",
     "sales": "Sales",
@@ -1109,7 +1093,6 @@
     "already_own": "You already own this item!",
     "get_more_poggers": "Get more POGGERS"
   },
-
   "payment": {
     "page_title": "Payment",
     "alipay_title": "Alipay Payment",
@@ -1133,9 +1116,7 @@
     "loading": "Loading...",
     "pay_with_stripe": "Pay with Stripe"
   },
-
   "not_found": "Page not found",
-
   "media": {
     "vid1": "What is POG?",
     "vid2": "POG Overview",
@@ -1144,7 +1125,6 @@
     "vid5": "Battle Pass",
     "vid6": "Store"
   },
-
   "faq": {
     "page_title": "Frequently Asked Questions",
     "question1": "Is this Free to Play?",
@@ -1194,7 +1174,6 @@
     "question13": "How do I install?",
     "answer13": "Open your Dota 2, navigate to the Arcade tab, and search for Path of Guardians. Install the game and you're good to go!"
   },
-
   "guardians": {
     "page_title": "Guardians",
     "monkey": "Monkey",
@@ -1207,7 +1186,6 @@
     "spell_block_description": "Blocks one targeted spell every 15 seconds. Also adds 25% status reistance.",
     "shattered_helm": "Artifact - Shattered Helm",
     "shattered_helm_description": "Upon death, the team that slays Monkey receives an Artifact belonging to the Guardian of War for 5 minutes. Effects: +50% damage, health, and attack speed to allied creeps.",
-
     "pooky": "Pooky",
     "pooky_title": "Guardian of Power",
     "obese_reality": "Obese Reality",
@@ -1222,7 +1200,6 @@
     "tea_time_description": "When more than one enemy is within reach of Bucket, he will spill his tea in an area around him. The tea deals damage over time and slows enemy movement speed. Each time this is cast, the cooldown will be reduced. Cooldown will be reset to default after 30 seconds of inactivity.",
     "ashes_of_codex": "Artifact - Ashes of the Codex",
     "ashes_of_codex_description": "Upon death, the team that slays Bucket will receive an Artifact belonging to the Guardian of Time for 5 minutes. Effects: 25% cooldown reduction for all allied heroes.",
-
     "lulu": "Lulu",
     "lulu_title": "Guardian of Thirst",
     "weave": "Weave",
@@ -1231,7 +1208,6 @@
     "insatiable_thirst_description": "If 2 or more heroes attack Lulu, her thirst manifests, granting her 90 bonus damage and 175% lifesteal for 30 seconds.",
     "cursed_chalice": "Cursed Chalice",
     "cursed_chalice_description": "Upon death, the team that slays Lulu will receive an Artifact belonging to the Guardian of Time for 5 minutes. +25% lifesteal and spell lifesteal against enemy heroes. 10% to other sources.",
-    
     "fig": "Fig",
     "fig_title": "Guardian of Death",
     "bad_touch": "Don't Touch Me!",
@@ -1241,20 +1217,19 @@
     "fig_buff": "Crosss of Fate",
     "fig_buff_description": "Upon death, the team that slays Fig will receive an Artifact belonging to the Guardian of Death for 5 minutes. Effects: Upon death, a wraith of yourself will spawn, delaying death for 5 seconds."
   },
-
   "custom_heroes": {
     "page_title": "Custom Heroes",
     "pc": {
       "name": "Penguin Commandos",
       "talents": [
         "+25 attack speed",
-        "Penguin Launcher +30 Damage",
-        "-4s Snowball Effect cooldown",
-        "+50 Happy Feet Radius",
-        "Snowball effect +100 damage",
+        "Penguin Launcher +45 Damage",
+        "+30 movement speed",
         "Happy Feet provides haste to allies for 5 seconds",
-        "+200 Attack Range",
-        "Add 3 Penguins to March of the Penguins"
+        "Snowball Effect +50 damage",
+        "Add 4 Penguins to March of the Penguins",
+        "-3s Snowball Effect cooldown",
+        "+2 Multishot Penguin Launcher"
       ],
       "abilities": [
         {
@@ -1268,11 +1243,11 @@
             },
             {
               "stat": "Base Damage",
-              "values": "90/110/130/150"
+              "values": "110/130/150/170"
             },
             {
               "stat": "Bonus Damage",
-              "values": "25"
+              "values": "50"
             },
             {
               "stat": "Charge Restore Time",
@@ -1326,11 +1301,11 @@
             },
             {
               "stat": "Damage",
-              "values": "150"
+              "values": "100"
             },
             {
               "stat": "Cooldown",
-              "values": "13/11/9/7"
+              "values": "11/10/9/8"
             }
           ]
         },
@@ -1345,7 +1320,7 @@
             },
             {
               "stat": "Damage",
-              "values": "250 325 400"
+              "values": "300/375/450"
             },
             {
               "stat": "Cooldown",
@@ -1360,9 +1335,12 @@
         {
           "ability": "scepter",
           "name": "Scepter",
-          "description": " Adds a 30% slow and 100 magical damage per second over 5 seconds to March of the Penguins.",
-          "stats": [
-          ]
+          "description": " Adds a 30% slow and 100 magical damage per second over 5 seconds to March of the Penguins."
+        },
+        {
+          "ability": "shard",
+          "name": "Shard",
+          "description": " Penguin Launcher deals damage in a 200 AoE"
         }
       ],
       "credits": [
@@ -1377,13 +1355,13 @@
       "name": "Mifune",
       "talents": [
         "+50 Ephemeral Slash Damage",
-        "+500 Ephemeral Slash Range",
-        "+125 Zanmato Damage",
-        "+30% Echo Strike Evasion",
-        "Hides Shattered Souls colors",
-        "Echo Strike grants 40 movement speed",
+        "-4s Echo Strike cooldown",
+        "Echo Strike provides +40 movespeed",
         "+0.4s Zanmato slow duration",
-        "-4s Echo Strike cooldown"
+        "+30% Echo Strike evasion",
+        "Hide color of shattered souls",
+        "+500 Ephemeral Slash range",
+        "+125 Zanmato damage"
       ],
       "abilities": [
         {
@@ -1588,6 +1566,11 @@
               "values": "50"
             }
           ]
+        },
+        {
+          "ability": "shard",
+          "name": "Shard",
+          "description": "Zanmato dispels enemies of positive buffs"
         }
       ],
       "credits": [
@@ -1742,6 +1725,11 @@
           "ability": "scepter",
           "name": "Scepter",
           "description": "Thunderous Rush's effects upgrade from a cone area to a 360 degree AoE"
+        },
+        {
+          "ability": "shard",
+          "name": "Shard",
+          "description": "Thunder Dome heals teammates for 100hp per second"
         }
       ],
       "credits": [
@@ -1753,9 +1741,806 @@
         "Sound: Pumodi",
         "Voice Actor: TravisAcarey"
       ]
+    },
+    "alexandria": {
+      "name": "Alexandria",
+      "talents": [
+        "+10% Mind Flow slow",
+        "+50 Mind Flow damage",
+        "+10%  Blind Faith Amplified Damage",
+        "+100 Blind Faith Damage",
+        "+200 Forbidden Veil Length",
+        "+150 Forbidden Veil damage",
+        "+100 Soul Splice movement speed",
+        "+10s Soul Splice Duration"
+      ],
+      "abilities": [
+        {
+          "ability": "mind_flow",
+          "name": "Mind Flow",
+          "description": "Alexandria throws puddles of energy on the ground. These puddles deal an immediate 25/50/75/100 damage and then 50 damage per second. They will also slow movement speed by 20%. Any damage done by these puddles will heal Alexandria. These puddles do not stack damage or slow. This ability comes with 1/1/2/2 charges.",
+          "stats": [
+            {
+              "stat": "Cooldown",
+              "values": "12"
+            },
+            {
+              "stat": "Duration",
+              "values": "4"
+            }
+          ]
+        },
+        {
+          "ability": "forbidden_veil",
+          "name": "Forbidden Veil",
+          "description": "Summons a transparent wall after a 1 second delay. When an enemy hero passes through for the first time, they will be stunned for 1.0/1.5/2.0/2.5 seconds. Any additional heroes that pass through will not be stunned, but will instead take bonus damage, increasing with each subsequent hero.  Heroes cannot be affected by this ability more than once.",
+          "stats": [
+            {
+              "stat": "Base magical damage",
+              "values": "250"
+            },
+            {
+              "stat": "Bonus magical damage per hero",
+              "values": "75"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "24"
+            },
+            {
+              "stat": "Duration",
+              "values": "8"
+            }
+          ]
+        },
+        {
+          "ability": "blind_faith",
+          "name": "Blind Faith",
+          "description": "Upon activation, applies a debuff to enemies in a coned shape area. This debuff will cause enemies to take amplified damage as well as increase their cast time. Casting a spell will remove this debuff. When the spell is removed, the enemy takes magical damage.",
+          "stats": [
+            {
+              "stat": "Cast Time slow",
+              "values": "300%"
+            },
+            {
+              "stat": "Amplified Damage",
+              "values": "5/10/15/20%"
+            },
+            {
+              "stat": "Duration",
+              "values": "12"
+            },
+            {
+              "stat": "Damage Taken",
+              "values": "150/200/250/300"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "16"
+            }
+          ]
+        },
+        {
+          "ability": "soul_splice",
+          "name": "Soul Splice",
+          "description": "Jump inside an Ally, thereby making Alexandria invulnerable. You are able to cast your abilities and items as normal, but you are still affected by any stuns and silences targeted towards the host. Mind Flow will heal both you and your host. While Alexandria remains inside, the following will be increased for the host: Damage Reduction: 20% Movement speed: +20 movement speed Turn rate becomes: 1.0",
+          "stats": [
+            {
+              "stat": "Duration",
+              "values": "18/24/30"
+            },
+            {
+              "stat": "Max Slow",
+              "values": "80%"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "60"
+            }
+          ]
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": "Forbidden Veil will last for 4 additional seconds. Allies passing through Forbidden Veil will be granted +300 phased movement speed for 2 seconds. In addition, they will be healed for 300 and have 200 mana refreshed. Every additional allied hero that passes through will get bonus HP and mana in addition to the base amount. Allied heroes can only be affected by this ability once.",
+          "stats": [
+            {
+              "stat": "Bonus HP heal",
+              "values": "100"
+            },
+            {
+              "stat": "Bonus mana refresh",
+              "values": "100"
+            }
+          ]
+        },
+        {
+          "ability": "shard",
+          "name": "Shard",
+          "description": "Adds an additional skill for Alexandria: No Accident. Effect: Make you and your host invulnerable to all damage for 2 seconds."
+        }
+      ],
+      "credits": [
+        "Concept: SUNSfan",
+        "Visual FX: VicFrank/Firetoad",
+        "Code: VicFrank",
+        "2D Art: Sajedene",
+        "Sound: Pumodi",
+        "Voice Actor: Marci"
+      ]
+    },
+    "warp_beast": {
+      "name": "Warp Beast",
+      "talents": [
+        "+8 Strength",
+        "+20 Damage",
+        "+40 Latch Attackspeed Bonus",
+        "15% Lifesteal",
+        "+200 Temporal Jump Radius",
+        "+24 Mana Eater Drain Amount",
+        "+1.5s Silence on Warp",
+        "+1000 Mana"
+      ],
+      "abilities": [
+        {
+          "ability": "temporal_jump",
+          "name": "Temporal Jump",
+          "description": "Warp Beast jumps to the targeted location over 0.6 seconds, creating an expanding wave upon landing which spreads over a radius and hits affected enemies with an attack. Has 3 charges and deals bonus damage to creeps.",
+          "stats": [
+            {
+              "stat": "Radius",
+              "values": "275/300/325/350"
+            },
+            {
+              "stat": "Range",
+              "values": "450/500/550/600"
+            },
+            {
+              "stat": "Bonus creep damage",
+              "values": "50/100/150/200"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "12/10/8/6"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "120"
+            }
+          ]
+        },
+        {
+          "ability": "latch",
+          "name": "Latch",
+          "description": "Warp Beast latches onto the back of an enemy unit or tower, granting increased attackspeed and causing him to continually attack his target while latched.",
+          "stats": [
+            {
+              "stat": "Attackspeed Bonus",
+              "values": "60/80/100/120"
+            },
+            {
+              "stat": "Duration",
+              "values": "2"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "8"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "80"
+            }
+          ]
+        },
+        {
+          "ability": "mana_eater",
+          "name": "Mana Eater",
+          "description": "Warp Beast drains mana on attacks, restoring mana equal to the amount drained. If Warp Beast kills a unit, he will also drain mana equal to 25%  of the unit's max mana. Any excess mana drained will be stored as bonus mana which lasts until spent, up to a limit.",
+          "stats": [
+            {
+              "stat": "Drain Amount",
+              "values": "12/20/28/36"
+            },
+            {
+              "stat": "Excess Mana Limit",
+              "values": "200/300/400/500"
+            }
+          ]
+        },
+        {
+          "ability": "warp",
+          "name": "Warp",
+          "description": "While toggled, whenever Warp Beast attempts to cast a spell or use an item on a target or location beyond its cast range, he will warp to a random position within range of the ability, spending mana based on how much further the target or location is from its range.",
+          "stats": [
+            {
+              "stat": "Distance Per Mana",
+              "values": "2.5"
+            },
+            {
+              "stat": "Warp Duration",
+              "values": "0.4/0.3/0.2"
+            }
+          ]
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": "Every time Warp Beast casts a spell, he gains a shield for 1.5 seconds that reduces incoming damage by 30%. Each subsequent cast does not stack, but refreshes the buff instead."
+        },
+        {
+          "ability": "shard",
+          "name": "Shard",
+          "description": "Attacking while latched applies a stackable -2 armor, lasting 3 seconds."
+        }
+      ],
+      "credits": [
+        "Concept: Sword Bacon",
+        "Visual FX: Nibuja",
+        "Code: Firetoad",
+        "2D Art: Arcvein",
+        "Sound: Pumodi",
+        "Voice Actor: TravisAcarey"
+      ]
+    },
+    "troy": {
+      "name": "Jeremy Khan",
+      "talents": [
+        "8 Strength",
+        "15% Magic Resistance",
+        "+8HP regen to Greater Fortitude",
+        "+300 range on Battle Thrust",
+        "Battle Thrust +150 damage",
+        "Fury +200 AoE",
+        "Greater Fortitude cap increased to 20% & 200 dps",
+        "Double Red Mist Rage damage"
+      ],
+      "abilities": [
+        {
+          "ability": "battle_lunge",
+          "name": "Battle Thrust",
+          "description": "Jumps on top of an area, dealing damage & slowing. For every hero/creep you hit you gain status resistance. Will also heal Jeremy based on how many heroes are hit.",
+          "stats": [
+            {
+              "stat": "Radius",
+              "values": "300"
+            },
+            {
+              "stat": "Range",
+              "values": "600"
+            },
+            {
+              "stat": "Damage",
+              "values": "100/175/250/325"
+            },
+            {
+              "stat": "Slow Percent",
+              "values": "30%"
+            },
+            {
+              "stat": "Slow Duration",
+              "values": "3"
+            },
+            {
+              "stat": "Status resistance bonus per creep",
+              "values": "4%"
+            },
+            {
+              "stat": "Status resistance bonus per hero",
+              "values": "16%"
+            },
+            {
+              "stat": "Heal per hero",
+              "values": "8% Max HP"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "15"
+            },
+            {
+              "stat": "Health Cost",
+              "values": "15% Max HP"
+            }
+          ]
+        },
+        {
+          "ability": "fury",
+          "name": "Fury",
+          "description": "After a 2 second delay, units around Jeremy will take damage based off of Jeremy's Max HP and be vacuumed towards him.  Creeps are only damaged by the base amount.",
+          "stats": [
+            {
+              "stat": "Base Damage",
+              "values": "50"
+            },
+            {
+              "stat": "Damage",
+              "values": "6/9/12/15% of Max HP"
+            },
+            {
+              "stat": "Pull Range",
+              "values": "300"
+            },
+            {
+              "stat": "Radius",
+              "values": "300"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "10"
+            },
+            {
+              "stat": "Health Cost",
+              "values": "12% of max health"
+            }
+          ]
+        },
+        {
+          "ability": "immolation",
+          "name": "Greater Fortitude",
+          "description": "Passively provides HP regen and deals damage over time in an area around Jeremy based on how much damage he's taken. Damage is calculated before armor reductions. (Note: self-damage counts). Buff lasts 5 seconds and can be refreshed upon taking more damage.",
+          "stats": [
+            {
+              "stat": "Damage",
+              "values": "10% of damage taken"
+            },
+            {
+              "stat": "Max damage cap",
+              "values": "40/60/80/100 damage per second"
+            },
+            {
+              "stat": "HP regeneration",
+              "values": "4/8/12/16"
+            },
+            {
+              "stat": "Radius",
+              "values": "300"
+            },
+            {
+              "stat": "Duration",
+              "values": "5"
+            }
+          ]
+        },
+        {
+          "ability": "red_mist_rage",
+          "name": "Red Mist Rage",
+          "description": "Instantly enter into a raged-frenzy where Jeremy gains a burst of Max HP and bonus damage while taking damage over time.",
+          "stats": [
+            {
+              "stat": "Max HP Boost",
+              "values": "500/1000/1500"
+            },
+            {
+              "stat": "Damage Gained",
+              "values": "4% of current HP in damage"
+            },
+            {
+              "stat": "Damage Taken",
+              "values": "25/50/75 per second"
+            },
+            {
+              "stat": "Duration",
+              "values": "20"
+            }
+          ]
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": "Provides Jeremy with a new passive ability: I'll Be Back. When slain, and after a 3 second delay, Jeremy will rise again with 25% HP. Upon revival, his current level of Fury is cast for free.",
+          "stats": [
+            {
+              "stat": "Cooldown",
+              "values": "140"
+            }
+          ]
+        },
+        {
+          "ability": "shard",
+          "name": "Scepter",
+          "description": "Red Mist Rage hard dispels upon activation and can be used while disabled."
+        }
+      ],
+      "credits": [
+        "Concept: SUNSfan",
+        "3D Art: Hawf",
+        "Code: Firetoad/VicFrank",
+        "2D Art: Arcvein",
+        "Sound: Pumodi",
+        "Voice Actor: SUNSfan"
+      ]
+    },
+    "lathaal": {
+      "name": "La'thaal",
+      "talents": [
+        "2 mana regen",
+        "200 HP",
+        "15% Spell Amplification",
+        "100 Mystic Twister Radius",
+        "+1s Conviction duration",
+        "+30 movement speed",
+        "250 Cast Range",
+        "+1 Superposition Charge"
+      ],
+      "abilities": [
+        {
+          "ability": "divine_intervention",
+          "name": "Divine Intervention",
+          "description": "Ministuns the target, dealing Max HP percentage-based magical damage and reducing their movement speed while channeling, increasing the effectiveness each second.",
+          "stats": [
+            {
+              "stat": "Initial Movement Slow",
+              "values": "20%"
+            },
+            {
+              "stat": "Movement Slow Per Second",
+              "values": "5/10/15/20%"
+            },
+            {
+              "stat": "Max Health DPS",
+              "values": "3.5/4.0/4.5/5%"
+            },
+            {
+              "stat": "Max Channel Time",
+              "values": "10"
+            },
+            {
+              "stat": "Cast Range",
+              "values": "450/550/650/750"
+            },
+            {
+              "stat": "Break Distance",
+              "values": "650/750/850/950"
+            },
+            {
+              "stat": "Debuff Duration",
+              "values": "4"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "15"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "60/70/80/90"
+            }
+          ]
+        },
+        {
+          "ability": "mystic_twister",
+          "name": "Mystic Twister",
+          "description": "While channeling, deals magical damage per second in a radius at target location and grants True Sight on enemies inside the area.",
+          "stats": [
+            {
+              "stat": "Damage",
+              "values": "60/90/120/150"
+            },
+            {
+              "stat": "Max Channel Time",
+              "values": "4/6/8/10"
+            },
+            {
+              "stat": "Radius",
+              "values": "300"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "7/5/3/1"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "90/110/130/150"
+            }
+          ]
+        },
+        {
+          "ability": "conviction",
+          "name": "Conviction",
+          "description": "Passive. Upon channeling an item or spell, La'thaal will gain temporary magic immunity. The buff will continue to work on illusions.",
+          "stats": [
+            {
+              "stat": "Magic Immune Duration",
+              "values": "0.5/1.0/1.5/2"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "10"
+            }
+          ]
+        },
+        {
+          "ability": "superposition",
+          "name": "Superposition",
+          "description": "Teleport to a target location up to 650 units away, leaving behind an illusion of yourself. If a channeled ability was interrupted, the illusion will continue to channel that ability for you.",
+          "stats": [
+            {
+              "stat": "Max Charges",
+              "values": "3"
+            },
+            {
+              "stat": "Illusion Outgoing Damage",
+              "values": "30/40/50%"
+            },
+            {
+              "stat": "Illusion Incoming Damage",
+              "values": "400/300/200%"
+            },
+            {
+              "stat": "Illusion Duration",
+              "values": "10"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "35/25/15"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "75"
+            }
+          ]
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": "Adds +1 Superposition Max Charges"
+        },
+        {
+          "ability": "shard",
+          "name": "Shard",
+          "description": "Superposition grants invisibility (1.5s)"
+        }
+      ],
+      "credits": [
+        "Concept: Frenetorp",
+        "3D Art: Hawf",
+        "Visual FX: Toyoka",
+        "Code: SwordBacon/VicFrank",
+        "2D Art: Hawf",
+        "Sound: Pumodi"
+      ]
+    },
+    "scaldris": {
+      "name": "Scaldris",
+      "talents": [
+        "+300 Jet Blaze distance",
+        "+16 Intelligence",
+        "+50% Ice Floes projectile speed",
+        "+15% spell lifesteal",
+        "+250 Living Flame spread radius",
+        "15% Cooldown Reduction",
+        "AoE Ultimates",
+        "+20% Spell Amp"
+      ],
+      "abilities": [
+        {
+          "ability": "antipode",
+          "name": "Antipode",
+          "description": "Innate passive ability. Scaldris' spells have a dual nature; he picks one of two elemental aspects when casting them. Casting the fire version of a spell switches its aspect to cold, and vice-versa."
+        },
+        {
+          "ability": "heatwave",
+          "name": "Heatwave",
+          "description": "Launches a wave of smoldering hot air in a straight line. Deals fire damage to any enemies hit. When used, will be replaced by Cold Front.",
+          "stats": [
+            {
+              "stat": "Radius",
+              "values": "300"
+            },
+            {
+              "stat": "Max Range",
+              "values": "1200"
+            },
+            {
+              "stat": "Damage",
+              "values": "100/175/250/325"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "12"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "100/120/140/160"
+            }
+          ]
+        },
+        {
+          "ability": "cold_front",
+          "name": "Cold Front",
+          "description": "Causes cold energy to explode in a target, slowing it for a duration. When used, will be replaced by Heatwave.",
+          "stats": [
+            {
+              "stat": "Cast Range",
+              "values": "800"
+            },
+            {
+              "stat": "Root duration",
+              "values": " 0.5/0.75/1.0/1.25"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "12"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "25"
+            }
+          ]
+        },
+        {
+          "ability": "scorch",
+          "name": "Scorch",
+          "description": "Summons blazing flames that scorch all nearby enemies, dealing fire damage and blinding them. When used, will be replaced by Freeze.",
+          "stats": [
+            {
+              "stat": "Radius",
+              "values": "600"
+            },
+            {
+              "stat": "Miss chance",
+              "values": "100%"
+            },
+            {
+              "stat": "Blind duration",
+              "values": "3"
+            },
+            {
+              "stat": "Damage",
+              "values": "75/130/185/240"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "14/12/10/8"
+            },
+            {
+              "stat": "Mana cost",
+              "values": "75/100/125/150"
+            }
+          ]
+        },
+        {
+          "ability": "freeze",
+          "name": "Freeze",
+          "description": "Launches a slow-moving wave of chilling wind in a straight line. Enemies hit are slowed. When used, will be replaced by Scorch.",
+          "stats": [
+            {
+              "stat": "Range",
+              "values": "1200"
+            },
+            {
+              "stat": "Root duration",
+              "values": "0.5/0.75/1.0/1.25"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "14/12/10/8"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "25"
+            }
+          ]
+        },
+        {
+          "ability": "jet_blaze",
+          "name": "Jet Blaze",
+          "description": "Propels yourself ahead by spewing a massive cone of fire backwards. Enemies in the cone or in your path take fire damage. When used, will be replaced by Ice Floes.",
+          "stats": [
+            {
+              "stat": "Range",
+              "values": "400/500/600/700"
+            },
+            {
+              "stat": "Cone length",
+              "values": "700"
+            },
+            {
+              "stat": "Damage",
+              "values": "80/120/160/200"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "18/15/12/9"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "75/90/105/120"
+            }
+          ]
+        },
+        {
+          "ability": "ice_floes",
+          "name": "Ice Floes",
+          "description": "Launches an ice tracer to a target location. Upon reaching it or its maximum range, the tracer teleports you to its location. Enemies in the line between your initial and final position during the teleport are slowed. When used, will be replaced by Jet Blaze.",
+          "stats": [
+            {
+              "stat": "Effect radius",
+              "values": "300"
+            },
+            {
+              "stat": "Root duration",
+              "values": "0.5/0.75/1.0/1.25"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "18/15/12/9"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "25"
+            }
+          ]
+        },
+        {
+          "ability": "living_flame",
+          "name": "Living Flame",
+          "description": "Summons a living, hungry flame that deals fire damage to its host. If Living Flame's debuff is ended prematurely by an Antipode proc or the death of its host, it jumps to a random enemy in range, refreshing its duration in the process. If Living Flame's duration expires naturally, its effects end without spreading. When used, will be replaced by Absolute Zero.",
+          "stats": [
+            {
+              "stat": "Spread radius",
+              "values": "650"
+            },
+            {
+              "stat": "Duration",
+              "values": "12"
+            },
+            {
+              "stat": "Damage per second",
+              "values": "35/55/75"
+            },
+            {
+              "stat": "Cooldown",
+              "values": " 80/65/50"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "200/275/350"
+            }
+          ]
+        },
+        {
+          "ability": "absolute_zero",
+          "name": "Absolute Zero",
+          "description": "Targets an enemy with an unerring sphere utterly devoid of any heat. Upon reaching its mark, the sphere explodes, freezing it. The cold is so intense that, even after being unfrozen, the unit's movement is still slowed by 60%. The slow then decays gradually, as the unit thaws and recovers its movements. When used, will be replaced by Living Flame.",
+          "stats": [
+            {
+              "stat": "Stun duration",
+              "values": "2.0/2.5/3.0"
+            },
+            {
+              "stat": "Slow duration",
+              "values": "6"
+            },
+            {
+              "stat": "Cooldown",
+              "values": "80/65/50"
+            },
+            {
+              "stat": "Mana Cost",
+              "values": "50"
+            }
+          ]
+        },
+        {
+          "ability": "scepter",
+          "name": "Scepter",
+          "description": "Causes casting fire spells to grant +10% spell amplification, and casting ice spells to grant +10% cooldown reduction. Both effects last for 10 seconds, can stack up to 4 times, and refresh themselves."
+        },
+        {
+          "ability": "shard",
+          "name": "Shard",
+          "description": " Ice spells recover 2.5% of your maximum mana for each target they hit."
+        }
+      ],
+      "credits": [
+        "Concept: Firetoad",
+        "Visual FX: Firetoad",
+        "Code: Firetoad",
+        "2D Art: Firetoad",
+        "Sound: Firetoad",
+        "Voice Actor: TravisAcarey"
+      ]
     }
   },
-
   "subscriptions": {
     "subscriptions": "Subscriptions",
     "manage_page_title": "Manage your Subscriptions",
@@ -1767,7 +2552,6 @@
     "subscribe": "Subscribe",
     "purchase": "Purchase Subscription"
   },
-
   "credits": {
     "page_title": "Our Team",
     "sunsfan_credit": "SUNSfan - Project Lead {contact}",

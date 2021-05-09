@@ -6,9 +6,9 @@
         v-for="hero in heroes"
         :key="hero"
         :href="`/custom_heroes/${hero}`"
-        class="mx-3"
+        class="mx-3 my-3"
       >
-        <img :src="getHeroPath(hero)" :alt="hero" />
+        <img :src="getHeroPath(hero)" :alt="hero" class="hero-image" />
       </a>
     </div>
   </div>
@@ -17,7 +17,16 @@
 <script>
 export default {
   data: () => ({
-    heroes: ["thunderboar", "mifune", "pc"],
+    heroes: [
+      "thunderboar",
+      "mifune",
+      "pc",
+      "alexandria",
+      "warp_beast",
+      "troy",
+      "lathaal",
+      "scaldris",
+    ],
   }),
 
   methods: {
@@ -34,5 +43,10 @@ export default {
   width: 600px;
 
   text-align: center;
+}
+
+.hero-image {
+  height: 76px;
+  width: 128px;
 }
 </style>
