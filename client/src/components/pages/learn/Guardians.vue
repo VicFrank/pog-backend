@@ -130,6 +130,52 @@ export default {
           },
         ],
       },
+      {
+        name: "log",
+        // img: require("./images/guardian_05.png"),
+        // video: "https://www.youtube.com/embed/qBUvP-6PU2o",
+        abilities: [
+          {
+            name: "lard_incarnate",
+            image: "guardian_lardincarnate.png",
+          },
+          {
+            name: "bugle_mode",
+            image: "guardian_buglemode.png",
+          },
+          {
+            name: "spell_block",
+            image: "spell_block.png",
+          },
+          {
+            name: "bugles_blessing",
+            image: "guardian_buff_bugles_blessing.png",
+          },
+        ],
+      },
+      {
+        name: "roo",
+        // img: require("./images/guardian_05.png"),
+        // video: "https://www.youtube.com/embed/qBUvP-6PU2o",
+        abilities: [
+          {
+            name: "alot_of_armor",
+            image: "guardian_lotofarmor.png",
+          },
+          {
+            name: "chain_sheep",
+            image: "guardian_chainsheep.png",
+          },
+          {
+            name: "spell_block",
+            image: "spell_block.png",
+          },
+          {
+            name: "wizard_hat",
+            image: "guardian_buff_wizardhat.png",
+          },
+        ],
+      },
     ],
   }),
 };
