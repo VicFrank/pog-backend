@@ -1633,7 +1633,7 @@ module.exports = {
       // Add the new quests
       let newQuests = [];
       let index = 1;
-      for (quest of questsToInsert) {
+      for (const quest of questsToInsert) {
         const insert_query = `
           INSERT INTO player_quests (steam_id, quest_id, quest_index) VALUES($1, $2, $3)
           RETURNING *;
@@ -1669,7 +1669,7 @@ module.exports = {
       // Add the new quests
       let newQuests = [];
       let index = 1;
-      for (quest of questsToInsert) {
+      for (const quest of questsToInsert) {
         const insert_query = `
           INSERT INTO player_quests (steam_id, quest_id, quest_index) VALUES($1, $2, $3)
           RETURNING *;
@@ -1698,7 +1698,7 @@ module.exports = {
     try {
       const allAchievements = await quests.getAllAchievements();
 
-      for (quest of allAchievements) {
+      for (const quest of allAchievements) {
         const insert_query = `
           INSERT INTO player_quests (steam_id, quest_id) VALUES($1, $2)
         `;

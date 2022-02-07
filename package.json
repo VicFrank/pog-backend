@@ -17,20 +17,20 @@
     "nodemon": "^1.19.4"
   },
   "dependencies": {
-    "@paypal/checkout-server-sdk": "^1.0.2",
-    "apicache": "^1.6.2",
-    "axios": "^0.21.1",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "apicache": "^1.6.3",
+    "axios": "^0.21.4",
     "connect-pg-simple": "^6.2.1",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
     "morgan": "^1.10.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "passport": "^0.4.1",
-    "passport-steam": "^1.0.15",
+    "passport-steam": "^1.0.17",
     "patreon-oauth": "^1.0.0",
     "paypal-rest-sdk": "^1.8.1",
-    "pg": "^8.6.0",
+    "pg": "^8.7.3",
     "redis": "^2.8.0",
-    "stripe": "^8.148.0"
+    "stripe": "^8.202.0"
   }
 }

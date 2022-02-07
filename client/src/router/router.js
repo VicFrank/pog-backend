@@ -27,6 +27,7 @@ const Store = () => import("../components/pages/cosmetics/Store");
 const Admin = () => import("../components/pages/admin/Admin");
 const Home = () => import("../components/pages/home/Home");
 const Credits = () => import("../components/pages/credits/Credits");
+const Horse = () => import("../components/pages/temp/Horse");
 
 import PoggersStore from "../components/pages/cosmetics/RealMoneyStore";
 import Checkout from "../components/pages/payment/Checkout";
@@ -60,6 +61,10 @@ const routes = [
   {
     path: "/",
     component: Home,
+  },
+  {
+    path: "/horse",
+    component: Horse,
   },
   {
     path: "/tournament",

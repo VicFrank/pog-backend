@@ -1,4 +1,4 @@
-var express = require("express"),
+const express = require("express"),
   router = express.Router(),
   passport = require("passport");
 
@@ -44,8 +44,6 @@ router.get("/patreon/callback", async (req, res) => {
 
     const patronID = data.id;
     const patrons = await getPatrons();
-
-    console.log(patronID);
 
     // check if the user is pledged to our patreon
     const isPledged = patrons.some((data) => data.id == patronID);
@@ -95,13 +93,9 @@ router.get("/steam/success", (req, res) => {
 //   request.  The first step in Steam authentication will involve redirecting
 //   the user to steamcommunity.com.  After authenticating, Steam will redirect the
 //   user back to this application at /auth/steam/return
-router.get(
-  "/steam",
-  passport.authenticate("steam", { failureRedirect: "/" }),
-  function (req, res) {
-    res.redirect("/");
-  }
-);
+router.get("/steam", passport.authenticate("steam", { failureRedirect: "/" }), function (req, res) {
+  res.redirect("/");
+});
 
 router.get("/logout", function (req, res) {
   req.logout();

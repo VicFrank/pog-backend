@@ -55,7 +55,12 @@
                   </div>
                   <div v-else class="loss">{{ game.mmr_change }}</div>
                 </td>
-                <td><div>{{ game.duration | hhmmss }}</div> <div class="text-muted">{{game.created_at | dateFromNow}}</div> </td>
+                <td>
+                  <div>{{ game.duration | hhmmss }}</div>
+                  <div class="text-muted">
+                    {{ game.created_at | dateFromNow }}
+                  </div>
+                </td>
                 <td>{{ game.kills }}/{{ game.deaths }}/{{ game.assists }}</td>
                 <td>
                   <ItemImage
