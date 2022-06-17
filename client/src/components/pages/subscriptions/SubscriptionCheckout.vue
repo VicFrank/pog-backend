@@ -24,12 +24,12 @@
                   {{ $t(`subscriptions.tier${tier}`) }}</b-card-text
                 >
                 <b-card-text>Price: ${{ price }}</b-card-text>
-                <StripePurchase
+                <!-- <StripePurchase
                   :item="item"
                   :key="item.item_id"
                   v-on:purchaseSuccess="onPurchaseSuccess"
                   v-on:error="onError"
-                />
+                /> -->
                 <!-- <PaypalSubscription :tier="tier" /> -->
                 <b-alert v-model="showError" variant="danger" dismissible>{{
                   error
@@ -58,7 +58,7 @@
 import LoginButton from "../login/LoginButton";
 // import PaypalSubscription from "../payment/PaypalSubscription";
 // import StripeSubscription from "../payment/StripeSubscription";
-import StripePurchase from "../payment/StripePurchase";
+// import StripePurchase from "../payment/StripePurchase";
 import PaypalPurchase from "../payment/PaypalPurchase";
 
 export default {
@@ -81,7 +81,7 @@ export default {
     LoginButton,
     // PaypalSubscription,
     // StripeSubscription,
-    StripePurchase,
+    // StripePurchase,
     PaypalPurchase,
   },
 
