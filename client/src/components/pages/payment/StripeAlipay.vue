@@ -1,14 +1,18 @@
 <template>
   <div>
-    <b-button variant="primary" @click="goToAlipay" :disabled="!complete">Pay with Alipay</b-button>
-    <b-alert v-model="showError" variant="danger" dismissible>{{ error }}</b-alert>
+    <b-button variant="primary" @click="goToAlipay" :disabled="!complete"
+      >Pay with Alipay</b-button
+    >
+    <b-alert v-model="showError" variant="danger" dismissible>{{
+      error
+    }}</b-alert>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    item: {}
+    item: {},
   },
 
   data: () => ({
@@ -17,12 +21,12 @@ export default {
     clientSecret: "",
     alipayRedirect: "",
     alipayStatus: "",
-    complete: false
+    complete: false,
   }),
 
   created() {
-    // const stripe = window.Stripe("pk_test_kG4TReBTkO6yDfO9mMwtShME00mx65Yyw2");
-    const stripe = window.Stripe("pk_live_FlJcVm7zuiGei0k6IDXksnmy003GNNZuiw");
+    const stripe = window.Stripe("pk_test_kG4TReBTkO6yDfO9mMwtShME00mx65Yyw2");
+    // const stripe = window.Stripe("pk_live_FlJcVm7zuiGei0k6IDXksnmy003GNNZuiw");
     this.stripe = stripe;
     stripe
       .createSource({
@@ -31,14 +35,14 @@ export default {
         currency: "usd",
         metadata: {
           itemID: this.item.item_id,
-          steamID: this.$store.state.auth.userSteamID
+          steamID: this.$store.state.auth.userSteamID,
         },
         redirect: {
-          return_url: `https://www.pathofguardians.com/alipay_payment?item_id=${this.item.item_id}`
-          // return_url: `http://localhost:8080/alipay_payment?item_id=${this.item.item_id}`
-        }
+          // return_url: `https://www.pathofguardians.com/alipay_payment?item_id=${this.item.item_id}`
+          return_url: `http://localhost:8080/alipay_payment?item_id=${this.item.item_id}`,
+        },
       })
-      .then(result => {
+      .then((result) => {
         if (result.error) {
           this.error = result.error.message;
           this.showError = true;
@@ -55,8 +59,8 @@ export default {
   methods: {
     goToAlipay() {
       window.location.href = this.alipayRedirect;
-    }
-  }
+    },
+  },
 };
 </script>
 

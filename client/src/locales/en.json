@@ -1214,7 +1214,7 @@
     "bad_touch_description": "Fig passively reduces all enemy attack speed in the area by 50",
     "taking_you_with_me": "Taking You With Me",
     "taking_you_with_me_description": "Upon death, Fig will explode, dealing 500 pure damage for each hero in the explosion. Each hero increases damage by 500.",
-    "fig_buff": "Crosss of Fate",
+    "fig_buff": "Cross of Fate",
     "fig_buff_description": "Upon death, the team that slays Fig will receive an Artifact belonging to the Guardian of Death for 5 minutes. Effects: Upon death, a wraith of yourself will spawn, delaying death for 5 seconds.",
     "roo": "Roo",
     "roo_title": "Guardian of Defense",
